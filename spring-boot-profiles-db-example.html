@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Boot Profiles - Dev and Prod DB Example</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2, h3 { color: #2c3e50; }
+        code, pre { background-color: #f4f4f4; padding: 8px; display: block; white-space: pre-wrap; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: #f0f0f0; }
+        .section { margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+    <h1>Spring Boot Profiles - Dev and Prod DB Example</h1>
+
+    <div class="section">
+        <h2>✅ Use Case</h2>
+        <ul>
+            <li><strong>dev</strong> profile uses H2 in-memory database</li>
+            <li><strong>prod</strong> profile uses MySQL database</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>📁 Project Structure</h2>
+        <pre>
+src/
+└── main/
+    ├── java/com/example/employee/
+    │   ├── controller/
+    │   ├── entity/
+    │   ├── repository/
+    │   ├── service/
+    │   ├── config/
+    │   └── EmployeeApplication.java
+    └── resources/
+        ├── application.properties
+        ├── application-dev.properties
+        └── application-prod.properties
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>🛠️ 1. application.properties</h2>
+        <pre>
+# Common properties
+spring.application.name=EmployeeAPI
+spring.profiles.active=dev
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>🛠️ 2. application-dev.properties</h2>
+        <pre>
+# H2 Database Config for Dev
+spring.datasource.url=jdbc:h2:mem:devdb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled=true
+spring.jpa.hibernate.ddl-auto=create-drop
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>🛠️ 3. application-prod.properties</h2>
+        <pre>
+# MySQL Database Config for Prod
+spring.datasource.url=jdbc:mysql://localhost:3306/proddb
+spring.datasource.username=produser
+spring.datasource.password=prodpass
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>📦 4. EmployeeApplication.java</h2>
+        <pre>
+@SpringBootApplication
+public class EmployeeApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(EmployeeApplication.class, args);
+    }
+}
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>👩‍💼 5. Employee.java (Entity)</h2>
+        <pre>
+@Entity
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    private String name;
+
+    private String department;
+
+    @Email
+    private String email;
+
+    // getters and setters
+}
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>🧩 6. Repository, Service, Controller</h2>
+        <p>These layers are shared and not profile-specific.</p>
+    </div>
+
+    <div class="section">
+        <h2>🧪 7. Switching Between Profiles</h2>
+        <p><strong>Option 1:</strong> In <code>application.properties</code></p>
+        <pre>spring.profiles.active=dev</pre>
+        <p><strong>Option 2:</strong> Command line:</p>
+        <pre>java -jar employee-api.jar --spring.profiles.active=prod</pre>
+    </div>
+
+    <div class="section">
+        <h2>🔄 Optional: Profile-Specific Beans</h2>
+        <pre>
+@Configuration
+public class DataSourceConfig {
+
+    @Bean
+    @Profile("dev")
+    public DataSource h2DataSource() {
+        return DataSourceBuilder.create()
+                .url("jdbc:h2:mem:testdb")
+                .username("sa")
+                .build();
+    }
+
+    @Bean
+    @Profile("prod")
+    public DataSource mysqlDataSource() {
+        return DataSourceBuilder.create()
+                .url("jdbc:mysql://localhost:3306/proddb")
+                .username("produser")
+                .password("prodpass")
+                .build();
+    }
+}
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>✅ Summary Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Environment</th>
+                    <th>Profile</th>
+                    <th>Database</th>
+                    <th>Persistence</th>
+                    <th>H2 Console</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Development</td>
+                    <td>dev</td>
+                    <td>H2</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Production</td>
+                    <td>prod</td>
+                    <td>MySQL</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

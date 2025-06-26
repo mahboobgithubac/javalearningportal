@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Annotations Guide</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        h1, h2, h3 { color: #2c3e50; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 6px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Spring Boot Annotations Overview</h1>
+
+    <h2>1. @Bean vs @Component</h2>
+    <p><strong>@Component:</strong> Class-level annotation used to mark a class as a Spring-managed component.</p>
+    <pre><code>@Component
+public class MyService {
+    public void serve() {
+        System.out.println("Service called");
+    }
+}</code></pre>
+    <p><strong>@Bean:</strong> Method-level annotation used in @Configuration classes to define beans manually.</p>
+    <pre><code>@Configuration
+public class AppConfig {
+    @Bean
+    public MyService myService() {
+        return new MyService();
+    }
+}</code></pre>
+    <table>
+        <tr><th>Feature</th><th>@Component</th><th>@Bean</th></tr>
+        <tr><td>Usage</td><td>On classes</td><td>On methods</td></tr>
+        <tr><td>Scanned automatically</td><td>Yes</td><td>No</td></tr>
+        <tr><td>Use case</td><td>Custom application classes</td><td>3rd party class or fine-grained config</td></tr>
+    </table>
+
+    <h2>2. Stereotype Annotations</h2>
+    <ul>
+        <li><strong>@Component</strong>: Generic component</li>
+        <li><strong>@Service</strong>: Marks a service class</li>
+        <li><strong>@Repository</strong>: Marks a DAO class and enables exception translation</li>
+        <li><strong>@Controller</strong>: Spring MVC controller</li>
+        <li><strong>@RestController</strong>: Combines @Controller and @ResponseBody for REST APIs</li>
+    </ul>
+
+    <h2>3. @SpringBootApplication</h2>
+    <p>Combination of <code>@Configuration</code>, <code>@EnableAutoConfiguration</code>, and <code>@ComponentScan</code>.</p>
+    <pre><code>@SpringBootApplication
+public class MyApp {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApp.class, args);
+    }
+}</code></pre>
+
+    <h2>4. @Conditional</h2>
+    <p>Used to register beans conditionally based on environment or custom logic.</p>
+    <pre><code>@Bean
+@Conditional(MyCondition.class)
+public MyService myService() {
+    return new MyService();
+}</code></pre>
+    <p>Spring Boot provides convenience versions like:</p>
+    <ul>
+        <li>@ConditionalOnProperty</li>
+        <li>@ConditionalOnClass</li>
+        <li>@ConditionalOnMissingBean</li>
+    </ul>
+
+ 
+<div class="section">
+    <h2>@ConditionalOnProperty</h2>
+    <p><strong>Purpose:</strong> Loads a bean <em>only when a specific property is present</em> (and optionally has a certain value).</p>
+    <h3>✅ Example</h3>
+    <pre><code>// application.properties
+feature.enabled=true
+</code></pre>
+    <pre><code>// Java config
+@Configuration
+public class FeatureConfig {
+
+    @Bean
+    @ConditionalOnProperty(name = "feature.enabled", havingValue = "true")
+    public FeatureService featureService() {
+        return new FeatureService();
+    }
+}
+</code></pre>
+</div>
+
+<div class="section">
+    <h2>@ConditionalOnClass</h2>
+    <p><strong>Purpose:</strong> Load a bean <em>only if a specific class is present</em> in the classpath.</p>
+    <h3>✅ Example</h3>
+    <pre><code>@Configuration
+public class OptionalLibraryConfig {
+
+    @Bean
+    @ConditionalOnClass(name = "com.fasterxml.jackson.databind.ObjectMapper")
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+}
+</code></pre>
+    <p>This bean will only be created if <code>com.fasterxml.jackson.databind.ObjectMapper</code> is on the classpath.</p>
+</div>
+
+<div class="section">
+    <h2>@ConditionalOnMissingBean</h2>
+    <p><strong>Purpose:</strong> Load a bean only if <em>no other bean of the same type is already defined</em> in the Spring context.</p>
+    <h3>✅ Example</h3>
+    <pre><code>@Configuration
+public class FallbackConfig {
+
+    @Bean
+    @ConditionalOnMissingBean(MyService.class)
+    public MyService myService() {
+        return new DefaultMyService();
+    }
+}
+</code></pre>
+    <p>This configuration ensures that <code>DefaultMyService</code> is used only if no other <code>MyService</code> bean is already defined elsewhere.</p>
+</div>
+   <h2>5. @PropertySource</h2>
+    <p>Used to load custom .properties files into the Spring Environment.</p>
+    <pre><code>@PropertySource("classpath:myconfig.properties")
+@Configuration
+public class AppConfig {
+    @Value("${app.name}")
+    private String appName;
+}</code></pre>
+    <h2>6. Spring Profile Annotations</h2>
+    <ul>
+        <li><strong>@Profile:</strong> Load beans/config based on active profile.</li>
+        <li><strong>@ActiveProfiles:</strong> Set active profile for tests.</li>
+        <li><strong>application-{profile}.properties:</strong> Used for environment-specific properties.</li>
+    </ul>
+    <pre><code>@Service
+@Profile("dev")
+public class DevService {}
+</code></pre>
+
+</body>
+</html>

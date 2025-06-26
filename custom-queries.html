@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JPA Annotations and Custom Queries in Spring Boot REST API</title>
+    <meta name="description" content="Learn how to use JPA annotations and write custom queries in a Spring Boot REST API project with practical examples.">
+    <meta name="keywords" content="Spring Boot, JPA, Annotations, Custom Query, REST API, Hibernate, Java Persistence">
+    <meta name="author" content="Java Interview Series">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: #f7f9fc;
+            color: #333;
+        }
+        header, footer {
+            background-color: #003366;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        h1, h2 {
+            color: #003366;
+        }
+        section {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        table, th, td {
+            border: 1px solid #ccd;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+        }
+        code {
+            background-color: #eef;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 1rem;
+            border-left: 5px solid #003366;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Spring Boot REST API - JPA Annotations & Custom Queries</h1>
+    <p>Mastering Data Persistence with JPA</p>
+</header>
+
+<section>
+    <h2>📌 JPA Annotations</h2>
+    <table>
+        <thead>
+            <tr><th>Annotation</th><th>Description</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>@Entity</code></td><td>Marks class as a JPA entity</td><td><code>@Entity public class User {}</code></td></tr>
+            <tr><td><code>@Table(name = "users")</code></td><td>Customizes table name</td><td><code>@Table(name = "users")</code></td></tr>
+            <tr><td><code>@Id</code></td><td>Specifies primary key</td><td><code>@Id private Long id;</code></td></tr>
+            <tr><td><code>@GeneratedValue</code></td><td>Auto-generates ID</td><td><code>@GeneratedValue(strategy = GenerationType.IDENTITY)</code></td></tr>
+            <tr><td><code>@Column</code></td><td>Maps field to column</td><td><code>@Column(name = "user_name", nullable = false)</code></td></tr>
+            <tr><td><code>@Transient</code></td><td>Field not persisted</td><td><code>@Transient private String temp;</code></td></tr>
+            <tr><td><code>@Enumerated</code></td><td>Persist enum as STRING</td><td><code>@Enumerated(EnumType.STRING)</code></td></tr>
+            <tr><td><code>@CreationTimestamp</code></td><td>Set creation time</td><td><code>@CreationTimestamp private LocalDateTime createdAt;</code></td></tr>
+            <tr><td><code>@OneToMany</code></td><td>One-to-many relationship</td><td><code>@OneToMany(mappedBy="user")</code></td></tr>
+            <tr><td><code>@ManyToOne</code></td><td>Many-to-one relationship</td><td><code>@ManyToOne @JoinColumn(name="user_id")</code></td></tr>
+        </tbody>
+    </table>
+
+    <h2>✅ Example Entity</h2>
+    <pre><code>@Entity
+@Table(name = "users")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_name", nullable = false)
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List&lt;Post&gt; posts;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+}</code></pre>
+
+    <h2>🧠 Custom Queries in JPA</h2>
+
+    <h3>1. JPQL Query (Entity-based)</h3>
+    <pre><code>@Query("SELECT u FROM User u WHERE u.name = :name")
+List&lt;User&gt; findByName(@Param("name") String name);</code></pre>
+
+    <h3>2. Native SQL Query</h3>
+    <pre><code>@Query(value = "SELECT * FROM users WHERE user_name = :name", nativeQuery = true)
+List&lt;User&gt; findByUserNameNative(@Param("name") String name);</code></pre>
+
+    <h3>3. Dynamic Query</h3>
+    <pre><code>@Query("SELECT u FROM User u WHERE (:name IS NULL OR u.name = :name) AND (:email IS NULL OR u.email = :email)")
+List&lt;User&gt; searchUsers(@Param("name") String name, @Param("email") String email);</code></pre>
+
+    <h3>4. Pagination Query</h3>
+    <pre><code>@Query("SELECT u FROM User u WHERE u.role = :role")
+Page&lt;User&gt; findByRole(@Param("role") Role role, Pageable pageable);</code></pre>
+
+    <h3>5. Update Query</h3>
+    <pre><code>@Modifying
+@Transactional
+@Query("UPDATE User u SET u.status = :status WHERE u.id = :id")
+void updateUserStatus(@Param("id") Long id, @Param("status") String status);</code></pre>
+
+    <h3>6. DTO Projection</h3>
+    <pre><code>public interface UserDTO {
+    String getName();
+    String getEmail();
+}
+
+@Query("SELECT u.name AS name, u.email AS email FROM User u WHERE u.role = :role")
+List&lt;UserDTO&gt; findUsersByRole(@Param("role") Role role);</code></pre>
+
+</section>
+
+<footer>
+    <p>&copy; 2025 Java Interview Series. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

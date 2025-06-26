@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JWT and Microservices Security - Interview Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code {
+      background: #f4f4f4;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-size: 0.95em;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      overflow-x: auto;
+      border-radius: 4px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f9f9f9;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛡️ JWT and Microservices Security – Interview Guide</h1>
+
+  <div class="section">
+    <h2>🔐 JWT Claims Explained</h2>
+    <p>In JWT (JSON Web Token), <strong>claims</strong> are key-value pairs in the payload used to carry information about the user.</p>
+
+    <h3>🧩 JWT Structure</h3>
+    <pre><code>&lt;Header&gt;.&lt;Payload&gt;.&lt;Signature&gt;</code></pre>
+
+    <h3>📦 Types of Claims</h3>
+    <h4>✅ Registered Claims</h4>
+    <table>
+      <tr><th>Claim</th><th>Description</th></tr>
+      <tr><td>iss</td><td>Issuer – Who created the token</td></tr>
+      <tr><td>sub</td><td>Subject – Whom the token refers to</td></tr>
+      <tr><td>aud</td><td>Audience – Intended recipient</td></tr>
+      <tr><td>exp</td><td>Expiration time</td></tr>
+      <tr><td>nbf</td><td>Not valid before</td></tr>
+      <tr><td>iat</td><td>Issued at time</td></tr>
+      <tr><td>jti</td><td>JWT ID – Unique token ID</td></tr>
+    </table>
+
+    <pre><code>{
+  "iss": "auth.myapp.com",
+  "sub": "user123",
+  "aud": "myapp.com",
+  "exp": 1718821200,
+  "iat": 1718817600,
+  "jti": "abc-123-xyz"
+}</code></pre>
+
+    <h4>⚙️ Public Claims</h4>
+    <p>Defined by application (collision-resistant):</p>
+    <pre><code>{
+  "role": "admin",
+  "email": "john@example.com"
+}</code></pre>
+
+    <h4>🔒 Private Claims</h4>
+    <p>Agreed upon between two parties:</p>
+    <pre><code>{
+  "tenant_id": "t-456",
+  "features": ["chat", "reporting"]
+}</code></pre>
+
+    <h3>🔧 Example JWT Payload</h3>
+    <pre><code>{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "role": "admin",
+  "iat": 1718817600,
+  "exp": 1718821200
+}</code></pre>
+
+    <h3>🧪 Java Code (Using JJWT)</h3>
+    <pre><code>String token = Jwts.builder()
+    .setSubject("user123")
+    .claim("role", "admin")
+    .claim("email", "john@example.com")
+    .setIssuedAt(new Date())
+    .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+    .signWith(SignatureAlgorithm.HS256, secretKey)
+    .compact();</code></pre>
+
+    <h3>🛡️ Server-side Validation</h3>
+    <ul>
+      <li>Check <code>exp</code> (expiration)</li>
+      <li>Validate <code>sub</code>, <code>role</code></li>
+      <li>Optionally validate <code>iss</code>, <code>aud</code>, <code>nbf</code></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🔑 JWT Technical Terms</h2>
+    <table>
+      <tr><th>Term</th><th>Description</th></tr>
+      <tr><td>JWT</td><td>JSON Web Token</td></tr>
+      <tr><td>Header</td><td>Specifies type and signing algorithm</td></tr>
+      <tr><td>Payload</td><td>Contains claims</td></tr>
+      <tr><td>Signature</td><td>Verifies token integrity</td></tr>
+      <tr><td>Bearer Token</td><td>Token sent in Authorization header</td></tr>
+      <tr><td>Access Token</td><td>Short-lived, used for APIs</td></tr>
+      <tr><td>Refresh Token</td><td>Used to get new access token</td></tr>
+      <tr><td>HS256</td><td>HMAC SHA-256 (symmetric)</td></tr>
+      <tr><td>RS256</td><td>RSA SHA-256 (asymmetric)</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Microservices Security – Interview Q&A</h2>
+
+    <h3>Q1: How do you secure communication between microservices?</h3>
+    <ul>
+      <li>Use HTTPS</li>
+      <li>Use mutual TLS (mTLS)</li>
+      <li>Sign/verify JWTs</li>
+      <li>Use OAuth2</li>
+      <li>Optionally use a Service Mesh (e.g., Istio)</li>
+    </ul>
+
+    <h3>Q2: How does JWT help in securing microservices?</h3>
+    <ul>
+      <li>Provides stateless authentication</li>
+      <li>Token contains identity info and claims</li>
+      <li>No need to call auth server per request</li>
+    </ul>
+
+    <h3>Q3: What’s the difference between authentication and authorization?</h3>
+    <ul>
+      <li><strong>Authentication:</strong> Who are you?</li>
+      <li><strong>Authorization:</strong> What are you allowed to do?</li>
+    </ul>
+
+    <h3>Q4: What is the role of an API Gateway in security?</h3>
+    <ul>
+      <li>Validates JWT tokens</li>
+      <li>Acts as central access control</li>
+      <li>Applies rate limiting, CORS, and throttling</li>
+    </ul>
+
+    <h3>Q5: How do you secure REST APIs?</h3>
+    <ul>
+      <li>Use HTTPS</li>
+      <li>Authenticate using JWT/OAuth2</li>
+      <li>Role-based access control (RBAC)</li>
+      <li>Input validation</li>
+      <li>Throttling with Resilience4j or API Gateway</li>
+    </ul>
+
+    <h3>Q6: What is OAuth2 in microservices?</h3>
+    <ul>
+      <li>Framework for delegated authorization</li>
+      <li>Auth server issues access and refresh tokens</li>
+      <li>Tokens (JWT) used to authorize requests</li>
+    </ul>
+
+    <h3>Q7: How do you handle role-based access?</h3>
+    <pre><code>@PreAuthorize("hasRole('ADMIN')")</code></pre>
+
+    <h3>Q8: What is mTLS?</h3>
+    <ul>
+      <li>Mutual TLS – both client and server authenticate</li>
+      <li>Used for internal microservice trust</li>
+    </ul>
+
+    <h3>Q9: How to revoke a JWT?</h3>
+    <ul>
+      <li>Blacklist token IDs (jti)</li>
+      <li>Use short expiry</li>
+      <li>Use token versioning in DB</li>
+    </ul>
+
+    <h3>Q10: Spring Cloud Gateway Security?</h3>
+    <ul>
+      <li>Use filters to validate JWT</li>
+      <li>Authenticate and authorize requests</li>
+    </ul>
+
+    <h3>Q11: CSRF Protection in microservices?</h3>
+    <ul>
+      <li>Not required for stateless APIs using JWT</li>
+      <li>Important only when using cookies/forms</li>
+    </ul>
+
+    <h3>Q12: Challenges in microservices security?</h3>
+    <ul>
+      <li>Distributed nature = wider attack surface</li>
+      <li>Service-to-service trust</li>
+      <li>Token leakage and secret management</li>
+    </ul>
+
+    <h3>Q13: What is a service mesh?</h3>
+    <ul>
+      <li>Layer for secure, observable service communication</li>
+      <li>Example: Istio with automatic mTLS and policies</li>
+    </ul>
+
+    <h3>Q14: How to manage secrets?</h3>
+    <ul>
+      <li>Use HashiCorp Vault, AWS Secrets Manager, Spring Cloud Vault</li>
+      <li>Don't hardcode secrets</li>
+      <li>Rotate periodically</li>
+    </ul>
+
+    <h3>Q15: How to validate JWT in Spring Boot?</h3>
+    <pre><code>Claims claims = Jwts.parser()
+    .setSigningKey(secret)
+    .parseClaimsJws(token)
+    .getBody();</code></pre>
+  </div>
+
+</body>
+</html>

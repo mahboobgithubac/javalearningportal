@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spring Boot REST API Security Guide</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+    }
+    h2 {
+      color: #004080;
+      margin-top: 30px;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      overflow: auto;
+      border-left: 4px solid #004080;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #e0e0e0;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  Spring Boot REST API Security – Step-by-Step Guide
+</header>
+
+<div class="section">
+Securing a REST API in Spring Boot is essential for protecting sensitive data, authenticating users, and controlling access. <br/>Here's a complete, step-by-step guide to secure your Spring Boot REST API using modern best practices:
+  <h2>✅ 1. Choose Your Security Strategy</h2>
+  <table>
+    <tr><th>Security Type</th><th>Description</th><th>When to Use</th></tr>
+    <tr><td>JWT (stateless)</td><td>Token-based authentication</td><td>Mobile/web apps, microservices</td></tr>
+    <tr><td>Session-based</td><td>Server keeps track of sessions</td><td>Traditional web apps</td></tr>
+    <tr><td>OAuth2 / OpenID</td><td>External identity providers (Google, etc.)</td><td>Public APIs, SSO</td></tr>
+    <tr><td>API Keys</td><td>Simple token in headers</td><td>Server-to-server, quick APIs</td></tr>
+    <tr><td>Basic Auth</td><td>Base64(username:password)</td><td>Testing, internal tools only</td></tr>
+  </table>
+</div>
+
+<div class="section">
+  <h2>✅ 2. Add Spring Security Dependency</h2>
+  <pre><code>&lt;!-- pom.xml --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- For JWT --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+  &lt;artifactId&gt;jjwt-api&lt;/artifactId&gt;
+  &lt;version&gt;0.11.5&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+
+<div class="section">
+  <h2>✅ 3. Configure SecurityFilterChain (Spring Boot 3+)</h2>
+  <pre><code>@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+      .csrf(AbstractHttpConfigurer::disable)
+      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+      .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/auth/**").permitAll()
+        .anyRequest().authenticated()
+      )
+      .authenticationProvider(customAuthProvider())
+      .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
+  }
+
+  // Add JWT filter and provider beans here
+}</code></pre>
+</div>
+
+<div class="section">
+  <h2>✅ 4. Implement JWT Authentication (for stateless APIs)</h2>
+  <h3>🔐 Token Generation (on login)</h3>
+  <pre><code>String token = Jwts.builder()
+  .setSubject("username")
+  .setIssuedAt(new Date())
+  .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+  .signWith(secretKey, SignatureAlgorithm.HS256)
+  .compact();</code></pre>
+
+  <h3>🔍 JWT Filter for Validation</h3>
+  <pre><code>public class JwtAuthFilter extends OncePerRequestFilter {
+  @Override
+  protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain chain) throws ServletException, IOException {
+    String authHeader = request.getHeader("Authorization");
+
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+      String token = authHeader.substring(7);
+      // validate token and set SecurityContext
+    }
+
+    chain.doFilter(request, response);
+  }
+}</code></pre>
+</div>
+
+<div class="section">
+  <h2>✅ 5. Protect Endpoints</h2>
+  <pre><code>@RestController
+@RequestMapping("/api")
+public class UserController {
+
+  @GetMapping("/public")
+  public String publicApi() {
+    return "Accessible by anyone";
+  }
+
+  @GetMapping("/secure")
+  public String secureApi() {
+    return "Only for authenticated users";
+  }
+}</code></pre>
+</div>
+
+<div class="section">
+  <h2>✅ 6. Enable CORS (for frontend access)</h2>
+  <pre><code>@Bean
+public WebMvcConfigurer corsConfigurer() {
+  return new WebMvcConfigurer() {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+      registry.addMapping("/**")
+              .allowedOrigins("http://localhost:3000")
+              .allowedMethods("*");
+    }
+  };
+}</code></pre>
+</div>
+
+<div class="section">
+  <h2>✅ 7. Store Passwords Securely</h2>
+  <h3>Define PasswordEncoder Bean</h3>
+  <pre><code>@Bean
+public PasswordEncoder passwordEncoder() {
+  return new BCryptPasswordEncoder();
+}</code></pre>
+  <h3>Hash Password Before Saving</h3>
+  <pre><code>String hashed = passwordEncoder.encode(rawPassword);</code></pre>
+</div>
+
+<div class="section">
+  <h2>✅ 8. Secure Sensitive Properties</h2>
+  <pre><code># application.properties
+spring.datasource.password=${DB_PASSWORD}
+jwt.secret=${JWT_SECRET}</code></pre>
+</div>
+
+<div class="section">
+  <h2>✅ 9. API Rate Limiting (Optional but Recommended)</h2>
+  <ul>
+    <li>Use <strong>Bucket4J</strong> or <strong>resilience4j</strong></li>
+    <li>Configure rate limiting at <strong>API Gateway</strong></li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>✅ Summary</h2>
+  <table>
+    <tr><th>Security Layer</th><th>Example</th></tr>
+    <tr><td>Authentication</td><td>JWT, OAuth2, Basic Auth</td></tr>
+    <tr><td>Authorization</td><td>Role-based endpoint access</td></tr>
+    <tr><td>Transport Security</td><td>HTTPS (TLS/SSL)</td></tr>
+    <tr><td>Data Security</td><td>Password hashing, token expiry</td></tr>
+    <tr><td>CORS</td><td>Frontend communication</td></tr>
+    <tr><td>Rate Limiting</td><td>Prevent abuse</td></tr>
+  </table>
+</div>
+
+</body>
+</html>

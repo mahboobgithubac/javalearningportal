@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot Entity and DTO Example</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+    pre { background: #f4f4f4; padding: 10px; border-left: 5px solid #ccc; overflow-x: auto; }
+    h2 { color: #2c3e50; }
+    code { background: #eef; padding: 2px 4px; }
+  </style>
+</head>
+<body>
+
+<h1>Spring Boot Example: Using Entity and DTO Classes with REST API</h1>
+
+<h2>📁 Project Structure</h2>
+<pre>
+com.example.demo
+├── controller
+│   └── UserController.java
+├── dto
+│   └── UserDTO.java
+├── entity
+│   └── User.java
+├── repository
+│   └── UserRepository.java
+├── service
+│   └── UserService.java
+└── DemoApplication.java
+</pre>
+
+<h2>1️⃣ User Entity (entity/User.java)</h2>
+<pre><code>@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String email;
+    private String password;
+
+    // Getters and Setters
+}
+</code></pre>
+
+<h2>2️⃣ User DTO (dto/UserDTO.java)</h2>
+<pre><code>public class UserDTO {
+    private String name;
+    private String email;
+
+    // Getters and Setters
+}
+</code></pre>
+
+<h2>3️⃣ User Repository (repository/UserRepository.java)</h2>
+<pre><code>public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+}
+</code></pre>
+
+<h2>4️⃣ User Service (service/UserService.java)</h2>
+<pre><code>@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public List&lt;UserDTO&gt; getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public UserDTO createUser(UserDTO dto) {
+        User user = convertToEntity(dto);
+        user.setPassword("default123"); // example
+        return convertToDTO(userRepository.save(user));
+    }
+
+    private UserDTO convertToDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        return dto;
+    }
+
+    private User convertToEntity(UserDTO dto) {
+        User user = new User();
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        return user;
+    }
+}
+</code></pre>
+
+<h2>5️⃣ User Controller (controller/UserController.java)</h2>
+<pre><code>@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @GetMapping
+    public List&lt;UserDTO&gt; getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @PostMapping
+    public UserDTO createUser(@RequestBody UserDTO dto) {
+        return userService.createUser(dto);
+    }
+}
+</code></pre>
+
+<h2>6️⃣ Main Class (DemoApplication.java)</h2>
+<pre><code>@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+</code></pre>
+
+<h2>📦 Dependencies (in pom.xml)</h2>
+<pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+        &lt;artifactId&gt;h2&lt;/artifactId&gt;
+        &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+
+<h2>🧪 Sample API Test</h2>
+<pre><code>// POST http://localhost:8080/api/users
+{
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+
+// GET http://localhost:8080/api/users
+[
+  {
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+]
+</code></pre>
+
+</body>
+</html>

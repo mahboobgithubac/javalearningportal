@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detecting Service Failures in Microservices</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 20px; line-height: 1.6; }
+    h1, h2, h3 { color: #003366; }
+    pre, code { background: #f4f4f4; padding: 10px; border-radius: 5px; display: block; white-space: pre-wrap; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    th { background-color: #003366; color: white; }
+  </style>
+</head>
+<body>
+  <h1>Detecting Service Failures in Microservices</h1>
+
+  <h2>✅ Common Service Failures</h2>
+  <table>
+    <tr><th>Type</th><th>Example</th></tr>
+    <tr><td>Network Failures</td><td>Service is unreachable</td></tr>
+    <tr><td>Timeouts</td><td>Service response exceeds time limit</td></tr>
+    <tr><td>Error Responses</td><td>HTTP 5xx errors</td></tr>
+    <tr><td>Resource Failures</td><td>Database or memory issues</td></tr>
+    <tr><td>Circuit Break Triggered</td><td>Service fails multiple times</td></tr>
+  </table>
+
+  <h2>✅ Techniques to Detect Service Failures</h2>
+
+  <h3>1. HTTP Status Codes Monitoring</h3>
+  <pre><code>try {
+    ResponseEntity&lt;String&gt; response = restTemplate.getForEntity("http://orderservice/orders", String.class);
+} catch (HttpServerErrorException ex) {
+    // 5xx errors
+} catch (HttpClientErrorException ex) {
+    // 4xx errors
+}</code></pre>
+
+  <h3>2. Timeout Configuration</h3>
+  <pre><code>@Bean
+public RestTemplate restTemplate() {
+    HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+    factory.setConnectTimeout(3000);
+    factory.setReadTimeout(3000);
+    return new RestTemplate(factory);
+}</code></pre>
+
+  <h3>3. Circuit Breaker Pattern</h3>
+  <pre><code>@CircuitBreaker(name = "orderService", fallbackMethod = "fallbackOrder")
+public String callOrderService() {
+    return restTemplate.getForObject("http://orderservice/orders", String.class);
+}
+
+public String fallbackOrder(Throwable t) {
+    return "Order Service is down";
+}</code></pre>
+
+  <h3>4. Health Check Endpoints</h3>
+  <pre><code>// Dependency
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+// Access endpoint
+http://localhost:8080/actuator/health</code></pre>
+
+  <h3>Sample Health JSON</h3>
+  <pre><code>{
+  "status": "DOWN",
+  "components": {
+    "db": { "status": "UP" },
+    "diskSpace": { "status": "UP" }
+  }
+}</code></pre>
+
+  <h3>5. Service Discovery Health</h3>
+  <p>Eureka dashboard shows DOWN/UNKNOWN status if service is failing.</p>
+
+  <h3>6. Centralized Logging & Alerts</h3>
+  <p>Use ELK, Grafana + Loki, or Splunk. Trigger alerts on error logs, exceptions, or timeouts.</p>
+
+  <h3>7. Distributed Tracing</h3>
+  <p>Use Spring Cloud Sleuth + Zipkin or OpenTelemetry to trace service-to-service call failures.</p>
+
+  <h2>✅ Summary Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Strategy</th>
+        <th>Detects</th>
+        <th>Tools</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>HTTP error handling</td><td>4xx/5xx</td><td>RestTemplate, WebClient</td></tr>
+      <tr><td>Timeout config</td><td>Slow responses</td><td>RestTemplate/WebClient</td></tr>
+      <tr><td>Circuit Breaker</td><td>Repeated failures</td><td>Resilience4j, Hystrix</td></tr>
+      <tr><td>Health Check</td><td>Service health</td><td>Spring Boot Actuator</td></tr>
+      <tr><td>Service Discovery</td><td>Node status</td><td>Eureka, Consul</td></tr>
+      <tr><td>Central Logging</td><td>Logs & Errors</td><td>ELK, Grafana Loki</td></tr>
+      <tr><td>Tracing</td><td>Call-level failure</td><td>Zipkin, Jaeger</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

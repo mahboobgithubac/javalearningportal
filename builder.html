@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Builder Pattern in Java - Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code, pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            display: block;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        .highlight {
+            background-color: #e0f7fa;
+            border-left: 4px solid #00796b;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Builder Pattern in Java</h1>
+    
+    <div class="highlight">
+        <strong>Definition:</strong><br>
+        The Builder Pattern is a <strong>creational design pattern</strong> used to construct complex objects step-by-step. It is especially useful when an object has many optional parameters or when constructors with many arguments become hard to read and maintain.
+    </div>
+
+    <h2>✅ Benefits</h2>
+    <ul>
+        <li>Makes object creation <strong>readable</strong> and <strong>flexible</strong>.</li>
+        <li>Avoids <strong>constructor telescoping</strong> (many overloaded constructors).</li>
+        <li><strong>Immutable</strong> objects can be created easily.</li>
+    </ul>
+
+    <h2>🔨 Example: Employee Object with Builder Pattern</h2>
+
+    <h3>1. ✅ Traditional Java Builder Pattern</h3>
+    <pre><code>public class Employee {
+    private final String name;
+    private final String department;
+    private final double salary;
+    private final String email;
+
+    private Employee(Builder builder) {
+        this.name = builder.name;
+        this.department = builder.department;
+        this.salary = builder.salary;
+        this.email = builder.email;
+    }
+
+    // Getters only (no setters to make it immutable)
+    public String getName() { return name; }
+    public String getDepartment() { return department; }
+    public double getSalary() { return salary; }
+    public String getEmail() { return email; }
+
+    public static class Builder {
+        private String name;
+        private String department;
+        private double salary;
+        private String email;
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setDepartment(String department) {
+            this.department = department;
+            return this;
+        }
+
+        public Builder setSalary(double salary) {
+            this.salary = salary;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Employee build() {
+            return new Employee(this);
+        }
+    }
+}</code></pre>
+
+    <h3>2. ✅ Usage</h3>
+    <pre><code>public class TestBuilder {
+    public static void main(String[] args) {
+        Employee emp = new Employee.Builder()
+                .setName("John Doe")
+                .setDepartment("Engineering")
+                .setSalary(85000)
+                .setEmail("john.doe@example.com")
+                .build();
+
+        System.out.println("Name: " + emp.getName());
+        System.out.println("Dept: " + emp.getDepartment());
+    }
+}</code></pre>
+<h1>💡 Java Records Alternative (Java 17+)</h1>
+
+    <div class="note">
+      If you're using Java 17+, you might use <strong>records</strong> with builders too — but they're immutable by default.
+    </div>
+
+    <h2>📦 Lombok Example (Less Boilerplate)</h2>
+    <p>If you use <strong>Lombok</strong>:</p>
+
+    <pre><code class="language-java">import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class Employee {
+    private String name;
+    private String department;
+    private double salary;
+    private String email;
+}
+</code></pre>
+
+    <h3>✅ Usage:</h3>
+    <pre><code class="language-java">Employee emp = Employee.builder()
+                .name("Alice")
+                .department("HR")
+                .salary(70000)
+                .email("alice@example.com")
+                .build();
+</code></pre>
+
+</body>
+</html>

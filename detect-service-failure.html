@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Detecting Service Failure in Microservices</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #e3f2fd;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    pre {
+    /*  background-color: #2d2d2d;  */
+      color: #003366;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .section {
+      background-color: #e0f7fa;
+      border-left: 5px solid #00796b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Detecting Service Failure in Microservices</h1>
+
+  <p>In microservices architecture, detecting service failures is essential to ensure system reliability and quick recovery. Below are practical ways to detect, handle, and monitor service failures.</p>
+
+  <h2>✅ Common Service Failures</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Network Failures</td>
+        <td>Service is unreachable due to network issues</td>
+      </tr>
+      <tr>
+        <td>Timeouts</td>
+        <td>Service does not respond in expected time</td>
+      </tr>
+      <tr>
+        <td>Error Responses</td>
+        <td>HTTP 5xx (e.g., 500, 502) errors</td>
+      </tr>
+      <tr>
+        <td>Resource Failures</td>
+        <td>DB connection errors, memory overload</td>
+      </tr>
+      <tr>
+        <td>Circuit Break Triggered</td>
+        <td>Service is down or slow repeatedly</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>✅ Techniques to Detect Service Failure</h2>
+
+  <div class="section">
+    <h3>1. HTTP Status Codes Monitoring</h3>
+    <p>Use <code>RestTemplate</code>, <code>WebClient</code>, or <code>FeignClient</code>. Catch <code>5xx</code> and <code>4xx</code> errors.</p>
+    <pre><code>try {
+    ResponseEntity&lt;String&gt; response = restTemplate.getForEntity("http://orderservice/orders", String.class);
+} catch (HttpServerErrorException ex) {
+    // 5xx errors
+} catch (HttpClientErrorException ex) {
+    // 4xx errors
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>2. Timeout Configuration</h3>
+    <p>Set connection and read timeouts:</p>
+    <pre><code>@Bean
+public RestTemplate restTemplate() {
+    HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+    factory.setConnectTimeout(3000);
+    factory.setReadTimeout(3000);
+    return new RestTemplate(factory);
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>3. Circuit Breaker Pattern</h3>
+    <p>Use <code>Resilience4j</code> or <code>Hystrix</code>:</p>
+    <pre><code>@CircuitBreaker(name = "orderService", fallbackMethod = "fallbackOrder")
+public String callOrderService() {
+    return restTemplate.getForObject("http://orderservice/orders", String.class);
+}
+
+public String fallbackOrder(Throwable t) {
+    return "Order Service is down";
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>4. Health Check Endpoints</h3>
+    <p>Use <strong>Spring Boot Actuator</strong>:</p>
+    <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+    <p><strong>Access:</strong> <code>http://localhost:8080/actuator/health</code></p>
+    <p><strong>Sample JSON:</strong></p>
+    <pre><code>{
+  "status": "DOWN",
+  "components": {
+    "db": { "status": "UP" },
+    "diskSpace": { "status": "UP" }
+  }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>5. Service Discovery Health Status</h3>
+    <p>If using Eureka, it marks services as <code>DOWN</code> or <code>UNKNOWN</code>. Dashboard shows registration status.</p>
+  </div>
+
+  <div class="section">
+    <h3>6. Centralized Logging & Alerts</h3>
+    <p>Use tools like <strong>ELK Stack</strong>, <strong>Grafana + Loki</strong>, or <strong>Splunk</strong>.</p>
+    <p>Log patterns, exceptions, or thresholds can trigger alerts.</p>
+  </div>
+
+  <div class="section">
+    <h3>7. Distributed Tracing</h3>
+    <p>Use <code>Spring Cloud Sleuth + Zipkin</code> or <code>OpenTelemetry</code> to trace where failure happened in a request path.</p>
+  </div>
+
+  <h2>✅ Summary Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Strategy</th>
+        <th>Detects</th>
+        <th>Tools</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>HTTP error handling</td>
+        <td>4xx/5xx errors</td>
+        <td>RestTemplate, WebClient, Feign</td>
+      </tr>
+      <tr>
+        <td>Timeout config</td>
+        <td>Delayed services</td>
+        <td>RestTemplate, WebClient</td>
+      </tr>
+      <tr>
+        <td>Circuit Breaker</td>
+        <td>Repeated failures</td>
+        <td>Resilience4j, Hystrix</td>
+      </tr>
+      <tr>
+        <td>Health Check API</td>
+        <td>Service health</td>
+        <td>Spring Boot Actuator</td>
+      </tr>
+      <tr>
+        <td>Service Discovery</td>
+        <td>Instance down</td>
+        <td>Eureka, Consul</td>
+      </tr>
+      <tr>
+        <td>Central Logging</td>
+        <td>Exceptions, downtimes</td>
+        <td>ELK, Splunk</td>
+      </tr>
+      <tr>
+        <td>Tracing</td>
+        <td>Call failures in chain</td>
+        <td>Zipkin, Jaeger, OpenTelemetry</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

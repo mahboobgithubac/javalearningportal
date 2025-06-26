@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java 8 Object List Problem Solving (Employee)</title>
+  <meta name="description" content="Java 8 Stream API Object List Problem Solving using Employee class. Includes sorting, grouping, filtering, transformation examples.">
+  <meta name="keywords" content="Java 8, Stream API, Employee problems, Interview questions, Object list problems, Grouping, Sorting, Mapping">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; display: flex; }
+    nav { width: 260px; background-color: #2c3e50; color: white; height: 100vh; overflow-y: auto; position: fixed; }
+    nav h2 { text-align: center; padding: 15px 0; background: #1a252f; margin: 0; }
+    nav ul { list-style: none; padding: 0; }
+    nav li { padding: 10px 20px; cursor: pointer; }
+    nav li:hover { background-color: #34495e; }
+    main { margin-left: 260px; padding: 20px; background-color: #f4f4f4; flex: 1; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    section { margin-bottom: 20px; border: 1px solid #ccc; background: white; border-radius: 5px; }
+    section h3 { margin: 0; padding: 15px; background: #3498db; color: white; cursor: pointer; }
+    .content { padding: 15px; display: none; }
+    pre { background: #2d2d2d; color: white; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    code[class*="language-"] { font-size: 14px; }
+  </style>
+  <script>
+    function toggleContent(id) {
+      const content = document.getElementById(id);
+      content.style.display = content.style.display === "block" ? "none" : "block";
+    }
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</head>
+<body>
+  <nav>
+    <h2>Employee Q&A</h2>
+    <ul>
+      <!-- Sidebar Navigation -->
+      <!-- Generated from 1 to 30 -->
+      <script>
+        document.write([...Array(30)].map((_, i) => `<li onclick="scrollToSection('q${i+1}')">${i+1}. Question ${i+1}</li>`).join(''));
+      </script>
+    </ul>
+  </nav>
+  <main>
+    <h1>Java 8 Object List Problem Solving (Employee)</h1>
+    <!-- 30 Questions Sections -->
+    <script>
+      const codeSnippets = `
+        employees.stream().sorted(Comparator.comparing(e -> e.name)).forEach(System.out::println);
+        employees.stream().sorted(Comparator.comparingDouble(e -> -e.salary)).forEach(System.out::println);
+        employees.stream().filter(e -> e.salary > 50000).forEach(System.out::println);
+        employees.stream().max(Comparator.comparingDouble(e -> e.salary)).orElse(null);
+        employees.stream().min(Comparator.comparingInt(e -> e.age)).orElse(null);
+        employees.stream().map(e -> e.name).collect(Collectors.toList());
+        new ArrayList<>(employees.stream().collect(Collectors.toMap(e -> e.id, Function.identity(), (e1, e2) -> e1)).values());
+        employees.stream().collect(Collectors.groupingBy(e -> e.department));
+        employees.stream().collect(Collectors.groupingBy(e -> e.department, Collectors.counting()));
+        employees.stream().collect(Collectors.groupingBy(e -> e.department, Collectors.averagingDouble(e -> e.salary)));
+        employees.stream().collect(Collectors.groupingBy(e -> e.department, Collectors.maxBy(Comparator.comparingDouble(e -> e.salary))));
+        employees.stream().mapToDouble(e -> e.salary).sum();
+        employees.stream().collect(Collectors.groupingBy(e -> e.age, Collectors.mapping(e -> e.name, Collectors.toList())));
+        employees.stream().anyMatch(e -> e.salary > 100000);
+        employees.stream().allMatch(e -> e.age > 18);
+        employees.stream().filter(e -> e.name.startsWith("A")).findFirst().orElse(null);
+        employees.stream().collect(Collectors.groupingBy(e -> e.name, Collectors.counting())).entrySet().stream().filter(e -> e.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toSet());
+        employees.stream().collect(Collectors.toMap(e -> e.id, e -> e.name));
+        // Question 19: See #8 (group by department)
+        employees.stream().map(e -> e.name).collect(Collectors.joining(", "));
+        employees.stream().sorted((e1, e2) -> Double.compare(e2.salary, e1.salary)).skip(1).findFirst().orElse(null);
+        employees.stream().sorted((e1, e2) -> Double.compare(e2.salary, e1.salary)).limit(3).forEach(System.out::println);
+        // Question 23: See #11 (highest-paid per dept)
+        employees.stream().collect(Collectors.partitioningBy(e -> e.age > 30));
+        employees.stream().max(Comparator.comparingInt(e -> e.name.length())).orElse(null);
+        Arrays.asList(employees.subList(0, 3), employees.subList(3, 6)).stream().flatMap(Collection::stream).collect(Collectors.toList());
+        employees.stream().skip(1).limit(3).collect(Collectors.toList());
+        employees.stream().flatMap(e -> e.name.chars().mapToObj(c -> (char) c)).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        // Question 29: Assume experience existed
+        avgSal.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList());
+      `.trim().split("\n");
+      for (let i = 0; i < 30; i++) {
+        document.write(`
+          <section id="q${i+1}">
+            <h3 onclick="toggleContent('a${i+1}')">${i+1}. Question ${i+1}</h3>
+            <div class="content" id="a${i+1}">
+              <pre><code class="language-java">${codeSnippets[i] || '// TODO'}</code></pre>
+            </div>
+          </section>
+        `);
+      }
+    </script>
+  </main>
+</body>
+</html>

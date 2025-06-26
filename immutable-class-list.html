@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Immutable Class with List in Java</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;/* #f4f6f9 */
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f6f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #003366;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #e0f7fa;
+            padding: 10px;
+            border-left: 5px solid #00796b;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Immutable Class with List Field in Java</h1>
+
+    <p>To create an immutable class with a <code>List</code> field in Java, ensure the following:</p>
+    <ul>
+        <li>The class is <code>final</code> (to prevent subclassing).</li>
+        <li>Fields are <code>private</code> and <code>final</code>.</li>
+        <li>No setters are provided.</li>
+        <li>The list is defensively copied in the constructor and the getter.</li>
+        <li>The internal list is wrapped with <code>Collections.unmodifiableList()</code>.</li>
+    </ul>
+
+    <h2>✅ Example: Immutable Class with List&lt;String&gt;</h2>
+
+    <pre><code>import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+
+public final class Employee {
+
+    private final String name;
+    private final List&lt;String&gt; skills;
+
+    public Employee(String name, List&lt;String&gt; skills) {
+        this.name = name;
+        // Defensive copy to maintain immutability
+        this.skills = Collections.unmodifiableList(new ArrayList&lt;&gt;(skills));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List&lt;String&gt; getSkills() {
+        // Return the unmodifiable list to prevent external modification
+        return skills;
+    }
+}</code></pre>
+
+    <h2>✅ Usage Example</h2>
+
+    <pre><code>import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        List&lt;String&gt; skills = new ArrayList&lt;&gt;(Arrays.asList("Java", "Spring"));
+        Employee emp = new Employee("Alice", skills);
+
+        System.out.println(emp.getName());        // Alice
+        System.out.println(emp.getSkills());      // [Java, Spring]
+
+        // Try to modify the list
+        skills.add("Hibernate");  // This won't affect the internal list
+        System.out.println(emp.getSkills());      // Still [Java, Spring]
+
+        // emp.getSkills().add("Hibernate");  // Throws UnsupportedOperationException
+    }
+}</code></pre>
+
+    <div class="note">
+        <h3>🛡️ Key Points</h3>
+        <ul>
+            <li>Use <code>Collections.unmodifiableList()</code> to block external modifications.</li>
+            <li>Always copy the input list to break the reference chain.</li>
+            <li>Avoid exposing any setters or mutable references.</li>
+        </ul>
+    </div>
+
+</body>
+</html>

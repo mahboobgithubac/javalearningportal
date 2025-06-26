@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feign Client Project</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 2rem; background-color: #f4f4f4; }
+        h1, h2, h3 { color: #2c3e50; }
+        code, pre { background: #e8e8e8; padding: 10px; border-radius: 5px; display: block; overflow-x: auto; }
+        .section { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 Feign Client Based Microservice Communication (Spring Boot)</h1>
+
+    <div class="section">
+        <h2>🧱 Project Overview</h2>
+        <ul>
+            <li><strong>Customer Service</strong> (calls <strong>Order Service</strong> using Feign)</li>
+            <li><strong>Order Service</strong> (provides order details)</li>
+            <li>REST communication using <strong>OpenFeign</strong></li>
+            <li>Technologies: Spring Boot, Spring Web, Spring Data JPA, OpenFeign</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>✅ 1. Order Service (Provider)</h2>
+
+        <h3>Dependencies (pom.xml)</h3>
+        <pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+        &lt;artifactId&gt;h2&lt;/artifactId&gt;
+        &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+
+        <h3>Entity: Order</h3>
+        <pre><code>@Entity
+public class Order {
+    @Id @GeneratedValue
+    private Long id;
+    private String productName;
+    private double price;
+    private Long customerId;
+    // Getters and Setters
+}</code></pre>
+
+        <h3>Repository</h3>
+        <pre><code>public interface OrderRepository extends JpaRepository&lt;Order, Long&gt; {
+    List&lt;Order&gt; findByCustomerId(Long customerId);
+}</code></pre>
+
+        <h3>Controller</h3>
+        <pre><code>@RestController
+@RequestMapping("/orders")
+public class OrderController {
+
+    @Autowired
+    private OrderRepository repository;
+
+    @GetMapping("/customer/{customerId}")
+    public List&lt;Order&gt; getOrdersForCustomer(@PathVariable Long customerId) {
+        return repository.findByCustomerId(customerId);
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>✅ 2. Customer Service (Consumer with Feign)</h2>
+
+        <h3>Dependencies (pom.xml)</h3>
+        <pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;2021.0.8&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</code></pre>
+
+        <h3>Main Class</h3>
+        <pre><code>@SpringBootApplication
+@EnableFeignClients
+public class CustomerServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(CustomerServiceApplication.class, args);
+    }
+}</code></pre>
+
+        <h3>Feign Client Interface</h3>
+        <pre><code>@FeignClient(name = "order-service", url = "http://localhost:8081")
+public interface OrderClient {
+    @GetMapping("/orders/customer/{customerId}")
+    List&lt;Order&gt; getOrders(@PathVariable("customerId") Long customerId);
+}</code></pre>
+
+        <h3>DTO for Order</h3>
+        <pre><code>public class Order {
+    private Long id;
+    private String productName;
+    private double price;
+    private Long customerId;
+    // Getters and Setters
+}</code></pre>
+
+        <h3>Customer Controller</h3>
+        <pre><code>@RestController
+@RequestMapping("/customers")
+public class CustomerController {
+
+    @Autowired
+    private OrderClient orderClient;
+
+    @GetMapping("/{id}/orders")
+    public List&lt;Order&gt; getCustomerOrders(@PathVariable Long id) {
+        return orderClient.getOrders(id);
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>🔁 Run Order Service on Port 8081</h2>
+        <h3>application.properties (Order Service)</h3>
+        <pre><code>server.port=8081
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.h2.console.enabled=true</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Sample Requests</h2>
+        <ul>
+            <li>Start both services.</li>
+            <li>Hit <code>http://localhost:8081/orders/customer/1</code> → returns orders.</li>
+            <li>Hit <code>http://localhost:8080/customers/1/orders</code> → Feign calls Order Service and returns the same.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>💡 Optional Add-ons</h2>
+        <ul>
+            <li>🔁 Add <strong>Resilience4j</strong> to Feign for Circuit Breaker</li>
+            <li>🌐 Use <strong>Service Discovery (Eureka)</strong> – no hardcoded URLs</li>
+            <li>🔁 Enable retries: <code>spring.cloud.openfeign.retry.enabled=true</code></li>
+        </ul>
+    </div>
+
+</body>
+</html>

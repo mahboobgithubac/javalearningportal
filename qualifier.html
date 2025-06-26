@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@Qualifier Annotation Example in Spring Boot</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+        h1, h2 { color: #2c3e50; }
+        code, pre { background: #f4f4f4; padding: 10px; border-radius: 5px; display: block; }
+        .note { background: #eafaf1; padding: 10px; border-left: 5px solid #27ae60; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+<h1>@Qualifier Annotation in Spring Boot</h1>
+
+<p>The <code>@Qualifier</code> annotation is used with <code>@Autowired</code> to resolve ambiguity when multiple beans of the same type exist. It helps Spring determine which specific bean to inject.</p>
+
+<h2>✅ Why Use @Qualifier?</h2>
+<p>When multiple implementations of an interface exist, Spring needs guidance to decide which one to inject. Without <code>@Qualifier</code>, Spring throws a <code>NoUniqueBeanDefinitionException</code>.</p>
+
+<h2>🧱 Step-by-Step Example</h2>
+
+<h3>1. Create an Interface</h3>
+<pre><code>public interface MessageService {
+    String getMessage();
+}
+</code></pre>
+
+<h3>2. Create Two Implementations</h3>
+
+<pre><code>// EmailService.java
+import org.springframework.stereotype.Service;
+
+@Service("emailService")
+public class EmailService implements MessageService {
+    public String getMessage() {
+        return "Email Message";
+    }
+}
+</code></pre>
+
+<pre><code>// SMSService.java
+import org.springframework.stereotype.Service;
+
+@Service("smsService")
+public class SMSService implements MessageService {
+    public String getMessage() {
+        return "SMS Message";
+    }
+}
+</code></pre>
+
+<h3>3. Use @Autowired with @Qualifier</h3>
+<pre><code>// NotificationManager.java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+@Component
+public class NotificationManager {
+
+    private final MessageService messageService;
+
+    @Autowired
+    public NotificationManager(@Qualifier("smsService") MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    public void sendNotification() {
+        System.out.println("Sending: " + messageService.getMessage());
+    }
+}
+</code></pre>
+
+<h3>4. Main Spring Boot Application</h3>
+<pre><code>// QualifierDemoApplication.java
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class QualifierDemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(QualifierDemoApplication.class, args);
+    }
+
+    @Bean
+    public CommandLineRunner run(NotificationManager manager) {
+        return args -> manager.sendNotification();
+    }
+}
+</code></pre>
+
+<h2>✅ Output</h2>
+<pre><code>Sending: SMS Message</code></pre>
+
+<p class="note">💡 Change <code>@Qualifier("smsService")</code> to <code>@Qualifier("emailService")</code> in the constructor to use the EmailService instead.</p>
+
+<h2>✅ Notes</h2>
+<ul>
+    <li><code>@Qualifier</code> can be used on constructors, fields, or setter injection methods.</li>
+    <li>Always use it when more than one bean of the same type is defined.</li>
+    <li>Without <code>@Qualifier</code>, Spring will not know which bean to inject and will throw an error.</li>
+</ul>
+
+  <section>
+    <h2>✅ Dynamic Bean Switching</h2>
+
+    <h3>🔹 Option 1: Inject Both Beans</h3>
+    <pre><code>@Component
+public class NotificationManager {
+
+    private final MessageService smsService;
+    private final MessageService emailService;
+
+    public NotificationManager(@Qualifier("smsService") MessageService smsService,
+                               @Qualifier("emailService") MessageService emailService) {
+        this.smsService = smsService;
+        this.emailService = emailService;
+    }
+
+    public void sendNotification(String type) {
+        if ("sms".equalsIgnoreCase(type)) {
+            System.out.println("Sending: " + smsService.getMessage());
+        } else if ("email".equalsIgnoreCase(type)) {
+            System.out.println("Sending: " + emailService.getMessage());
+        } else {
+            System.out.println("Unknown type. No message sent.");
+        }
+    }
+}</code></pre>
+
+    <h3>🔹 Option 2: Use Map for Dynamic Injection</h3>
+    <pre><code>@Component
+public class NotificationManager {
+
+    private final Map&lt;String, MessageService&gt; serviceMap;
+
+    public NotificationManager(Map&lt;String, MessageService&gt; serviceMap) {
+        this.serviceMap = serviceMap;
+    }
+
+    public void sendNotification(String type) {
+        MessageService service = serviceMap.get(type + "Service");
+        if (service != null) {
+            System.out.println("Sending: " + service.getMessage());
+        } else {
+            System.out.println("Unknown service type.");
+        }
+    }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>✅ Summary Comparison</h2>
+    <table>
+      <tr>
+        <th>Approach</th>
+        <th>Pros</th>
+        <th>Use When</th>
+      </tr>
+      <tr>
+        <td>Inject both with @Qualifier</td>
+        <td>Simple and clear for 2–3 beans</td>
+        <td>Few fixed implementations</td>
+      </tr>
+      <tr>
+        <td>Inject as Map&lt;String, Bean&gt;</td>
+        <td>Scalable and dynamic</td>
+        <td>Multiple implementations, dynamic routing</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>✅ Professional Spring Boot Project Structure</h2>
+    <pre><code>src/
+└── main/
+    ├── java/
+    │   └── com/
+    │       └── yourcompany/
+    │           └── yourproject/
+    │               ├── YourProjectApplication.java
+    │               ├── controller/
+    │               ├── service/
+    │               ├── model/
+    │               ├── dto/
+    │               ├── repository/
+    │               ├── entity/
+    │               ├── config/
+    │               ├── exception/
+    │               └── utils/
+    └── resources/
+        ├── application.properties
+        ├── static/
+        └── templates/</code></pre>
+  </section>
+
+  <section>
+    <h3>Layer Description</h3>
+    <table>
+      <tr>
+        <th>Layer</th>
+        <th>Description</th>
+      </tr>
+      <tr><td>controller</td><td>REST endpoints</td></tr>
+      <tr><td>service</td><td>Business logic, service beans</td></tr>
+      <tr><td>repository</td><td>Spring Data interfaces</td></tr>
+      <tr><td>entity</td><td>JPA Entities</td></tr>
+      <tr><td>dto</td><td>Data Transfer Objects</td></tr>
+      <tr><td>model</td><td>Custom request/response objects</td></tr>
+      <tr><td>config</td><td>Spring configuration classes</td></tr>
+      <tr><td>exception</td><td>Global/custom exception handling</td></tr>
+      <tr><td>utils</td><td>Helper classes</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>✅ REST Example Controller</h2>
+    <pre><code>@RestController
+@RequestMapping("/api/notify")
+public class NotificationController {
+
+    private final NotificationManager manager;
+
+    public NotificationController(NotificationManager manager) {
+        this.manager = manager;
+    }
+
+    @GetMapping("/{type}")
+    public String notify(@PathVariable String type) {
+        return manager.sendNotification(type);
+    }
+}</code></pre>
+  </section>
+
+</body>
+</html>

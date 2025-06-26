@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Inheritance and Polymorphism</title>
+</head>
+<body>
+
+<h1>Java Inheritance and Polymorphism</h1>
+<p><strong>Inheritance</strong> allows a subclass to acquire properties and behaviors of a superclass.</p>
+<p><strong>Polymorphism</strong> enables a single interface to represent different types of objects.</p>
+<pre><code>class Animal {
+    void makeSound() {
+        System.out.println("Some sound");
+    }
+}
+
+class Dog extends Animal {
+    void makeSound() {
+        System.out.println("Bark");
+    }
+}</code></pre>
+<p>Here, <code>Dog</code> overrides <code>makeSound</code> demonstrating runtime polymorphism.</p>
+
+</body>
+</html>

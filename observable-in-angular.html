@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Observable in Angular (RxJS)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    header {
+      background-color: #1976d2;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    section {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #1976d2;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<header>🔍 Observable in Angular (RxJS)</header>
+
+<section>
+  <h2>🧠 What Does Observable Do?</h2>
+  <p>In Angular, Observable is a core feature provided by <strong>RxJS</strong> (Reactive Extensions for JavaScript). It allows you to work with asynchronous data streams — such as HTTP responses, user inputs, WebSockets, timers, etc.</p>
+  <p>When you call:</p>
+  <pre><code>getTodos(): Observable&lt;Todo[]&gt; {
+  return this.http.get&lt;Todo[]&gt;(this.apiUrl);
+}</code></pre>
+  <p>This method returns a stream of data (Observable) that may emit a value now, later, or never.</p>
+</section>
+
+<section>
+  <h2>✅ Why Use Observable in Angular?</h2>
+  <ul>
+    <li><strong>HTTP is asynchronous:</strong> You don’t know when the backend will return the data.</li>
+    <li><strong>Reactive programming:</strong> You can subscribe to data changes and react dynamically.</li>
+    <li><strong>Unsubscribe for cleanup:</strong> Helps avoid memory leaks by unsubscribing when no longer needed.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>🔁 How to Use It</h2>
+  <p>You subscribe to an Observable to get the data:</p>
+  <pre><code>this.todoService.getTodos().subscribe(todos =&gt; {
+  this.todos = todos;
+});</code></pre>
+</section>
+
+<section>
+  <h2>🔧 Common Methods</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>RxJS Operator</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>subscribe()</code></td>
+        <td>Start consuming the data</td>
+      </tr>
+      <tr>
+        <td><code>pipe()</code></td>
+        <td>Chain RxJS operators</td>
+      </tr>
+      <tr>
+        <td><code>map()</code></td>
+        <td>Transform data</td>
+      </tr>
+      <tr>
+        <td><code>catchError()</code></td>
+        <td>Handle errors in stream</td>
+      </tr>
+      <tr>
+        <td><code>of()</code></td>
+        <td>Create an observable from value</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>✅ In Short</h2>
+  <ul>
+    <li>Observable is like a promise, but more powerful.</li>
+    <li>It supports multiple values over time (streams).</li>
+    <li>It's used heavily in Angular's HttpClient, forms, and event handling.</li>
+  </ul>
+</section>
+
+</body>
+</html>

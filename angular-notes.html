@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular Topics with Code Examples</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; background-color: #f9f9f9; }
+        h1, h2 { color: #333; }
+        pre { background-color: #eee; padding: 10px; overflow-x: auto; border-left: 4px solid #2196f3; }
+        code { font-family: Consolas, monospace; }
+        section { margin-bottom: 40px; }
+    </style>
+</head>
+<body>
+    <h1>Angular Topics with Code Examples</h1>
+
+    <section>
+        <h2>1. Component and Template</h2>
+        <p>Components are the building blocks of an Angular application. They control a part of the UI and consist of a TypeScript class, HTML template, and CSS styles.</p>
+        <ul>
+            <li>Each component has a selector used in HTML.</li>
+            <li>Templates define the component's view.</li>
+        </ul>
+        <pre><code>// app.component.ts
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  title = 'Angular Example';
+}</code></pre>
+        <pre><code><!-- app.component.html -->
+&lt;h1&gt;{{ title }}&lt;/h1&gt;</code></pre>
+    </section>
+
+    <section>
+        <h2>2. Data Binding</h2>
+        <p>Data binding allows synchronization between the model and view. Angular supports one-way and two-way binding.</p>
+        <ul>
+            <li><code>{{}}</code> for interpolation</li>
+            <li><code>[property]</code> for property binding</li>
+            <li><code>(event)</code> for event binding</li>
+            <li><code>[(ngModel)]</code> for two-way binding</li>
+        </ul>
+        <pre><code>&lt;input [(ngModel)]="username" /&gt;
+&lt;p&gt;Hello, {{ username }}&lt;/p&gt;</code></pre>
+    </section>
+
+    <section>
+        <h2>3. Directive Example</h2>
+        <p>Directives are used to modify the structure or behavior of DOM elements.</p>
+        <ul>
+            <li>Structural directives: <code>*ngIf</code>, <code>*ngFor</code></li>
+            <li>Attribute directives: <code>ngClass</code>, <code>ngStyle</code></li>
+        </ul>
+        <pre><code>&lt;div *ngIf="isVisible"&gt;Visible Content&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item }}&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+    </section>
+
+    <section>
+        <h2>4. Service and Dependency Injection</h2>
+        <p>Services in Angular provide reusable business logic, and dependency injection (DI) allows services to be injected into components.</p>
+        <ul>
+            <li>Use <code>@Injectable</code> to make a class injectable.</li>
+            <li>DI ensures components get the instances they need.</li>
+        </ul>
+        <pre><code>// data.service.ts
+@Injectable({ providedIn: 'root' })
+export class DataService {
+  getData() { return ['Angular', 'React', 'Vue']; }
+}</code></pre>
+        <pre><code>// app.component.ts
+constructor(private dataService: DataService) {}
+ngOnInit() {
+  this.items = this.dataService.getData();
+}</code></pre>
+    </section>
+
+    <section>
+        <h2>5. Routing</h2>
+        <p>Routing enables navigation between different views or components in a single-page application.</p>
+        <ul>
+            <li>Use <code>RouterModule.forRoot()</code> to configure routes.</li>
+            <li>Use <code>&lt;router-outlet&gt;</code> to load routed components.</li>
+        </ul>
+        <pre><code>// app-routing.module.ts
+const routes: Routes = [
+  { path: 'home', component: HomeComponent },
+  { path: 'about', component: AboutComponent }
+];</code></pre>
+        <pre><code>&lt;a routerLink="/home"&gt;Home&lt;/a&gt;
+&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
+    </section>
+
+    <section>
+        <h2>6. Reactive Forms</h2>
+        <p>Reactive Forms provide a model-driven approach to handling form inputs, with better scalability and validation support.</p>
+        <ul>
+            <li>Use <code>FormControl</code>, <code>FormGroup</code>, and <code>FormBuilder</code>.</li>
+            <li>Allows for dynamic form generation and validation.</li>
+        </ul>
+        <pre><code>// app.component.ts
+form = new FormGroup({
+  name: new FormControl('', Validators.required)
+});</code></pre>
+        <pre><code>&lt;form [formGroup]="form" (ngSubmit)="submit()"&gt;
+  &lt;input formControlName="name" /&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    </section>
+
+    <section>
+        <h2>7. HTTP Requests</h2>
+        <p>Angular uses the <code>HttpClient</code> service to make HTTP calls to backend APIs.</p>
+        <ul>
+            <li>Supports GET, POST, PUT, DELETE requests.</li>
+            <li>Works with RxJS Observables.</li>
+        </ul>
+        <pre><code>// data.service.ts
+constructor(private http: HttpClient) {}
+getPosts() {
+  return this.http.get('https://jsonplaceholder.typicode.com/posts');
+}</code></pre>
+    </section>
+
+    <section>
+        <h2>8. JWT Auth Interceptor</h2>
+        <p>An HTTP interceptor can be used to attach a JWT token to every outgoing HTTP request.</p>
+        <ul>
+            <li>Helps with authentication headers.</li>
+            <li>Registered in providers array.</li>
+        </ul>
+        <pre><code>@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {
+    const token = localStorage.getItem('token');
+    const authReq = req.clone({
+      headers: req.headers.set('Authorization', `Bearer ${token}`)
+    });
+    return next.handle(authReq);
+  }
+}</code></pre>
+    </section>
+
+    <section>
+        <h2>9. Pipe Example</h2>
+        <p>Pipes transform data in templates. You can use built-in or custom pipes.</p>
+        <ul>
+            <li>Built-in: <code>date</code>, <code>uppercase</code>, <code>currency</code></li>
+            <li>Custom: Implement <code>PipeTransform</code></li>
+        </ul>
+        <pre><code>@Pipe({ name: 'capitalize' })
+export class CapitalizePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+}</code></pre>
+        <pre><code>&lt;p&gt;{{ 'hello' | capitalize }}&lt;/p&gt;</code></pre>
+    </section>
+
+    <section>
+        <h2>10. Custom Directive</h2>
+        <p>Directives add custom behavior to elements. Attribute directives change the appearance or behavior of an element.</p>
+        <ul>
+            <li>Created with <code>@Directive</code>.</li>
+            <li>Use <code>ElementRef</code> and <code>Renderer2</code> to interact with the DOM.</li>
+        </ul>
+        <pre><code>@Directive({ selector: '[appHighlight]' })
+export class HighlightDirective {
+  constructor(el: ElementRef) {
+    el.nativeElement.style.backgroundColor = 'yellow';
+  }
+}</code></pre>
+        <pre><code>&lt;p appHighlight&gt;Highlighted Text&lt;/p&gt;</code></pre>
+    </section>
+
+</body>
+</html>

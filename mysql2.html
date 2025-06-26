@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn MySQL JOINs, Keys, and Advanced SQL Queries with examples. Perfect for SQL interviews and beginners." />
+  <meta name="keywords" content="MySQL, SQL Joins, SQL Keys, Primary Key, Foreign Key, SQL Queries" />
+  <meta name="author" content="JavaSQLTutorials" />
+  
+  <title>MySQL Joins, Keys & Advanced SQL Queries with Output | Java Learning Portal</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; }
+    header, footer { background-color: #003366; color: white; text-align: center; padding: 20px; }
+    nav { background-color: #444; text-align: center; padding: 10px; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    main { padding: 20px; max-width: 1000px; margin: auto; background: white; }
+    section { margin-bottom: 40px; }
+    h1, h2, h3 { color: #003366; }
+    pre, code { background-color: #f0f0f0; padding: 10px; display: block; border-left: 4px solid #003366; overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    .intro { background-color: #eaf0f6; padding: 15px; border-left: 5px solid #003366; margin-bottom: 20px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Java Learning Portal - MySQL Tutorial</h1>
+  </header>
+
+  <nav>
+    <a href="#joins">Joins</a>
+    <a href="#keys">Keys</a>
+    <a href="#queries">Queries</a>
+    <a href="#samples">Sample Tables</a>
+  </nav>
+
+  <main>
+    <section id="samples" class="intro">
+      <h2>Sample Tables Used</h2>
+      <h3 id="employees">1. employees</h3>
+      <table>
+        <tr><th>emp_id</th><th>name</th><th>dept_id</th><th>salary</th><th>manager_id</th></tr>
+        <tr><td>1</td><td>Alice</td><td>10</td><td>70000</td><td>3</td></tr>
+        <tr><td>2</td><td>Bob</td><td>20</td><td>60000</td><td>3</td></tr>
+        <tr><td>3</td><td>Carol</td><td>10</td><td>90000</td><td></td></tr>
+      </table>
+
+      <h3 id="departments">2. departments</h3>
+      <table>
+        <tr><th>dept_id</th><th>dept_name</th></tr>
+        <tr><td>10</td><td>HR</td></tr>
+        <tr><td>20</td><td>Finance</td></tr>
+      </table>
+    </section>
+
+    <section id="joins">
+      <h2>1. MySQL JOINs</h2>
+
+      <h3>INNER JOIN <a href="#employees">↩ employees</a> <a href="#departments">↩ departments</a></h3>
+      <pre><code>SELECT employees.name, departments.dept_name
+FROM employees
+INNER JOIN departments ON employees.dept_id = departments.dept_id;</code></pre>
+      <h4>🟢 Output Example:</h4>
+      <pre><code>Alice | HR
+Bob   | Finance
+Carol | HR</code></pre>
+
+      <h3>LEFT JOIN <a href="#employees">↩ employees</a> <a href="#departments">↩ departments</a></h3>
+      <pre><code>SELECT employees.name, departments.dept_name
+FROM employees
+LEFT JOIN departments ON employees.dept_id = departments.dept_id;</code></pre>
+
+      <h3>RIGHT JOIN</h3>
+      <pre><code>SELECT employees.name, departments.dept_name
+FROM employees
+RIGHT JOIN departments ON employees.dept_id = departments.dept_id;</code></pre>
+    </section>
+
+    <section id="keys">
+      <h2>2. MySQL Keys</h2>
+      <h3>Primary Key</h3>
+      <pre><code>CREATE TABLE students (
+  student_id INT PRIMARY KEY,
+  name VARCHAR(50),
+  age INT
+);</code></pre>
+
+      <h3>Foreign Key</h3>
+      <pre><code>CREATE TABLE employees (
+  emp_id INT PRIMARY KEY,
+  dept_id INT,
+  FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);</code></pre>
+    </section>
+
+    <section id="queries">
+      <h2>3. Advanced MySQL Queries</h2>
+
+      <h3>Nth Highest Salary <a href="#employees">↩ employees</a></h3>
+      <pre><code>SELECT DISTINCT salary
+FROM employees e1
+WHERE N = (
+  SELECT COUNT(DISTINCT salary)
+  FROM employees e2
+  WHERE e2.salary >= e1.salary
+);</code></pre>
+
+      <h3>Delete Duplicate Rows <a href="#employees">↩ employees</a></h3>
+      <pre><code>DELETE e1
+FROM employees e1
+JOIN employees e2 
+  ON e1.name = e2.name AND e1.salary = e2.salary AND e1.emp_id < e2.emp_id;</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 JavaSQLTutorials. All rights reserved.</p>
+    <p>Optimized for SQL learners and interview preparation.</p>
+  </footer>
+</body>
+</html>

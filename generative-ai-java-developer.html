@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative AI for Java Developers | Java AI Assistant</title>
+    <meta name="description" content="Discover how generative AI tools can boost productivity for Java developers. Explore code assistants, unit test generators, setup guides, and more.">
+    <meta name="keywords" content="Java, Generative AI, AI for developers, Code Assistant, Java Tools, IntelliJ, Copilot, Spring Boot, JUnit, Diffblue, Tabnine, GitHub Actions">
+    <meta name="author" content="Java AI Guide">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        header, footer {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #003366;
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        footer p {
+            margin: 0.5rem 0;
+        }
+		body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header nav {
+                margin-top: 10px;
+            }
+        }
+		
+   
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+		 <div class="dropdown">
+		<a href="#">Concepts ▾</a>
+    <div class="dropdown-content">
+      <a href="mysql.html">MySQL</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <!--<a href="#">Concepts</a>-->
+		<div class="dropdown">
+        <a href="#">Projects</a> 
+		<div class="dropdown-content">
+      <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <a href="#">Contact</a>
+		 
+    </nav>
+</header>
+
+<main class="container">
+    <section class="intro">
+        <p><strong>Welcome to the Java Learning Portal!</strong> This platform provides concise and practical explanations of core Java concepts with real-world examples. Perfect for students, developers, and interview preparation. Explore each concept below to strengthen your understanding of Java fundamentals.</p>
+    </section>
+    
+        <h1>Java AI Assistant</h1>
+        
+    
+
+    <main>
+        <h2>🚀 Generative AI for Java Developers</h2>
+
+        <section>
+            <h3>🔧 Key Use Cases</h3>
+            <ul>
+                <li><strong>Code Generation:</strong> Generate Java classes, REST APIs, and DTOs with AI.</li>
+                <li><strong>Boilerplate Elimination:</strong> Use Lombok and templates to remove repetition.</li>
+                <li><strong>Code Explanation:</strong> Understand legacy or unfamiliar code quickly.</li>
+                <li><strong>Unit Test Creation:</strong> Auto-generate JUnit 5 tests with edge cases.</li>
+                <li><strong>Bug Detection:</strong> Identify and fix code issues using AI tools.</li>
+                <li><strong>Documentation:</strong> Generate JavaDocs, Swagger docs, and README files.</li>
+                <li><strong>Query Building:</strong> Use AI to write JPQL, SQL, and Criteria queries.</li>
+                <li><strong>Design Guidance:</strong> Apply design patterns and microservices advice from AI.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>🧰 Toolchain Setup</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tool</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>GitHub Copilot</td><td>Code autocompletion in IntelliJ</td></tr>
+                    <tr><td>ChatGPT</td><td>Natural language code generation and explanation</td></tr>
+                    <tr><td>Tabnine</td><td>Code prediction and inline suggestions</td></tr>
+                    <tr><td>Diffblue Cover</td><td>JUnit test generation for Java</td></tr>
+                    <tr><td>Spring Initializr</td><td>Bootstrapping Spring Boot apps</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h3>🧠 Prompt Examples</h3>
+            <ul>
+                <li>"Generate a REST controller in Spring Boot for Product management."</li>
+                <li>"Explain what this Java stream pipeline does."</li>
+                <li>"Generate a JUnit 5 test case for calculateTotal() method."</li>
+                <li>"Suggest improvements for this multithreaded code using ExecutorService."</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>📦 Template Repository Structure</h3>
+            <pre>
+java-ai-assistant/
+├── springboot-crud-template/
+├── code-generator-prompts/
+├── unit-tests/
+├── sql-helper/
+├── docker-deployment/
+└── README.md
+            </pre>
+        </section>
+
+        <section>
+            <h3>🎯 Setup Tips</h3>
+            <ul>
+                <li>Use ChatGPT with IntelliJ plugins for fast code help</li>
+                <li>Install GitHub Copilot or Tabnine for real-time autocompletion</li>
+                <li>Use Diffblue to auto-generate tests and detect bugs</li>
+                <li>Keep reusable prompts and templates organized in your repo</li>
+            </ul>
+        </section>
+    </main>
+
+<footer>
+    &copy; 2025 Java Learning Portal. All rights reserved.
+	
+	
+<!--	 <div style="margin-top:10px;">
+    <a href="https://www.hitwebcounter.com" target="_blank">
+      <img src="https://hitwebcounter.com/counter/counter.php?page=20836914&style=0006&nbdigits=5&type=page&initCount=0" 
+           title="Web Counter" alt="Visit counter" border="0" />
+    </a>
+  </div>
+	->
+	<!-- hitwebcounter Code START -->
+<a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=20836914&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>      
+</footer>
+
+<script>
+    // Visit Counter using localStorage
+    const visitKey = 'javaLearningPortalVisits';
+    let count = localStorage.getItem(visitKey);
+
+    if (!count) {
+        count = 1;
+    } else {
+        count = parseInt(count) + 1;
+    }
+
+    localStorage.setItem(visitKey, count);
+    document.getElementById('visitCount').textContent = `👀 you have visited ${count} time(s) on this browser.`;
+</script>
+    <footer>
+        <p>&copy; 2025 Java AI Assistant. All rights reserved.</p>
+        <p><a href="#" style="color: #fff;">Privacy Policy</a> | <a href="#" style="color: #fff;">Terms of Use</a></p>
+    </footer>
+</body>
+</html>

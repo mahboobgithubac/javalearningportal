@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RestTemplate vs WebClient vs FeignClient - Spring Boot</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        header, footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+        main {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #003366;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 0 10px #ccc;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e6f0ff;
+        }
+        pre {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        section {
+            background: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+ 
+</header>
+
+<main>
+
+    <section>
+	   <h1>RestTemplate vs WebClient vs FeignClient</h1>
+		<p><b>Spring Boot - HTTP Client Comparison</b></p>
+        <h2>🔍 Comparison Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature / Aspect</th>
+                    <th>RestTemplate</th>
+                    <th>WebClient</th>
+                    <th>FeignClient</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Library</td>
+                    <td>Spring Web (synchronous)</td>
+                    <td>Spring WebFlux (reactive)</td>
+                    <td>Spring Cloud OpenFeign</td>
+                </tr>
+                <tr>
+                    <td>Programming Model</td>
+                    <td>Blocking</td>
+                    <td>Non-blocking (reactive)</td>
+                    <td>Declarative</td>
+                </tr>
+                <tr>
+                    <td>Ease of Use</td>
+                    <td>Imperative, verbose</td>
+                    <td>Verbose for simple tasks</td>
+                    <td>Very concise (interface-based)</td>
+                </tr>
+                <tr>
+                    <td>Performance</td>
+                    <td>Low under load</td>
+                    <td>High concurrency & performance</td>
+                    <td>Depends on HTTP client</td>
+                </tr>
+                <tr>
+                    <td>Declarative Support</td>
+                    <td>❌</td>
+                    <td>❌</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>Load Balancing</td>
+                    <td>✅ with Ribbon</td>
+                    <td>✅ with Ribbon</td>
+                    <td>✅ with Ribbon/Spring LoadBalancer</td>
+                </tr>
+                <tr>
+                    <td>Retry Mechanism</td>
+                    <td>Manual</td>
+                    <td>Manual</td>
+                    <td>✅ Built-in</td>
+                </tr>
+                <tr>
+                    <td>Logging</td>
+                    <td>Manual</td>
+                    <td>Manual</td>
+                    <td>✅ Built-in</td>
+                </tr>
+                <tr>
+                    <td>Streaming Support</td>
+                    <td>❌ Poor</td>
+                    <td>✅ Excellent</td>
+                    <td>⚠️ Limited</td>
+                </tr>
+                <tr>
+                    <td>Circuit Breaker</td>
+                    <td>With external libs</td>
+                    <td>With external libs</td>
+                    <td>✅ Easy integration</td>
+                </tr>
+                <tr>
+                    <td>Use Case</td>
+                    <td>Simple sync calls</td>
+                    <td>Reactive microservices</td>
+                    <td>Microservices + declarative</td>
+                </tr>
+                <tr>
+                    <td>Lifecycle</td>
+                    <td>Deprecated (use WebClient)</td>
+                    <td>Current standard</td>
+                    <td>Recommended in Spring Cloud</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>✅ When to Use</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Scenario</th>
+                    <th>Best Choice</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Simple HTTP call</td>
+                    <td>RestTemplate</td>
+                </tr>
+                <tr>
+                    <td>High-load async APIs</td>
+                    <td>WebClient</td>
+                </tr>
+                <tr>
+                    <td>Declarative microservices client</td>
+                    <td>FeignClient</td>
+                </tr>
+                <tr>
+                    <td>Need retries, fallback, load balancing</td>
+                    <td>FeignClient</td>
+                </tr>
+                <tr>
+                    <td>Streaming / reactive handling</td>
+                    <td>WebClient</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>📘 Code Examples</h2>
+
+        <h3>🟦 RestTemplate</h3>
+        <pre><code>RestTemplate restTemplate = new RestTemplate();
+String result = restTemplate.getForObject("http://service/api", String.class);</code></pre>
+
+        <h3>🟨 WebClient</h3>
+        <pre><code>WebClient client = WebClient.create();
+Mono&lt;String&gt; response = client.get()
+    .uri("http://service/api")
+    .retrieve()
+    .bodyToMono(String.class);</code></pre>
+
+        <h3>🟩 FeignClient</h3>
+        <pre><code>@FeignClient(name = "payment-service")
+public interface PaymentClient {
+    @PostMapping("/payments")
+    String makePayment(@RequestBody PaymentRequest request);
+}
+
+// Usage:
+@Autowired
+private PaymentClient paymentClient;
+
+paymentClient.makePayment(request);</code></pre>
+    </section>
+
+</main>
+
+<footer>
+    <p>Spring Boot HTTP Clients &copy; 2025</p>
+</footer>
+
+</body>
+</html>

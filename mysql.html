@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn MySQL JOINs, Keys, and Advanced SQL Queries with examples. Perfect for SQL interviews and beginners.">
+  <meta name="keywords" content="MySQL, SQL Joins, SQL Keys, Primary Key, Foreign Key, SQL Queries">
+  <meta name="author" content="JavaSQLTutorials">
+     <title>Java Learning Portal | MySQL Joins, Keys, and Query Examples</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; }
+    header, footer { background-color: #222; color: #fff; text-align: center; padding: 20px 0; }
+    nav { background: #444; padding: 10px; text-align: center; }
+    nav a { color: #fff; margin: 0 15px; text-decoration: none; }
+    main { padding: 20px; max-width: 1000px; margin: auto; }
+    section { margin-bottom: 40px; }
+    h1, h2, h3 { color: #333; }
+    code, pre { background-color: #f4f4f4; padding: 10px; display: block; overflow-x: auto; border-left: 4px solid #333; }
+	   body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header nav {
+                margin-top: 10px;
+            }
+        }
+		
+   
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+		 <div class="dropdown">
+		<a href="#">Concepts ▾</a>
+    <div class="dropdown-content">
+      <a href="mysql.html">MySQL</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <!--<a href="#">Concepts</a>-->
+		<div class="dropdown">
+        <a href="#">Projects</a> 
+		<div class="dropdown-content">
+      <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <a href="#">Contact</a>
+		 
+    </nav>
+</header>
+ 
+    <h1>MySQL Joins, Keys, and Query Examples</h1>
+    <p>Master SQL concepts with clear examples and structured queries</p>
+ 
+
+  <nav>
+    <a href="#joins">Joins</a>
+    <a href="#keys">Keys</a>
+    <a href="#queries">Useful Queries</a>
+  </nav>
+
+  <main>
+    <section id="joins">
+      <h2>1. MySQL JOINs with Examples</h2>
+      <h3>INNER JOIN</h3>
+      <pre><code>SELECT employees.name, departments.dept_name
+FROM employees
+INNER JOIN departments
+ON employees.dept_id = departments.dept_id;</code></pre>
+      <h3>LEFT JOIN</h3>
+      <pre><code>SELECT employees.name, departments.dept_name
+FROM employees
+LEFT JOIN departments
+ON employees.dept_id = departments.dept_id;</code></pre>
+      <h3>RIGHT JOIN</h3>
+      <pre><code>SELECT employees.name, departments.dept_name
+FROM employees
+RIGHT JOIN departments
+ON employees.dept_id = departments.dept_id;</code></pre>
+      <h3>FULL OUTER JOIN</h3>
+      <pre><code>(Not supported directly in MySQL)
+-- Emulated using UNION:
+SELECT employees.name, departments.dept_name
+FROM employees
+LEFT JOIN departments ON employees.dept_id = departments.dept_id
+UNION
+SELECT employees.name, departments.dept_name
+FROM employees
+RIGHT JOIN departments ON employees.dept_id = departments.dept_id;</code></pre>
+      <h3>CROSS JOIN</h3>
+      <pre><code>SELECT employees.name, departments.dept_name
+FROM employees
+CROSS JOIN departments;</code></pre>
+      <h3>SELF JOIN</h3>
+      <pre><code>SELECT A.name AS Employee, B.name AS Manager
+FROM employees A
+JOIN employees B ON A.manager_id = B.emp_id;</code></pre>
+    </section>
+
+    <section id="keys">
+      <h2>2. Types of Keys in MySQL with Examples</h2>
+      <h3>Primary Key</h3>
+      <pre><code>CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT
+);</code></pre>
+      <h3>Composite Key</h3>
+      <pre><code>CREATE TABLE course_enrollments (
+    student_id INT,
+    course_id INT,
+    PRIMARY KEY (student_id, course_id)
+);</code></pre>
+      <h3>Foreign Key</h3>
+      <pre><code>CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);</code></pre>
+      <h3>Unique Key</h3>
+      <pre><code>CREATE TABLE users (
+    user_id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE
+);</code></pre>
+      <h3>Alternate & Candidate Keys</h3>
+      <p>Candidate Key: student_id, email<br>Alternate Key: email (if student_id is chosen as primary key)</p>
+      <h3>Super Key</h3>
+      <p>Any combination of attributes that uniquely identify a row.</p>
+      <h3>Index Key</h3>
+      <pre><code>CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    KEY(name)
+);</code></pre>
+    </section>
+
+    <section id="queries">
+      <h2>3. Useful MySQL Queries</h2>
+      <h3>Nth Highest Salary</h3>
+      <pre><code>SELECT DISTINCT(salary)
+FROM employees Emp1
+WHERE N = (
+    SELECT COUNT(DISTINCT(Emp2.salary))
+    FROM employees Emp2
+    WHERE Emp2.salary >= Emp1.salary
+);</code></pre>
+      <h3>Max Salary by Department</h3>
+      <pre><code>SELECT department, MAX(salary)
+FROM employees
+GROUP BY department
+ORDER BY MAX(salary) DESC;</code></pre>
+      <h3>Average Salary by Department</h3>
+      <pre><code>SELECT department, AVG(salary)
+FROM employees
+GROUP BY department;</code></pre>
+      <h3>Department with Least Employees</h3>
+      <pre><code>SELECT department_name
+FROM employees
+GROUP BY department_name
+HAVING COUNT(*) = (
+    SELECT MIN(emp_count)
+    FROM (
+        SELECT COUNT(*) AS emp_count
+        FROM employees
+        GROUP BY department_name
+    ) AS counts
+);</code></pre>
+      <h3>Find Duplicate Rows</h3>
+      <pre><code>SELECT EMPNAME, DEPT, CONTACTNO, CITY, COUNT(*)
+FROM DETAILS
+GROUP BY EMPNAME, DEPT, CONTACTNO, CITY
+HAVING COUNT(*) > 1;</code></pre>
+      <h3>Delete Duplicate Rows</h3>
+      <pre><code>DELETE emp1
+FROM employee emp1
+INNER JOIN employee emp2 
+  ON emp1.name = emp2.name
+ AND emp1.salary = emp2.salary
+ AND emp1.id < emp2.id;</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 JavaSQLTutorials. All rights reserved.</p>
+    <p>Optimized for SQL interview preparation and database learners.</p>
+  </footer>
+</body>
+</html>

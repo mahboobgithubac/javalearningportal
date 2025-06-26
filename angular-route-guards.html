@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Angular Route Guards Explained</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    header {
+      background-color: #1976d2;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 5px;
+    }
+    section {
+      background: white;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #1976d2;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🔒 Angular Route Guards Explained</h1>
+    <p>Control navigation and access in Angular applications with route guards</p>
+  </header>
+
+  <section>
+    <h2>✅ What are Route Guards?</h2>
+    <p>Route guards are interfaces in Angular used to control navigation to and from routes based on custom logic, such as user authentication or unsaved changes.</p>
+  </section>
+
+  <section>
+    <h2>🔹 Types of Route Guards</h2>
+    <table>
+      <tr><th>Guard Interface</th><th>Purpose</th></tr>
+      <tr><td><code>CanActivate</code></td><td>Controls if a route can be activated</td></tr>
+      <tr><td><code>CanActivateChild</code></td><td>Controls if child routes can be activated</td></tr>
+      <tr><td><code>CanDeactivate</code></td><td>Controls if a user can leave the current route</td></tr>
+      <tr><td><code>CanLoad</code></td><td>Prevents lazy-loaded module from loading</td></tr>
+      <tr><td><code>Resolve</code></td><td>Pre-fetches data before route activation</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>🔧 Example: <code>CanActivate</code></h2>
+
+    <h3>Step 1: Create Auth Guard</h3>
+    <pre><code>import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+
+@Injectable({ providedIn: 'root' })
+export class AuthGuard implements CanActivate {
+  constructor(private router: Router) {}
+
+  canActivate(): boolean {
+    const isLoggedIn = !!localStorage.getItem('token');
+    if (!isLoggedIn) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+    return true;
+  }
+}</code></pre>
+
+    <h3>Step 2: Use in Routing</h3>
+    <pre><code>const routes: Routes = [
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent }
+];</code></pre>
+  </section>
+
+  <section>
+    <h2>🔄 Example: <code>CanDeactivate</code></h2>
+
+    <h3>Step 1: Create Interface</h3>
+    <pre><code>export interface CanComponentDeactivate {
+  canDeactivate: () => boolean | Observable&lt;boolean&gt;;
+}</code></pre>
+
+    <h3>Step 2: Guard Implementation</h3>
+    <pre><code>import { Injectable } from '@angular/core';
+import { CanDeactivate } from '@angular/router';
+import { CanComponentDeactivate } from './can-deactivate.interface';
+
+@Injectable({ providedIn: 'root' })
+export class ConfirmDeactivateGuard implements CanDeactivate&lt;CanComponentDeactivate&gt; {
+  canDeactivate(component: CanComponentDeactivate): boolean {
+    return component.canDeactivate ? component.canDeactivate() : true;
+  }
+}</code></pre>
+
+    <h3>Step 3: Implement in Component</h3>
+    <pre><code>export class ProfileComponent implements CanComponentDeactivate {
+  canDeactivate(): boolean {
+    return confirm('You have unsaved changes. Do you really want to leave?');
+  }
+}</code></pre>
+
+    <h3>Step 4: Register in Routing</h3>
+    <pre><code>{ path: 'profile', component: ProfileComponent, canDeactivate: [ConfirmDeactivateGuard] }</code></pre>
+  </section>
+
+  <section>
+    <h2>📌 Summary Table</h2>
+    <table>
+      <tr>
+        <th>Guard Interface</th>
+        <th>When It Runs</th>
+        <th>Common Use Case</th>
+      </tr>
+      <tr>
+        <td><code>CanActivate</code></td>
+        <td>Before activating route</td>
+        <td>Check if user is authenticated</td>
+      </tr>
+      <tr>
+        <td><code>CanActivateChild</code></td>
+        <td>Before activating child route</td>
+        <td>Restrict access to child components</td>
+      </tr>
+      <tr>
+        <td><code>CanDeactivate</code></td>
+        <td>Before leaving route</td>
+        <td>Prompt if form has unsaved changes</td>
+      </tr>
+      <tr>
+        <td><code>CanLoad</code></td>
+        <td>Before lazy loading a module</td>
+        <td>Block unauthorized users from loading modules</td>
+      </tr>
+      <tr>
+        <td><code>Resolve</code></td>
+        <td>Before route activation</td>
+        <td>Preload route data (e.g., user info)</td>
+      </tr>
+    </table>
+  </section>
+
+</body>
+</html>

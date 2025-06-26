@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Microservices Exception Handling</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+    h1, h2, h3 {
+      color: #333;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: monospace;
+    }
+    .section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    ul {
+      margin-left: 20px;
+    }
+    .json {
+      background: #1e1e1e;
+      color: #9cdcfe;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Microservice Exception Handling: Service-to-Service Communication</h1>
+
+  <div class="section">
+    <h2>🔁 Communication Type</h2>
+    <p><strong>1. Synchronous Communication</strong> (e.g., REST APIs via RestTemplate, WebClient, or Feign Client)</p>
+    <ul>
+      <li>Service B throws an exception (e.g., 404, 500)</li>
+      <li>Service A receives an HTTP error response</li>
+      <li>The HTTP client (RestTemplate, WebClient, Feign) in Service A throws exceptions like <code>HttpClientErrorException</code>, <code>HttpServerErrorException</code></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>✅ Example: RestTemplate in Service A</h2>
+    <pre><code>// Service A using RestTemplate
+try {
+    ResponseEntity&lt;String&gt; response = restTemplate.getForEntity("http://service-b/api/data", String.class);
+} catch (HttpClientErrorException | HttpServerErrorException ex) {
+    // Handle the exception
+    System.out.println("Error from Service B: " + ex.getStatusCode());
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🔄 Exception Handling in Service B</h2>
+    <p>Use <code>@RestControllerAdvice</code> to handle errors globally:</p>
+    <pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;String&gt; handleNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data not found: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;String&gt; handleGeneric(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Error: " + ex.getMessage());
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🧩 Feign Client Example</h2>
+    <pre><code>@FeignClient(name = "service-b", url = "http://localhost:8082")
+public interface ServiceBClient {
+    @GetMapping("/api/data")
+    String getData();
+}
+
+// In Service A
+try {
+    String response = serviceBClient.getData();
+} catch (FeignException ex) {
+    System.out.println("Feign Error: " + ex.status() + " - " + ex.getMessage());
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🛠 Best Practices</h2>
+    <ul>
+      <li>✅ Always return proper status codes from Service B</li>
+      <li>✅ Use structured error response objects</li>
+      <li>✅ Log the root cause in both services</li>
+      <li>✅ Use circuit breakers (e.g., Resilience4j) for resilience</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🧪 Sample JSON Error Response from Service B</h2>
+    <pre class="json">{
+  "timestamp": "2025-06-19T14:32:00Z",
+  "status": 404,
+  "error": "Not Found",
+  "message": "User ID not found",
+  "path": "/api/user/123"
+}</pre>
+    <p>Service A can parse this structured error and respond accordingly.</p>
+  </div>
+
+</body>
+</html>

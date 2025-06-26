@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Learning Portal</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Java Learning Portal: Learn Java core concepts like OOP, Streams, Collections, Multithreading, and more. Ideal for developers, students, and interview prep.">
+    <meta name="keywords" content="Java, Java tutorials, Java learning, Java core concepts, Java programming, Java OOP, Java streams, Java collections, Java interview prep">
+    <meta name="author" content="Mahboob Anwar">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://javalearningportal.netlify.app/">
+	<link rel="canonical" href="https://javalearningportal.netlify.app/">
+
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Java Learning Portal - Master Java Concepts Easily">
+    <meta property="og:description" content="Explore essential Java programming topics with real-world examples. Great for students, developers, and interviews.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://javalearningportal.netlify.app/">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/226/226777.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Java Learning Portal - Master Java Concepts Easily">
+    <meta name="twitter:description" content="Learn Java concepts like OOP, Streams, Collections, and more with practical examples.">
+    <meta name="twitter:image" content="https://cdn-icons-png.flaticon.com/512/226/226777.png">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Java Learning Portal",
+      "url": "https://yourdomain.com/java-learning-portal.html",
+      "description": "Explore core Java concepts like OOP, Streams, Collections, and more with real-world examples. Perfect for developers, students, and interview prep.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Java Learning Portal",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://cdn-icons-png.flaticon.com/512/226/226777.png"
+        }
+      },
+      "inLanguage": "en",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://yourdomain.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-KTCFC3S');
+    </script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header nav {
+                margin-top: 10px;
+            }
+        }
+		
+   
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+</style>
+	
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+		 <div class="dropdown">
+		<a href="#">Concepts ▾</a>
+    <div class="dropdown-content">
+      <a href="mysql.html">MySQL</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <!--<a href="#">Concepts</a>-->
+		<div class="dropdown">
+        <a href="#">Projects</a> 
+		<div class="dropdown-content">
+      <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <a href="#">Contact</a>
+		 
+    </nav>
+</header>
+
+<main class="container">
+    <section class="intro">
+        <p><strong>Welcome to the Java Learning Portal!</strong> This platform provides concise and practical explanations of core Java concepts with real-world examples. Perfect for students, developers, and interview preparation. Explore each concept below to strengthen your understanding of Java fundamentals.</p>
+    </section>
+
+    <h2>Java Core Concepts</h2>
+    <ul>
+        <li><a href="hashcode-equals-contract.html" >✅ hashCode() and equals() Contract</a></li>
+        <li><a href="java-inheritance-polymorphism.html">✅ Java Inheritance & Polymorphism</a></li>
+        <li><a href="#">✅ Java Streams and Functional Programming</a></li>
+        <li><a href="#">✅ Exception Handling Best Practices</a></li>
+        <li><a href="#">✅ Java Collections Framework Overview</a></li>
+        <li><a href="multithreading-interview.html">✅ Multithreading & Concurrency</a></li>
+        <li><a href="#">✅ SOLID Principles in Java</a></li>
+		<li><a href="array-iterate.html">✅ Several ways to iterate Array</a></li>
+		<li><a href="list-set-iterate.html">✅ Several ways to iterate List and Set</a></li>
+		<li><a href="treeset.html">✅ TreeSet Example</a></li>
+		
+		<li><a href="hashmap-example.html">✅ Several ways to iterate Hashmap</a></li>
+		<li><a href="microservice-design-patterens.html">✅ Microservice Design Patterns in Java</a></li>
+		<li><a href="generative-ai-java-developer.html">✅ Generative AI for Java Developer</a></li>
+    </ul>
+
+    <div class="visit-counter" id="visitCount">
+        <!-- Counter will be inserted here -->
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 Java Learning Portal. All rights reserved.
+	
+<!-- hitwebcounter Code START -->
+ <div style="margin-top:10px;">
+<a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=20923573&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>                                    
+    </div>                                  
+<a href="visit-stat.html" target="_blank">stat</a>
+</footer>
+
+<script>
+    // Visit Counter using localStorage
+    const visitKey = 'javaLearningPortalVisits';
+    let count = localStorage.getItem(visitKey);
+
+    if (!count) {
+        count = 1;
+    } else {
+        count = parseInt(count) + 1;
+    }
+
+    localStorage.setItem(visitKey, count);
+    document.getElementById('visitCount').textContent = `👀 you have visited ${count} time(s) on this browser.`;
+	<!-- 100% privacy-first analytics -->
+
+
+</script>
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java Greedy Algorithm - Minimum Coins Calculator</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Java program to calculate the minimum number of coins using a greedy algorithm. Includes clean Java code, logic, and sample output." />
+  <meta name="keywords" content="Java, Coin Calculator, Greedy Algorithm, Minimum Coins, Coin Change Java, Java Interview Programs" />
+  <meta name="author" content="Your Name" />
+
+  <!-- Social Media Preview Tags -->
+  <meta property="og:title" content="Java Coin Calculator - Minimum Coins using Greedy Algorithm" />
+  <meta property="og:description" content="Java program to find the minimum number of coins required using a greedy approach. Full code and output included." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourdomain.com/minimum-coins-greedy-java.html" />
+  <meta property="og:image" content="https://yourdomain.com/images/java-coins-preview.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+    }
+
+    header, footer {
+      background-color: #34495e;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    main {
+      padding: 30px;
+    }
+
+    h2 {
+      color: #2c3e50;
+    }
+
+    pre {
+      background-color: #ecf0f1;
+      padding: 15px;
+      border-left: 5px solid #2980b9;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .output-box {
+      background-color: #e8f5e9;
+      padding: 15px;
+      border-left: 5px solid #2e7d32;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Minimum Coins Calculator in Java</h1>
+    <p>Greedy Algorithm Approach</p>
+  </header>
+
+  <main>
+    <div class="section">
+      <h2>Program Description</h2>
+      <p>
+        This Java program finds the <strong>minimum number of coins</strong> needed to make a given amount using a greedy algorithm. It tries to use the largest denominations first. The coin denominations are <code>{10, 5, 2, 1}</code>, and the program works efficiently for most practical scenarios.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Java Code</h2>
+      <pre>
+import java.util.Arrays;
+
+class Main {
+    public static void main(String[] args) {
+        int[] coins = {10, 5, 2, 1}; // sorted in descending order
+        int amount = 108;
+        int count = 0;
+
+        for (int coin : coins) {
+            if (amount >= coin) {
+                int used = amount / coin;
+                count += used;
+                amount = amount % coin;
+            }
+        }
+
+        System.out.println("Minimum number of coins: " + count);
+    }
+}
+      </pre>
+    </div>
+
+    <div class="section">
+      <h2>Sample Output</h2>
+      <div class="output-box">
+        Minimum number of coins: <strong>13</strong>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Java Programming Resources | All Rights Reserved</p>
+  </footer>
+
+</body>
+</html>

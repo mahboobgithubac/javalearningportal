@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Visit Statistics Page" />
+  <title>Visit Statistics</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      text-align: center;
+      padding: 2rem;
+    }
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: inline-block;
+      padding: 2rem 3rem;
+    }
+    h1 {
+      color: #003366;
+    }
+    table {
+      margin-top: 2rem;
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #003366;
+      color: white;
+    }
+    #statForm {
+      display: none;
+      margin-top: 2rem;
+    }
+    input[type="date"], input[type="number"] {
+      padding: 0.5rem;
+      margin: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin: 0.3rem;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+    }
+    .delete-btn:hover {
+      background-color: #b02a37;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Page Visit Counter</h1>
+    <div id="totalCount"></div>
+    <button onclick="toggleForm()">Add/Update Stat</button>
+    <div id="statForm">
+      <form onsubmit="addOrUpdateStat(event)">
+        <input type="date" id="statDate" required />
+        <input type="number" id="statCount" required placeholder="Visit Count" />
+        <button type="submit">Save</button>
+      </form>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Visits</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="visitTableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const visitKey = 'visit-stats-table';
+    const today = new Date().toISOString().split('T')[0];
+    let stats = JSON.parse(localStorage.getItem(visitKey)) || {};
+
+    if (!stats[today]) {
+      stats[today] = 1;
+    } else {
+      stats[today] += 1;
+    }
+    localStorage.setItem(visitKey, JSON.stringify(stats));
+
+    function renderTable() {
+      const tbody = document.getElementById('visitTableBody');
+      tbody.innerHTML = '';
+      let total = 0;
+      for (const [date, count] of Object.entries(stats).sort()) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${date}</td>
+          <td>${count}</td>
+          <td>
+            <button onclick="editStat('${date}', ${count})">Edit</button>
+            <button class="delete-btn" onclick="deleteStat('${date}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+        total += count;
+      }
+      document.getElementById('totalCount').innerHTML = `<strong>Total Visits: ${total}</strong>`;
+    }
+
+    function toggleForm() {
+      const form = document.getElementById('statForm');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addOrUpdateStat(event) {
+      event.preventDefault();
+      const date = document.getElementById('statDate').value;
+      const count = parseInt(document.getElementById('statCount').value);
+      if (date && !isNaN(count)) {
+        stats[date] = count;
+        localStorage.setItem(visitKey, JSON.stringify(stats));
+        renderTable();
+        event.target.reset();
+        toggleForm();
+      }
+    }
+
+    function deleteStat(date) {
+      if (confirm(`Delete visit stat for ${date}?`)) {
+        delete stats[date];
+        localStorage.setItem(visitKey, JSON.stringify(stats));
+        renderTable();
+      }
+    }
+
+    function editStat(date, count) {
+      document.getElementById('statDate').value = date;
+      document.getElementById('statCount').value = count;
+      document.getElementById('statForm').style.display = 'block';
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>

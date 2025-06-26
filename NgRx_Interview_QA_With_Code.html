@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NgRx Interview Questions with Code Examples</title>
+  <meta name="description" content="NgRx Interview Questions and Answers with Code Examples">
+  <meta name="keywords" content="Angular, NgRx, Redux, Interview, Code, State Management">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #f4f4f4; color: #222; }
+    .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    h1 { text-align: center; color: #006699; }
+    h2 { color: #004466; margin-top: 40px; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+    .qa { margin-bottom: 20px; }
+    .question { font-weight: bold; margin-bottom: 5px; }
+    .answer { margin-left: 20px; }
+    pre { background: #f1f1f1; padding: 10px; border-left: 4px solid #ccc; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>NgRx Interview Questions and Answers with Code Examples</h1>
+<h2>Basic NgRx Questions</h2><div class='qa'><div class='question'>Q: What is NgRx?</div><div class='answer'>A: NgRx is a reactive state management library for Angular, based on the Redux pattern. It uses actions, reducers, selectors, and effects.</div></div><div class='qa'><div class='question'>Q: What are Actions in NgRx?</div><div class='answer'>A: Actions are dispatched events used to signal a change:</div><pre>Example:
+export const addTodo = createAction('[Todo] Add', props<{ todo: Todo }>());</pre></div><div class='qa'><div class='question'>Q: What is a Reducer?</div><div class='answer'>A: Reducers update state based on action:</div><pre>Example:
+export const todoReducer = createReducer(
+  initialState,
+  on(addTodo, (state, { todo }) => [...state, todo])
+);</pre></div><div class='qa'><div class='question'>Q: What is a Selector?</div><div class='answer'>A: Selectors read slices of state:</div><pre>Example:
+export const selectTodos = createSelector(selectFeature, (state) => state.todos);</pre></div><div class='qa'><div class='question'>Q: What is an Effect in NgRx?</div><div class='answer'>A: Effects handle async tasks:</div><pre>Example:
+loadTodos$ = createEffect(() => this.actions$.pipe(
+  ofType(loadTodos),
+  mergeMap(() => this.todoService.getAll().pipe(
+    map(todos => loadTodosSuccess({ todos }))
+  ))
+));</pre></div><div class='qa'><div class='question'>Q: What is the purpose of the Store in NgRx?</div><div class='answer'>A: The store is a single source of truth that holds the state of your app.</div></div><div class='qa'><div class='question'>Q: How do you dispatch an action in Angular?</div><div class='answer'>A: Use store.dispatch():</div><pre>this.store.dispatch(addTodo({ todo: { id: 1, title: 'Sample' } }));</pre></div><div class='qa'><div class='question'>Q: How do you select data from the Store?</div><div class='answer'>A: Use store.select():</div><pre>this.todos$ = this.store.select(selectTodos);</pre></div><div class='qa'><div class='question'>Q: What is the difference between createAction and dispatch()?</div><div class='answer'>A: createAction defines an action, dispatch() triggers it:</div><pre>createAction → Definition
+store.dispatch → Usage</pre></div><div class='qa'><div class='question'>Q: What is createReducer used for?</div><div class='answer'>A: Used to define reducer logic:</div><pre>const reducer = createReducer(initialState, on(action, callback));</pre></div><h2>Intermediate Questions</h2><div class='qa'><div class='question'>Q: What is a Feature Selector in NgRx?</div><div class='answer'>A: Used to select a slice of feature state:</div><pre>export const selectFeature = createFeatureSelector<FeatureState>('feature');</pre></div><div class='qa'><div class='question'>Q: How is state managed in NgRx?</div><div class='answer'>A: Via actions (dispatch), reducers (update), selectors (read), and effects (async logic).</div></div><div class='qa'><div class='question'>Q: How do you handle side effects using Effects?</div><div class='answer'>A: Effects use createEffect:</div><pre>@Injectable()
+export class TodoEffects {
+  load$ = createEffect(() => this.actions$.pipe(
+    ofType(loadTodos),
+    mergeMap(() => this.service.get().pipe(
+      map(data => loadSuccess({ data }))
+    ))
+  ));
+}</pre></div><div class='qa'><div class='question'>Q: What are ofType, mergeMap, switchMap in Effects?</div><div class='answer'>A: ofType filters actions; mergeMap/switchMap handle observables.</div></div><div class='qa'><div class='question'>Q: How do you combine multiple reducers?</div><div class='answer'>A: Use StoreModule.forRoot():</div><pre>StoreModule.forRoot({ todos: todoReducer, users: userReducer })</pre></div><div class='qa'><div class='question'>Q: Explain the use of StoreModule.forRoot() and StoreModule.forFeature()</div><div class='answer'>A: forRoot() for app-wide store; forFeature() for lazy-loaded modules.</div></div><div class='qa'><div class='question'>Q: How do you test an NgRx reducer or effect?</div><div class='answer'>A: Reducers: test as pure functions.</div><pre>Effects: use jasmine-marbles or TestScheduler.</pre></div><div class='qa'><div class='question'>Q: What is the role of createFeatureSelector?</div><div class='answer'>A: Used to create selectors for a feature state.</div></div><h2>Advanced Questions</h2><div class='qa'><div class='question'>Q: How does NgRx maintain immutability?</div><div class='answer'>A: By using pure functions and spread/rest operators:</div><pre>return { ...state, newValue };</pre></div><div class='qa'><div class='question'>Q: What is the difference between Actions and Effects?</div><div class='answer'>A: Actions describe state changes; Effects perform async tasks like API calls.</div></div><div class='qa'><div class='question'>Q: How would you structure a large application using NgRx?</div><div class='answer'>A: Split state into feature modules, use typed actions/selectors/effects.</div></div><div class='qa'><div class='question'>Q: How do you handle error states in NgRx?</div><div class='answer'>A: Dispatch a failure action in effect:</div><pre>catchError(err => of(loadFail({ error: err })))</pre></div><div class='qa'><div class='question'>Q: Explain optimistic vs pessimistic updates in NgRx.</div><div class='answer'>A: Optimistic: update UI before server response. Pessimistic: wait for server response first.</div></div><div class='qa'><div class='question'>Q: How do you unsubscribe from selectors?</div><div class='answer'>A: Use async pipe in HTML or manually unsubscribe using takeUntil.</div></div><div class='qa'><div class='question'>Q: What are Entity adapters in NgRx?</div><div class='answer'>A: Helpers to manage entity collections:</div><pre>const adapter = createEntityAdapter<Todo>();</pre></div>
+  </div>
+</body>
+</html>

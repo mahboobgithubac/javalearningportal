@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- SEO Meta Tags -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Learn multiple ways to iterate through arrays in Java 8 with examples including enhanced for loop, Streams, IntStream, and parallel processing.">
+<meta name="keywords" content="Java 8, Array Iteration, Streams, IntStream, Java Examples, Java Tutorial">
+<meta name="author" content="Mahboob Anwar">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (Social Sharing) -->
+<meta property="og:title" content="Java 8 Array Iteration Methods - Tutorial" />
+<meta property="og:description" content="Explore different methods to iterate over arrays in Java 8 using for-each loops, Streams, and IntStream with practical examples." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://javalearningportal.netlify.app/array-iterate" />
+<meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/226/226777.png" />
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://javalearningportal.netlify.app/array-iterate" />
+
+<title>Java 8 Array Iteration Methods - Tutorial</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        header, footer {
+            background-color: #002244;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1, footer p {
+            margin: 0;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #003366;
+        }
+
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            overflow-x: auto;
+            border-left: 4px solid #003366;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        footer {
+            margin-top: 50px;
+        }
+		  body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header nav {
+                margin-top: 10px;
+            }
+        }
+		
+   
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+		
+		
+    </style>
+</head>
+<body>
+    <header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+		 <div class="dropdown">
+		<a href="#">Concepts ▾</a>
+    <div class="dropdown-content">
+      <a href="mysql.html">MySQL</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <!--<a href="#">Concepts</a>-->
+		<div class="dropdown">
+        <a href="#">Projects</a> 
+		<div class="dropdown-content">
+      <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <a href="#">Contact</a>
+		 
+    </nav>
+</header>
+
+    <main>
+        <h2>Java 8 - Different Ways to Iterate Through Arrays</h2>
+        <p>Here are several efficient and modern ways to iterate through arrays in Java 8:</p>
+
+        <h3>1. Using the Enhanced For Loop</h3>
+        <p>This is the most straightforward and commonly used method:</p>
+        <pre><code>int[] numbers = {1, 2, 3, 4, 5};
+for (int number : numbers) {
+    System.out.println(number);
+}</code></pre>
+
+        <h3>2. Using Arrays.stream() and forEach()</h3>
+        <p>This method converts the array into a stream for functional-style operations:</p>
+        <pre><code>import java.util.Arrays;
+
+int[] numbers = {1, 2, 3, 4, 5};
+Arrays.stream(numbers).forEach(number -&gt; System.out.println(number));
+
+// Or using method reference
+Arrays.stream(numbers).forEach(System.out::println);</code></pre>
+
+        <h3>3. Using IntStream.range() and forEach()</h3>
+        <p>Useful when you need access to the index during iteration:</p>
+        <pre><code>import java.util.stream.IntStream;
+
+int[] numbers = {1, 2, 3, 4, 5};
+IntStream.range(0, numbers.length)
+         .forEach(i -&gt; System.out.println("Index: " + i + ", Value: " + numbers[i]));</code></pre>
+
+        <h3>4. Using Arrays.stream() and forEachOrdered()</h3>
+        <p>Preserves the order even when used with a parallel stream:</p>
+        <pre><code>import java.util.Arrays;
+
+Integer[] numbers = {1, 2, 3, 4, 5};
+Arrays.stream(numbers)
+      .parallel()
+      .forEachOrdered(System.out::println);</code></pre>
+
+        <h3>Notes:</h3>
+        <ul>
+            <li><strong>forEach()</strong> does not guarantee order in parallel streams.</li>
+            <li><strong>forEachOrdered()</strong> maintains order even in parallel processing.</li>
+            <li>Use <code>Arrays.stream()</code> or <code>IntStream.range()</code> for primitive arrays.</li>
+            <li>Use <code>Arrays.stream()</code> for object arrays like <code>Integer[]</code>.</li>
+        </ul>
+    </main>
+
+  
+<footer>
+    &copy; 2025 Java Learning Portal. All rights reserved.
+	<p>Empowering Developers to Write Clean and Modern Java Code</p>
+	
+	
+<!--	 <div style="margin-top:10px;">
+    <a href="https://www.hitwebcounter.com" target="_blank">
+      <img src="https://hitwebcounter.com/counter/counter.php?page=20836914&style=0006&nbdigits=5&type=page&initCount=0" 
+           title="Web Counter" alt="Visit counter" border="0" />
+    </a>
+  </div>
+	->
+	<!-- hitwebcounter Code START -->
+<a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=20836914&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>      
+</footer>
+
+<script>
+    // Visit Counter using localStorage
+    const visitKey = 'javaLearningPortalVisits';
+    let count = localStorage.getItem(visitKey);
+
+    if (!count) {
+        count = 1;
+    } else {
+        count = parseInt(count) + 1;
+    }
+
+    localStorage.setItem(visitKey, count);
+    document.getElementById('visitCount').textContent = `👀 you have visited ${count} time(s) on this browser.`;
+</script>
+</body>
+</html>

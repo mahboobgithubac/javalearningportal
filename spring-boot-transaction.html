@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot Transaction Management Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background: #f8f8f8;
+      padding: 12px;
+      overflow-x: auto;
+      border-left: 4px solid #007acc;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Spring Boot Transaction Management Example</h1>
+
+  <div class="section">
+    <h2>Overview</h2>
+    <p>This is a complete example demonstrating how to use <code>@Transactional</code> in a Spring Boot application to manage database transactions.</p>
+  </div>
+
+  <div class="section">
+    <h2>1. Dependencies (Maven)</h2>
+    <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+  &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+  &lt;artifactId&gt;h2&lt;/artifactId&gt;
+  &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>2. Entity: Account.java</h2>
+    <pre><code>@Entity
+public class Account {
+    @Id
+    private Long id;
+    private String name;
+    private Double balance;
+
+    // Getters and Setters
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>3. Repository: AccountRepository.java</h2>
+    <pre><code>public interface AccountRepository extends JpaRepository&lt;Account, Long&gt; {}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>4. Service: BankService.java</h2>
+    <pre><code>@Service
+public class BankService {
+
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Transactional
+    public void transfer(Long fromId, Long toId, double amount) {
+        Account from = accountRepository.findById(fromId)
+            .orElseThrow(() -&gt; new RuntimeException("Sender not found"));
+        Account to = accountRepository.findById(toId)
+            .orElseThrow(() -&gt; new RuntimeException("Receiver not found"));
+
+        if (from.getBalance() &lt; amount) {
+            throw new RuntimeException("Insufficient balance");
+        }
+
+        from.setBalance(from.getBalance() - amount);
+        to.setBalance(to.getBalance() + amount);
+
+        accountRepository.save(from);
+        accountRepository.save(to);
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>5. Controller: BankController.java</h2>
+    <pre><code>@RestController
+@RequestMapping("/api/bank")
+public class BankController {
+
+    @Autowired
+    private BankService bankService;
+
+    @PostMapping("/transfer")
+    public ResponseEntity&lt;String&gt; transfer(@RequestParam Long from,
+                                             @RequestParam Long to,
+                                             @RequestParam double amount) {
+        bankService.transfer(from, to, amount);
+        return ResponseEntity.ok("Transfer successful");
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>6. Application Properties</h2>
+    <pre><code>spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=create
+spring.h2.console.enabled=true</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>7. Test: BankServiceTest.java</h2>
+    <pre><code>@SpringBootTest
+public class BankServiceTest {
+
+    @Autowired
+    private BankService bankService;
+
+    @Test
+    void testTransferFailureRollback() {
+        assertThrows(RuntimeException.class, () -&gt; {
+            bankService.transfer(1L, 2L, 10000); // too much
+        });
+
+        // validate that no money has been deducted
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>8. Run & Test</h2>
+    <p>Start the application and hit the API endpoint:</p>
+    <pre><code>POST /api/bank/transfer?from=1&amp;to=2&amp;amount=500</code></pre>
+    <p>Check H2 Console: <code>http://localhost:8080/h2-console</code> to verify data.</p>
+  </div>
+
+  <div class="section">
+    <h2>Conclusion</h2>
+    <p>This project demonstrates atomic transactions using <code>@Transactional</code> in Spring Boot. You can test rollback scenarios by throwing exceptions in the service method.</p>
+  </div>
+
+</body>
+</html>

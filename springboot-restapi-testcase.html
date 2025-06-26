@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spring Boot REST API Test Cases</title>
+  <meta name="description" content="JUnit and Mockito test cases for Spring Boot REST API controller, service, and repository layers with annotations and examples.">
+  <meta name="keywords" content="Spring Boot, REST API, JUnit, Mockito, Testing, MockMvc, WebMvcTest, DataJpaTest">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    header, footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    main {
+      max-width: 960px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    h2 {
+      margin-top: 2rem;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 1rem;
+      overflow-x: auto;
+      border-left: 4px solid #003366;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Spring Boot REST API Test Cases</h1>
+  <p>Controller, Service, and Repository Layer Testing Using JUnit & Mockito</p>
+</header>
+
+<main>
+
+  <section>
+    <h2>1️⃣ Controller Layer Test</h2>
+    <p>We use <code>@WebMvcTest</code> to test the controller in isolation using <code>MockMvc</code>.</p>
+
+    <ul>
+      <li><code>@WebMvcTest</code> - Loads only the web layer (e.g., Controller)</li>
+      <li><code>@MockBean</code> - Creates mock instances for service beans</li>
+      <li><code>MockMvc</code> - Performs HTTP requests in tests</li>
+    </ul>
+
+    <pre><code>@WebMvcTest(EmployeeController.class)
+class EmployeeControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private EmployeeService employeeService;
+
+    @Test
+    void testCreateEmployee() throws Exception {
+        Employee employee = new Employee(1L, "John", "Dev");
+        when(employeeService.save(any(Employee.class))).thenReturn(employee);
+
+        mockMvc.perform(post("/api/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"John\",\"role\":\"Dev\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("John"));
+    }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>2️⃣ Service Layer Test</h2>
+    <p>We use <code>@ExtendWith(MockitoExtension.class)</code> to inject mocks and test the service logic directly.</p>
+
+    <ul>
+      <li><code>@Mock</code> - Mocks a dependency</li>
+      <li><code>@InjectMocks</code> - Injects mocks into the service class</li>
+    </ul>
+
+    <pre><code>@ExtendWith(MockitoExtension.class)
+class EmployeeServiceTest {
+
+    @Mock
+    private EmployeeRepository employeeRepository;
+
+    @InjectMocks
+    private EmployeeServiceImpl employeeService;
+
+    @Test
+    void testFindById() {
+        Employee emp = new Employee(1L, "John", "Dev");
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(emp));
+
+        Employee result = employeeService.findById(1L);
+
+        assertEquals("Dev", result.getRole());
+        verify(employeeRepository).findById(1L);
+    }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>3️⃣ Repository Layer Test</h2>
+    <p>We use <code>@DataJpaTest</code> to load only JPA-related components using an in-memory database like H2.</p>
+
+    <ul>
+      <li><code>@DataJpaTest</code> - Configures only JPA components</li>
+      <li><code>@Autowired</code> - Injects repository bean</li>
+    </ul>
+
+    <pre><code>@DataJpaTest
+class EmployeeRepositoryTest {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Test
+    void testSaveAndFindById() {
+        Employee emp = new Employee(null, "Alice", "QA");
+        Employee saved = employeeRepository.save(emp);
+
+        Optional&lt;Employee&gt; found = employeeRepository.findById(saved.getId());
+        assertTrue(found.isPresent());
+    }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>📌 Mockito <code>any()</code> Matcher Explained</h2>
+    <p><code>any(Class)</code> is a matcher that allows Mockito to accept any instance of a given class as an argument.</p>
+
+    <pre><code>when(employeeRepository.save(any(Employee.class))).thenReturn(employee);</code></pre>
+
+    <p>✅ This tells Mockito to return the mocked <code>employee</code> object no matter which <code>Employee</code> instance is passed.</p>
+
+    <h3>❌ Without <code>any()</code></h3>
+    <pre><code>when(employeeRepository.save(emp)).thenReturn(emp);</code></pre>
+    <p>This works only if <code>emp</code> is the exact same object instance, which is often not the case.</p>
+
+    <h3>Other Matchers:</h3>
+    <ul>
+      <li><code>anyString()</code>, <code>anyLong()</code>, etc.</li>
+      <li><code>eq(value)</code> - exact match</li>
+      <li><code>isNull()</code>, <code>notNull()</code></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; 2025 Spring Boot Testing Guide</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sort HashMap by Age (Value) - Java 8 Example</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1, h2 { color: #2c3e50; }
+    code, pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; display: block; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>✅ Example: Sort <code>HashMap&lt;String, Integer&gt;</code> by Age (Value)</h1>
+
+  <h2>✅ Java 8 Code</h2>
+  <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class SortMapByAge {
+    public static void main(String[] args) {
+        Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+        map.put("Alice", 30);
+        map.put("Bob", 25);
+        map.put("Charlie", 35);
+
+        System.out.println("Original Map:");
+        map.forEach((k, v) -&gt; System.out.println(k + " -&gt; " + v));
+
+        // Sort by value (age)
+        LinkedHashMap&lt;String, Integer&gt; sortedMap = map.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByValue())
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue,
+                    (e1, e2) -&gt; e1,
+                    LinkedHashMap::new
+                )
+            );
+
+        System.out.println("\nSorted Map by Age:");
+        sortedMap.forEach((k, v) -&gt; System.out.println(k + " -&gt; " + v));
+    }
+}</code></pre>
+
+  <h2>✅ Output</h2>
+  <pre><code>Original Map:
+Alice -&gt; 30
+Bob -&gt; 25
+Charlie -&gt; 35
+
+Sorted Map by Age:
+Bob -&gt; 25
+Alice -&gt; 30
+Charlie -&gt; 35</code></pre>
+
+  <h2>✅ Descending Order</h2>
+  <p>Change the stream sort line to reverse order:</p>
+  <pre><code>.sorted(Map.Entry.&lt;String, Integer&gt;comparingByValue().reversed())</code></pre>
+
+</body>
+</html>

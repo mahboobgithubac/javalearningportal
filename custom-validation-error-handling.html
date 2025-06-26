@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Validation Error Format - Spring Boot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        code, pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            display: block;
+            white-space: pre-wrap;
+            border-left: 4px solid #ccc;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #efefef;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Custom Validation Error Format using ApiError Class in Spring Boot</h1>
+
+<h2>1️⃣ Create the ApiError DTO</h2>
+<pre><code>package com.example.employee.exception;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+
+public class ApiError {
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
+    private String message;
+    private Map&lt;String, String&gt; fieldErrors;
+
+    // Constructors
+    public ApiError() {}
+
+    public ApiError(LocalDateTime timestamp, int status, String error, String message) {
+        this.timestamp = timestamp;
+        this.status = status;
+        this.error = error;
+        this.message = message;
+    }
+
+    // Getters and Setters
+    // ... (omitted for brevity)
+}
+</code></pre>
+
+<h2>2️⃣ Update GlobalExceptionHandler</h2>
+
+<h3>🔹 For Validation Errors</h3>
+<pre><code>@ExceptionHandler(MethodArgumentNotValidException.class)
+public ResponseEntity&lt;ApiError&gt; handleValidationErrors(MethodArgumentNotValidException ex) {
+    Map&lt;String, String&gt; fieldErrors = new HashMap&lt;&gt;();
+    ex.getBindingResult().getFieldErrors().forEach(error -&gt;
+        fieldErrors.put(error.getField(), error.getDefaultMessage())
+    );
+
+    ApiError apiError = new ApiError();
+    apiError.setTimestamp(LocalDateTime.now());
+    apiError.setStatus(HttpStatus.BAD_REQUEST.value());
+    apiError.setError("Validation Failed");
+    apiError.setMessage("Request contains invalid fields");
+    apiError.setFieldErrors(fieldErrors);
+
+    return new ResponseEntity&lt;&gt;(apiError, HttpStatus.BAD_REQUEST);
+}
+</code></pre>
+
+<h3>🔹 For Resource Not Found</h3>
+<pre><code>@ExceptionHandler(ResourceNotFoundException.class)
+public ResponseEntity&lt;ApiError&gt; handleResourceNotFound(ResourceNotFoundException ex) {
+    ApiError apiError = new ApiError(
+        LocalDateTime.now(),
+        HttpStatus.NOT_FOUND.value(),
+        "Not Found",
+        ex.getMessage()
+    );
+    return new ResponseEntity&lt;&gt;(apiError, HttpStatus.NOT_FOUND);
+}
+</code></pre>
+
+<h3>🔹 For Generic Errors</h3>
+<pre><code>@ExceptionHandler(Exception.class)
+public ResponseEntity&lt;ApiError&gt; handleGeneralError(Exception ex) {
+    ApiError apiError = new ApiError(
+        LocalDateTime.now(),
+        HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        "Internal Server Error",
+        ex.getMessage()
+    );
+    return new ResponseEntity&lt;&gt;(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+}
+</code></pre>
+
+<h2>🧪 Sample Request (Invalid Data)</h2>
+<pre><code>{
+  "name": "",
+  "email": "invalid_email"
+}
+</code></pre>
+
+<h2>✅ Sample Error Response (400 - Validation Error)</h2>
+<pre><code>{
+  "timestamp": "2025-06-17T13:30:00.000",
+  "status": 400,
+  "error": "Validation Failed",
+  "message": "Request contains invalid fields",
+  "fieldErrors": {
+    "name": "Name is mandatory",
+    "email": "Invalid email format"
+  }
+}
+</code></pre>
+
+<h2>✅ Benefits of Using ApiError</h2>
+<table>
+    <tr>
+        <th>Advantage</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>✅ Structure</td>
+        <td>Easy for frontend to parse and display</td>
+    </tr>
+    <tr>
+        <td>✅ Consistency</td>
+        <td>Same format for all error types</td>
+    </tr>
+    <tr>
+        <td>✅ Maintainability</td>
+        <td>Easy to extend with additional fields (e.g. path, errorCode)</td>
+    </tr>
+</table>
+
+</body>
+</html>

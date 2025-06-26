@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlockingQueue vs Non-Blocking Queue in Java</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+   /* body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1, h2 { color: #2c3e50; }
+	
+    code, pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; display: block; white-space: pre-wrap; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #eee; }*/
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+    <h1 style="margin: 0;">Java Learning Portal</h1>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <div class="dropdown">
+      <a href="#">Concepts ▾</a>
+      <div class="dropdown-content">
+        <a href="mysql.html">MySQL</a>
+        <a href="#">Java</a>
+        <a href="#">Spring Boot</a>
+        <a href="#">REST API</a>
+        <a href="#">Microservices</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <a href="#">Projects</a>
+      <div class="dropdown-content">
+        <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+        <a href="#">Java</a>
+        <a href="#">Spring Boot</a>
+        <a href="#">REST API</a>
+        <a href="#">Microservices</a>
+      </div>
+    </div>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h3>Categories</h3>
+    <ul>
+      <li><strong>Java Core</strong>
+        <ul>
+          <li><a href="hashcode-equals-contract.html">hashCode & equals</a></li>
+          <li><a href="java-inheritance-polymorphism.html">OOP Concepts</a></li>
+          <li><a href="#">Streams & Lambdas</a></li>
+        </ul>
+      </li>
+      <li><strong>Spring Boot</strong>
+        <ul>
+          <li><a href="#">Spring Boot Basics</a></li>
+          <li><a href="#">Spring Annotations</a></li>
+          <li><a href="#">REST API</a></li>
+        </ul>
+      </li>
+      <li><strong>Microservices</strong>
+        <ul>
+          <li><a href="microservice-design-patterens.html">Design Patterns</a></li>
+          <li><a href="#">Service Discovery</a></li>
+        </ul>
+      </li>
+      <li><strong>Tools</strong>
+        <ul>
+          <li><a href="#">Maven & Gradle</a></li>
+          <li><a href="#">CI/CD</a></li>
+          <li><a href="#">Docker</a></li>
+        </ul>
+      </li>
+	   <li><strong>Interview questions</strong>
+        <ul>
+          <li><a href="important-interview-questions.html">Java 17 Features and Microservices</a></li>
+          <li><a href="#">Spring Annotations</a></li>
+          <li><a href="#">REST API</a></li>
+        </ul>
+      </li>
+	   <li><strong>Problem Solving Interview  Questions</strong>
+        <ul>
+          <li><a href="no-of-coins.html" >Count no of coins</a></li>
+		    <li><a href="array-solution.html" >Java 8 Arrays based questions</a></li>
+		<li><a href="listps.html" >Java 8 List based questions</a></li>
+		<li><a href="even-odd-thread.html" >Even Odd Thread Printing questions</a></li>
+		
+		
+          <li><a href="#">Spring Annotations</a></li>
+          <li><a href="#">REST API</a></li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+  <main class="container">
+    <section class="intro">
+      <p><strong>Welcome to the Java Learning Portal!</strong> This platform provides concise and practical explanations of core Java concepts with real-world examples. Perfect for students, developers, and interview preparation. Explore each concept below to strengthen your understanding of Java fundamentals.</p>
+    </section>
+
+  <h1>BlockingQueue vs Non-Blocking Queue in Java</h1>
+
+  <h2>✅ BlockingQueue</h2>
+  <ul>
+    <li><strong>Interface:</strong> <code>java.util.concurrent.BlockingQueue</code></li>
+    <li><strong>Behavior:</strong> Blocks when:
+      <ul>
+        <li>Queue is <strong>empty</strong> on <code>take()</code></li>
+        <li>Queue is <strong>full</strong> on <code>put()</code> (for bounded queues)</li>
+      </ul>
+    </li>
+    <li><strong>Thread-safe:</strong> Yes</li>
+    <li><strong>Use case:</strong> Producer-consumer problems</li>
+  </ul>
+
+  <h3>Example</h3>
+  <pre><code>import java.util.concurrent.*;
+
+public class BlockingQueueExample {
+    public static void main(String[] args) throws InterruptedException {
+        BlockingQueue&lt;String&gt; queue = new ArrayBlockingQueue&lt;&gt;(2);
+
+        // Producer
+        new Thread(() -&gt; {
+            try {
+                queue.put("Java");
+                queue.put("Python");
+                queue.put("C++"); // Will block if queue is full
+            } catch (InterruptedException e) {}
+        }).start();
+
+        // Consumer
+        new Thread(() -&gt; {
+            try {
+                Thread.sleep(1000);
+                System.out.println(queue.take()); // "Java"
+            } catch (InterruptedException e) {}
+        }).start();
+    }
+}</code></pre>
+
+  <h2>✅ Non-Blocking Queue</h2>
+  <ul>
+    <li><strong>Interface:</strong> <code>Queue</code>, <code>ConcurrentLinkedQueue</code></li>
+    <li><strong>Behavior:</strong> Never blocks
+      <ul>
+        <li><code>offer()</code> returns false if it can't add</li>
+        <li><code>poll()</code> returns null if empty</li>
+      </ul>
+    </li>
+    <li><strong>Thread-safe:</strong> Only if using <code>ConcurrentLinkedQueue</code></li>
+    <li><strong>Use case:</strong> High-throughput systems</li>
+  </ul>
+
+  <h3>Example</h3>
+  <pre><code>import java.util.concurrent.ConcurrentLinkedQueue;
+
+public class NonBlockingQueueExample {
+    public static void main(String[] args) {
+        ConcurrentLinkedQueue&lt;String&gt; queue = new ConcurrentLinkedQueue&lt;&gt;();
+
+        queue.offer("Java");
+        queue.offer("Python");
+
+        System.out.println(queue.poll()); // "Java"
+        System.out.println(queue.poll()); // "Python"
+        System.out.println(queue.poll()); // null
+    }
+}</code></pre>
+
+  <h2>✅ Comparison Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>BlockingQueue</th>
+        <th>Non-blocking Queue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Interface</td><td>BlockingQueue</td><td>Queue, ConcurrentLinkedQueue</td></tr>
+      <tr><td>Blocking behavior</td><td>Yes</td><td>No</td></tr>
+      <tr><td>Thread-safe</td><td>Yes</td><td>Only with ConcurrentLinkedQueue</td></tr>
+      <tr><td>Common classes</td><td>ArrayBlockingQueue, LinkedBlockingQueue</td><td>ConcurrentLinkedQueue</td></tr>
+      <tr><td>Use case</td><td>Producer-consumer pattern</td><td>Fast, non-blocking access</td></tr>
+      <tr><td>Null elements allowed</td><td>❌ No</td><td>✅ Yes (in some)</td></tr>
+      <tr><td>Exception methods</td><td>add(), remove()</td><td>Same</td></tr>
+      <tr><td>Non-blocking methods</td><td>offer(), poll()</td><td>Primary methods</td></tr>
+    </tbody>
+  </table>
+
+<div class="visit-counter" id="visitCount"></div>
+  </main>
+</div>
+
+<footer>
+  &copy; 2025 Java Learning Portal. All rights reserved.
+  <div style="margin-top:10px;">
+    <a href="https://www.hitwebcounter.com" target="_blank">
+      <img src="https://hitwebcounter.com/counter/counter.php?page=20923573&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" alt="Visit counter For Websites" border="0" />
+    </a>
+  </div>
+  <a href="visit-stat.html" target="_blank">stat</a>
+</footer>
+
+<script>
+  // Visit Counter using localStorage
+  const visitKey = 'javaLearningPortalVisits';
+  let count = localStorage.getItem(visitKey);
+
+  if (!count) {
+    count = 1;
+  } else {
+    count = parseInt(count) + 1;
+  }
+
+  localStorage.setItem(visitKey, count);
+  document.getElementById('visitCount').textContent = `👀 You have visited ${count} time(s) on this browser.`;
+</script>
+
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+</body>
+</html>

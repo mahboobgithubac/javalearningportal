@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Angular Counter App Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #343a40;
+      display: flex;
+      justify-content: center;
+      padding: 0.5rem 0;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    pre {
+      background-color: #e9ecef;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+
+    h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Angular Counter App</h1>
+  </header>
+
+  <nav>
+    <a href="#setup">Setup</a>
+    <a href="#component">Component</a>
+    <a href="#template">Template</a>
+    <a href="#style">Style</a>
+    <a href="#mainapp">Main App</a>
+    <a href="#run">Run</a>
+  </nav>
+
+  <section id="setup">
+    <h2>1. Setup Angular App</h2>
+    <pre><code>ng new counter-app
+cd counter-app
+ng serve</code></pre>
+  </section>
+
+  <section id="component">
+    <h2>2. Generate Counter Component</h2>
+    <pre><code>ng generate component counter</code></pre>
+
+    <h3>counter.component.ts</h3>
+    <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-counter',
+  templateUrl: './counter.component.html',
+  styleUrls: ['./counter.component.css']
+})
+export class CounterComponent {
+  count: number = 0;
+
+  increment(): void {
+    this.count++;
+  }
+
+  decrement(): void {
+    if (this.count > 0) {
+      this.count--;
+    }
+  }
+
+  reset(): void {
+    this.count = 0;
+  }
+}
+</code></pre>
+  </section>
+
+  <section id="template">
+    <h2>3. Template (HTML)</h2>
+    <h3>counter.component.html</h3>
+    <pre><code>&lt;div style="text-align: center; margin-top: 50px;"&gt;
+  &lt;h2&gt;Angular Counter App&lt;/h2&gt;
+  &lt;h1&gt;{{ count }}&lt;/h1&gt;
+
+  &lt;button (click)="increment()"&gt;Increment&lt;/button&gt;
+  &lt;button (click)="decrement()"&gt;Decrement&lt;/button&gt;
+  &lt;button (click)="reset()"&gt;Reset&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+  </section>
+
+  <section id="style">
+    <h2>4. Styling</h2>
+    <h3>counter.component.css</h3>
+    <pre><code>button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+}</code></pre>
+  </section>
+
+  <section id="mainapp">
+    <h2>5. Use Component in Main App</h2>
+    <h3>app.component.html</h3>
+    <pre><code>&lt;app-counter&gt;&lt;/app-counter&gt;</code></pre>
+  </section>
+
+  <section id="run">
+    <h2>6. Run the App</h2>
+    <pre><code>ng serve</code></pre>
+    <p>Open in browser: <a href="http://localhost:4200" target="_blank">http://localhost:4200</a></p>
+  </section>
+
+  <footer>
+    &copy; 2025 Angular Counter Guide
+  </footer>
+</body>
+</html>

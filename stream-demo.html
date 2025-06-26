@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Stream Q&A Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    .question {
+      cursor: pointer;
+      background: #3498db;
+      color: white;
+      padding: 12px 15px;
+      border-radius: 6px;
+      margin: 10px 0;
+      transition: background 0.3s;
+    }
+    .question:hover {
+      background: #2980b9;
+    }
+    .answer {
+      display: none;
+      background: #ecf0f1;
+      border-left: 4px solid #3498db;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 0 0 6px 6px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      overflow-x: auto;
+      border-radius: 4px;
+    }
+  </style>
+  <script>
+    function toggle(id) {
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</head>
+<body>
+
+<h1>Java 8 Stream Q&A - Demo (with Descriptive Class Names)</h1>
+
+<!-- Question 1 -->
+<div class="question" onclick="toggle('a1')">
+  Q1: Convert a list of strings to uppercase
+</div>
+<div id="a1" class="answer">
+  <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class UppercaseStrings {
+    public static void main(String[] args) {
+        List&lt;String&gt; names = Arrays.asList("john", "jane", "jack");
+        List&lt;String&gt; upper = names.stream()
+                                   .map(String::toUpperCase)
+                                   .collect(Collectors.toList());
+        System.out.println("Uppercase: " + upper);
+    }
+}</code></pre>
+</div>
+
+<!-- Question 2 -->
+<div class="question" onclick="toggle('a2')">
+  Q2: Square a list of numbers
+</div>
+<div id="a2" class="answer">
+  <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class SquareNumbers {
+    public static void main(String[] args) {
+        List&lt;Integer&gt; nums = Arrays.asList(1, 2, 3, 4);
+        List&lt;Integer&gt; squares = nums.stream()
+                                     .map(n -&gt; n * n)
+                                     .collect(Collectors.toList());
+        System.out.println("Squares: " + squares);
+    }
+}</code></pre>
+</div>
+
+<!-- Question 3 -->
+<div class="question" onclick="toggle('a3')">
+  Q3: Flatten a list of lists
+</div>
+<div id="a3" class="answer">
+  <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class FlattenListOfLists {
+    public static void main(String[] args) {
+        List&lt;List&lt;String&gt;&gt; nested = Arrays.asList(
+            Arrays.asList("a", "b"),
+            Arrays.asList("c")
+        );
+        List&lt;String&gt; flat = nested.stream()
+                                   .flatMap(List::stream)
+                                   .collect(Collectors.toList());
+        System.out.println("Flattened: " + flat);
+    }
+}</code></pre>
+</div>
+
+</body>
+</html>

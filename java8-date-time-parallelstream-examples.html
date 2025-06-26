@@ -1,0 +1,173 @@
+<!-- Full HTML Code Updated -->
+<!-- File name suggestion: java8-date-time-parallelstream-examples.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java 8 Date/Time & Parallel Stream Examples</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      padding: 40px;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    .explanation {
+      background-color: #eef9ff;
+      border-left: 4px solid #17a2b8;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Java 8 Date/Time & Parallel Stream Examples</h1>
+
+  <section>
+    <h2>1. Second Saturday of May 2023</h2>
+    <pre><code>LocalDate secondSaturday = LocalDate.of(2023, 5, 1)
+    .with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
+    .plusWeeks(1);
+System.out.println("Second Saturday of 5/2023 is: " + secondSaturday);</code></pre>
+    <div class="explanation">
+      Output: <strong>2023-05-13</strong><br>
+      Explanation: Uses <code>TemporalAdjusters</code> to find the second Saturday.
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Parse and Format Dates</h2>
+    <pre><code>LocalDate date = LocalDate.parse("2023-05-15");
+LocalDateTime dateTime = LocalDateTime.parse("2023-05-15T10:30:45");
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+LocalDate custom = LocalDate.parse("15-05-2023", formatter);</code></pre>
+  </section>
+
+  <section>
+    <h2>3. Date Difference</h2>
+    <pre><code>Period p = Period.between(LocalDate.of(2020, 1, 1), LocalDate.of(2023, 5, 15));
+System.out.println("Years: " + p.getYears());</code></pre>
+  </section>
+
+  <section>
+    <h2>4. Add/Subtract Days/Months</h2>
+    <pre><code>LocalDate newDate = LocalDate.of(2023, 5, 15).plusDays(5).minusMonths(2);</code></pre>
+  </section>
+
+  <section>
+    <h2>5. Convert Old Date to New API</h2>
+    <pre><code>Date oldDate = new Date();
+Instant instant = oldDate.toInstant();
+LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());</code></pre>
+  </section>
+
+  <section>
+    <h2>6. Compare Dates</h2>
+    <pre><code>if (date.isBefore(today)) { ... }</code></pre>
+  </section>
+
+  <section>
+    <h2>7. Time Zone Example</h2>
+    <pre><code>ZonedDateTime utc = ZonedDateTime.of(2023, 5, 15, 12, 0, 0, 0, ZoneId.of("UTC"));
+ZonedDateTime tokyo = utc.withZoneSameInstant(ZoneId.of("Asia/Tokyo"));</code></pre>
+  </section>
+
+  <section>
+    <h2>8. Leap Year Check</h2>
+    <pre><code>System.out.println(Year.of(2024).isLeap());</code></pre>
+  </section>
+
+  <section>
+    <h2>9. First and Last Day of Month</h2>
+    <pre><code>YearMonth ym = YearMonth.of(2023, 5);
+LocalDate first = ym.atDay(1);
+LocalDate last = ym.atEndOfMonth();</code></pre>
+  </section>
+
+  <section>
+    <h2>10. All Dates Between Two Dates</h2>
+    <pre><code>Stream.iterate(start, date -&gt; date.plusDays(1))
+  .limit(ChronoUnit.DAYS.between(start, end) + 1)
+  .forEach(System.out::println);</code></pre>
+  </section>
+
+  <section>
+    <h2>11. Compare ZonedDateTime</h2>
+    <pre><code>if (zdt1.isAfter(zdt2)) { ... }</code></pre>
+  </section>
+
+  <section>
+    <h2>12. Instant to ZonedDateTime</h2>
+    <pre><code>Instant i = Instant.parse("2023-05-15T08:00:00Z");
+ZonedDateTime zdt = i.atZone(ZoneId.of("America/New_York"));</code></pre>
+  </section>
+
+  <section>
+    <h2>13. Next Weekday</h2>
+    <pre><code>LocalDate nextFriday = date.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));</code></pre>
+  </section>
+
+  <section>
+    <h2>14. Calculate Age</h2>
+    <pre><code>Period age = Period.between(birthDate, today);
+System.out.printf("Age: %d years, %d months, %d days%n", age.getYears(), age.getMonths(), age.getDays());</code></pre>
+  </section>
+
+  <section>
+    <h2>15. Parallel Stream Example</h2>
+    <pre><code>List&lt;Integer&gt; numbers = Arrays.asList(1,2,3,4,5,6,7,8,9,10);
+int sumOfSquares = numbers.parallelStream()
+    .map(n -&gt; n * n)
+    .reduce(0, Integer::sum);
+System.out.println("Sum of squares: " + sumOfSquares);</code></pre>
+    <div class="explanation">
+      Output: <strong>385</strong><br>
+      Parallel processing using multiple threads.
+    </div>
+  </section>
+
+  <section>
+    <h2>16. Stream vs ParallelStream Performance</h2>
+    <pre><code>List&lt;Integer&gt; numbers = IntStream.rangeClosed(1, 1_000_000)
+    .boxed()
+    .collect(Collectors.toList());
+
+long start = System.currentTimeMillis();
+long sum = numbers.stream().mapToLong(n -&gt; n * n).sum();
+long time = System.currentTimeMillis() - start;
+System.out.println("Sequential time: " + time);
+
+start = System.currentTimeMillis();
+sum = numbers.parallelStream().mapToLong(n -&gt; n * n).sum();
+time = System.currentTimeMillis() - start;
+System.out.println("Parallel time: " + time);</code></pre>
+    <div class="explanation">
+      Timings vary by machine. Parallel streams typically outperform for large datasets.
+    </div>
+  </section>
+
+</body>
+</html>

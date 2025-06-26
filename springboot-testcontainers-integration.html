@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spring Boot Integration Testing with Testcontainers</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1, h2, h3 { color: #2c3e50; }
+    pre, code { background: #f4f4f4; padding: 10px; border-left: 4px solid #ccc; white-space: pre-wrap; display: block; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<h1>✅ Spring Boot Integration Testing with Testcontainers</h1>
+
+<p>Integration testing in Spring Boot using Testcontainers allows testing real interactions with external dependencies such as databases or message brokers in isolated Docker containers.</p>
+
+<h2>📦 Implementation Steps</h2>
+
+<h3>1️⃣ Add Dependencies</h3>
+<p>Include Testcontainers, the specific container (like PostgreSQL), and Spring Boot Testcontainers in your <code>pom.xml</code>:</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.testcontainers&lt;/groupId&gt;
+    &lt;artifactId&gt;junit-jupiter&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.testcontainers&lt;/groupId&gt;
+    &lt;artifactId&gt;postgresql&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-testcontainers&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h3>2️⃣ Configure the Test</h3>
+<p>Use annotations <code>@SpringBootTest</code>, <code>@Testcontainers</code>, and <code>@Container</code> for container lifecycle management:</p>
+
+<pre><code>@SpringBootTest
+@Testcontainers
+class MyIntegrationTest {
+
+    @Container
+    static PostgreSQLContainer&lt;?&gt; postgres = new PostgreSQLContainer<>("postgres:15-alpine");
+
+    @Autowired
+    private MyRepository myRepository;
+
+    @DynamicPropertySource
+    static void properties(DynamicPropertySource registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+
+    @Test
+    void testDataIsPersisted() {
+        MyEntity entity = new MyEntity();
+        entity.setData("test data");
+        myRepository.save(entity);
+
+        MyEntity retrievedEntity = myRepository.findById(entity.getId()).orElse(null);
+        assertThat(retrievedEntity).isNotNull();
+        assertThat(retrievedEntity.getData()).isEqualTo("test data");
+    }
+}
+</code></pre>
+
+<h3>3️⃣ Dynamic Properties</h3>
+<p>The <code>@DynamicPropertySource</code> annotation dynamically binds container connection details into the Spring context.</p>
+
+<h2>🎯 Benefits</h2>
+<ul>
+  <li><strong>Real Dependencies:</strong> Uses actual databases or services similar to production.</li>
+  <li><strong>Isolation:</strong> Each test runs in its own container for clean, repeatable tests.</li>
+  <li><strong>Simplified Setup:</strong> Testcontainers manages container lifecycle automatically.</li>
+  <li><strong>Consistency:</strong> Works the same across all environments and CI/CD pipelines.</li>
+</ul>
+
+</body>
+</html>

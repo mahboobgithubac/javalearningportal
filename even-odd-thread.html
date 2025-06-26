@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Program: Even and Odd Thread Example</title>
+    <meta name="description" content="Java multithreading example where two threads print even and odd numbers alternately with thread names.">
+    <meta name="keywords" content="Java, Multithreading, Even Odd Threads, Java Threads, Thread Synchronization, Java Examples">
+    <meta name="author" content="Mahboob Anwar">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f4f4f4;
+            color: #333;
+        }
+        header, footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 960px;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 6px;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Java Multithreading Example</h2>
+</header>
+
+<div class="container">
+    <h1>Even and Odd Thread Printing with Thread Names</h1>
+
+    <p>This Java program demonstrates how to use two threads to print even and odd numbers alternately up to a given limit.
+    Each thread prints its name along with the number it handles.</p>
+
+    <h2>Java Code:</h2>
+    <pre><code>
+// Shared class for printing numbers
+class NumberPrinter {
+    private int number = 1;
+    private final int limit;
+
+    public NumberPrinter(int limit) {
+        this.limit = limit;
+    }
+
+    public synchronized void printOdd() {
+        while (number <= limit) {
+            if (number % 2 == 1) {
+                System.out.println(Thread.currentThread().getName() + " - Odd: " + number);
+                number++;
+                notify();
+            } else {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+
+    public synchronized void printEven() {
+        while (number <= limit) {
+            if (number % 2 == 0) {
+                System.out.println(Thread.currentThread().getName() + " - Even: " + number);
+                number++;
+                notify();
+            } else {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    }
+}
+
+// Main class to run the threads
+public class EvenOddThreads {
+    public static void main(String[] args) {
+        int limit = 10;
+        NumberPrinter printer = new NumberPrinter(limit);
+
+        Thread oddThread = new Thread(() -> printer.printOdd(), "OddThread");
+        Thread evenThread = new Thread(() -> printer.printEven(), "EvenThread");
+
+        oddThread.start();
+        evenThread.start();
+    }
+}
+    </code></pre>
+
+    <h2>Sample Output:</h2>
+    <pre><code>
+OddThread - Odd: 1
+EvenThread - Even: 2
+OddThread - Odd: 3
+EvenThread - Even: 4
+OddThread - Odd: 5
+EvenThread - Even: 6
+OddThread - Odd: 7
+EvenThread - Even: 8
+OddThread - Odd: 9
+EvenThread - Even: 10
+    </code></pre>
+
+    <p>This example uses <code>synchronized</code>, <code>wait()</code>, and <code>notify()</code> to alternate execution between threads. You can also implement this with <code>ReentrantLock</code> and <code>Condition</code> if you prefer fine-grained control.</p>
+</div>
+
+<footer>
+    <p>&copy; 2025 Java Tutorials | Multithreading Example</p>
+</footer>
+
+</body>
+</html>

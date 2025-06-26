@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Angular Counter App with Tests</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+    h1, h2, h3 { color: #333; }
+    section { background: #fff; padding: 20px; margin-bottom: 30px; box-shadow: 0 0 5px rgba(0,0,0,0.1); border-radius: 5px; }
+    pre { background: #eee; padding: 10px; overflow-x: auto; border-left: 4px solid #007acc; }
+    code { font-family: Consolas, monospace; }
+    ul { padding-left: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Angular Counter App with Unit Tests</h1>
+
+  <section>
+    <h2>1. Create Angular App</h2>
+    <p>Generate a new Angular project using the CLI:</p>
+    <pre><code>ng new counter-app
+cd counter-app
+ng serve</code></pre>
+  </section>
+
+  <section>
+    <h2>2. Generate Counter Component</h2>
+    <p>Create a new component for the counter functionality:</p>
+    <pre><code>ng generate component counter</code></pre>
+  </section>
+
+  <section>
+    <h2>3. Counter Logic (TypeScript)</h2>
+    <p>Implement increment, decrement, and reset logic in <code>counter.component.ts</code>:</p>
+    <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-counter',
+  templateUrl: './counter.component.html',
+  styleUrls: ['./counter.component.css']
+})
+export class CounterComponent {
+  count: number = 0;
+
+  increment(): void {
+    this.count++;
+  }
+
+  decrement(): void {
+    if (this.count > 0) {
+      this.count--;
+    }
+  }
+
+  reset(): void {
+    this.count = 0;
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>4. Counter Template (HTML)</h2>
+    <p>Use buttons to control the counter in <code>counter.component.html</code>:</p>
+    <pre><code>&lt;div style="text-align: center;"&gt;
+  &lt;h2&gt;Angular Counter App&lt;/h2&gt;
+  &lt;h3&gt;{{ count }}&lt;/h3&gt;
+  &lt;button (click)="increment()"&gt;Increment&lt;/button&gt;
+  &lt;button (click)="decrement()"&gt;Decrement&lt;/button&gt;
+  &lt;button (click)="reset()"&gt;Reset&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <section>
+    <h2>5. Styling (CSS)</h2>
+    <p>Apply simple styling in <code>counter.component.css</code>:</p>
+    <pre><code>button {
+  margin: 0 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>6. Use in App Component</h2>
+    <p>Embed the counter component in the main <code>app.component.html</code>:</p>
+    <pre><code>&lt;app-counter&gt;&lt;/app-counter&gt;</code></pre>
+  </section>
+
+  <section>
+    <h2>7. Run the App</h2>
+    <p>Start the development server:</p>
+    <pre><code>ng serve</code></pre>
+    <p>Visit <code>http://localhost:4200</code> to see the app in action.</p>
+  </section>
+
+  <section>
+    <h2>8. Unit Tests with Jasmine</h2>
+    <p>Write unit tests in <code>counter.component.spec.ts</code> to verify logic:</p>
+    <pre><code>import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CounterComponent } from './counter.component';
+
+describe('CounterComponent', () => {
+  let component: CounterComponent;
+  let fixture: ComponentFixture&lt;CounterComponent&gt;;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ CounterComponent ]
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(CounterComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize count to 0', () => {
+    expect(component.count).toBe(0);
+  });
+
+  it('should increment the count', () => {
+    component.increment();
+    expect(component.count).toBe(1);
+  });
+
+  it('should decrement the count', () => {
+    component.count = 2;
+    component.decrement();
+    expect(component.count).toBe(1);
+  });
+
+  it('should not decrement below 0', () => {
+    component.count = 0;
+    component.decrement();
+    expect(component.count).toBe(0);
+  });
+
+  it('should reset the count to 0', () => {
+    component.count = 5;
+    component.reset();
+    expect(component.count).toBe(0);
+  });
+});</code></pre>
+  </section>
+
+  <section>
+    <h2>9. Jasmine vs Karma</h2>
+    <p><strong>Jasmine</strong> is the testing framework, and <strong>Karma</strong> is the test runner used by Angular CLI:</p>
+    <ul>
+      <li>Jasmine provides functions like <code>describe</code>, <code>it</code>, and <code>expect</code>.</li>
+      <li>Karma runs the tests in a real browser and shows results.</li>
+    </ul>
+    <p>To run the tests:</p>
+    <pre><code>ng test</code></pre>
+  </section>
+
+</body>
+</html>
+o

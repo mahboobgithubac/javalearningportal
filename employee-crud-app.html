@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spring Boot Employee CRUD REST API</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+    h1, h2, h3 { color: #2c3e50; }
+    code, pre { background: #f4f4f4; padding: 10px; display: block; overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #eee; }
+  </style>
+</head>
+<body>
+  <h1>Spring Boot Employee CRUD REST API</h1>
+  <h2>✅ Project Structure</h2>
+  <pre><code>employee-crud-api/
+├── src/
+│   ├── main/
+│   │   ├── java/com/example/employee/
+│   │   │   ├── controller/EmployeeController.java
+│   │   │   ├── entity/Employee.java
+│   │   │   ├── repository/EmployeeRepository.java
+│   │   │   ├── service/EmployeeService.java
+│   │   │   ├── service/impl/EmployeeServiceImpl.java
+│   │   │   └── EmployeeCrudApiApplication.java
+│   │   └── resources/
+│   │       ├── application.properties
+└── pom.xml</code></pre>
+
+  <h2>1⃣ pom.xml</h2>
+  <pre><code>&lt;project xmlns="http://maven.apache.org/POM/4.0.0"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.example&lt;/groupId&gt;
+  &lt;artifactId&gt;employee-crud-api&lt;/artifactId&gt;
+  &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+
+  &lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;3.2.4&lt;/version&gt;
+  &lt;/parent&gt;
+
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+      &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+      &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;jakarta.validation&lt;/groupId&gt;
+      &lt;artifactId&gt;jakarta.validation-api&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+      &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+&lt;/project&gt;</code></pre>
+
+  <h2>2⃣ application.properties</h2>
+  <pre><code>spring.datasource.url=jdbc:mysql://localhost:3306/employee_db
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+server.port=8080</code></pre>
+
+  <h2>3⃣ Employee Entity</h2>
+  <pre><code>@Entity
+public class Employee {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @NotBlank(message = "Name is mandatory")
+  private String name;
+  private String department;
+  private String email;
+}</code></pre>
+
+  <h2>4⃣ Employee Repository</h2>
+  <pre><code>public interface EmployeeRepository extends JpaRepository&lt;Employee, Long&gt; { }</code></pre>
+
+  <h2>5⃣ Service Interface</h2>
+  <pre><code>public interface EmployeeService {
+  Employee save(Employee employee);
+  List&lt;Employee&gt; findAll();
+  Employee findById(Long id);
+  Employee update(Long id, Employee employee);
+  void delete(Long id);
+}</code></pre>
+
+  <h2>6⃣ Service Implementation</h2>
+  <pre><code>@Service
+public class EmployeeServiceImpl implements EmployeeService {
+  @Autowired
+  private EmployeeRepository repository;
+
+  public Employee save(Employee employee) {
+    return repository.save(employee);
+  }
+
+  public List&lt;Employee&gt; findAll() {
+    return repository.findAll();
+  }
+
+  public Employee findById(Long id) {
+    return repository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
+  }
+
+  public Employee update(Long id, Employee employee) {
+    Employee existing = findById(id);
+    existing.setName(employee.getName());
+    existing.setEmail(employee.getEmail());
+    existing.setDepartment(employee.getDepartment());
+    return repository.save(existing);
+  }
+
+  public void delete(Long id) {
+    repository.deleteById(id);
+  }
+}</code></pre>
+
+  <h2>7⃣ REST Controller</h2>
+  <pre><code>@RestController
+@RequestMapping("/api/employees")
+@CrossOrigin
+public class EmployeeController {
+
+  @Autowired
+  private EmployeeService service;
+
+  @PostMapping
+  public Employee create(@Valid @RequestBody Employee employee) {
+    return service.save(employee);
+  }
+
+  @GetMapping
+  public List&lt;Employee&gt; getAll() {
+    return service.findAll();
+  }
+
+  @GetMapping("/{id}")
+  public Employee getById(@PathVariable Long id) {
+    return service.findById(id);
+  }
+
+  @PutMapping("/{id}")
+  public Employee update(@PathVariable Long id, @Valid @RequestBody Employee employee) {
+    return service.update(id, employee);
+  }
+
+  @DeleteMapping("/{id}")
+  public void delete(@PathVariable Long id) {
+    service.delete(id);
+  }
+}</code></pre>
+
+  <h2>8⃣ Main Application</h2>
+  <pre><code>@SpringBootApplication
+public class EmployeeCrudApiApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(EmployeeCrudApiApplication.class, args);
+  }
+}</code></pre>
+
+  <h2>✅ API Endpoints</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Endpoint</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>POST</td><td>/api/employees</td><td>Create new employee</td></tr>
+      <tr><td>GET</td><td>/api/employees</td><td>Get all employees</td></tr>
+      <tr><td>GET</td><td>/api/employees/{id}</td><td>Get employee by ID</td></tr>
+      <tr><td>PUT</td><td>/api/employees/{id}</td><td>Update employee</td></tr>
+      <tr><td>DELETE</td><td>/api/employees/{id}</td><td>Delete employee</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

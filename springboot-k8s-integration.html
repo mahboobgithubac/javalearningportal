@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spring Boot + Kubernetes Integration</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1, h2, h3 { color: #2c3e50; }
+    pre, code { background: #f4f4f4; padding: 10px; border-left: 4px solid #ccc; overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #f9f9f9; }
+  </style>
+</head>
+<body>
+
+<h1>✅ Spring Boot + Kubernetes Integration Example</h1>
+
+<h2>🔧 Prerequisites</h2>
+<ul>
+  <li>Java 17+</li>
+  <li>Spring Boot (REST API)</li>
+  <li>Maven</li>
+  <li>Docker</li>
+  <li>Minikube or Kubernetes cluster (EKS/GKE/AKS)</li>
+  <li>kubectl installed</li>
+</ul>
+
+<h2>📁 Project Structure</h2>
+<pre><code>spring-boot-k8s-demo/
+├── src/
+├── Dockerfile
+├── pom.xml
+├── k8s/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   └── configmap.yaml (optional)
+</code></pre>
+
+<h2>1️⃣ Spring Boot REST API (HelloController.java)</h2>
+<pre><code>@RestController
+public class HelloController {
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello from Spring Boot on Kubernetes!";
+    }
+}
+</code></pre>
+
+<h2>2️⃣ Dockerfile</h2>
+<pre><code>FROM openjdk:17-jdk-slim
+VOLUME /tmp
+COPY target/*.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+</code></pre>
+
+<h3>🛠️ Build & Tag Docker Image</h3>
+<pre><code>mvn clean package -DskipTests
+docker build -t spring-boot-k8s-demo .
+</code></pre>
+
+<h2>3️⃣ Kubernetes Deployment YAML (k8s/deployment.yaml)</h2>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springboot-app
+  template:
+    metadata:
+      labels:
+        app: springboot-app
+    spec:
+      containers:
+        - name: springboot-container
+          image: spring-boot-k8s-demo:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+</code></pre>
+
+<h2>4️⃣ Kubernetes Service YAML (k8s/service.yaml)</h2>
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-service
+spec:
+  selector:
+    app: springboot-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: NodePort
+</code></pre>
+
+<h2>5️⃣ Optional: ConfigMap (k8s/configmap.yaml)</h2>
+<pre><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_MESSAGE: "Hello from ConfigMap"
+</code></pre>
+<p>Then read it in Spring using <code>@Value("${APP_MESSAGE}")</code>.</p>
+
+<h2>6️⃣ Running on Minikube</h2>
+<pre><code>minikube start
+eval $(minikube docker-env)
+docker build -t spring-boot-k8s-demo .
+kubectl apply -f k8s/
+minikube service springboot-service
+</code></pre>
+
+<h2>✅ Access the App</h2>
+<pre><code>minikube service springboot-service --url</code></pre>
+<p>You should see:</p>
+<pre><code>Hello from Spring Boot on Kubernetes!</code></pre>
+
+<h2>🚀 Ready for Cloud?</h2>
+<ul>
+  <li><strong>EKS (AWS):</strong> Push image to ECR, update image tag</li>
+  <li><strong>GKE (Google):</strong> Use Google Container Registry (GCR)</li>
+  <li><strong>AKS (Azure):</strong> Use Azure Container Registry (ACR)</li>
+</ul>
+
+<h2>✅ Summary</h2>
+<table>
+  <thead>
+    <tr><th>Component</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Spring Boot App</td><td>REST API with endpoint <code>/hello</code></td></tr>
+    <tr><td>Dockerfile</td><td>Converts app to container image</td></tr>
+    <tr><td>K8s Deployment</td><td>Defines pods and replicas</td></tr>
+    <tr><td>K8s Service</td><td>Exposes app via NodePort</td></tr>
+    <tr><td>Optional Config</td><td>Inject runtime config via ConfigMap</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

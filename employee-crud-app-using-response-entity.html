@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Boot EmployeeController using ResponseEntity</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        code, pre { background: #f4f4f4; padding: 10px; display: block; border-left: 4px solid #ccc; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        h2 { color: #2c3e50; }
+    </style>
+</head>
+<body>
+    <h1>Spring Boot EmployeeController using ResponseEntity</h1>
+
+    <h2>✅ EmployeeController.java (Using ResponseEntity)</h2>
+
+    <pre><code>package com.example.employee.controller;
+
+import com.example.employee.entity.Employee;
+import com.example.employee.service.EmployeeService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/employees")
+@CrossOrigin
+public class EmployeeController {
+
+    @Autowired
+    private EmployeeService service;
+
+    // CREATE Employee
+    @PostMapping
+    public ResponseEntity&lt;Employee&gt; createEmployee(@Valid @RequestBody Employee employee) {
+        Employee saved = service.save(employee);
+        return ResponseEntity
+                .created(URI.create("/api/employees/" + saved.getId()))
+                .body(saved);
+    }
+
+    // GET All Employees
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Employee&gt;&gt; getAllEmployees() {
+        List&lt;Employee&gt; employees = service.findAll();
+        return ResponseEntity.ok(employees);
+    }
+
+    // GET Employee by ID
+    @GetMapping("/{id}")
+    public ResponseEntity&lt;Employee&gt; getEmployeeById(@PathVariable Long id) {
+        Employee employee = service.findById(id);
+        return ResponseEntity.ok(employee);
+    }
+
+    // UPDATE Employee
+    @PutMapping("/{id}")
+    public ResponseEntity&lt;Employee&gt; updateEmployee(@PathVariable Long id,
+                                                   @Valid @RequestBody Employee employeeDetails) {
+        Employee updated = service.update(id, employeeDetails);
+        return ResponseEntity.ok(updated);
+    }
+
+    // DELETE Employee
+    @DeleteMapping("/{id}")
+    public ResponseEntity&lt;Void&gt; deleteEmployee(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}
+</code></pre>
+
+    <h2>✅ Why Use ResponseEntity?</h2>
+    <ul>
+        <li>Fine-grained control over HTTP status codes.</li>
+        <li>Ability to add custom headers.</li>
+        <li>Good RESTful practice (e.g., returning <code>201 Created</code> with location URI).</li>
+        <li>Improves clarity and client-side integration (e.g., in Swagger, Postman).</li>
+    </ul>
+
+    <h2>✅ Do Other Layers Need Changes?</h2>
+    <p><strong>No changes are needed in other layers.</strong></p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Layer</th>
+                <th>File</th>
+                <th>Changes Required</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Entity</td>
+                <td>Employee.java</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td>Repository</td>
+                <td>EmployeeRepository.java</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td>Service</td>
+                <td>EmployeeService.java</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td>Service Implementation</td>
+                <td>EmployeeServiceImpl.java</td>
+                <td>❌ No</td>
+            </tr>
+            <tr>
+                <td>Controller</td>
+                <td>EmployeeController.java</td>
+                <td>✅ Yes (converted to ResponseEntity)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Let me know if you want to enhance this with:</p>
+    <ul>
+        <li>🔄 Global exception handling using <code>@ControllerAdvice</code></li>
+        <li>📜 Swagger/OpenAPI documentation</li>
+        <li>🌐 Pagination support</li>
+        <li>🔐 JWT or OAuth2-based security</li>
+    </ul>
+</body>
+</html>

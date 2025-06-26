@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hibernate N+1 Problem</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code {
+      background: #eef;
+      padding: 3px 5px;
+      border-radius: 4px;
+    }
+    pre {
+      background: #eef;
+      padding: 10px;
+      border-left: 4px solid #2c3e50;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #ddd;
+    }
+    .highlight {
+      background: #ffffcc;
+      padding: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>❌ N+1 Select Problem in Hibernate</h1>
+
+  <p>The N+1 Select Problem is a common performance issue in ORM frameworks like Hibernate. It happens when the application executes <strong>1 query for the parent entity</strong> and <strong>N additional queries</strong> to fetch each of the associated child entities.</p>
+
+  <h2>🔍 Example Scenario</h2>
+
+  <p>Consider a <code>Department</code> entity with a list of <code>Employee</code>s:</p>
+
+  <pre><code>@Entity
+public class Department {
+    @Id
+    private Long id;
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    private List&lt;Employee&gt; employees;
+}</code></pre>
+
+  <p>And your code:</p>
+
+  <pre><code>List&lt;Department&gt; departments = entityManager
+    .createQuery("SELECT d FROM Department d", Department.class)
+    .getResultList();
+
+for (Department dept : departments) {
+    dept.getEmployees().size(); // Triggers N queries
+}</code></pre>
+
+  <p>This will cause 1 query to fetch departments and N queries to fetch employees — hence the name <strong>N+1</strong>.</p>
+
+  <h2>🚨 Why Is It a Problem?</h2>
+  <ul>
+    <li>Significantly increases the number of queries</li>
+    <li>Causes performance bottlenecks with large datasets</li>
+    <li>Results in slower application response times</li>
+  </ul>
+
+  <h2>✅ Solutions to N+1 Problem</h2>
+
+  <h3>1. Use <code>JOIN FETCH</code> in JPQL</h3>
+  <pre><code>List&lt;Department&gt; departments = entityManager.createQuery(
+    "SELECT d FROM Department d JOIN FETCH d.employees", Department.class)
+    .getResultList();</code></pre>
+  <p>This fetches departments and employees in a single SQL query.</p>
+
+  <h3>2. Use <code>@EntityGraph</code></h3>
+  <pre><code>@EntityGraph(attributePaths = "employees")
+List&lt;Department&gt; findAll();</code></pre>
+
+  <p>Spring Data example:</p>
+  <pre><code>@Query("SELECT d FROM Department d")
+@EntityGraph(attributePaths = "employees")
+List&lt;Department&gt; findAllWithEmployees();</code></pre>
+
+  <h3>3. Use <code>@BatchSize</code> or Global Batch Fetch Size</h3>
+  <pre><code>@OneToMany(fetch = FetchType.LAZY)
+@BatchSize(size = 10)
+private List&lt;Employee&gt; employees;</code></pre>
+
+  <p>Or globally in <code>application.properties</code>:</p>
+  <pre><code>hibernate.default_batch_fetch_size=10</code></pre>
+
+  <h3>4. Use <code>FetchType.EAGER</code> (Caution)</h3>
+  <pre><code>@OneToMany(fetch = FetchType.EAGER)
+private List&lt;Employee&gt; employees;</code></pre>
+  <p><strong>⚠️ Warning:</strong> Avoid <code>EAGER</code> on collections as it can load too much data.</p>
+
+  <h2>📌 Best Practices</h2>
+  <table>
+    <tr><th>Practice</th><th>Recommendation</th></tr>
+    <tr><td>Avoid lazy on critical paths</td><td>Use fetch joins or entity graphs for important relationships</td></tr>
+    <tr><td>Use projections</td><td>Fetch only needed data in DTOs</td></tr>
+    <tr><td>Enable SQL logging</td><td><code>spring.jpa.show-sql=true</code> to monitor queries</td></tr>
+    <tr><td>Use profilers</td><td>Tools like Hibernate Statistics, JProfiler, YourKit for deep analysis</td></tr>
+  </table>
+
+</body>
+</html>

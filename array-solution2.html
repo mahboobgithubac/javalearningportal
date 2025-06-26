@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java 8 Array Stream Solutions</title>
+  <meta name="description" content="Java 8 Stream API solutions for array-based interview problems.">
+  <meta name="keywords" content="Java 8, Stream API, Array problems, Interview questions, Java Streams">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; display: flex; }
+    nav { width: 260px; background-color: #2c3e50; color: white; height: 100vh; overflow-y: auto; position: fixed; }
+    nav h2 { text-align: center; padding: 15px 0; background: #1a252f; margin: 0; }
+    nav ul { list-style: none; padding: 0; }
+    nav li { padding: 10px 20px; cursor: pointer; }
+    nav li:hover { background-color: #34495e; }
+    main { margin-left: 260px; padding: 20px; background-color: #f4f4f4; flex: 1; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    section { margin-bottom: 20px; border: 1px solid #ccc; background: white; border-radius: 5px; }
+    section h3 { margin: 0; padding: 15px; background: #3498db; color: white; cursor: pointer; }
+    .content { padding: 15px; display: none; }
+    pre { background: #2d2d2d; color: white; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    code[class*="language-"] { font-size: 14px; }
+  </style>
+  <script>
+    function toggleContent(id) {
+      const content = document.getElementById(id);
+      content.style.display = content.style.display === "block" ? "none" : "block";
+    }
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</head>
+<body>
+  <nav>
+    <h2>Array Q&A</h2>
+    <ul>
+      <li onclick="scrollToSection('q1')">1. Find all prime numbers</li>
+      <li onclick="scrollToSection('q2')">2. Count numbers > average</li>
+      <li onclick="scrollToSection('q3')">3. Frequency of each element</li>
+      <li onclick="scrollToSection('q4')">4. Top 3 maximum numbers</li>
+      <li onclick="scrollToSection('q5')">5. Number closest to zero</li>
+      <li onclick="scrollToSection('q6')">6. Product of all numbers</li>
+      <li onclick="scrollToSection('q7')">7. Convert to CSV</li>
+      <li onclick="scrollToSection('q8')">8. Find duplicates</li>
+      <li onclick="scrollToSection('q9')">9. Find common elements</li>
+      <li onclick="scrollToSection('q10')">10. Partition even/odd</li>
+      <li onclick="scrollToSection('q11')">11. Group by even/odd</li>
+      <li onclick="scrollToSection('q12')">12. Appear exactly once</li>
+      <li onclick="scrollToSection('q13')">13. Remove negatives</li>
+      <li onclick="scrollToSection('q14')">14. Replace negatives with 0</li>
+      <li onclick="scrollToSection('q15')">15. Sort by absolute value</li>
+      <li onclick="scrollToSection('q16')">16. Longest increasing subsequence</li>
+      <li onclick="scrollToSection('q17')">17. Max difference between elements</li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1>Java 8 Array Stream Problem Solving</h1>
+
+    <!-- 1 -->
+    <section id="q1">
+      <h3 onclick="toggleContent('a1')">1. Find all prime numbers</h3>
+      <div class="content" id="a1">
+        <pre><code class="language-java">
+List<Integer> primes = Arrays.stream(arr)
+  .filter(n -> n > 1 && IntStream.rangeClosed(2, (int)Math.sqrt(n)).allMatch(i -> n % i != 0))
+  .boxed().collect(Collectors.toList());
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section id="q2">
+      <h3 onclick="toggleContent('a2')">2. Count numbers > average</h3>
+      <div class="content" id="a2">
+        <pre><code class="language-java">
+double avg = Arrays.stream(arr).average().orElse(0);
+long greaterThanAvg = Arrays.stream(arr).filter(n -> n > avg).count();
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section id="q3">
+      <h3 onclick="toggleContent('a3')">3. Frequency of each element</h3>
+      <div class="content" id="a3">
+        <pre><code class="language-java">
+Map<Integer, Long> freq = Arrays.stream(arr).boxed()
+  .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section id="q4">
+      <h3 onclick="toggleContent('a4')">4. Top 3 maximum numbers</h3>
+      <div class="content" id="a4">
+        <pre><code class="language-java">
+List<Integer> top3 = Arrays.stream(arr).boxed()
+  .sorted(Comparator.reverseOrder()).distinct().limit(3).collect(Collectors.toList());
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section id="q5">
+      <h3 onclick="toggleContent('a5')">5. Number closest to zero</h3>
+      <div class="content" id="a5">
+        <pre><code class="language-java">
+int closestToZero = Arrays.stream(arr).boxed()
+  .min(Comparator.comparingInt(Math::abs)).orElse(0);
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section id="q6">
+      <h3 onclick="toggleContent('a6')">6. Product of all numbers</h3>
+      <div class="content" id="a6">
+        <pre><code class="language-java">
+int product = Arrays.stream(arr).reduce(1, (a, b) -> a * b);
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section id="q7">
+      <h3 onclick="toggleContent('a7')">7. Convert to CSV</h3>
+      <div class="content" id="a7">
+        <pre><code class="language-java">
+String csv = Arrays.stream(arr).mapToObj(String::valueOf)
+  .collect(Collectors.joining(", "));
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section id="q8">
+      <h3 onclick="toggleContent('a8')">8. Find duplicates</h3>
+      <div class="content" id="a8">
+        <pre><code class="language-java">
+Set<Integer> seen = new HashSet<>();
+Set<Integer> duplicates = Arrays.stream(arr)
+  .filter(n -> !seen.add(n)).boxed().collect(Collectors.toSet());
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 9 -->
+    <section id="q9">
+      <h3 onclick="toggleContent('a9')">9. Find common elements</h3>
+      <div class="content" id="a9">
+        <pre><code class="language-java">
+Set<Integer> set1 = Arrays.stream(arr).boxed().collect(Collectors.toSet());
+Set<Integer> common = Arrays.stream(arr2).filter(set1::contains)
+  .boxed().collect(Collectors.toSet());
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section id="q10">
+      <h3 onclick="toggleContent('a10')">10. Partition even/odd</h3>
+      <div class="content" id="a10">
+        <pre><code class="language-java">
+Map<Boolean, List<Integer>> evenOdd = Arrays.stream(arr).boxed()
+  .collect(Collectors.partitioningBy(n -> n % 2 == 0));
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 11 -->
+    <section id="q11">
+      <h3 onclick="toggleContent('a11')">11. Group by even/odd</h3>
+      <div class="content" id="a11">
+        <pre><code class="language-java">
+Map<String, List<Integer>> evenOddGroup = Arrays.stream(arr).boxed()
+  .collect(Collectors.groupingBy(n -> (n % 2 == 0) ? "Even" : "Odd"));
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 12 -->
+    <section id="q12">
+      <h3 onclick="toggleContent('a12')">12. Appear exactly once</h3>
+      <div class="content" id="a12">
+        <pre><code class="language-java">
+List<Integer> once = freq.entrySet().stream()
+  .filter(e -> e.getValue() == 1).map(Map.Entry::getKey)
+  .collect(Collectors.toList());
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 13 -->
+    <section id="q13">
+      <h3 onclick="toggleContent('a13')">13. Remove negatives</h3>
+      <div class="content" id="a13">
+        <pre><code class="language-java">
+int[] nonNegative = Arrays.stream(arr).filter(n -> n >= 0).toArray();
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 14 -->
+    <section id="q14">
+      <h3 onclick="toggleContent('a14')">14. Replace negatives with 0</h3>
+      <div class="content" id="a14">
+        <pre><code class="language-java">
+int[] replacedNeg = Arrays.stream(arr).map(n -> n < 0 ? 0 : n).toArray();
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 15 -->
+    <section id="q15">
+      <h3 onclick="toggleContent('a15')">15. Sort by absolute value</h3>
+      <div class="content" id="a15">
+        <pre><code class="language-java">
+int[] absSorted = Arrays.stream(arr).boxed()
+  .sorted(Comparator.comparingInt(Math::abs))
+  .mapToInt(Integer::intValue).toArray();
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 16 -->
+    <section id="q16">
+      <h3 onclick="toggleContent('a16')">16. Longest increasing subsequence</h3>
+      <div class="content" id="a16">
+        <pre><code class="language-java">
+List<Integer> increasing = new ArrayList<>();
+Arrays.stream(arr).forEach(n -> {
+  if (increasing.isEmpty() || n > increasing.get(increasing.size() - 1))
+    increasing.add(n);
+});
+        </code></pre>
+      </div>
+    </section>
+
+    <!-- 17 -->
+    <section id="q17">
+      <h3 onclick="toggleContent('a17')">17. Max difference between elements</h3>
+      <div class="content" id="a17">
+        <pre><code class="language-java">
+int max = Arrays.stream(arr).max().orElse(0);
+int min = Arrays.stream(arr).min().orElse(0);
+int maxDiff = max - min;
+        </code></pre>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

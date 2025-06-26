@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immutable Class with Mutable Object Field</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        h1, h2 { color: #2c3e50; }
+        code, pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; display: block; white-space: pre-wrap; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #eee; }
+    </style>
+</head>
+<body>
+    <h1>Immutable Class with Mutable Object Field</h1>
+
+    <h2>✅ Problem: <code>Address</code> is Mutable</h2>
+    <pre><code>public class Address {
+    private String city;
+    private String state;
+
+    public Address(String city, String state) {
+        this.city = city;
+        this.state = state;
+    }
+
+    public String getCity() { return city; }
+    public String getState() { return state; }
+
+    public void setCity(String city) { this.city = city; }
+    public void setState(String state) { this.state = state; }
+}</code></pre>
+
+    <p>Anyone with access to the <code>Address</code> object can modify it using setters. This breaks immutability of the containing class.</p>
+
+    <h2>✅ Solution: Deep Copy and Defensive Copy in <code>Employee</code></h2>
+    <pre><code>public final class Employee {
+    private final String name;
+    private final Address address;
+
+    public Employee(String name, Address address) {
+        this.name = name;
+        // Deep copy to prevent modification of original object
+        this.address = new Address(address.getCity(), address.getState());
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Address getAddress() {
+        // Return a defensive copy
+        return new Address(address.getCity(), address.getState());
+    }
+}</code></pre>
+
+    <h2>✅ Usage Example</h2>
+    <pre><code>public class Main {
+    public static void main(String[] args) {
+        Address addr = new Address("Delhi", "Delhi");
+        Employee emp = new Employee("Alice", addr);
+
+        addr.setCity("Mumbai"); // Won't affect Employee
+        System.out.println(emp.getAddress().getCity()); // Delhi
+
+        Address gotAddress = emp.getAddress();
+        gotAddress.setCity("Pune"); // Still no effect
+        System.out.println(emp.getAddress().getCity()); // Delhi
+    }
+}</code></pre>
+
+    <h2>✅ Summary</h2>
+    <table>
+        <thead>
+            <tr><th>Aspect</th><th>Why it's important</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Deep copy in constructor</td><td>Protects internal state from changes in input object</td></tr>
+            <tr><td>Defensive copy in getter</td><td>Protects internal state from changes via returned object</td></tr>
+            <tr><td>Final and private fields</td><td>Prevent modification outside the class</td></tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

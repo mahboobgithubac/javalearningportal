@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@Qualifier in Spring Boot</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+        code, pre { background: #f4f4f4; padding: 10px; display: block; border-left: 3px solid #007BFF; margin-bottom: 10px; }
+        h2 { color: #007BFF; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #007BFF; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>@Qualifier Annotation in Spring Boot</h1>
+
+    <h2>✅ Why Use <code>@Qualifier</code>?</h2>
+    <p>When multiple beans of the same type exist, Spring needs help knowing which one to autowire. <code>@Qualifier</code> helps resolve this ambiguity.</p>
+
+    <h2>✅ Example</h2>
+
+    <h3>1. Interface</h3>
+    <pre><code>public interface MessageService {
+    String getMessage();
+}</code></pre>
+
+    <h3>2. Implementations</h3>
+    <pre><code>@Service("emailService")
+public class EmailService implements MessageService {
+    public String getMessage() {
+        return "Email Message";
+    }
+}</code></pre>
+
+    <pre><code>@Service("smsService")
+public class SMSService implements MessageService {
+    public String getMessage() {
+        return "SMS Message";
+    }
+}</code></pre>
+
+    <h3>3. Inject with @Qualifier</h3>
+    <pre><code>@Component
+public class NotificationManager {
+
+    private final MessageService messageService;
+
+    @Autowired
+    public NotificationManager(@Qualifier("smsService") MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    public void sendNotification() {
+        System.out.println("Sending: " + messageService.getMessage());
+    }
+}</code></pre>
+
+    <h3>4. Spring Boot Main Class</h3>
+    <pre><code>@SpringBootApplication
+public class QualifierDemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(QualifierDemoApplication.class, args);
+    }
+
+    @Bean
+    public CommandLineRunner run(NotificationManager manager) {
+        return args -> manager.sendNotification();
+    }
+}</code></pre>
+
+    <h3>Output</h3>
+    <pre><code>Sending: SMS Message</code></pre>
+
+    <h2>✅ Dynamic Switching Between Beans</h2>
+    <p>If you want to use SMS sometimes and Email at other times dynamically, don't use a fixed <code>@Qualifier</code> in the constructor.</p>
+
+    <h3>Option 1: Inject Both Beans</h3>
+    <pre><code>@Component
+public class NotificationManager {
+
+    private final MessageService smsService;
+    private final MessageService emailService;
+
+    public NotificationManager(@Qualifier("smsService") MessageService smsService,
+                               @Qualifier("emailService") MessageService emailService) {
+        this.smsService = smsService;
+        this.emailService = emailService;
+    }
+
+    public void sendNotification(String type) {
+        if ("sms".equalsIgnoreCase(type)) {
+            System.out.println("Sending: " + smsService.getMessage());
+        } else if ("email".equalsIgnoreCase(type)) {
+            System.out.println("Sending: " + emailService.getMessage());
+        } else {
+            System.out.println("Unknown type. No message sent.");
+        }
+    }
+}</code></pre>
+
+    <h3>Main Class Usage</h3>
+    <pre><code>@Bean
+public CommandLineRunner run(NotificationManager manager) {
+    return args -> {
+        manager.sendNotification("sms");
+        manager.sendNotification("email");
+    };
+}</code></pre>
+
+    <h3>Option 2: Inject as a Map (Scalable)</h3>
+    <pre><code>@Component
+public class NotificationManager {
+
+    private final Map&lt;String, MessageService&gt; serviceMap;
+
+    public NotificationManager(Map&lt;String, MessageService&gt; serviceMap) {
+        this.serviceMap = serviceMap;
+    }
+
+    public void sendNotification(String type) {
+        MessageService service = serviceMap.get(type + "Service");
+        if (service != null) {
+            System.out.println("Sending: " + service.getMessage());
+        } else {
+            System.out.println("Unknown service type.");
+        }
+    }
+}</code></pre>
+
+    <h2>✅ Summary Table</h2>
+    <table>
+        <tr>
+            <th>Approach</th>
+            <th>Pros</th>
+            <th>Use When</th>
+        </tr>
+        <tr>
+            <td>Inject both with @Qualifier</td>
+            <td>Simple and clear for 2–3 beans</td>
+            <td>You only have 2–3 services</td>
+        </tr>
+        <tr>
+            <td>Inject as Map&lt;String, Bean&gt;</td>
+            <td>Scalable, flexible, dynamic access</td>
+            <td>You may have many services</td>
+        </tr>
+    </table>
+
+</body>
+</html>

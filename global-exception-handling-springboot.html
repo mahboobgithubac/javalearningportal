@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Global Exception Handling in Spring Boot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 40px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: monospace;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🌐 Global Exception Handling in Spring Boot using <code>@RestControllerAdvice</code></h1>
+
+    <div class="section">
+        <h2>✅ Step-by-Step Guide</h2>
+        <ol>
+            <li><strong>Create a Custom Exception</strong></li>
+        </ol>
+        <pre><code>// File: com/example/employee/exception/ResourceNotFoundException.java
+package com.example.employee.exception;
+
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}
+        </code></pre>
+
+        <ol start="2">
+            <li><strong>Update Service to Throw Custom Exception</strong></li>
+        </ol>
+        <pre><code>// Inside EmployeeServiceImpl.java
+import com.example.employee.exception.ResourceNotFoundException;
+
+public Employee findById(Long id) {
+    return repository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID " + id));
+}
+        </code></pre>
+
+        <ol start="3">
+            <li><strong>Create a Global Exception Handler</strong></li>
+        </ol>
+        <pre><code>// File: com/example/employee/exception/GlobalExceptionHandler.java
+package com.example.employee.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice // Same as @ControllerAdvice + @ResponseBody
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;Object&gt; handleResourceNotFound(ResourceNotFoundException ex) {
+        Map&lt;String, Object&gt; error = new HashMap&lt;&gt;();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("message", ex.getMessage());
+        error.put("status", HttpStatus.NOT_FOUND.value());
+        return new ResponseEntity&lt;&gt;(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;Object&gt; handleGeneralException(Exception ex) {
+        Map&lt;String, Object&gt; error = new HashMap&lt;&gt;();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("message", "Internal Server Error");
+        error.put("details", ex.getMessage());
+        error.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return new ResponseEntity&lt;&gt;(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="section">
+        <h2>🧪 Sample JSON Error Response</h2>
+        <pre><code>{
+  "timestamp": "2025-06-17T12:45:30.764",
+  "message": "Employee not found with ID 99",
+  "status": 404
+}
+        </code></pre>
+    </div>
+
+    <div class="section">
+        <h2>🎯 Benefits of Using <code>@RestControllerAdvice</code></h2>
+        <ul>
+            <li>Centralized error handling across all controllers.</li>
+            <li>Clean and reusable error formatting.</li>
+            <li>Avoids cluttering controller methods with try/catch blocks.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Optional Enhancements</h2>
+        <ul>
+            <li>Customize error format for validation errors using <code>@Valid</code>.</li>
+            <li>Add more custom exceptions (e.g., <code>BadRequestException</code>, <code>UnauthorizedException</code>).</li>
+            <li>Define a reusable <code>ApiError</code> response model for all errors.</li>
+        </ul>
+    </div>
+
+</body>
+</html>

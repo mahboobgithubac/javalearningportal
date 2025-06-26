@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advanced Spring Boot REST API Interview Questions</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    details { margin-bottom: 15px; border: 1px solid #ccc; padding: 10px; border-radius: 6px; }
+    summary { font-weight: bold; font-size: 1.1em; cursor: pointer; }
+    code, pre { background: #f5f5f5; padding: 5px; display: block; white-space: pre-wrap; border-radius: 4px; }
+    h1 { color: #333; }
+  </style>
+</head>
+<body>
+
+<h1>Advanced Spring Boot REST API Interview Questions</h1>
+
+<details>
+  <summary>1. What is OAuth2/OpenID Connect and how do you use it in Spring Boot?</summary>
+  <p>OAuth2 allows secure delegated access. Spring Boot uses <code>spring-boot-starter-oauth2-client</code> for integration with providers like Google, Okta.</p>
+  <pre>
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: xxx
+            client-secret: xxx
+            scope: openid, profile, email
+  </pre>
+</details>
+
+<details>
+  <summary>2. How do you implement Rate Limiting in Spring Boot?</summary>
+  <p>Using Bucket4j:</p>
+  <pre>
+Bucket bucket = Bucket4j.builder()
+  .addLimit(Bandwidth.classic(10, Refill.intervally(10, Duration.ofMinutes(1))))
+  .build();
+
+@GetMapping("/api")
+public ResponseEntity&lt;String&gt; handleRequest() {
+  if (bucket.tryConsume(1)) return ResponseEntity.ok("Allowed");
+  return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body("Too many requests");
+}
+  </pre>
+</details>
+
+<details>
+  <summary>3. WebClient vs RestTemplate?</summary>
+  <ul>
+    <li><strong>RestTemplate</strong> - Blocking, deprecated</li>
+    <li><strong>WebClient</strong> - Non-blocking, reactive</li>
+  </ul>
+  <pre>
+WebClient.create()
+  .get().uri("https://api.com/data")
+  .retrieve()
+  .bodyToMono(String.class)
+  .subscribe(System.out::println);
+  </pre>
+</details>
+
+<details>
+  <summary>4. How to version REST APIs?</summary>
+  <p>Use URI versioning:</p>
+  <pre>
+@RestController
+@RequestMapping("/api/v1/products")
+public class ProductV1Controller { ... }
+  </pre>
+  <p>Or use headers or parameters like <code>?version=1</code></p>
+</details>
+
+<details>
+  <summary>5. What is idempotency and how do you implement it?</summary>
+  <p>Idempotency ensures safe retries. Clients send <code>Idempotency-Key</code> header:</p>
+  <pre>
+@PostMapping("/orders")
+public ResponseEntity&lt;String&gt; createOrder(@RequestHeader("Idempotency-Key") String key) {
+  if (orderService.existsByKey(key)) return ResponseEntity.status(409).body("Already processed");
+  orderService.saveOrderWithKey(key);
+  return ResponseEntity.ok("Created");
+}
+  </pre>
+</details>
+
+<details>
+  <summary>6. How to implement advanced pagination, filtering, and sorting?</summary>
+  <p>Using <code>Pageable</code>:</p>
+  <pre>
+@GetMapping
+public Page&lt;Employee&gt; getAll(Pageable pageable) {
+  return employeeRepo.findAll(pageable);
+}
+  </pre>
+  <p>Filtering with Specification:</p>
+  <pre>
+Specification&lt;Employee&gt; hasDept(String dept) {
+  return (root, q, cb) -> cb.equal(root.get("department"), dept);
+}
+  </pre>
+</details>
+
+<details>
+  <summary>7. What is WebFlux and when should you use it?</summary>
+  <p>WebFlux is used for reactive, non-blocking APIs. Useful for high throughput and streaming.</p>
+  <pre>
+@GetMapping("/flux")
+public Flux&lt;String&gt; getData() {
+  return Flux.just("A", "B", "C").delayElements(Duration.ofSeconds(1));
+}
+  </pre>
+</details>
+
+<details>
+  <summary>8. How do you add a Correlation ID for traceability?</summary>
+  <p>Use a filter to attach a unique ID to every request:</p>
+  <pre>
+@Component
+public class CorrelationIdFilter extends OncePerRequestFilter {
+  protected void doFilterInternal(...) {
+    String id = request.getHeader("X-Correlation-ID");
+    if (id == null) id = UUID.randomUUID().toString();
+    MDC.put("correlationId", id);
+    response.setHeader("X-Correlation-ID", id);
+    ...
+  }
+}
+  </pre>
+</details>
+
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Comprehensive Java Multithreading Interview Questions and Answers for Beginners to Experts with code examples, concepts, and concurrency tools." />
+  <meta name="keywords" content="Java, Multithreading, Interview Questions, Java Threads, Concurrency, ExecutorService, Synchronization, Callable, Java Developer" />
+  <meta name="author" content="Mahboob Anwar" />
+  <title>Java Multithreading Interview Questions and Answers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    header, footer {
+      background-color: #0e2f44;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    footer {
+      font-size: 0.9em;
+    }
+    .container {
+      padding: 20px;
+      max-width: 960px;
+      margin: auto;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #0e2f44;
+    }
+    pre {
+      background-color: #eee;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    code {
+      color: #c7254e;
+      background-color: #f9f2f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .level {
+      font-weight: bold;
+      padding: 5px;
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #dedede;
+      border-left: 5px solid #0e2f44;
+    }
+	 body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header nav {
+                margin-top: 10px;
+            }
+        }
+		
+   
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  </style>
+</head>
+<body>
+
+
+ 
+
+<header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+		 <div class="dropdown">
+		<a href="#">Concepts ▾</a>
+    <div class="dropdown-content">
+      <a href="mysql.html">MySQL</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <!--<a href="#">Concepts</a>-->
+		<div class="dropdown">
+        <a href="#">Projects</a> 
+		<div class="dropdown-content">
+      <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <a href="#">Contact</a>
+		 
+    </nav>
+</header>
+            <h1 style="padding-left: 6em;">Java Multithreading Interview Questions and Answers</h1>
+  <p style="padding-left: 14em;"><b>Prepare for interviews with essential multithreading concepts, examples, and concurrency tools</b></p>
+<div class="container">
+  <h2 class="level">🟢 Beginner-Level</h2>
+
+  <h3>1. What is a thread in Java?</h3>
+  <p>A thread is the smallest unit of execution. In Java, threads can run concurrently to perform multitasking.</p>
+
+  <h3>2. How do you create a thread in Java?</h3>
+  <pre><code>// Extending Thread
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread running...");
+    }
+}
+
+// Implementing Runnable
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Runnable running...");
+    }
+}
+
+new MyThread().start();
+new Thread(new MyRunnable()).start();</code></pre>
+
+  <h3>3. What is the difference between start() and run()?</h3>
+  <ul>
+    <li><code>start()</code> creates a new thread and invokes <code>run()</code>.</li>
+    <li><code>run()</code> executes in the current thread like a normal method.</li>
+  </ul>
+
+  <h3>4. Thread Lifecycle in Java</h3>
+  <p>New → Runnable → Running → Blocked/Waiting → Terminated</p>
+
+  <h3>5. What are daemon threads?</h3>
+  <p>Background threads that exit when all user threads finish.</p>
+  <pre><code>Thread t = new Thread(() -> System.out.println("Daemon"));
+t.setDaemon(true);
+t.start();</code></pre>
+
+  <h2 class="level">🟡 Intermediate-Level</h2>
+
+  <h3>6. What is synchronization in Java?</h3>
+  <p>Used to avoid concurrent access problems on shared resources.</p>
+  <pre><code>public synchronized void increment() {
+    count++;
+}</code></pre>
+
+  <h3>7. Difference between synchronized method and block</h3>
+  <pre><code>synchronized(this) {
+    // More fine-grained control
+}</code></pre>
+
+  <h3>8. What does the volatile keyword do?</h3>
+  <p>Ensures visibility of changes to variables across threads.</p>
+  <pre><code>volatile boolean flag = true;</code></pre>
+
+  <h3>9. Difference: wait() vs sleep()</h3>
+  <table border="1" cellpadding="5">
+    <tr><th>Feature</th><th>wait()</th><th>sleep()</th></tr>
+    <tr><td>Belongs to</td><td>Object</td><td>Thread</td></tr>
+    <tr><td>Releases Lock</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Use</td><td>Thread Communication</td><td>Delay Execution</td></tr>
+  </table>
+
+  <h3>10. What are ThreadLocal variables?</h3>
+  <pre><code>ThreadLocal<Integer> local = ThreadLocal.withInitial(() -> 1);</code></pre>
+
+  <h2 class="level">🔵 Advanced-Level</h2>
+
+  <h3>11. What is ExecutorService?</h3>
+  <p>Used to manage thread pools and run async tasks.</p>
+  <pre><code>ExecutorService ex = Executors.newFixedThreadPool(2);
+ex.submit(() -> System.out.println("Run"));
+ex.shutdown();</code></pre>
+
+  <h3>12. What is the Callable interface?</h3>
+  <p>Like Runnable but returns a result and can throw exceptions.</p>
+  <pre><code>Callable&lt;Integer&gt; task = () -> 10;
+Future&lt;Integer&gt; future = executor.submit(task);</code></pre>
+
+  <h3>13. Future vs CompletableFuture</h3>
+  <ul>
+    <li><code>Future</code> is blocking</li>
+    <li><code>CompletableFuture</code> allows chaining and async tasks</li>
+  </ul>
+  <pre><code>CompletableFuture.supplyAsync(() -> "Hello")
+    .thenApply(s -> s + " World")
+    .thenAccept(System.out::println);</code></pre>
+
+  <h3>14. Common threading issues</h3>
+  <ul>
+    <li>Race Condition</li>
+    <li>Deadlock</li>
+    <li>Livelock</li>
+    <li>Starvation</li>
+  </ul>
+
+  <h3>15. What is deadlock and how to prevent it?</h3>
+  <ul>
+    <li>Avoid nested locks</li>
+    <li>Use lock ordering</li>
+    <li>Use <code>tryLock()</code></li>
+  </ul>
+
+  <h2 class="level">🔴 Expert-Level</h2>
+
+  <h3>16. ReentrantLock vs synchronized</h3>
+  <p>Allows try-lock, interruptible lock, and fairness control.</p>
+  <pre><code>Lock lock = new ReentrantLock();
+if(lock.tryLock(1, TimeUnit.SECONDS)) {
+    try {
+        // logic
+    } finally {
+        lock.unlock();
+    }
+}</code></pre>
+
+  <h3>17. Semaphore, CountDownLatch, CyclicBarrier</h3>
+  <ul>
+    <li><strong>Semaphore:</strong> controls access with permits</li>
+    <li><strong>CountDownLatch:</strong> waits for tasks to complete</li>
+    <li><strong>CyclicBarrier:</strong> waits for threads to reach barrier</li>
+  </ul>
+
+  <h3>18. What is CAS (Compare-And-Swap)?</h3>
+  <pre><code>AtomicInteger atomic = new AtomicInteger(0);
+atomic.compareAndSet(0, 1);</code></pre>
+
+  <h3>19. Fork/Join Framework</h3>
+  <pre><code>class MyTask extends RecursiveTask&lt;Integer&gt; {
+    protected Integer compute() {
+        // Divide and conquer logic
+    }
+}</code></pre>
+
+  <h3>20. What is false sharing?</h3>
+  <p>Occurs when multiple threads access variables on the same cache line, hurting performance. Use padding or separation to avoid.</p>
+  <h3>21. How do you ensure thread safety in Java?</h3>
+  <ul>
+    <li>Use synchronized blocks or methods</li>
+    <li>Use concurrent collections (e.g., <code>ConcurrentHashMap</code>)</li>
+    <li>Use immutable objects</li>
+    <li>Use atomic variables (like <code>AtomicInteger</code>)</li>
+  </ul>
+
+  <h3>22. Difference between ConcurrentHashMap and Hashtable?</h3>
+  <table>
+    <tr><th>Feature</th><th>ConcurrentHashMap</th><th>Hashtable</th></tr>
+    <tr><td>Locking</td><td>Segmented locks</td><td>Entire map is locked</td></tr>
+    <tr><td>Null Keys</td><td>No null keys or values</td><td>No null keys or values</td></tr>
+    <tr><td>Performance</td><td>High concurrency</td><td>Slower under load</td></tr>
+  </table>
+
+  <h3>23. What are the different thread states in Java?</h3>
+  <ul>
+    <li><strong>NEW</strong> – Created but not started</li>
+    <li><strong>RUNNABLE</strong> – Ready to run</li>
+    <li><strong>BLOCKED</strong> – Waiting to acquire a lock</li>
+    <li><strong>WAITING</strong> – Waiting indefinitely</li>
+    <li><strong>TIMED_WAITING</strong> – Waiting for a fixed time</li>
+    <li><strong>TERMINATED</strong> – Finished</li>
+  </ul>
+
+  <h3>24. What is thread priority?</h3>
+  <p>Thread priority decides the order of thread scheduling. Values range from 1 (MIN) to 10 (MAX), default is 5.</p>
+  <pre><code>thread.setPriority(Thread.MAX_PRIORITY);</code></pre>
+
+  <h3>25. What is inter-thread communication in Java?</h3>
+  <p>It allows threads to communicate using <code>wait()</code>, <code>notify()</code>, and <code>notifyAll()</code>.</p>
+  <pre><code>synchronized(obj) {
+    while(conditionNotMet) obj.wait();
+    obj.notify();
+}</code></pre>
+
+  <h3>26. How do you handle thread interruption?</h3>
+  <p>Use <code>Thread.interrupt()</code> to interrupt a thread and check using <code>Thread.interrupted()</code> or <code>isInterrupted()</code>.</p>
+  <pre><code>while (!Thread.currentThread().isInterrupted()) {
+    // work
+}</code></pre>
+
+  <h3>27. Difference between Thread Pool and ForkJoinPool?</h3>
+  <ul>
+    <li><strong>ThreadPool</strong>: Ideal for independent tasks</li>
+    <li><strong>ForkJoinPool</strong>: Ideal for recursive, divide-and-conquer tasks</li>
+  </ul>
+
+  <h3>28. What is the use of BlockingQueue?</h3>
+  <p>Used for thread-safe producer-consumer pattern. Blocks automatically when full/empty.</p>
+  <pre><code>BlockingQueue&lt;String&gt; queue = new ArrayBlockingQueue&lt;&gt;(10);
+queue.put("item");
+String item = queue.take();</code></pre>
+
+  <h3>29. How to avoid race conditions?</h3>
+  <ul>
+    <li>Use synchronized blocks/methods</li>
+    <li>Use atomic classes</li>
+    <li>Minimize shared mutable state</li>
+  </ul>
+
+  <h3>30. Best practices for multithreading in Java</h3>
+  <ul>
+    <li>Avoid shared mutable state</li>
+    <li>Prefer higher-level concurrency utilities</li>
+    <li>Use thread pools, avoid creating threads manually</li>
+    <li>Always handle exceptions in threads</li>
+    <li>Test for thread-safety using stress tests</li>
+  </ul>
+</div>
+</div>
+
+<footer>
+    &copy; 2025 Java Learning Portal. All rights reserved.
+	  <p>Designed by Mahboob Anwar | Optimized for search engines and clean UI</p>
+	
+<!-- hitwebcounter Code START -->
+ <div style="margin-top:10px;">
+<a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=20923573&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>                                    
+    </div>                                  
+
+</footer>
+
+<script>
+    // Visit Counter using localStorage
+    const visitKey = 'javaLearningPortalVisits';
+    let count = localStorage.getItem(visitKey);
+
+    if (!count) {
+        count = 1;
+    } else {
+        count = parseInt(count) + 1;
+    }
+
+    localStorage.setItem(visitKey, count);
+    document.getElementById('visitCount').textContent = `👀 you have visited ${count} time(s) on this browser.`;
+	<!-- 100% privacy-first analytics -->
+
+
+</script>
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+
+
+</body>
+</html>

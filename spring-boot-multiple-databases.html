@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Boot - Multiple Databases (MySQL + PostgreSQL)</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2, h3 { color: #2c3e50; }
+        pre, code { background-color: #f4f4f4; padding: 10px; display: block; white-space: pre-wrap; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        th { background-color: #f0f0f0; }
+        .section { margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+    <h1>Spring Boot: Multiple Databases Configuration (MySQL + PostgreSQL)</h1>
+
+    <div class="section">
+        <h2>✅ Use Case</h2>
+        <ul>
+            <li><strong>Primary DB (MySQL)</strong> - Manages <code>Employee</code> entity</li>
+            <li><strong>Secondary DB (PostgreSQL)</strong> - Manages <code>Department</code> entity</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🔧 Project Structure</h2>
+        <pre>
+src/main/java/
+└── com.example.multidb/
+    ├── employee/
+    │   ├── entity/Employee.java
+    │   ├── repo/EmployeeRepository.java
+    ├── department/
+    │   ├── entity/Department.java
+    │   ├── repo/DepartmentRepository.java
+    ├── config/
+    │   ├── PrimaryDataSourceConfig.java
+    │   └── SecondaryDataSourceConfig.java
+    └── MultiDbApplication.java
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>🛠️ 1. pom.xml Dependencies</h2>
+        <pre>
+&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.postgresql&lt;/groupId&gt;
+    &lt;artifactId&gt;postgresql&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>⚙️ 2. application.properties</h2>
+        <pre>
+# PRIMARY DB - MySQL
+spring.datasource.primary.url=jdbc:mysql://localhost:3306/employeedb
+spring.datasource.primary.username=root
+spring.datasource.primary.password=pass
+spring.datasource.primary.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# SECONDARY DB - PostgreSQL
+spring.datasource.secondary.url=jdbc:postgresql://localhost:5432/departmentdb
+spring.datasource.secondary.username=postgres
+spring.datasource.secondary.password=pass
+spring.datasource.secondary.driver-class-name=org.postgresql.Driver
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>🧩 3. PrimaryDataSourceConfig.java (MySQL)</h2>
+        <pre>
+@Configuration
+@EnableTransactionManagement
+@EnableJpaRepositories(
+    basePackages = "com.example.multidb.employee.repo",
+    entityManagerFactoryRef = "primaryEntityManager",
+    transactionManagerRef = "primaryTransactionManager"
+)
+public class PrimaryDataSourceConfig {
+
+    @Primary
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.primary")
+    public DataSource primaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Primary
+    @Bean
+    public LocalContainerEntityManagerFactoryBean primaryEntityManager(
+            EntityManagerFactoryBuilder builder) {
+        return builder
+                .dataSource(primaryDataSource())
+                .packages("com.example.multidb.employee.entity")
+                .persistenceUnit("primary")
+                .build();
+    }
+
+    @Primary
+    @Bean
+    public PlatformTransactionManager primaryTransactionManager(
+            @Qualifier("primaryEntityManager") EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
+}
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>🧩 4. SecondaryDataSourceConfig.java (PostgreSQL)</h2>
+        <pre>
+@Configuration
+@EnableTransactionManagement
+@EnableJpaRepositories(
+    basePackages = "com.example.multidb.department.repo",
+    entityManagerFactoryRef = "secondaryEntityManager",
+    transactionManagerRef = "secondaryTransactionManager"
+)
+public class SecondaryDataSourceConfig {
+
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.secondary")
+    public DataSource secondaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean secondaryEntityManager(
+            EntityManagerFactoryBuilder builder) {
+        return builder
+                .dataSource(secondaryDataSource())
+                .packages("com.example.multidb.department.entity")
+                .persistenceUnit("secondary")
+                .build();
+    }
+
+    @Bean
+    public PlatformTransactionManager secondaryTransactionManager(
+            @Qualifier("secondaryEntityManager") EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
+}
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>📦 5. Entity and Repository Examples</h2>
+        <h3>✅ Employee.java (MySQL)</h3>
+        <pre>
+@Entity
+public class Employee {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+}
+        </pre>
+        <h3>✅ EmployeeRepository.java</h3>
+        <pre>
+@Repository
+public interface EmployeeRepository extends JpaRepository&lt;Employee, Long&gt; {}
+        </pre>
+
+        <h3>✅ Department.java (PostgreSQL)</h3>
+        <pre>
+@Entity
+public class Department {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+}
+        </pre>
+        <h3>✅ DepartmentRepository.java</h3>
+        <pre>
+@Repository
+public interface DepartmentRepository extends JpaRepository&lt;Department, Long&gt; {}
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>🚀 6. Service Usage</h2>
+        <pre>
+@Service
+public class EmployeeService {
+    @Autowired
+    private EmployeeRepository employeeRepository;
+    // ...
+}
+
+@Service
+public class DepartmentService {
+    @Autowired
+    private DepartmentRepository departmentRepository;
+    // ...
+}
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>✅ Summary Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Primary DB (MySQL)</th>
+                    <th>Secondary DB (PostgreSQL)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Datasource prefix</td>
+                    <td>spring.datasource.primary</td>
+                    <td>spring.datasource.secondary</td>
+                </tr>
+                <tr>
+                    <td>Entity Package</td>
+                    <td>employee.entity</td>
+                    <td>department.entity</td>
+                </tr>
+                <tr>
+                    <td>Repo Package</td>
+                    <td>employee.repo</td>
+                    <td>department.repo</td>
+                </tr>
+                <tr>
+                    <td>Transaction Manager</td>
+                    <td>primaryTransactionManager</td>
+                    <td>secondaryTransactionManager</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

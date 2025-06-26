@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Angular Notifications Guide</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; background: #f9f9f9; }
+    h1, h2 { color: #2c3e50; }
+    pre { background: #eee; padding: 10px; overflow-x: auto; border-left: 4px solid #007acc; }
+    code { font-family: monospace; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #007acc; color: #fff; }
+    .note { background: #e8f4fd; padding: 10px; border-left: 4px solid #007acc; margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+  <h1>🔔 Angular Notifications</h1>
+  <p>In Angular, notifications refer to showing messages to users like success, error, warning, or info — typically via toast popups, snack bars, or alert banners.</p>
+
+  <h2>✅ Ways to Show Notifications</h2>
+
+  <h3>1. Angular Material SnackBar</h3>
+  <div class="note">Lightweight, built-in option for brief messages.</div>
+
+  <pre><code>ng add @angular/material</code></pre>
+
+  <p><strong>Usage:</strong></p>
+  <pre><code>import { MatSnackBar } from '@angular/material/snack-bar';
+
+constructor(private snackBar: MatSnackBar) {}
+
+this.snackBar.open('Task Added Successfully!', 'Close', {
+  duration: 3000
+});</code></pre>
+
+  <h3>2. ngx-toastr (Popular External Library)</h3>
+
+  <pre><code>npm install ngx-toastr --save
+npm install @angular/animations --save</code></pre>
+
+  <p><strong>In <code>app.module.ts</code>:</strong></p>
+  <pre><code>import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+@NgModule({
+  imports: [
+    BrowserAnimationsModule,
+    ToastrModule.forRoot() // Global config
+  ]
+})</code></pre>
+
+  <p><strong>Usage in Component:</strong></p>
+  <pre><code>import { ToastrService } from 'ngx-toastr';
+
+constructor(private toastr: ToastrService) {}
+
+this.toastr.success('Todo added!', 'Success');
+this.toastr.error('Something went wrong', 'Error');</code></pre>
+
+  <h3>3. Custom Notification Component</h3>
+  <p>Create a reusable notification component and manage state using a shared service:</p>
+
+  <pre><code>// notification.service.ts
+private notification$ = new BehaviorSubject&lt;string&gt;('');
+
+show(message: string) {
+  this.notification$.next(message);
+}
+
+getNotification(): Observable&lt;string&gt; {
+  return this.notification$.asObservable();
+}</code></pre>
+
+  <p>You can use this inside a custom snackbar/banner notification component.</p>
+
+  <h2>📘 When to Use What?</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Use When...</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>MatSnackBar</td>
+        <td>You're already using Angular Material</td>
+      </tr>
+      <tr>
+        <td>ngx-toastr</td>
+        <td>You want beautiful customizable toasts</td>
+      </tr>
+      <tr>
+        <td>Custom Component</td>
+        <td>You need full design control</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🧪 Example in a ToDo App</h2>
+  <pre><code>this.todoService.addTodo(todo).subscribe({
+  next: () =&gt; this.toastr.success('Added successfully'),
+  error: () =&gt; this.toastr.error('Failed to add todo')
+});</code></pre>
+
+  <h2>🎯 Want More?</h2>
+  <ul>
+    <li>✅ Built-in toast component in your ToDo app?</li>
+    <li>✅ Notifications for success/error in all CRUD operations?</li>
+  </ul>
+
+</body>
+</html>

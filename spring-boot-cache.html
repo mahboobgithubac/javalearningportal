@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Boot Caching Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #eef;
+            padding: 10px;
+            border-left: 5px solid #3498db;
+            overflow-x: auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+        table, th, td {
+            border: 1px solid #aaa;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffecb5;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>✅ Caching in Spring Boot</h1>
+    <p>Spring Boot makes it easy to add caching to your application with minimal configuration. It supports various cache providers like:</p>
+    <ul>
+        <li>In-Memory (default)</li>
+        <li>EhCache</li>
+        <li>Redis</li>
+        <li>Caffeine</li>
+        <li>Hazelcast</li>
+    </ul>
+
+    <h2>🔹 1. Basic Caching Setup (In-Memory with SimpleCacheManager)</h2>
+
+    <h3>✅ Step 1: Add Dependency</h3>
+    <p><strong>Option 1: Default Simple In-Memory Caching</strong></p>
+    <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+    <p><strong>Option 2: Explicit Spring Cache Support</strong></p>
+    <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+    <p><strong>Optional - Redis</strong></p>
+    <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+    <p><strong>Optional - Caffeine</strong></p>
+    <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;com.github.ben-manes.caffeine&lt;/groupId&gt;
+  &lt;artifactId&gt;caffeine&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+    <h3>✅ Step 2: Enable Caching in Main Class</h3>
+    <pre><code>@SpringBootApplication
+@EnableCaching
+public class EmployeeApiApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(EmployeeApiApplication.class, args);
+    }
+}</code></pre>
+
+    <h3>✅ Step 3: Use Cache Annotations in Service</h3>
+    <pre><code>@Service
+public class EmployeeService {
+
+    @Autowired
+    private EmployeeRepository repo;
+
+    @Cacheable(value = "employees", key = "#id")
+    public Employee getEmployeeById(Long id) {
+        System.out.println("Fetching from DB...");
+        return repo.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+    }
+
+    @CachePut(value = "employees", key = "#employee.id")
+    public Employee updateEmployee(Employee employee) {
+        return repo.save(employee);
+    }
+
+    @CacheEvict(value = "employees", key = "#id")
+    public void deleteEmployee(Long id) {
+        repo.deleteById(id);
+    }
+}</code></pre>
+
+    <h3>✅ Step 4: Configure Cache (Optional)</h3>
+    <p>No extra config needed for in-memory. For providers like Redis or EhCache, define TTL, eviction, and cache manager in application.yml or Java config.</p>
+
+    <div class="success">
+        <strong>🧪 Example Flow:</strong><br>
+        - First call to <code>getEmployeeById(1)</code> hits the DB and caches the result.<br>
+        - Next calls fetch from cache.<br>
+        - <code>updateEmployee()</code> updates both DB and cache.<br>
+        - <code>deleteEmployee()</code> removes from both DB and cache.
+    </div>
+
+    <h3>🔄 Summary of Annotations</h3>
+    <table>
+        <tr>
+            <th>Annotation</th>
+            <th>Use Case</th>
+        </tr>
+        <tr>
+            <td>@Cacheable</td>
+            <td>Caches the method result</td>
+        </tr>
+        <tr>
+            <td>@CachePut</td>
+            <td>Updates the cache when method runs</td>
+        </tr>
+        <tr>
+            <td>@CacheEvict</td>
+            <td>Removes entry from cache</td>
+        </tr>
+        <tr>
+            <td>@EnableCaching</td>
+            <td>Enables Spring's caching system</td>
+        </tr>
+    </table>
+
+    <h2>🧠 Understanding Cache Keys</h2>
+    <pre><code>@Cacheable(value = "employees", key = "#id")</code></pre>
+    <p>✅ <code>#id</code> refers to method parameter named <code>id</code>.</p>
+
+    <h3>🔁 Alternate Examples</h3>
+    <pre><code>@Cacheable(value = "employees", key = "#name + '-' + #dept")
+public Employee findByNameAndDept(String name, String dept) { ... }</code></pre>
+
+    <pre><code>@Cacheable(value = "searchCache", key = "#searchRequest.query")
+public List&lt;Employee&gt; search(SearchRequest searchRequest) { ... }</code></pre>
+
+    <div class="note">
+        ⚠️ <strong>Common Mistakes:</strong><br>
+        - <code>key = "id"</code> (literal string)<br>
+        - <code>key = "#employee.id"</code> (if employee param doesn't exist)
+    </div>
+
+    <h2>✅ When to Use Caching (Which Layer?)</h2>
+    <table>
+        <tr>
+            <th>Layer</th>
+            <th>Use Caching?</th>
+            <th>Why</th>
+        </tr>
+        <tr>
+            <td>Controller</td>
+            <td>❌ No</td>
+            <td>Handles HTTP, not business logic</td>
+        </tr>
+        <tr>
+            <td>Service</td>
+            <td>✅ Yes</td>
+            <td>Handles business logic and cache integration</td>
+        </tr>
+        <tr>
+            <td>Repository</td>
+            <td>❌ No</td>
+            <td>Delegates to DB directly</td>
+        </tr>
+    </table>
+
+    <h2>✅ Cache Behavior Overview</h2>
+    <table>
+        <tr>
+            <th>Action</th>
+            <th>Annotation</th>
+            <th>Behavior</th>
+        </tr>
+        <tr>
+            <td>Read</td>
+            <td>@Cacheable</td>
+            <td>Checks cache, executes method if not present</td>
+        </tr>
+        <tr>
+            <td>Update</td>
+            <td>@CachePut</td>
+            <td>Executes method and updates cache</td>
+        </tr>
+        <tr>
+            <td>Delete</td>
+            <td>@CacheEvict</td>
+            <td>Removes entry from cache</td>
+        </tr>
+    </table>
+
+    <h2>🚀 Want to Go Further?</h2>
+    <ul>
+        <li>Redis + Spring Boot caching setup</li>
+        <li>Caffeine in-memory high-performance cache</li>
+        <li>TTL, eviction policies, and metrics</li>
+    </ul>
+</body>
+</html>

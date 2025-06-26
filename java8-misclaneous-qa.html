@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Stream Questions & Answers</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1, h2 { color: #2c3e50; }
+    a { text-decoration: none; color: #2980b9; }
+    a:hover { text-decoration: underline; }
+    .answer { margin-bottom: 25px; padding: 10px; background: #f9f9f9; border-left: 5px solid #3498db; }
+  </style>
+</head>
+<body>
+
+<h1>Java 8 Stream Interview Questions & Answers</h1>
+
+<h2>Questions</h2>
+<ol>
+  <li><a href="#q1">Convert a list of strings to uppercase</a></li>
+  <li><a href="#q2">Square a list of numbers</a></li>
+  <li><a href="#q3">Flatten a list of lists</a></li>
+  <li><a href="#q4">Remove null or empty strings</a></li>
+  <li><a href="#q5">Convert a list to CSV string</a></li>
+  <li><a href="#q6">Filter even numbers from a list</a></li>
+  <li><a href="#q7">Filter strings starting with "j"</a></li>
+  <li><a href="#q8">Check if any string starts with "A"</a></li>
+  <li><a href="#q9">Check if all strings have length > 3</a></li>
+  <li><a href="#q10">Check if no string is blank</a></li>
+  <li><a href="#q11">Sort strings in reverse order</a></li>
+  <li><a href="#q12">Sort list of objects by multiple fields</a></li>
+  <li><a href="#q13">Get top 3 highest numbers</a></li>
+  <li><a href="#q14">Find the second smallest number</a></li>
+  <li><a href="#q15">Count distinct elements</a></li>
+  <li><a href="#q16">Find the maximum number</a></li>
+  <li><a href="#q17">Sum of even numbers</a></li>
+  <li><a href="#q18">Calculate average of numbers</a></li>
+  <li><a href="#q19">Create frequency map from list</a></li>
+  <li><a href="#q20">Group strings by their length</a></li>
+  <li><a href="#q21">Group employees by department</a></li>
+  <li><a href="#q22">Count employees per department</a></li>
+  <li><a href="#q23">Longest name per department</a></li>
+  <li><a href="#q24">Create a Map of ID to name</a></li>
+  <li><a href="#q25">Find duplicates in a list</a></li>
+  <li><a href="#q26">Partition numbers into even and odd</a></li>
+  <li><a href="#q27">Merge and sort lists</a></li>
+  <li><a href="#q28">Find the longest word in a sentence</a></li>
+  <li><a href="#q29">Count words in a sentence</a></li>
+  <li><a href="#q30">Create character frequency map</a></li>
+  <li><a href="#q31">Get a safe property using Optional</a></li>
+  <li><a href="#q32">Flatten nested lists using flatMap</a></li>
+  <li><a href="#q33">Filter present optional strings</a></li>
+  <li><a href="#q34">Convert Map to list of strings</a></li>
+  <li><a href="#q35">Remove duplicates and sort list</a></li>
+  <li><a href="#q36">Extract digits from string</a></li>
+  <li><a href="#q37">Create CSV string from names</a></li>
+  <li><a href="#q38">Get unique characters in string</a></li>
+  <li><a href="#q39">Capitalize each word in a sentence</a></li>
+  <li><a href="#q40">Replace vowels with *</a></li>
+</ol>
+
+<h2>Answers</h2>
+
+<div class="answer" id="q1">
+  <strong>Q1: Convert a list of strings to uppercase</strong><br>
+  <code>names.stream().map(String::toUpperCase).collect(Collectors.toList())</code>
+</div>
+
+<div class="answer" id="q2">
+  <strong>Q2: Square a list of numbers</strong><br>
+  <code>nums.stream().map(n -> n * n).collect(Collectors.toList())</code>
+</div>
+
+<div class="answer" id="q3">
+  <strong>Q3: Flatten a list of lists</strong><br>
+  <code>nested.stream().flatMap(List::stream).collect(Collectors.toList())</code>
+</div>
+
+<div class="answer" id="q4">
+  <strong>Q4: Remove null or empty strings</strong><br>
+  <code>mixed.stream().filter(s -> s != null && !s.isEmpty()).collect(Collectors.toList())</code>
+</div>
+
+<div class="answer" id="q5">
+  <strong>Q5: Convert a list to CSV string</strong><br>
+  <code>nums.stream().map(String::valueOf).collect(Collectors.joining(", "))</code>
+</div>
+
+<!-- Continue similarly for remaining answers... -->
+
+<div class="answer" id="q40">
+  <strong>Q40: Replace vowels with *</strong><br>
+  <code>"education".chars().mapToObj(c -> "aeiou".indexOf(c) >= 0 ? "*" : "" + (char) c).collect(Collectors.joining())</code>
+</div>
+
+</body>
+</html>

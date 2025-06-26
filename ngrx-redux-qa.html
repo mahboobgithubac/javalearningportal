@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NgRx Redux Style Interview Q&A</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1 { color: #2c3e50; }
+    h2 { color: #2980b9; margin-top: 30px; }
+    pre { background: #f4f4f4; padding: 10px; overflow-x: auto; border-left: 3px solid #3498db; }
+    code { font-family: Consolas, monospace; }
+    .qa { margin-bottom: 20px; }
+    .question { font-weight: bold; color: #2c3e50; }
+    .answer { color: #34495e; }
+  </style>
+</head>
+<body>
+
+<h1>NgRx (Redux) Interview Questions – Angular</h1>
+
+<div class="qa">
+  <div class="question">✅ What is an Action in NgRx?</div>
+  <div class="answer">Actions are plain objects describing events that trigger state changes.</div>
+  <pre><code>export const addTodo = createAction(
+  '[Todo] Add',
+  props&lt;{ todo: Todo }&gt;()
+);</code></pre>
+</div>
+
+<div class="qa">
+  <div class="question">✅ What is a Reducer in NgRx?</div>
+  <div class="answer">A reducer is a pure function that updates state based on the action.</div>
+  <pre><code>export const todoReducer = createReducer(
+  initialState,
+  on(addTodo, (state, { todo }) =&gt; [...state, todo]),
+  on(deleteTodo, (state, { id }) =&gt; state.filter(t =&gt; t.id !== id))
+);</code></pre>
+</div>
+
+<div class="qa">
+  <div class="question">✅ What is a Selector in NgRx?</div>
+  <div class="answer">Selectors are pure functions that retrieve a specific slice of state from the store.</div>
+  <pre><code>export const selectTodos = createSelector(
+  selectFeatureState,
+  (state) =&gt; state.todos
+);</code></pre>
+</div>
+
+<div class="qa">
+  <div class="question">✅ What is an Effect in NgRx?</div>
+  <div class="answer">Effects handle side effects like HTTP requests triggered by actions.</div>
+  <pre><code>loadTodos$ = createEffect(() =&gt;
+  this.actions$.pipe(
+    ofType(loadTodos),
+    mergeMap(() =&gt; this.todoService.getTodos()
+      .pipe(map(todos =&gt; loadTodosSuccess({ todos }))))
+  )
+);</code></pre>
+</div>
+
+<div class="qa">
+  <div class="question">✅ How do you fetch data from the store?</div>
+  <div class="answer">Use <code>store.select()</code> with a selector.</div>
+  <pre><code>this.todos$ = this.store.select(selectAllTodos);</code></pre>
+</div>
+
+<div class="qa">
+  <div class="question">✅ How do you add data to the store?</div>
+  <div class="answer">Dispatch an action, handled by the reducer to update the store.</div>
+  <pre><code>this.store.dispatch(addTodo({ todo: { id: 1, title: 'New Task' } }));</code></pre>
+</div>
+
+<h2>🔥 Extra – Code Examples</h2>
+
+<h3>Model (todo.model.ts)</h3>
+<pre><code>export interface Todo {
+  id: number;
+  title: string;
+}</code></pre>
+
+<h3>Actions (todo.actions.ts)</h3>
+<pre><code>export const addTodo = createAction(
+  '[Todo] Add',
+  props&lt;{ todo: Todo }&gt;()
+);
+
+export const deleteTodo = createAction(
+  '[Todo] Delete',
+  props&lt;{ id: number }&gt;()
+);</code></pre>
+
+<h3>Reducer (todo.reducer.ts)</h3>
+<pre><code>export const todoReducer = createReducer(
+  [],
+  on(addTodo, (state, { todo }) =&gt; [...state, todo]),
+  on(deleteTodo, (state, { id }) =&gt; state.filter(t =&gt; t.id !== id))
+);</code></pre>
+
+<h3>Selector (todo.selectors.ts)</h3>
+<pre><code>export const selectTodos = createFeatureSelector&lt;Todo[]&gt;('todos');
+
+export const selectAllTodos = createSelector(
+  selectTodos,
+  (todos: Todo[]) =&gt; todos
+);</code></pre>
+
+<h3>Store Module (app.module.ts)</h3>
+<pre><code>imports: [
+  BrowserModule,
+  StoreModule.forRoot({ todos: todoReducer })
+]</code></pre>
+
+<h3>Component (todo.component.ts)</h3>
+<pre><code>this.todos$ = this.store.select(selectAllTodos);</code></pre>
+
+<h3>Template (todo.component.html)</h3>
+<pre><code>&lt;ul&gt;
+  &lt;li *ngFor="let todo of todos$ | async"&gt;
+    {{ todo.title }}
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+</body>
+</html>

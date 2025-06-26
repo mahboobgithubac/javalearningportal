@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exception Handling Best Practices</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+
+<h1>Exception Handling Best Practices</h1>
+<p>Effective exception handling improves code robustness and readability.</p>
+<ul>
+    <li>Catch specific exceptions instead of generic ones.</li>
+    <li>Use finally blocks or try-with-resources to clean up resources.</li>
+    <li>Log exceptions for troubleshooting.</li>
+</ul>
+<pre><code>try (BufferedReader reader = new BufferedReader(new FileReader("file.txt"))) {
+    String line = reader.readLine();
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre>
+
+</body>
+</html>

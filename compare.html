@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>compare() Implementation in Java</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1, h2 { color: #2c3e50; }
+    code, pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; display: block; white-space: pre-wrap; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #eee; }
+  </style>
+</head>
+<body>
+  <h1>compare() Implementation in Java</h1>
+
+  <h2>✅ Syntax</h2>
+  <pre><code>int compare(T o1, T o2)</code></pre>
+
+  <ul>
+    <li>Returns   0    if   o1    equals   o2   </li>
+    <li>Returns   &lt; 0    if   o1    should come before   o2   </li>
+    <li>Returns   &gt; 0    if   o1    should come after   o2   </li>
+  </ul>
+
+  <h2>✅ Example: Custom Comparator to Sort by Age</h2>
+  <pre><code>import java.util.*;
+
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+}
+
+class AgeComparator implements Comparator&lt;Person&gt; {
+    @Override
+    public int compare(Person p1, Person p2) {
+        return Integer.compare(p1.getAge(), p2.getAge());
+        // OR: return p1.getAge() - p2.getAge();
+    }
+}</code></pre>
+
+  <h2>✅ Usage Example</h2>
+  <pre><code>public class Main {
+    public static void main(String[] args) {
+        List&lt;Person&gt; list = new ArrayList&lt;&gt;();
+        list.add(new Person("Alice", 30));
+        list.add(new Person("Bob", 25));
+        list.add(new Person("Charlie", 35));
+
+        Collections.sort(list, new AgeComparator());
+
+        for (Person p : list) {
+            System.out.println(p.getName() + " - " + p.getAge());
+        }
+    }
+}</code></pre>
+
+  <h2>✅ To Compare by Name</h2>
+  <pre><code>class NameComparator implements Comparator&lt;Person&gt; {
+    public int compare(Person p1, Person p2) {
+        return p1.getName().compareTo(p2.getName());
+    }
+}</code></pre>
+
+  <h2>✅ compareTo() vs compare()</h2>
+  <table>
+    <thead>
+      <tr><th>Feature</th><th>compareTo()</th><th>compare()</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Interface</td><td>Comparable&lt;T&gt;</td><td>Comparator&lt;T&gt;</td></tr>
+      <tr><td>Defined In</td><td>The class itself</td><td>External class or lambda</td></tr>
+      <tr><td>Used For</td><td>Natural ordering</td><td>Custom ordering</td></tr>
+      <tr><td>Modifies Class?</td><td>Yes</td><td>No</td></tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

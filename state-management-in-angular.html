@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>State Management in Angular</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #eef;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #eef;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.6rem;
+      text-align: left;
+    }
+    th {
+      background-color: #ddd;
+    }
+    .highlight {
+      background-color: #d1f7c4;
+      padding: 0.5rem;
+      border-left: 4px solid green;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 What is State Management?</h1>
+  <p>It’s the process of maintaining the current state of your app (like user info, todos, UI state) across:</p>
+  <ul>
+    <li>Multiple components</li>
+    <li>HTTP requests</li>
+    <li>User navigation</li>
+  </ul>
+
+  <h2>✅ Types of State in Angular</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Example</th>
+        <th>Scope</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Local State</td>
+        <td><code>formData</code> inside a component</td>
+        <td>Component-only</td>
+      </tr>
+      <tr>
+        <td>Shared State</td>
+        <td><code>todos</code> array in a service</td>
+        <td>Across components</td>
+      </tr>
+      <tr>
+        <td>Global State</td>
+        <td>Auth state, theme, cart, etc.</td>
+        <td>Entire app</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🔄 State Management Techniques</h2>
+
+  <h3>1. ✅ Service with BehaviorSubject</h3>
+  <p><strong>Most common & simple</strong></p>
+  <pre><code>private todos = new BehaviorSubject&lt;Todo[]&gt;([]);
+getTodos(): Observable&lt;Todo[]&gt; {
+  return this.todos.asObservable();
+}</code></pre>
+  <p><strong>Use this when:</strong></p>
+  <ul>
+    <li>App is small to medium</li>
+    <li>Data is shared by few components</li>
+    <li>No complex transformations</li>
+  </ul>
+
+  <h3>2. 🚀 RxJS + ReplaySubject, Subject, AsyncPipe</h3>
+  <p>You can build reactive data flows using RxJS streams.</p>
+
+  <h3>3. 🧩 NgRx (Redux for Angular)</h3>
+  <p>A full-fledged state management library:</p>
+  <ul>
+    <li>Uses <code>@ngrx/store</code>, actions, reducers, effects</li>
+    <li>Inspired by Redux (immutable state + single source of truth)</li>
+  </ul>
+  <pre><code>ng add @ngrx/store
+ng add @ngrx/effects</code></pre>
+  <p><strong>Use NgRx when:</strong></p>
+  <ul>
+    <li>App is large and complex</li>
+    <li>You need undo/redo, dev tools, or time travel debugging</li>
+    <li>You want fine-grained control over state mutation</li>
+  </ul>
+
+  <h3>4. ⚙️ Signals (Experimental in Angular 16+)</h3>
+  <pre><code>import { signal } from '@angular/core';
+
+const count = signal(0);
+count.set(count() + 1);</code></pre>
+
+  <h2>✅ Best Approach for Your ToDo App</h2>
+  <div class="highlight">
+    Keep using <code>BehaviorSubject</code> in a service — it's simple, effective, and reactive.
+  </div>
+
+  <h2>🧠 Summary Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Approach</th>
+        <th>Complexity</th>
+        <th>Suitability</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>BehaviorSubject</td>
+        <td>Low</td>
+        <td>Small/medium apps</td>
+      </tr>
+      <tr>
+        <td>NgRx Store</td>
+        <td>High</td>
+        <td>Enterprise/large apps</td>
+      </tr>
+      <tr>
+        <td>Signals (v16+)</td>
+        <td>Medium</td>
+        <td>Modern small apps</td>
+      </tr>
+      <tr>
+        <td>Local Variables</td>
+        <td>Very Low</td>
+        <td>Local state only</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🔁 BehaviorSubject in Angular (RxJS)</h2>
+  <p>A <strong>BehaviorSubject</strong> is a special type of Observable provided by RxJS that:</p>
+  <ul>
+    <li>✅ Holds a current value</li>
+    <li>✅ Emits the latest value to new subscribers immediately</li>
+    <li>✅ Can be both observed and updated (read/write)</li>
+  </ul>
+
+  <h3>✅ Import & Basic Use</h3>
+  <pre><code>import { BehaviorSubject } from 'rxjs';
+
+const subject = new BehaviorSubject&lt;number&gt;(0); // initial value is 0
+
+subject.subscribe(val =&gt; console.log('Subscriber A:', val));
+
+subject.next(1);
+subject.next(2);
+
+subject.subscribe(val =&gt; console.log('Subscriber B:', val));</code></pre>
+
+  <h3>🧾 Output:</h3>
+  <pre><code>Subscriber A: 0
+Subscriber A: 1
+Subscriber A: 2
+Subscriber B: 2</code></pre>
+
+  <h3>📦 Use Case in Angular Service</h3>
+  <pre><code>private todos = new BehaviorSubject&lt;Todo[]&gt;([]);
+
+getTodos(): Observable&lt;Todo[]&gt; {
+  return this.todos.asObservable(); // read only
+}
+
+addTodo(todo: Todo) {
+  const current = this.todos.getValue();
+  this.todos.next([...current, todo]); // write/update
+}</code></pre>
+
+  <h3>📘 BehaviorSubject vs Subject</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Subject</th>
+        <th>BehaviorSubject</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Has initial value?</td>
+        <td>❌ No</td>
+        <td>✅ Yes</td>
+      </tr>
+      <tr>
+        <td>Emits last value?</td>
+        <td>❌ No</td>
+        <td>✅ Yes</td>
+      </tr>
+      <tr>
+        <td>Usage</td>
+        <td>Events, actions</td>
+        <td>Form/input state</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>✅ Summary</h2>
+  <p><strong>BehaviorSubject&lt;T&gt;</strong> stores the latest value.</p>
+  <p>It's perfect for state management in services. Subscribers always receive the most recent value, even if they subscribe later.</p>
+
+</body>
+</html>

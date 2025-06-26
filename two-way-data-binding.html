@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Two-Way Data Binding in Angular</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+    }
+
+    code, pre {
+      background-color: #f0f0f0;
+      padding: 8px;
+      border-radius: 4px;
+      display: block;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    .tag {
+      background: #e7f3ff;
+      color: #007acc;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔁 Two-Way Data Binding in Angular</h1>
+
+  <div class="section">
+    <p><strong>Two-way data binding</strong> in Angular allows <strong>synchronization of data between the component and the view (HTML)</strong>. When the model changes, the view updates, and when the view changes, the model updates.</p>
+  </div>
+
+  <div class="section">
+    <h2>✅ Key Concept</h2>
+    <ul>
+      <li><strong>Property Binding:</strong> <span class="tag">{{ value }}</span> (Component → View)</li>
+      <li><strong>Event Binding:</strong> <span class="tag">(input)="onInputChange($event)"</span> (View → Component)</li>
+    </ul>
+    <p>Angular combines both into <span class="tag">[(ngModel)]</span>.</p>
+  </div>
+
+  <div class="section">
+    <h2>🧠 Syntax</h2>
+    <pre><code>&lt;input [(ngModel)]="propertyName" /&gt;</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>📘 Example</h2>
+
+    <h3>1. Component (TypeScript)</h3>
+    <pre><code>// app.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  username: string = 'Mahboob';
+}</code></pre>
+
+    <h3>2. Template (HTML)</h3>
+    <pre><code>&lt;!-- app.component.html --&gt;
+&lt;h2&gt;Welcome, {{ username }}&lt;/h2&gt;
+&lt;input [(ngModel)]="username" placeholder="Enter your name" /&gt;</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🎯 How It Works</h2>
+    <ul>
+      <li>Displays <strong>Welcome, Mahboob</strong> initially.</li>
+      <li>User updates the input field → <strong>username</strong> in component updates.</li>
+      <li><strong>{{ username }}</strong> in template reflects the updated value in real time.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>✅ Required Module</h2>
+    <p>To use <span class="tag">ngModel</span>, import <span class="tag">FormsModule</span>:</p>
+    <pre><code>// app.module.ts
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule, FormsModule],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>💡 Summary</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Directive Used</td>
+          <td><code>[(ngModel)]</code></td>
+        </tr>
+        <tr>
+          <td>Binding Direction</td>
+          <td>Component ↔ View</td>
+        </tr>
+        <tr>
+          <td>Use Case</td>
+          <td>Forms, Real-time UI updates</td>
+        </tr>
+        <tr>
+          <td>Required Module</td>
+          <td><code>FormsModule</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

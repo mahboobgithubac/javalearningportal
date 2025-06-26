@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sort HashMap by Age in Java 7</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1, h2 { color: #2c3e50; }
+    code, pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; display: block; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Sort HashMap by Age in Java 7</h1>
+
+  <h2>✅ Java 7 Example</h2>
+  <pre><code>import java.util.*;
+
+public class SortMapByAgeJava7 {
+    public static void main(String[] args) {
+        Map&lt;String, Integer&gt; map = new HashMap&lt;String, Integer&gt;();
+        map.put("Alice", 30);
+        map.put("Bob", 25);
+        map.put("Charlie", 35);
+
+        System.out.println("Original Map:");
+        for (Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " -&gt; " + entry.getValue());
+        }
+
+        // Step 1: Convert map to list
+        List&lt;Map.Entry&lt;String, Integer&gt;&gt; list = new ArrayList&lt;Map.Entry&lt;String, Integer&gt;&gt;(map.entrySet());
+
+        // Step 2: Sort the list using a Comparator
+        Collections.sort(list, new Comparator&lt;Map.Entry&lt;String, Integer&gt;&gt;() {
+            public int compare(Map.Entry&lt;String, Integer&gt; e1, Map.Entry&lt;String, Integer&gt; e2) {
+                return e1.getValue().compareTo(e2.getValue());
+            }
+        });
+
+        // Step 3: Put the sorted list into a LinkedHashMap
+        Map&lt;String, Integer&gt; sortedMap = new LinkedHashMap&lt;String, Integer&gt;();
+        for (Map.Entry&lt;String, Integer&gt; entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        System.out.println("\nSorted Map by Age:");
+        for (Map.Entry&lt;String, Integer&gt; entry : sortedMap.entrySet()) {
+            System.out.println(entry.getKey() + " -&gt; " + entry.getValue());
+        }
+    }
+}</code></pre>
+
+  <h2>✅ Output</h2>
+  <pre><code>Original Map:
+Alice -&gt; 30
+Bob -&gt; 25
+Charlie -&gt; 35
+
+Sorted Map by Age:
+Bob -&gt; 25
+Alice -&gt; 30
+Charlie -&gt; 35</code></pre>
+
+  <h2>✅ To Sort in Descending Order</h2>
+  <p>Change the comparator line:</p>
+  <pre><code>// For descending sort
+return e2.getValue().compareTo(e1.getValue());</code></pre>
+
+<a href="sort-map-in-asc-desc-java8.html">Using Java 8  Sort HashMap<String, Integer> by Age (Value)</a>
+</body>
+</html>

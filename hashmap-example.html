@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Iterate and Update HashMap in Java</title>
+  <meta name="description" content="Explore all the essential ways to iterate, update values, and handle keys in a HashMap using Java. Includes examples and output.">
+  <meta name="keywords" content="Java HashMap, iterate HashMap, update HashMap value, change HashMap key, Java 8 map iteration">
+  <meta name="author" content="Mahboob Anwar">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Java HashMap Iteration and Update Guide" />
+  <meta property="og:description" content="Learn how to iterate and update values in Java HashMap safely and efficiently. Covers entrySet, keySet, compute, replace, and key handling." />
+  <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/226/226777.png" />
+  <style>
+    /*body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 0; }*/
+    header, footer { background-color: #003366; color: white; text-align: center; padding: 20px; }
+    main { max-width: 950px; margin: auto; padding: 30px; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1, h2, h3 { color: #003366; }
+    pre { background-color: #f0f0f0; padding: 10px; border-left: 5px solid #003366; overflow-x: auto; }
+    code { font-family: Consolas, monospace; }
+    .intro { margin-bottom: 20px; padding: 15px; background: #eaf0f6; border-left: 5px solid #003366; border-radius: 4px; }
+	   body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header nav {
+                margin-top: 10px;
+            }
+        }
+		
+   
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+		 <div class="dropdown">
+		<a href="#">Concepts ▾</a>
+    <div class="dropdown-content">
+      <a href="mysql.html">MySQL</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <!--<a href="#">Concepts</a>-->
+		<div class="dropdown">
+        <a href="#">Projects</a> 
+		<div class="dropdown-content">
+      <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <a href="#">Contact</a>
+		 
+    </nav>
+</header>
+
+<main class="container">
+    <section class="intro">
+        <p><strong>Welcome to the Java Learning Portal!</strong> This platform provides concise and practical explanations of core Java concepts with real-world examples. Perfect for students, developers, and interview preparation. Explore each concept below to strengthen your understanding of Java fundamentals.</p>
+    </section>
+
+<main>
+  <div class="intro">
+    <p><strong>HashMap Overview:</strong> A <code>HashMap</code> is a key-value based data structure from the Java Collections Framework that allows fast retrieval, insertion, and deletion. Keys must be unique and are indexed by their hash codes.</p>
+  </div>
+
+  <h2>1. Creating and Iterating a HashMap</h2>
+  <pre><code>Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+map.put("A", 1);
+map.put("B", 2);
+map.put("C", 3);</code></pre>
+
+  <h3>1.1 Using entrySet()</h3>
+  <pre><code>for (Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) {
+    System.out.println(entry.getKey() + " => " + entry.getValue());
+}</code></pre>
+  <strong>Output:</strong>
+  <pre><code>A => 1
+B => 2
+C => 3</code></pre>
+
+  <h3>1.2 Using keySet()</h3>
+  <pre><code>for (String key : map.keySet()) {
+    System.out.println(key + " => " + map.get(key));
+}</code></pre>
+
+  <h3>1.3 Using forEach()</h3>
+  <pre><code>map.forEach((key, value) -> {
+    System.out.println(key + " => " + value);
+});</code></pre>
+
+  <h3>1.4 Using Iterator</h3>
+  <pre><code>Iterator&lt;Map.Entry&lt;String, Integer&gt;&gt; iterator = map.entrySet().iterator();
+while (iterator.hasNext()) {
+    Map.Entry&lt;String, Integer&gt; entry = iterator.next();
+    System.out.println(entry.getKey() + " => " + entry.getValue());
+}</code></pre>
+
+  <h3>1.5 Using Stream API</h3>
+  <pre><code>map.entrySet().stream()
+   .forEach(entry -> System.out.println(entry.getKey() + " => " + entry.getValue()));</code></pre>
+
+  <h2>2. Updating HashMap Values</h2>
+
+  <h3>2.1 Using put()</h3>
+  <pre><code>map.put("A", 10); // Overwrites if "A" exists</code></pre>
+
+  <h3>2.2 Using replace()</h3>
+  <pre><code>map.replace("B", 20); // Replaces if "B" exists</code></pre>
+  <pre><code>map.replace("C", 3, 30); // Only replaces if current value is 3</code></pre>
+
+  <h3>2.3 Using compute() and computeIfPresent()</h3>
+  <pre><code>map.compute("A", (k, v) -> v + 5);
+map.computeIfPresent("B", (k, v) -> v * 2);</code></pre>
+
+  <h3>2.4 Using merge()</h3>
+  <pre><code>
+ Map<String, Integer> map = new HashMap<>();
+map.put("C", 3);
+
+map.merge("C", 5, Integer::sum);  //add 5 and 3 
+System.out.println(map.get("C"));
+🔵 Output:
+
+8  
+</code></pre>
+  <h2>3. Updating Values While Iterating</h2>
+  <pre><code>for (Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) {
+    entry.setValue(entry.getValue() + 1);
+}</code></pre>
+
+  <h3>Alternative methods:</h3>
+  <pre><code>map.forEach((k, v) -> map.replace(k, v + 1));
+map.keySet().forEach(k -> map.compute(k, (key, val) -> val + 1));</code></pre>
+
+  <h2>4. Can You Update a Key in HashMap?</h2>
+  <p><strong>No</strong>, keys cannot be directly updated. The best approach is to remove the old key and insert a new one:</p>
+  <pre><code>if (map.containsKey("A")) {
+    Integer value = map.remove("A");
+    map.put("Alpha", value);
+}</code></pre>
+
+  <h3>⚠️ Caution with Mutable Keys</h3>
+  <p>Never modify fields in custom objects that are used in <code>equals()</code> or <code>hashCode()</code>. Doing so may corrupt the internal structure of the HashMap.</p>
+  <pre><code>class Student {
+    int id;
+    // equals and hashCode use id
+}
+Student s = new Student(101);
+map.put(s, "Alice");
+s.id = 102;
+System.out.println(map.get(s)); // Likely null</code></pre>
+
+  <h2>5. Summary</h2>
+  <ul>
+    <li><strong>Use entrySet()</strong> for safe iteration and updating.</li>
+    <li><strong>Use put/replace/compute/merge</strong> to update values.</li>
+    <li><strong>To change a key</strong>, remove old and insert new.</li>
+    <li><strong>Prefer immutable keys</strong> in real-world HashMap usage.</li>
+  </ul>
+</main>
+<footer>
+    &copy; 2025 Java Learning Portal. All rights reserved.
+	
+	
+
+	<!-- hitwebcounter Code START -->
+	<div style="margin-top:10px;">
+<a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=20836914&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>    </div>    
+</footer>
+
+<script>
+    // Visit Counter using localStorage
+    const visitKey = 'javaLearningPortalVisits';
+    let count = localStorage.getItem(visitKey);
+
+    if (!count) {
+        count = 1;
+    } else {
+        count = parseInt(count) + 1;
+    }
+
+    localStorage.setItem(visitKey, count);
+    document.getElementById('visitCount').textContent = `👀 you have visited ${count} time(s) on this browser.`;
+</script>
+
+</body>
+</html>

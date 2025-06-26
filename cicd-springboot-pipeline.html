@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CI/CD Pipeline for Spring Boot REST API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        code, pre { background-color: #f4f4f4; padding: 10px; display: block; border-left: 3px solid #ccc; white-space: pre-wrap; }
+        h1, h2, h3 { color: #2c3e50; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f9f9f9; }
+        .mermaid { background-color: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>✅ CI/CD Pipeline for Spring Boot REST API</h1>
+<p><strong>Using GitHub + Jenkins + Docker + AWS/Cloud/Linux Server</strong></p>
+
+<h2>🧱 Technologies Involved</h2>
+<ul>
+    <li>Version Control: GitHub/GitLab/Bitbucket</li>
+    <li>CI/CD Tool: Jenkins / GitHub Actions / GitLab CI</li>
+    <li>Build Tool: Maven or Gradle</li>
+    <li>Testing: JUnit, Mockito</li>
+    <li>Containerization: Docker</li>
+    <li>Deployment Target: AWS EC2 / DigitalOcean / On-Premise Linux Server / Kubernetes</li>
+</ul>
+
+<h2>🔁 Pipeline Flow Overview</h2>
+<div class="mermaid">
+<pre><code>graph LR
+A[Code Push to GitHub] --> B[Jenkins Triggered (CI)]
+B --> C[Build with Maven]
+C --> D[Run Tests (JUnit/Mockito)]
+D --> E[Package JAR]
+E --> F[Build Docker Image]
+F --> G[Push Image to DockerHub/ECR]
+G --> H[Deploy to Server or K8s]</code></pre>
+</div>
+
+<h2>🛠️ Jenkins Pipeline (Declarative)</h2>
+<pre><code>pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "your-dockerhub-username/spring-boot-api"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/your-repo/spring-boot-api.git', branch: 'main'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhub-password', variable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                        echo $DOCKER_PASSWORD | docker login -u your-dockerhub-username --password-stdin
+                        docker push $IMAGE_NAME
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'ssh ubuntu@your-server-ip "docker pull $IMAGE_NAME && docker stop app || true && docker rm app || true && docker run -d --name app -p 8080:8080 $IMAGE_NAME"'
+            }
+        }
+    }
+}
+</code></pre>
+
+<h2>📦 Dockerfile</h2>
+<pre><code>FROM openjdk:17-jdk-slim
+VOLUME /tmp
+COPY target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+</code></pre>
+
+<h2>🌐 Sample Spring Boot App Structure</h2>
+<pre><code>spring-boot-api/
+├── src/main/java/com/example/api
+├── src/test/java/com/example/api
+├── Dockerfile
+├── pom.xml
+└── Jenkinsfile
+</code></pre>
+
+<h2>🧪 Add Unit Test Example</h2>
+<pre><code>@SpringBootTest
+class ApiApplicationTests {
+    @Test
+    void contextLoads() {
+    }
+}
+</code></pre>
+
+<h2>📤 GitHub Webhook to Jenkins</h2>
+<ul>
+    <li><strong>URL:</strong> http://your-jenkins-server:8080/github-webhook/</li>
+    <li><strong>Content type:</strong> application/json</li>
+    <li><strong>Trigger:</strong> push events</li>
+</ul>
+
+<h2>🔐 Jenkins Credentials Needed</h2>
+<ul>
+    <li>DockerHub Username & Password (dockerhub-password)</li>
+    <li>SSH Key for server access</li>
+</ul>
+
+<h2>📦 Optional Enhancements</h2>
+<table>
+    <thead>
+        <tr><th>Feature</th><th>Tool</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>Code Quality</td><td>SonarQube</td></tr>
+        <tr><td>Kubernetes Deployment</td><td>Helm + K8s</td></tr>
+        <tr><td>Notification</td><td>Slack/Webhook</td></tr>
+        <tr><td>Secrets</td><td>Vault / Jenkins credentials</td></tr>
+    </tbody>
+</table>
+
+<h2>📄 Result</h2>
+<ul>
+    <li>✅ Fully automated testing and deployment</li>
+    <li>✅ Dockerized build and production image</li>
+    <li>✅ Triggered on every push or merge</li>
+    <li>✅ Secure credentials and versioning</li>
+</ul>
+
+</body>
+</html>

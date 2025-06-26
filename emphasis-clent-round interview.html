@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Angular & Java Q&A Guide</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; color: #333; }
+    h1 { text-align: center; color: #2c3e50; }
+    .search-box { margin-bottom: 20px; text-align: center; }
+    input[type="text"] { padding: 10px; width: 60%; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
+    .faq-item { background: #fff; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px; padding: 15px; }
+    .faq-question { cursor: pointer; font-weight: bold; margin-bottom: 10px; }
+    .faq-answer { display: none; padding-left: 10px; }
+    .faq-item.active .faq-answer { display: block; }
+  </style>
+</head>
+<body>
+  <h1>Angular & Java Q&A Guide</h1>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search for a question...">
+  </div>
+
+  <div id="faqContainer">
+    <!-- Each Q&A item will go here -->
+  </div>
+
+  <script>
+    const data = [
+      {
+        question: "1. How to pass parameter in method reference in Java",
+        answer: `<p>Method references can't directly pass parameters. Instead, use a lambda or wrap the method reference in a lambda that accepts arguments.</p>
+<pre><code>MyInterface ref = message -> System.out.println("Hello " + message);
+ref.printMessage("Alice");
+</code></pre>`
+      },
+      {
+        question: "2. Track all incoming and outgoing REST API requests/responses in Spring Boot",
+        answer: `<p>Use Spring <code>HandlerInterceptor</code> or <code>OncePerRequestFilter</code>. Example:</p>
+<pre><code>@Component
+public class LoggingInterceptor implements HandlerInterceptor {
+  public boolean preHandle(...) {
+    log.info("Request URI: " + request.getRequestURI());
+    return true;
+  }
+}</code></pre>`
+      },
+      {
+        question: "3. When to use JDBC vs JPA in Spring Boot",
+        answer: `<ul>
+<li>Use <strong>JDBC</strong> for performance-critical or SQL-intensive work.</li>
+<li>Use <strong>JPA</strong> for domain-driven development and simplified CRUD.</li>
+<li>Hybrid approach is common in large applications.</li>
+</ul>`
+      },
+      {
+        question: "4. How to categorize a large Angular application",
+        answer: `<p>Use feature-based folder structure, lazy loading, shared/core modules, smart/dumb components. Structure example:</p>
+<pre><code>src/app/
+  core/
+  shared/
+  features/
+    products/
+    cart/
+</code></pre>`
+      },
+      {
+        question: "5. How to support different browsers in Angular app",
+        answer: `<ul>
+<li>Define browser targets in <code>browserslist</code></li>
+<li>Use <code>polyfills.ts</code> for backward compatibility</li>
+<li>Use Autoprefixer (built-in)</li>
+<li>Test in BrowserStack or real browsers</li>
+</ul>`
+      },
+      {
+        question: "6. Store and Signal in Angular",
+        answer: `<p><strong>Signal</strong> is a reactive primitive introduced in Angular 16+. You can build a store using signals:</p>
+<pre><code>const count = signal(0);
+const doubled = computed(() => count() * 2);
+</code></pre>`
+      },
+      {
+        question: "7. Angular Shell",
+        answer: `<ul>
+<li><strong>Microfrontend shell</strong>: Hosts remote Angular apps (via Module Federation)</li>
+<li><strong>Layout shell</strong>: Contains navbar/sidebar/router-outlet</li>
+</ul>`
+      },
+      {
+        question: "8. Zone.js",
+        answer: `<p><strong>Zone.js</strong> lets Angular detect async operations and trigger change detection automatically.</p>
+<pre><code>import 'zone.js';
+</code></pre>`
+      },
+      {
+        question: "9. Change Detection Strategy in Angular",
+        answer: `<ul>
+<li><strong>Default:</strong> Checks all components</li>
+<li><strong>OnPush:</strong> Checks only if inputs change by reference</li>
+<li>Use <code>ChangeDetectorRef</code> for manual control</li>
+</ul>`
+      },
+      {
+        question: "10. Alternatives to NgRx for large Angular apps",
+        answer: `<ul>
+<li>NGXS</li>
+<li>Akita</li>
+<li>RxJS Service-based</li>
+<li>@ngrx/component-store</li>
+<li>Signals (Angular 16+)</li>
+</ul>`
+      },
+      {
+        question: "11. How to design a full Amazon-like portal in Angular",
+        answer: `<ul>
+<li>Use feature-based folders and lazy-loaded modules</li>
+<li>Global services: Auth, ProductService, CartService</li>
+<li>Modules: Products, Cart, Checkout, Orders, Admin</li>
+<li>Responsive design with Bootstrap or Angular Material</li>
+</ul>`
+      }
+    ];
+
+    const container = document.getElementById("faqContainer");
+    data.forEach((item, index) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "faq-item";
+      wrapper.innerHTML = `
+        <div class="faq-question">${item.question}</div>
+        <div class="faq-answer">${item.answer}</div>
+      `;
+      wrapper.querySelector(".faq-question").addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+      container.appendChild(wrapper);
+    });
+
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const value = this.value.toLowerCase();
+      document.querySelectorAll(".faq-item").forEach(item => {
+        const question = item.querySelector(".faq-question").textContent.toLowerCase();
+        item.style.display = question.includes(value) ? "block" : "none";
+      });
+    });
+  </script>
+</body>
+</html>

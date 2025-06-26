@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JUnit & Mockito Interview Guide with Code Examples</title>
+  <meta name="description" content="Top JUnit and Mockito interview questions with explanations and Java code examples.">
+  <meta name="keywords" content="JUnit, Mockito, Spring Boot, Java, Unit Testing, Interview Questions, Mocking">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+    }
+    header, footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    main {
+      max-width: 1000px;
+      margin: auto;
+      background-color: #fff;
+      padding: 2rem;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    details {
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      background: #fafafa;
+      border-radius: 5px;
+    }
+    summary {
+      font-weight: bold;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #003366;
+    }
+    code, pre {
+      background-color: #eef;
+      padding: 8px;
+      display: block;
+      border-left: 4px solid #003366;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    pre {
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>JUnit & Mockito Interview Questions with Code Examples</h1>
+</header>
+
+<main>
+
+<details>
+  <summary>1️⃣ What is the difference between JUnit and Mockito?</summary>
+  <p><strong>JUnit</strong> is used to write and run unit tests.<br>
+     <strong>Mockito</strong> is used to mock dependencies and isolate units of code.</p>
+  <pre><code>// JUnit test
+@Test
+void testSum() {
+    assertEquals(4, 2 + 2);
+}
+
+// Mockito mock
+@Mock
+MyRepository repository;</code></pre>
+</details>
+
+<details>
+  <summary>2️⃣ What is mocking?</summary>
+  <p>Mocking creates dummy objects of classes/interfaces to simulate behavior for unit testing.</p>
+  <pre><code>@Mock
+EmailService emailService;
+
+when(emailService.send(anyString())).thenReturn(true);</code></pre>
+</details>
+
+<details>
+  <summary>3️⃣ What does @Mock do?</summary>
+  <p>It creates a mock instance of a class/interface.</p>
+  <pre><code>@Mock
+UserRepository userRepository;
+
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
+    @InjectMocks
+    UserService service;
+}</code></pre>
+</details>
+
+<details>
+  <summary>4️⃣ What is @InjectMocks?</summary>
+  <p>It injects mock dependencies into the object under test.</p>
+  <pre><code>@InjectMocks
+UserService userService;
+
+@Mock
+UserRepository userRepository;</code></pre>
+</details>
+
+<details>
+  <summary>5️⃣ What is @WebMvcTest?</summary>
+  <p>It is used to test Spring MVC controllers in isolation (without loading full context).</p>
+  <pre><code>@WebMvcTest(UserController.class)
+class UserControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private UserService userService;
+
+    @Test
+    void getUserTest() throws Exception {
+        when(userService.getUser(1L)).thenReturn(new User(1L, "John"));
+
+        mockMvc.perform(get("/users/1"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.name").value("John"));
+    }
+}</code></pre>
+</details>
+
+<details>
+  <summary>6️⃣ What is MockMvc?</summary>
+  <p>MockMvc simulates HTTP requests for testing Spring controllers without running a real server.</p>
+  <pre><code>mockMvc.perform(post("/api/save")
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"name\":\"Test\"}"))
+    .andExpect(status().isCreated());</code></pre>
+</details>
+
+<details>
+  <summary>7️⃣ What is any() in Mockito?</summary>
+  <p><code>any()</code> is a matcher that accepts any argument of a given type.</p>
+  <pre><code>when(userRepo.save(any(User.class)))
+    .thenReturn(new User(1L, "Test"));</code></pre>
+</details>
+
+<details>
+  <summary>8️⃣ Difference between any() and eq() in Mockito?</summary>
+  <p><code>any()</code> matches any value, <code>eq()</code> matches exact value.</p>
+  <pre><code>// any()
+when(service.save(anyString())).thenReturn("done");
+
+// eq()
+when(service.save(eq("admin"))).thenReturn("admin saved");</code></pre>
+</details>
+
+<details>
+  <summary>9️⃣ What is @DataJpaTest?</summary>
+  <p>It configures an in-memory database to test JPA repositories.</p>
+  <pre><code>@DataJpaTest
+class UserRepositoryTest {
+
+    @Autowired
+    UserRepository repository;
+
+    @Test
+    void testFindById() {
+        User u = new User(null, "A");
+        repository.save(u);
+        assertTrue(repository.findById(u.getId()).isPresent());
+    }
+}</code></pre>
+</details>
+
+<details>
+  <summary>🔟 How do you test exceptions in JUnit 5?</summary>
+  <pre><code>assertThrows(RuntimeException.class, () -> {
+    service.findById(-1L);
+});</code></pre>
+</details>
+
+<details>
+  <summary>1️⃣1️⃣ What is verify() in Mockito?</summary>
+  <p>It checks if a method was called on a mock.</p>
+  <pre><code>verify(userRepository).findById(1L);</code></pre>
+</details>
+
+<details>
+  <summary>1️⃣2️⃣ How do you test a controller with path variables and body?</summary>
+  <pre><code>mockMvc.perform(put("/users/1")
+    .contentType(MediaType.APPLICATION_JSON)
+    .content("{\"name\":\"Updated\"}"))
+    .andExpect(status().isOk());</code></pre>
+</details>
+
+</main>
+
+<footer>
+  <p>&copy; 2025 Java Testing Interview Guide</p>
+</footer>
+
+</body>
+</html>

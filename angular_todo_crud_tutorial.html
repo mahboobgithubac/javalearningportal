@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Angular ToDo CRUD App Tutorial</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; }
+    h1, h2 { color: #333; }
+    section { background: #fff; margin-bottom: 20px; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    pre { background: #eee; padding: 10px; overflow-x: auto; border-left: 5px solid #007acc; }
+    code { font-family: Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <h1>Angular ToDo CRUD App - Step-by-Step Tutorial (with Filter, Search & Pagination)</h1>
+ <h1>📁 Angular ToDo App – Folder Structure</h1>
+
+  <pre><code>todo-crud-app/
+├── src/
+│   ├── app/
+│   │   ├── todo/                      # Feature module/folder
+│   │   │   ├── todo.component.ts      # Component logic
+│   │   │   ├── todo.component.html    # Component template
+│   │   │   ├── todo.component.css     # Component styling
+│   │   │   ├── todo.service.ts        # REST API service
+│   │   │   ├── todo.model.ts          # Data model (interface)
+│   │   │   └── todo.module.ts         # (optional) Feature module
+│   │   ├── app.component.ts
+│   │   ├── app.component.html
+│   │   ├── app.component.css
+│   │   ├── app.module.ts              # Main app module
+│   │   └── ...
+│   ├── assets/                        # Static files (logo, CSS, etc.)
+│   ├── environments/
+│   │   ├── environment.ts             # Dev env config
+│   │   └── environment.prod.ts        # Prod env config
+│   └── index.html
+├── angular.json                       # Angular config
+├── package.json                       # Project dependencies
+├── tsconfig.json                      # TypeScript config
+└── README.md
+</code></pre>
+
+  <h2>📦 Folder Breakdown</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Folder/File</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>todo/</code></td>
+        <td>All logic related to the ToDo feature is isolated here</td>
+      </tr>
+      <tr>
+        <td><code>todo.service.ts</code></td>
+        <td>Makes REST API calls using HttpClient</td>
+      </tr>
+      <tr>
+        <td><code>todo.model.ts</code></td>
+        <td>Type-safe interface for Todo object</td>
+      </tr>
+      <tr>
+        <td><code>todo.component.*</code></td>
+        <td>Angular UI logic, view, and styling</td>
+      </tr>
+      <tr>
+        <td><code>app.module.ts</code></td>
+        <td>Registers HttpClientModule and declares components</td>
+      </tr>
+      <tr>
+        <td><code>environments/</code></td>
+        <td>Holds base URLs for API based on build (dev/prod)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🌐 Optional Enhancement – Feature Module</h2>
+  <p>You can further modularize the app with <code>TodoModule</code> if it grows larger:</p>
+
+  <pre><code>// todo.module.ts
+@NgModule({
+  declarations: [TodoComponent],
+  imports: [CommonModule, FormsModule],
+  exports: [TodoComponent]
+})
+export class TodoModule {}
+</code></pre>
+
+  <p>Then import <code>TodoModule</code> into <code>AppModule</code>.</p>
+  <section>
+    <h2>1. Create Angular App</h2>
+    <pre><code>ng new todo-crud-app
+cd todo-crud-app
+ng generate component todo
+ng generate service todo
+ng serve</code></pre>
+  </section>
+
+  <section>
+    <h2>2. Create Model - todo.model.ts</h2>
+    <pre><code>export interface Todo {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>3. Create Service - todo.service.ts</h2>
+    <pre><code>import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Todo } from './todo.model';
+
+@Injectable({ providedIn: 'root' })
+export class TodoService {
+  private todos: Todo[] = [];
+  private todoSubject = new BehaviorSubject<Todo[]>(this.todos);
+
+  getTodos(): Observable<Todo[]> {
+    return this.todoSubject.asObservable();
+  }
+
+  addTodo(todo: Todo): void {
+    todo.id = this.todos.length + 1;
+    this.todos.push(todo);
+    this.todoSubject.next(this.todos);
+  }
+
+  updateTodo(updated: Todo): void {
+    const index = this.todos.findIndex(t => t.id === updated.id);
+    if (index !== -1) {
+      this.todos[index] = updated;
+      this.todoSubject.next(this.todos);
+    }
+  }
+
+  deleteTodo(id: number): void {
+    this.todos = this.todos.filter(t => t.id !== id);
+    this.todoSubject.next(this.todos);
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>4. Component Logic - todo.component.ts</h2>
+    <pre><code>import { Component, OnInit } from '@angular/core';
+import { Todo } from '../todo.model';
+import { TodoService } from '../todo.service';
+
+@Component({
+  selector: 'app-todo',
+  templateUrl: './todo.component.html',
+  styleUrls: ['./todo.component.css']
+})
+export class TodoComponent implements OnInit {
+  todos: Todo[] = [];
+  formData: Todo = { id: 0, title: '', description: '', completed: false };
+  isEditing = false;
+
+  searchText: string = '';
+  filterCompleted: string = 'all';
+  currentPage: number = 1;
+  todosPerPage: number = 5;
+
+  constructor(private todoService: TodoService) {}
+
+  ngOnInit(): void {
+    this.todoService.getTodos().subscribe(data => this.todos = data);
+  }
+
+  get filteredTodos(): Todo[] {
+    let filtered = this.todos;
+    if (this.filterCompleted !== 'all') {
+      filtered = filtered.filter(todo =>
+        this.filterCompleted === 'completed' ? todo.completed : !todo.completed);
+    }
+    if (this.searchText) {
+      filtered = filtered.filter(todo =>
+        todo.title.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        todo.description.toLowerCase().includes(this.searchText.toLowerCase()));
+    }
+    return filtered;
+  }
+
+  get paginatedTodos(): Todo[] {
+    const start = (this.currentPage - 1) * this.todosPerPage;
+    return this.filteredTodos.slice(start, start + this.todosPerPage);
+  }
+
+  changePage(page: number): void {
+    this.currentPage = page;
+  }
+
+  submit(): void {
+    if (this.isEditing) {
+      this.todoService.updateTodo(this.formData);
+    } else {
+      this.todoService.addTodo(this.formData);
+    }
+    this.resetForm();
+  }
+
+  edit(todo: Todo): void {
+    this.formData = { ...todo };
+    this.isEditing = true;
+  }
+
+  delete(id: number): void {
+    this.todoService.deleteTodo(id);
+  }
+
+  resetForm(): void {
+    this.formData = { id: 0, title: '', description: '', completed: false };
+    this.isEditing = false;
+  }
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>5. Template - todo.component.html</h2>
+    <pre><code>&lt;div class=&quot;container&quot;&gt;
+  &lt;h2&gt;Angular ToDo CRUD App&lt;/h2&gt;
+
+  &lt;form (submit)=&quot;submit()&quot;&gt;
+    &lt;input [(ngModel)]=&quot;formData.title&quot; name=&quot;title&quot; placeholder=&quot;Title&quot; required /&gt;
+    &lt;input [(ngModel)]=&quot;formData.description&quot; name=&quot;description&quot; placeholder=&quot;Description&quot; required /&gt;
+    &lt;label&gt;
+      &lt;input type=&quot;checkbox&quot; [(ngModel)]=&quot;formData.completed&quot; name=&quot;completed&quot; /&gt;
+      Completed
+    &lt;/label&gt;
+    &lt;button type=&quot;submit&quot;&gt;{{ isEditing ? 'Update' : 'Add' }} Todo&lt;/button&gt;
+    &lt;button type=&quot;button&quot; (click)=&quot;resetForm()&quot;&gt;Clear&lt;/button&gt;
+  &lt;/form&gt;
+
+  &lt;div&gt;
+    &lt;input [(ngModel)]="searchText" placeholder="Search todos" /&gt;
+    &lt;select [(ngModel)]="filterCompleted"&gt;
+      &lt;option value="all"&gt;All&lt;/option&gt;
+      &lt;option value="completed"&gt;Completed&lt;/option&gt;
+      &lt;option value="incomplete"&gt;Incomplete&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+
+  &lt;ul&gt;
+    &lt;li *ngFor="let todo of paginatedTodos"&gt;
+      &lt;strong&gt;{{ todo.title }}&lt;/strong&gt;: {{ todo.description }}
+      &lt;span *ngIf="todo.completed"&gt;(Done)&lt;/span&gt;
+      &lt;button (click)="edit(todo)"&gt;Edit&lt;/button&gt;
+      &lt;button (click)="delete(todo.id)"&gt;Delete&lt;/button&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;div&gt;
+    &lt;button *ngFor="let p of [].constructor(Math.ceil(filteredTodos.length / todosPerPage)); let i = index" (click)="changePage(i + 1)"&gt;
+      {{ i + 1 }}
+    &lt;/button&gt;
+  &lt;/div&gt;
+
+&lt;/div&gt;</code></pre>
+  </section>
+
+  <section>
+    <h2>6. Style - todo.component.css</h2>
+    <pre><code>.container {
+  max-width: 600px;
+  margin: auto;
+}
+
+input {
+  margin: 5px;
+}
+
+button {
+  margin: 5px;
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>7. Use Component in App</h2>
+    <pre><code>&lt;app-todo&gt;&lt;/app-todo&gt;</code></pre>
+  </section>
+
+</body>
+</html>

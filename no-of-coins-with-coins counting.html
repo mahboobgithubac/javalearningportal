@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Java Coin Calculator - Minimum Coins</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header, footer {
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    main {
+      padding: 30px;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #e8eaf6;
+      padding: 15px;
+      border-left: 5px solid #3f51b5;
+      overflow-x: auto;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    .output-box {
+      background-color: #d0f0c0;
+      padding: 15px;
+      border-left: 5px solid #4caf50;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Minimum Coin Calculator - Java Implementation</h1>
+  </header>
+
+  <main>
+    <div class="section">
+      <h2>Description:</h2>
+      <p>This Java program calculates the <strong>minimum number of coins</strong> required to make a given amount using the available coin denominations <code>{10, 5, 2, 1}</code>. It uses a greedy algorithm, always subtracting the largest denomination first and then moving to smaller ones.</p>
+    </div>
+
+    <div class="section">
+      <h2>Java Code:</h2>
+      <pre>
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+        int[] coins = {10, 5, 2, 1}; // sorted descending
+        int amount = 108;
+        int count = 0;
+
+        Map&lt;Integer, Integer&gt; coinUsage = new LinkedHashMap&lt;&gt;();
+
+        for (int coin : coins) {
+            if (amount >= coin) {
+                int used = amount / coin;
+                count += used;
+                amount = amount % coin;
+                coinUsage.put(coin, used);
+            }
+        }
+
+        System.out.println("Minimum number of coins: " + count);
+        System.out.println("Coins used:");
+        for (Map.Entry&lt;Integer, Integer&gt; entry : coinUsage.entrySet()) {
+            System.out.println("Coin " + entry.getKey() + " used: " + entry.getValue() + " times");
+        }
+    }
+}
+      </pre>
+    </div>
+
+    <div class="section">
+      <h2>Sample Output (for Amount = 108):</h2>
+      <div class="output-box">
+        Minimum number of coins: <strong>13</strong><br/>
+        Coins used:<br/>
+        Coin 10 used: 10 times<br/>
+        Coin 5 used: 1 time<br/>
+        Coin 2 used: 1 time<br/>
+        Coin 1 used: 1 time
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Java Programming Projects | Coin Calculator</p>
+  </footer>
+
+</body>
+</html>

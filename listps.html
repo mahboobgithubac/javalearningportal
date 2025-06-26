@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java 8 List Problem Solving</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Java 8 List Stream API Problems and Solutions with Explanation and Output">
+  <meta name="keywords" content="Java 8, Stream API, List problems, Interview, Java problem solving, Code examples">
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+    }
+    nav {
+      width: 250px;
+      background-color: #2c3e50;
+      height: 100vh;
+      color: white;
+      overflow-y: auto;
+      padding: 20px 0;
+    }
+    nav h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    nav li {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    nav li:hover {
+      background-color: #34495e;
+    }
+    main {
+      flex: 1;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    section {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      background-color: white;
+      border-radius: 5px;
+    }
+    section h3 {
+      margin: 0;
+      padding: 15px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+    .content {
+      padding: 15px;
+      display: none;
+    }
+    pre {
+      background: #eef;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+  </style>
+
+  <script>
+    function toggleContent(id) {
+      const content = document.getElementById(id);
+      content.style.display = content.style.display === "none" ? "block" : "none";
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h2>List Q&A</h2>
+    <ul>
+      <li onclick="scrollToSection('q1')">1. Frequency of elements</li>
+      <li onclick="scrollToSection('q2')">2. Remove duplicates</li>
+      <li onclick="scrollToSection('q3')">3. Max and Min</li>
+      <li onclick="scrollToSection('q4')">4. Sum and Average</li>
+      <li onclick="scrollToSection('q5')">5. Sort Asc/Desc</li>
+      <li onclick="scrollToSection('q6')">6. Count even numbers</li>
+      <li onclick="scrollToSection('q7')">7. Square each element</li>
+      <li onclick="scrollToSection('q8')">8. Filter > 5</li>
+      <li onclick="scrollToSection('q9')">9. Group by parity</li>
+      <li onclick="scrollToSection('q10')">10. First > 5</li>
+      <li onclick="scrollToSection('q11')">11. Count distinct</li>
+      <li onclick="scrollToSection('q12')">12. Find duplicates</li>
+      <li onclick="scrollToSection('q13')">13. Comma-separated</li>
+      <li onclick="scrollToSection('q14')">14. All positive?</li>
+      <li onclick="scrollToSection('q15')">15. Partition even/odd</li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1>Java 8 List Problem Solving</h1>
+
+    <!-- Repeat this section for each Q&A -->
+    <section id="q1">
+      <h3 onclick="toggleContent('a1')">1. Frequency of elements</h3>
+      <div class="content" id="a1">
+        <pre>
+Map&lt;Integer, Long&gt; freqMap = list.stream()
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+// Output: {1=1, 3=3, 5=2, 7=1, 9=1}
+        </pre>
+      </div>
+    </section>
+
+    <section id="q2">
+      <h3 onclick="toggleContent('a2')">2. Remove duplicates</h3>
+      <div class="content" id="a2">
+        <pre>
+List&lt;Integer&gt; distinctList = list.stream().distinct().collect(Collectors.toList());
+// Output: [3, 5, 9, 1, 7]
+        </pre>
+      </div>
+    </section>
+
+    <section id="q3">
+      <h3 onclick="toggleContent('a3')">3. Max and Min</h3>
+      <div class="content" id="a3">
+        <pre>
+int max = list.stream().max(Integer::compareTo).orElse(-1);
+int min = list.stream().min(Integer::compareTo).orElse(-1);
+// Output: Max = 9, Min = 1
+        </pre>
+      </div>
+    </section>
+
+    <section id="q4">
+      <h3 onclick="toggleContent('a4')">4. Sum and Average</h3>
+      <div class="content" id="a4">
+        <pre>
+int sum = list.stream().mapToInt(i -&gt; i).sum();
+double avg = list.stream().mapToInt(i -&gt; i).average().orElse(0.0);
+// Output: Sum = 36, Avg = 4.5
+        </pre>
+      </div>
+    </section>
+
+    <section id="q5">
+      <h3 onclick="toggleContent('a5')">5. Sort Ascending and Descending</h3>
+      <div class="content" id="a5">
+        <pre>
+List&lt;Integer&gt; asc = list.stream().sorted().collect(Collectors.toList());
+List&lt;Integer&gt; desc = list.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+// Output: Asc: [1, 3, 3, 3, 5, 5, 7, 9]
+//         Desc: [9, 7, 5, 5, 3, 3, 3, 1]
+        </pre>
+      </div>
+    </section>
+
+    <section id="q6">
+      <h3 onclick="toggleContent('a6')">6. Count even numbers</h3>
+      <div class="content" id="a6">
+        <pre>
+long evenCount = list.stream().filter(i -&gt; i % 2 == 0).count();
+// Output: 0
+        </pre>
+      </div>
+    </section>
+
+    <section id="q7">
+      <h3 onclick="toggleContent('a7')">7. Square each element</h3>
+      <div class="content" id="a7">
+        <pre>
+List&lt;Integer&gt; squared = list.stream().map(i -&gt; i * i).collect(Collectors.toList());
+// Output: [9, 25, 9, 81, 1, 25, 49, 9]
+        </pre>
+      </div>
+    </section>
+
+    <section id="q8">
+      <h3 onclick="toggleContent('a8')">8. Filter numbers &gt; 5</h3>
+      <div class="content" id="a8">
+        <pre>
+List&lt;Integer&gt; gtFive = list.stream().filter(i -&gt; i &gt; 5).collect(Collectors.toList());
+// Output: [9, 7]
+        </pre>
+      </div>
+    </section>
+
+    <section id="q9">
+      <h3 onclick="toggleContent('a9')">9. Group by Even/Odd</h3>
+      <div class="content" id="a9">
+        <pre>
+Map&lt;String, List&lt;Integer&gt;&gt; parityGroup = list.stream()
+    .collect(Collectors.groupingBy(i -&gt; i % 2 == 0 ? "Even" : "Odd"));
+// Output: {Odd=[3, 5, 3, 9, 1, 5, 7, 3]}
+        </pre>
+      </div>
+    </section>
+
+    <section id="q10">
+      <h3 onclick="toggleContent('a10')">10. First element &gt; 5</h3>
+      <div class="content" id="a10">
+        <pre>
+Optional&lt;Integer&gt; firstGT5 = list.stream().filter(i -&gt; i &gt; 5).findFirst();
+// Output: 9
+        </pre>
+      </div>
+    </section>
+
+    <section id="q11">
+      <h3 onclick="toggleContent('a11')">11. Count distinct elements</h3>
+      <div class="content" id="a11">
+        <pre>
+long distinctCount = list.stream().distinct().count();
+// Output: 5
+        </pre>
+      </div>
+    </section>
+
+    <section id="q12">
+      <h3 onclick="toggleContent('a12')">12. Find duplicates</h3>
+      <div class="content" id="a12">
+        <pre>
+Set&lt;Integer&gt; duplicates = list.stream()
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+    .entrySet().stream().filter(e -&gt; e.getValue() &gt; 1)
+    .map(Map.Entry::getKey).collect(Collectors.toSet());
+// Output: [3, 5]
+        </pre>
+      </div>
+    </section>
+
+    <section id="q13">
+      <h3 onclick="toggleContent('a13')">13. Comma-separated string</h3>
+      <div class="content" id="a13">
+        <pre>
+String joined = list.stream().map(String::valueOf).collect(Collectors.joining(", "));
+// Output: "3, 5, 3, 9, 1, 5, 7, 3"
+        </pre>
+      </div>
+    </section>
+
+    <section id="q14">
+      <h3 onclick="toggleContent('a14')">14. All elements positive?</h3>
+      <div class="content" id="a14">
+        <pre>
+boolean allPositive = list.stream().allMatch(i -&gt; i &gt; 0);
+// Output: true
+        </pre>
+      </div>
+    </section>
+
+    <section id="q15">
+      <h3 onclick="toggleContent('a15')">15. Partition into Even and Odd</h3>
+      <div class="content" id="a15">
+        <pre>
+Map&lt;Boolean, List&lt;Integer&gt;&gt; partitioned = list.stream()
+    .collect(Collectors.partitioningBy(i -&gt; i % 2 == 0));
+// Output: {false=[3, 5, 3, 9, 1, 5, 7, 3], true=[]}
+        </pre>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

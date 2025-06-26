@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular Interview Questions & Examples</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+    h1, h2 { text-align: center; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .question { margin: 15px 0; cursor: pointer; font-weight: bold; color: #007BFF; }
+    .answer { display: none; padding: 10px; background: #fff; border-left: 4px solid #007BFF; margin-bottom: 15px; border-radius: 5px; }
+    pre { background: #eee; padding: 10px; overflow-x: auto; border-radius: 5px; }
+    code { font-family: Consolas, monospace; }
+  </style>
+  <script>
+    function toggleAnswer(id) {
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Angular Interview Questions with Code Examples</h1>
+    <div id="qa-container">
+      <!-- Questions 1 to 45 -->
+      <!-- For brevity, only questions 1 to 10 shown here. Full version will include all 45 questions. -->
+
+      <div class="question" onclick="toggleAnswer('q1')">1. What is Angular?</div>
+      <div class="answer" id="q1">
+        Angular is a TypeScript-based open-source front-end web application platform developed by Google.
+        <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: '<h1>Hello Angular</h1>'
+})
+export class AppComponent {}</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q2')">2. What are the key features of Angular?</div>
+      <div class="answer" id="q2">
+        Component-based architecture, Two-way binding, Dependency Injection, Directives, RxJS.
+        <pre><code>// Two-way binding
+<input [(ngModel)]="username">
+<p>Hello {{username}}</p></code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q3')">3. What is a component in Angular?</div>
+      <div class="answer" id="q3">
+        A component controls a part of the UI and consists of a TypeScript class, HTML template, and CSS.
+        <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-user',
+  template: '<p>User works!</p>'
+})
+export class UserComponent {}</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q4')">4. What is a module in Angular?</div>
+      <div class="answer" id="q4">
+        Modules help organize an application into cohesive blocks of functionality.
+        <pre><code>import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+@NgModule({
+  imports: [BrowserModule],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q5')">5. Explain the structure of an Angular application.</div>
+      <div class="answer" id="q5">
+        Main parts: Modules, Components, Templates, Services, Routing, and Dependency Injection.
+        <pre><code>// Folder structure example
+src/
+  app/
+    app.component.ts
+    app.module.ts
+    user/
+      user.component.ts</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q6')">6. What is data binding in Angular?</div>
+      <div class="answer" id="q6">
+        Data binding connects component logic with the UI.
+        <pre><code>// Interpolation
+<p>{{ title }}</p>
+
+// Property binding
+<img [src]="imagePath">
+
+// Event binding
+<button (click)="handleClick()">Click</button>
+
+// Two-way binding
+<input [(ngModel)]="name"></code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q7')">7. What are directives in Angular?</div>
+      <div class="answer" id="q7">
+        Directives are instructions in the DOM. Types: Structural and Attribute directives.
+        <pre><code>// ngIf structural directive
+<p *ngIf="isVisible">Visible Text</p>
+
+// ngStyle attribute directive
+<p [ngStyle]="{color: 'red'}">Styled Text</p></code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q8')">8. What is the role of ngIf, ngFor, and ngSwitch?</div>
+      <div class="answer" id="q8">
+        ngIf: Conditional rendering, ngFor: Looping, ngSwitch: Conditional multiple blocks.
+        <pre><code>// ngIf
+<p *ngIf="show">Hello</p>
+
+// ngFor
+<li *ngFor="let item of items">{{item}}</li>
+
+// ngSwitch
+<div [ngSwitch]="color">
+  <p *ngSwitchCase="'red'">Red</p>
+  <p *ngSwitchCase="'blue'">Blue</p>
+  <p *ngSwitchDefault>Other</p>
+</div></code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q9')">9. How do you handle forms in Angular?</div>
+      <div class="answer" id="q9">
+        Template-driven and Reactive forms are used in Angular.
+        <pre><code>// Template-driven
+<form #form="ngForm">
+  <input name="username" ngModel required>
+</form>
+
+// Reactive
+form = this.fb.group({ username: [''] });</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q10')">10. What is Angular CLI and how do you use it?</div>
+      <div class="answer" id="q10">
+        CLI is a command-line tool to create and manage Angular projects.
+        <pre><code>// Install Angular CLI
+npm install -g @angular/cli
+
+// Create a new project
+ng new my-app
+
+// Serve project
+cd my-app
+ng serve</code></pre>
+      </div>
+
+      <!-- Questions 11 to 45 will be added next phase -->
+	     <div class="question" onclick="toggleAnswer('q11')">11. What is two-way data binding in Angular?</div>
+      <div class="answer" id="q11">
+        Two-way data binding binds the component’s data to the UI and vice versa.
+        <pre><code><input [(ngModel)]="username">
+<p>{{username}}</p></code></pre>
+<a href="two-way-data-binding.html">more</a>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q12')">12. Explain dependency injection in Angular.</div>
+      <div class="answer" id="q12">
+        DI is a design pattern used to supply a class with its dependencies.
+        <pre><code>@Injectable({ providedIn: 'root' })
+export class DataService {}
+
+constructor(private dataService: DataService) {}</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q13')">13. What are services and how are they used?</div>
+      <div class="answer" id="q13">
+        Services hold business logic and are injected into components.
+        <pre><code>@Injectable()
+export class LoggerService {
+  log(msg: string) { console.log(msg); }
+}</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q14')">14. What are lifecycle hooks in Angular?</div>
+      <div class="answer" id="q14">
+        Lifecycle hooks allow you to tap into key events: ngOnInit, ngOnDestroy, etc.
+        <pre><code>ngOnInit() {
+  console.log('Component initialized');
+}</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q15')">15. What is RxJS and how is it used?</div>
+      <div class="answer" id="q15">
+        RxJS provides reactive programming using Observables.
+        <pre><code>import { of } from 'rxjs';
+of(1, 2, 3).subscribe(console.log);</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q16')">16. Difference between Observable and Promise?</div>
+      <div class="answer" id="q16">
+        Observable is lazy, supports multiple values and cancellable. Promise is eager and single value.
+        <pre><code>// Observable
+obs$.subscribe();
+
+// Promise
+promise.then();</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q17')">17. How does routing work in Angular?</div>
+      <div class="answer" id="q17">
+        Routing allows navigation between views.
+        <pre><code>const routes: Routes = [
+  { path: 'home', component: HomeComponent }
+];
+
+@NgModule({ imports: [RouterModule.forRoot(routes)] })</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q18')">18. What is lazy loading?</div>
+      <div class="answer" id="q18">
+        Lazy loading loads feature modules on demand.
+        <pre><code>{
+  path: 'admin',
+  loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+}</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q19')">19. Difference between @Input and @Output?</div>
+      <div class="answer" id="q19">
+        @Input sends data to child, @Output sends data to parent.
+        <pre><code>@Input() data: string;
+@Output() event = new EventEmitter();</code></pre>
+      </div>
+
+      <div class="question" onclick="toggleAnswer('q20')">20. How do you share data between components?</div>
+      <div class="answer" id="q20">
+        Via input/output, services, or shared module.
+        <pre><code>// Service with BehaviorSubject
+private data = new BehaviorSubject<string>('');
+data$ = this.data.asObservable();</code></pre>
+      </div>
+ <div class="question" onclick="toggleAnswer('q45')">45. Explain a time when you optimized an Angular app for performance.</div>
+      <div class="answer" id="q45">
+        Used OnPush strategy, lazy loading, and memoization to improve performance.
+        <pre><code>@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush
+})</code></pre>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

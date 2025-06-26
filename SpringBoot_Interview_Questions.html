@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot Interview Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    h1 {
+      text-align: center;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-left: 5px solid #3498db;
+      overflow-x: auto;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      font-size: 90%;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    ul {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Spring Boot Interview Questions</h1>
+
+  <section>
+    <h2>🔹 Basic Level</h2>
+    <p><strong>1. What is Spring Boot?</strong><br>
+    Spring Boot is a framework that simplifies the development of Spring applications by providing:</p>
+    <ul>
+      <li>Auto-configuration</li>
+      <li>Embedded servers (like Tomcat)</li>
+      <li>Opinionated starter dependencies</li>
+      <li>Production-ready features (e.g., health checks, metrics)</li>
+    </ul>
+
+    <p><strong>2. What are the advantages of Spring Boot?</strong></p>
+    <ul>
+      <li>Reduces boilerplate code</li>
+      <li>No need for external server deployment</li>
+      <li>Auto-configuration based on classpath</li>
+      <li>Starter templates for dependencies</li>
+      <li>Production-ready features (Actuator)</li>
+    </ul>
+
+    <p><strong>3. What are Starters in Spring Boot?</strong><br>
+    Starters are pre-defined dependencies that simplify build configuration.</p>
+    <pre>
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+    </pre>
+
+    <p><strong>4. How does Spring Boot auto-configuration work?</strong><br>
+    It uses <code>@EnableAutoConfiguration</code> and classpath scanning to automatically configure beans.</p>
+
+    <p><strong>5. How do you create a Spring Boot application?</strong></p>
+    <pre>
+@SpringBootApplication
+public class App {
+  public static void main(String[] args) {
+    SpringApplication.run(App.class, args);
+  }
+}
+    </pre>
+
+    <p><strong>6. What is @SpringBootApplication?</strong><br>
+    A convenience annotation that includes:</p>
+    <ul>
+      <li>@Configuration</li>
+      <li>@EnableAutoConfiguration</li>
+      <li>@ComponentScan</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>🔹 Intermediate Level</h2>
+
+    <p><strong>7. What is Spring Boot Actuator?</strong><br>
+    Provides production-ready features like health checks, metrics, and environment info at endpoints like <code>/actuator/health</code>.</p>
+
+    <p><strong>8. How do you handle exceptions in Spring Boot?</strong></p>
+    <pre>
+@ControllerAdvice
+public class GlobalExceptionHandler {
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity&lt;String&gt; handleException(Exception e) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+  }
+}
+    </pre>
+
+    <p><strong>9. How to connect Spring Boot with a database?</strong></p>
+    <pre>
+spring.datasource.url=jdbc:mysql://localhost:3306/db
+spring.datasource.username=root
+spring.datasource.password=pass
+spring.jpa.hibernate.ddl-auto=update
+    </pre>
+
+    <p><strong>10. Difference between @Component, @Service, @Repository, and @Controller?</strong></p>
+    <ul>
+      <li>@Component – Generic bean</li>
+      <li>@Service – Business logic layer</li>
+      <li>@Repository – Data access layer</li>
+      <li>@Controller – Web controller (MVC)</li>
+    </ul>
+
+    <p><strong>11. What are Profiles in Spring Boot?</strong><br>
+    Used to define environment-specific configurations using <code>@Profile</code>.</p>
+
+    <p><strong>12. How to configure properties in Spring Boot?</strong><br>
+    Use <code>application.properties</code> or <code>application.yml</code> and bind them using <code>@Value</code> or <code>@ConfigurationProperties</code>.</p>
+
+    <p><strong>13. How do you implement logging in Spring Boot?</strong></p>
+    <pre>
+logging.level.root=INFO
+logging.level.org.springframework=DEBUG
+    </pre>
+
+    <p><strong>14. How do you test a Spring Boot application?</strong><br>
+    Use <code>@SpringBootTest</code> for integration tests and <code>@WebMvcTest</code>, <code>@DataJpaTest</code> for slice tests.</p>
+  </section>
+
+  <section>
+    <h2>🔹 Advanced Level</h2>
+
+    <p><strong>15. What is Spring Boot DevTools?</strong><br>
+    Provides live reload, automatic restart, and better developer experience.</p>
+
+    <p><strong>16. Explain the Spring Boot Starter Parent.</strong><br>
+    It provides default configurations for Maven such as dependency versions, Java version, and plugin settings.</p>
+
+    <p><strong>17. What is the use of CommandLineRunner and ApplicationRunner?</strong></p>
+    <pre>
+@Bean
+public CommandLineRunner run() {
+  return args -> System.out.println("Application started");
+}
+    </pre>
+
+    <p><strong>18. How does Spring Boot support microservices?</strong><br>
+    Via Spring MVC for REST APIs, Spring Cloud Config, Eureka for discovery, Resilience4j, and Spring Cloud Gateway.</p>
+
+    <p><strong>19. Difference between Spring Boot and Spring MVC?</strong><br>
+    Spring Boot simplifies configuration and includes embedded servers, while Spring MVC is the web framework part.</p>
+
+    <p><strong>20. What is the use of @EnableAutoConfiguration?</strong><br>
+    Enables Spring Boot’s auto-configuration based on classpath settings.</p>
+  </section>
+
+  <section>
+    <h2>🔹 Bonus: Microservice-Specific Spring Boot Questions</h2>
+
+    <p><strong>21. How do you create a REST API in Spring Boot?</strong></p>
+    <pre>
+@RestController
+@RequestMapping("/api")
+public class UserController {
+  @GetMapping("/users")
+  public List&lt;User&gt; getUsers() {
+    return userService.getAllUsers();
+  }
+}
+    </pre>
+
+    <p><strong>22. How do you implement security in Spring Boot?</strong><br>
+    Use Spring Security and configure it with <code>SecurityFilterChain</code> or <code>WebSecurityConfigurerAdapter</code> (deprecated in newer versions).</p>
+
+    <p><strong>23. What is the difference between @RestController and @Controller?</strong><br>
+    <code>@RestController</code> = <code>@Controller</code> + <code>@ResponseBody</code><br>
+    Used for REST APIs that return JSON/XML directly.</p>
+
+    <p><strong>24. What are common annotations used in Spring Boot?</strong></p>
+    <ul>
+      <li>@SpringBootApplication</li>
+      <li>@RestController, @RequestMapping, @GetMapping/@PostMapping</li>
+      <li>@Service, @Repository, @Autowired</li>
+      <li>@Entity, @Id</li>
+      <li>@EnableJpaRepositories</li>
+      <li>@ComponentScan, @Configuration</li>
+    </ul>
+  </section>
+
+</body>
+</html>
+	

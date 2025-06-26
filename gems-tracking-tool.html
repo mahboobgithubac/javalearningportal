@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GEMs Tracking Tool Architecture Overview - Full Stack Web Application using Microservices-inspired Layered Architecture">
+    <meta name="keywords" content="GEMs Tracking, Architecture, Spring Boot, ReactJS, MySQL, REST API, Full Stack App">
+    <meta name="author" content="Your Name">
+    <title>GEMs Tracking Tool – Architecture Overview</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        header, footer {
+            background-color: #003366;
+            color: white;
+        }
+        footer {
+            padding: 10px 0;
+            margin-top: 40px;
+        }
+        .architecture-diagram {
+            font-family: monospace;
+            background-color: #eef1f5;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+<header class="p-4 text-center">
+    <h1>GEMs Tracking Tool</h1>
+    <p class="lead">Architecture Overview</p>
+</header>
+
+<div class="container my-5">
+
+    <section class="mb-4">
+        <h2>1. Architecture Type</h2>
+        <p><strong>Full Stack Web Application</strong> using Microservices-inspired layered architecture.</p>
+        <h5>Technology Stack:</h5>
+        <ul>
+            <li><strong>Frontend:</strong> ReactJS + Bootstrap (Client-Side Rendering)</li>
+            <li><strong>Backend:</strong> Spring Boot (REST APIs)</li>
+            <li><strong>Database:</strong> MySQL</li>
+            <li><strong>Communication Format:</strong> JSON over HTTP</li>
+            <li><strong>Build & Dependency:</strong> Maven</li>
+            <li><strong>Server:</strong> Apache Tomcat (Embedded via Spring Boot)</li>
+        </ul>
+    </section>
+
+    <section class="mb-4">
+        <h2>2. High-Level Architecture Diagram</h2>
+        <div class="architecture-diagram">
+<pre>
++---------------------+        HTTP/JSON        +---------------------+
+|     ReactJS UI      |  &lt;-------------------&gt;  |   Spring Boot APIs   |
+| (Bootstrap, Axios)  |                         | (REST Controllers)   |
++---------------------+                         +----------+----------+
+                                                          |
+                                                          |
+                                                +---------v----------+
+                                                |   Service Layer     |
+                                                | (Business Logic)    |
+                                                +---------+----------+
+                                                          |
+                                                +---------v----------+
+                                                |   Repository Layer  |
+                                                |  (Spring Data JPA)  |
+                                                +---------+----------+
+                                                          |
+                                                +---------v----------+
+                                                |      MySQL DB       |
+                                                +---------------------+
+</pre>
+        </div>
+    </section>
+
+    <section class="mb-4">
+        <h2>3. Layered Architecture Breakdown</h2>
+        <h5>🔹 Frontend Layer (ReactJS + Bootstrap)</h5>
+        <ul>
+            <li>UI for employee onboarding, training tracking, and record views</li>
+            <li>Communicates with backend via Axios/fetch using REST APIs</li>
+            <li>Responsive design using Bootstrap</li>
+        </ul>
+
+        <h5>🔹 Controller Layer (Spring Boot - REST)</h5>
+        <ul>
+            <li>Receives API requests from the frontend</li>
+            <li>Maps endpoints to services</li>
+            <li>Handles request/response conversion (JSON)</li>
+        </ul>
+
+        <h5>🔹 Service Layer</h5>
+        <ul>
+            <li>Implements business logic such as:
+                <ul>
+                    <li>Assigning trainings to employees</li>
+                    <li>Validating employee data</li>
+                    <li>Tracking training completion</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h5>🔹 Repository Layer (JPA)</h5>
+        <ul>
+            <li>Uses Spring Data JPA interfaces to interact with MySQL</li>
+            <li>Performs CRUD operations on employee/training entities</li>
+        </ul>
+
+        <h5>🔹 Database Layer (MySQL)</h5>
+        <ul>
+            <li><code>employees</code> - personal & job details</li>
+            <li><code>trainings</code> - list of available trainings</li>
+            <li><code>employee_training_status</code> - track which employee completed which training</li>
+        </ul>
+    </section>
+
+    <section class="mb-4">
+        <h2>4. Security and Validation</h2>
+        <ul>
+            <li>Input validations on both frontend (React) and backend (Spring Boot)</li>
+            <li>Role-based access control (optional extension)</li>
+            <li>Field-level validation using JSR-303 (Hibernate Validator)</li>
+        </ul>
+    </section>
+
+    <section class="mb-4">
+        <h2>5. Tools and DevOps</h2>
+        <ul>
+            <li><strong>Build Tool:</strong> Maven</li>
+            <li><strong>Server:</strong> Embedded Tomcat via Spring Boot</li>
+            <li><strong>Version Control:</strong> Git (if used)</li>
+            <li><strong>Deployment:</strong> WAR/JAR file deployed to server or Docker container (optional)</li>
+            <li><strong>Testing:</strong> JUnit, Postman for API testing</li>
+        </ul>
+    </section>
+
+</div>
+
+<footer class="text-center">
+    <p>&copy; 2025 GEMs Tracking Tool | Designed by Your Name | All rights reserved</p>
+</footer>
+
+</body>
+</html>

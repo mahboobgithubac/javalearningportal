@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swagger Integration in Spring Boot</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1, h2, h3 { color: #2c3e50; }
+    code, pre { background: #f4f4f4; padding: 5px 10px; border-radius: 4px; display: block; white-space: pre-wrap; }
+    .section { margin-bottom: 30px; }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Minimal Setup for Swagger UI in Spring Boot</h1>
+
+  <div class="section">
+    <h2>🧩 1. Add Dependency (<code>pom.xml</code>)</h2>
+    <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.springdoc&lt;/groupId&gt;
+  &lt;artifactId&gt;springdoc-openapi-starter-webmvc-ui&lt;/artifactId&gt;
+  &lt;version&gt;2.5.0&lt;/version&gt; &lt;!-- or latest --&gt;
+&lt;/dependency&gt;
+</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>⚙️ 2. No Additional Config Needed</h2>
+    <p>Optional config is only for customizing.</p>
+  </div>
+
+  <div class="section">
+    <h2>🚀 3. Run Your App</h2>
+    <p>Start your app and open:</p>
+    <pre><code>http://localhost:8080/swagger-ui.html</code></pre>
+    <p>You will see all your REST endpoints documented automatically.</p>
+  </div>
+
+  <div class="section">
+    <h2>📁 4. Example Controller (Annotated)</h2>
+    <pre><code>@RestController
+@RequestMapping("/employees")
+@Tag(name = "Employee API", description = "Operations related to Employee")
+public class EmployeeController {
+
+    @Autowired
+    private EmployeeService service;
+
+    @Operation(summary = "Get all employees")
+    @GetMapping
+    public List&lt;Employee&gt; getAll() {
+        return service.getAllEmployees();
+    }
+
+    @Operation(summary = "Get employee by ID")
+    @GetMapping("/{id}")
+    public Employee getById(@PathVariable Long id) {
+        return service.getEmployeeById(id);
+    }
+
+    @Operation(summary = "Add new employee")
+    @PostMapping
+    public Employee save(@RequestBody Employee employee) {
+        return service.saveEmployee(employee);
+    }
+
+    @Operation(summary = "Delete employee")
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deleteEmployee(id);
+    }
+}
+</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🧪 Example Response in Swagger UI</h2>
+    <ul>
+      <li>GET <code>/employees</code></li>
+      <li>GET <code>/employees/{id}</code></li>
+      <li>POST <code>/employees</code></li>
+      <li>DELETE <code>/employees/{id}</code></li>
+    </ul>
+    <p>...will be auto-documented.</p>
+  </div>
+
+  <div class="section">
+    <h2>✅ Summary</h2>
+    <table border="1" cellpadding="8">
+      <tr>
+        <th>Feature</th>
+        <th>URL</th>
+      </tr>
+      <tr>
+        <td>Swagger UI</td>
+        <td><code>http://localhost:8080/swagger-ui.html</code></td>
+      </tr>
+      <tr>
+        <td>OpenAPI JSON</td>
+        <td><code>http://localhost:8080/v3/api-docs</code></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>💡 Optional Additions</h2>
+    <ul>
+      <li>Add <code>@OpenAPIDefinition</code> or custom <code>OpenAPIConfig</code> for metadata</li>
+      <li>Secure with JWT or Basic Auth</li>
+      <li>Enable only for dev profile using <code>@Profile</code></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Would you like?</h2>
+    <ul>
+      <li>⚙️ Customizing Swagger layout or title?</li>
+      <li>🔐 Securing with JWT token header?</li>
+      <li>🧾 HTML/PDF generation of API docs?</li>
+    </ul>
+	
+	
+	<h1>✅ Swagger/OpenAPI Annotations Summary (Spring Boot + Springdoc)</h1>
+
+  <h2>🧩 Basic Annotations (Commonly Used)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Annotation</th>
+        <th>Applied On</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>@Tag</code></td>
+        <td>Controller class</td>
+        <td>Groups related endpoints under a tag in Swagger UI</td>
+      </tr>
+      <tr>
+        <td><code>@Operation</code></td>
+        <td>API methods (GET, POST...)</td>
+        <td>Describes what an endpoint does (summary, description)</td>
+      </tr>
+      <tr>
+        <td><code>@OpenAPIDefinition</code></td>
+        <td>Main app or config class</td>
+        <td>Provides global metadata (title, version, description, contact, etc.)</td>
+      </tr>
+      <tr>
+        <td><code>@Bean + OpenAPI</code></td>
+        <td>Config class (<code>OpenAPIConfig</code>)</td>
+        <td>Customize API info like title, contact, license, version</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>⚙️ Optional Advanced Annotations</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Annotation</th>
+        <th>Purpose</th>
+        <th>Where to Use</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>@ApiResponse</code></td>
+        <td>Describes possible HTTP responses</td>
+        <td>On controller methods</td>
+      </tr>
+      <tr>
+        <td><code>@ApiResponses</code></td>
+        <td>Container for multiple <code>@ApiResponse</code>s</td>
+        <td>On controller methods</td>
+      </tr>
+      <tr>
+        <td><code>@Parameter</code></td>
+        <td>Adds metadata to method parameters</td>
+        <td>On <code>@RequestParam</code>, <code>@PathVariable</code>, etc.</td>
+      </tr>
+      <tr>
+        <td><code>@RequestBody</code></td>
+        <td>Adds description, schema, and examples to request body</td>
+        <td>On request body parameter</td>
+      </tr>
+      <tr>
+        <td><code>@Schema</code></td>
+        <td>Adds documentation to model fields</td>
+        <td>On DTO/entity fields</td>
+      </tr>
+      <tr>
+        <td><code>@ExampleObject</code></td>
+        <td>Provides example JSON payloads</td>
+        <td>Inside <code>@RequestBody</code> or <code>@Content</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>📌 Example Usage</h2>
+
+  <h3>🔹 <code>@Tag</code></h3>
+  <pre><code>@Tag(name = "Employees", description = "Employee management API")
+@RestController
+public class EmployeeController {
+    ...
+}</code></pre>
+
+  <h3>🔹 <code>@Operation</code> with <code>@ApiResponses</code></h3>
+  <pre><code>@Operation(summary = "Get employee by ID")
+@ApiResponses(value = {
+    @ApiResponse(responseCode = "200", description = "Employee found"),
+    @ApiResponse(responseCode = "404", description = "Employee not found")
+})
+@GetMapping("/{id}")
+public ResponseEntity&lt;Employee&gt; getById(@PathVariable Long id) {
+    ...
+}</code></pre>
+
+  <h3>🔹 <code>@Parameter</code> on Method Parameters</h3>
+  <pre><code>@GetMapping
+public ResponseEntity&lt;Page&lt;Employee&gt;&gt; getAllEmployees(
+    @Parameter(description = "Page number", example = "0")
+    @RequestParam int page,
+
+    @Parameter(description = "Page size", example = "10")
+    @RequestParam int size
+) {
+    ...
+}</code></pre>
+
+  <h3>🔹 <code>@RequestBody</code> with <code>@ExampleObject</code></h3>
+  <pre><code>@PostMapping
+@Operation(summary = "Add employee")
+public ResponseEntity&lt;Employee&gt; create(
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        description = "Employee object",
+        required = true,
+        content = @Content(
+            schema = @Schema(implementation = Employee.class),
+            examples = @ExampleObject(
+                value = "{\"name\":\"John Doe\",\"email\":\"john@example.com\"}"
+            )
+        )
+    )
+    @Valid @RequestBody Employee employee
+) {
+    ...
+}</code></pre>
+
+  <h3>🔹 <code>@Schema</code> on Model Fields</h3>
+  <pre><code>public class Employee {
+
+    @Schema(description = "Employee ID", example = "1")
+    private Long id;
+
+    @Schema(description = "Full name", example = "Alice Smith")
+    private String name;
+
+    @Schema(description = "Email address", example = "alice@example.com")
+    private String email;
+}</code></pre>
+  </div>
+
+<h2>✅ Spring Boot: @RequestBody with Swagger/OpenAPI Example</h2>
+
+<h3>🔹 EmployeeController.java</h3>
+<pre><code>@RestController
+@RequestMapping("/api/employees")
+@Tag(name = "Employees", description = "Employee management API")
+public class EmployeeController {
+
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Operation(summary = "Create a new employee")
+    @ApiResponse(responseCode = "201", description = "Employee created successfully")
+    @PostMapping
+    public ResponseEntity&lt;Employee&gt; createEmployee(
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Employee object to be created",
+            required = true,
+            content = @Content(
+                schema = @Schema(implementation = Employee.class),
+                examples = @ExampleObject(
+                    name = "Employee Example",
+                    value = "{ \"name\": \"John Doe\", \"department\": \"IT\", \"email\": \"john.doe@example.com\" }"
+                )
+            )
+        )
+        @RequestBody Employee employee
+    ) {
+        Employee saved = employeeService.save(employee);
+        return new ResponseEntity&lt;&gt;(saved, HttpStatus.CREATED);
+    }
+
+    @Operation(
+        summary = "Update an existing employee",
+        description = "Updates the employee details by ID"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Employee updated successfully",
+            content = @Content(schema = @Schema(implementation = Employee.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input data",
+            content = @Content(schema = @Schema(example = "{\"message\": \"Validation failed\"}"))),
+        @ApiResponse(responseCode = "404", description = "Employee not found")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity&lt;Employee&gt; updateEmployee(
+        @PathVariable Long id,
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Updated employee data",
+            required = true,
+            content = @Content(
+                schema = @Schema(implementation = Employee.class),
+                examples = @ExampleObject(
+                    name = "Update Example",
+                    value = "{ \"name\": \"Jane Smith\", \"department\": \"HR\", \"email\": \"jane.smith@example.com\" }"
+                )
+            )
+        )
+        @Valid @RequestBody Employee updatedEmployee
+    ) {
+        Employee existing = employeeService.getEmployeeById(id);
+        existing.setName(updatedEmployee.getName());
+        existing.setDepartment(updatedEmployee.getDepartment());
+        existing.setEmail(updatedEmployee.getEmail());
+        return ResponseEntity.ok(employeeService.save(existing));
+    }
+}
+</code></pre>
+
+<h3>🔹 Employee.java (Entity with @Schema and Validation)</h3>
+<pre><code>@Entity
+@Schema(description = "Employee entity containing basic details")
+public class Employee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Unique ID of the employee", example = "1")
+    private Long id;
+
+    @NotBlank(message = "Name is required")
+    @Schema(description = "Full name of the employee", example = "Jane Smith", required = true)
+    private String name;
+
+    @NotBlank(message = "Department is required")
+    @Schema(description = "Department", example = "HR")
+    private String department;
+
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required")
+    @Schema(description = "Email of the employee", example = "jane.smith@example.com")
+    private String email;
+
+    // Getters and Setters
+}
+</code></pre>
+
+<h3>🔹 GlobalExceptionHandler.java</h3>
+<pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;Map&lt;String, String&gt;&gt; handleValidationErrors(MethodArgumentNotValidException ex) {
+        Map&lt;String, String&gt; errors = new HashMap&lt;&gt;();
+        ex.getBindingResult().getFieldErrors()
+            .forEach(error -&gt; errors.put(error.getField(), error.getDefaultMessage()));
+        return new ResponseEntity&lt;&gt;(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity&lt;String&gt; handleNotFound(NoSuchElementException ex) {
+        return new ResponseEntity&lt;&gt;("Employee not found", HttpStatus.NOT_FOUND);
+    }
+}
+</code></pre>
+
+<h3>🔁 Example PUT Request Payload</h3>
+<pre><code>{
+  "name": "Jane Smith",
+  "department": "HR",
+  "email": "jane.smith@example.com"
+}
+</code></pre>
+
+<h3>✅ Summary</h3>
+<ul>
+  <li>Documented request body with <code>@RequestBody</code> and examples</li>
+  <li>Validated input using <code>@Valid</code>, <code>@NotBlank</code>, and <code>@Email</code></li>
+  <li>Defined field-level metadata with <code>@Schema</code></li>
+  <li>Handled errors using <code>@RestControllerAdvice</code></li>
+  <li>Tested via Swagger UI with example input/output</li>
+</ul>
+
+</body>
+</html>

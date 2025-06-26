@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EventEmitter in Angular</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    th {
+      background-color: #2c3e50;
+      color: white;
+    }
+    .note {
+      background-color: #fff3cd;
+      border-left: 6px solid #ffeeba;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📌 EventEmitter in Angular</h1>
+
+  <p><strong>EventEmitter</strong> is a class in Angular used to <strong>create custom events</strong> and <strong>communicate from child components to parent components</strong>.</p>
+
+  <h2>✅ When to Use EventEmitter</h2>
+  <p>To send data <strong>from child to parent</strong> component via <code>@Output()</code>.</p>
+
+  <h2>📦 Import From</h2>
+  <pre><code>import { EventEmitter, Output } from '@angular/core';</code></pre>
+
+  <h2>🛠️ How It Works</h2>
+
+  <h3>1. Child Component (Sender)</h3>
+  <pre><code>import { Component, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  template: `&lt;button (click)="sendMessage()"&gt;Send&lt;/button&gt;`
+})
+export class ChildComponent {
+  @Output() messageEvent = new EventEmitter&lt;string&gt;();
+
+  sendMessage() {
+    this.messageEvent.emit('Hello Parent!');
+  }
+}</code></pre>
+
+  <h3>2. Parent Component (Receiver)</h3>
+  <pre><code>@Component({
+  selector: 'app-parent',
+  template: `&lt;app-child (messageEvent)="receiveMessage($event)"&gt;&lt;/app-child&gt;`
+})
+export class ParentComponent {
+  receiveMessage(msg: string) {
+    console.log('Received from child:', msg);
+  }
+}</code></pre>
+
+  <h2>🔄 EventEmitter Methods</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>.emit()</code></td>
+        <td>Emits a value to parent component</td>
+      </tr>
+      <tr>
+        <td><code>.subscribe()</code></td>
+        <td>Used internally by Angular template bindings or services</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>Note:</strong> You rarely call <code>.subscribe()</code> directly with <code>@Output()</code> — it's handled in the template.
+  </div>
+
+  <h2>⚠️ Best Practice</h2>
+  <p>Use <code>EventEmitter</code> <strong>only with</strong> <code>@Output()</code>, and only for <strong>component communication</strong> (not for service-based events).</p>
+
+</body>
+</html>

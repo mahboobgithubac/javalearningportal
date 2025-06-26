@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Private and Public Key in Spring Boot Security</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.6;
+      color: #333;
+    }
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    h1, h2, h3 {
+      color: #004080;
+    }
+    pre {
+      background: #eee;
+      padding: 1rem;
+      overflow-x: auto;
+      border-left: 5px solid #004080;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Private and Public Key in Spring Boot Security</h1>
+</header>
+
+<main>
+  <h2>🔐 Common Use Cases</h2>
+  <ul>
+    <li>JWT (JSON Web Token) Signing and Verification</li>
+    <li>Secure communication (SSL/TLS via HTTPS)</li>
+    <li>Asymmetric encryption/decryption (optional)</li>
+  </ul>
+
+  <h2>✅ 1. Using Private/Public Key for JWT Authentication</h2>
+  <p>In asymmetric JWT, the private key signs the token, and the public key verifies it.</p>
+
+  <h3>📁 Step 1: Generate RSA Key Pair</h3>
+  <pre><code># Private Key
+openssl genrsa -out private.pem 2048
+
+# Public Key
+openssl rsa -in private.pem -pubout -out public.pem</code></pre>
+
+  <h3>📁 Step 2: Place keys in your Spring Boot project</h3>
+  <pre><code>src/main/resources/
+├── keys/
+│   ├── private.pem
+│   └── public.pem</code></pre>
+
+  <h3>⚙️ Step 3: Add to application.yml</h3>
+  <pre><code>jwt:
+  private-key: classpath:keys/private.pem
+  public-key: classpath:keys/public.pem</code></pre>
+
+  <h3>🔄 Step 4: Load Keys in Java</h3>
+  <pre><code>@Component
+public class KeyUtil {
+
+    @Value("${jwt.private-key}")
+    private Resource privateKeyResource;
+
+    @Value("${jwt.public-key}")
+    private Resource publicKeyResource;
+
+    public PrivateKey getPrivateKey() throws Exception {
+        String key = new String(privateKeyResource.getInputStream().readAllBytes());
+        key = key.replaceAll("-----\\w+ PRIVATE KEY-----", "").replaceAll("\\s", "");
+        byte[] bytes = Base64.getDecoder().decode(key);
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(bytes);
+        return KeyFactory.getInstance("RSA").generatePrivate(spec);
+    }
+
+    public PublicKey getPublicKey() throws Exception {
+        String key = new String(publicKeyResource.getInputStream().readAllBytes());
+        key = key.replaceAll("-----\\w+ PUBLIC KEY-----", "").replaceAll("\\s", "");
+        byte[] bytes = Base64.getDecoder().decode(key);
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(bytes);
+        return KeyFactory.getInstance("RSA").generatePublic(spec);
+    }
+}</code></pre>
+
+  <h3>🔐 Step 5: JWT Signing & Validation</h3>
+  <pre><code>// Sign with private key
+String jwt = Jwts.builder()
+    .setSubject("username")
+    .signWith(keyUtil.getPrivateKey(), SignatureAlgorithm.RS256)
+    .compact();
+
+// Verify with public key
+Jws&lt;Claims&gt; claims = Jwts.parserBuilder()
+    .setSigningKey(keyUtil.getPublicKey())
+    .build()
+    .parseClaimsJws(jwt);</code></pre>
+
+  <h2>🛡️ 2. TLS/SSL with Private Key (for HTTPS)</h2>
+  <p>In Spring Boot, SSL/TLS uses a private key in a keystore for HTTPS communication.</p>
+
+  <h3>application.yml</h3>
+  <pre><code>server:
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: yourpassword
+    key-store-type: PKCS12
+    key-alias: youralias</code></pre>
+
+  <h3>Generate Keystore using keytool</h3>
+  <pre><code>keytool -genkeypair -alias youralias -keyalg RSA -keysize 2048 \
+  -storetype PKCS12 -keystore keystore.p12 -validity 3650</code></pre>
+
+  <h2>✅ Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Use Case</th>
+        <th>Private Key Purpose</th>
+        <th>Public Key Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>JWT Auth (RS256)</td>
+        <td>Sign JWT</td>
+        <td>Verify JWT</td>
+      </tr>
+      <tr>
+        <td>HTTPS (TLS/SSL)</td>
+        <td>Decrypt SSL handshakes</td>
+        <td>Not required (browser uses cert)</td>
+      </tr>
+      <tr>
+        <td>Asymmetric Encryption (RSA)</td>
+        <td>Decrypt</td>
+        <td>Encrypt</td>
+      </tr>
+    </tbody>
+  </table>
+</main>
+
+</body>
+</html>

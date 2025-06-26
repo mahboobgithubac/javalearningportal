@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Second Occurrence Finder - Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 30px;
+    }
+    h1 {
+      color: #333;
+    }
+    pre {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    .explanation {
+      background-color: #e1f5fe;
+      border-left: 5px solid #0288d1;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    a {
+      margin-top: 20px;
+      display: inline-block;
+      color: #1976d2;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Find Second Occurrence of a Character (Java)</h1>
+
+  <pre><code>public class SecondOccurrenceFinder {
+    public static void main(String[] args) {
+        String input = "hello world";
+        char target = 'l';
+
+        int firstIndex = input.indexOf(target);
+        if (firstIndex != -1) {
+            int secondIndex = input.indexOf(target, firstIndex + 1);
+            if (secondIndex != -1) {
+                System.out.println("Second occurrence of '" + target + "' is at index: " + secondIndex);
+            } else {
+                System.out.println("Character occurs only once.");
+            }
+        } else {
+            System.out.println("Character not found.");
+        }
+    }
+}
+  </code></pre>
+
+  <div class="explanation">
+    <h3>🔍 Explanation:</h3>
+    <ul>
+      <li><code>indexOf(target)</code> returns the index of the first occurrence.</li>
+      <li><code>indexOf(target, firstIndex + 1)</code> starts the search from the next character after the first match.</li>
+      <li>If the second index is <code>-1</code>, the character appears only once.</li>
+    </ul>
+  </div>
+ <h1>Find Second Occurrence of Character using Java 8 Stream API</h1>
+
+  <pre><code>import java.util.stream.IntStream;
+
+public class SecondOccurrenceWithStreams {
+    public static void main(String[] args) {
+        String input = "hello world";
+        char target = 'l';
+
+        int[] indexes = IntStream.range(0, input.length())
+                .filter(i -&gt; input.charAt(i) == target)
+                .limit(2) // limit to first two occurrences
+                .toArray();
+
+        if (indexes.length &lt; 2) {
+            System.out.println("Second occurrence not found.");
+        } else {
+            System.out.println("Second occurrence of '" + target + "' is at index: " + indexes[1]);
+        }
+    }
+}
+  </code></pre>
+
+  <div class="explanation">
+    <strong>🔍 Explanation:</strong>
+    <ul>
+      <li><code>IntStream.range(0, input.length())</code> generates a stream of indices from 0 to the end of the string.</li>
+      <li><code>filter(i -&gt; input.charAt(i) == target)</code> filters the indices where the character matches the target.</li>
+      <li><code>limit(2)</code> ensures only the first two matching indices are collected.</li>
+      <li><code>toArray()</code> converts the filtered stream into an array of matching indices.</li>
+      <li>If the array has fewer than 2 elements, the second occurrence doesn’t exist.</li>
+    </ul>
+  </div>
+  
+
+</body>
+</html>

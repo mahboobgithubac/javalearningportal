@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Understand HTTP status codes for authentication and authorization failures, and transaction management in microservices including Saga, Choreography, and Orchestration patterns.">
+  <meta name="keywords" content="HTTP Status Codes, 401 Unauthorized, 403 Forbidden, Microservices, Transaction Management, Saga Pattern, Orchestration, Choreography, Spring Boot">
+  <meta name="author" content="ChatGPT">
+  <title>HTTP Status Codes & Transaction Management in Microservices</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+    header, footer {
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+    }
+    h1, h2, h3 {
+      color: #0056b3;
+    }
+    code, pre {
+      background-color: #eee;
+      padding: 5px;
+      display: block;
+      margin: 10px 0;
+      border-left: 4px solid #ccc;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>HTTP Status Codes & Microservices Transaction Management</h1>
+</header>
+
+<main>
+
+  <section>
+    <h2>1. Wrong Credentials - What Status Code?</h2>
+    <p><strong>✅ Status Code: 401 Unauthorized</strong></p>
+    <p>This indicates that the user credentials are invalid or missing.</p>
+
+    <h3>🔁 Common Related Status Codes</h3>
+    <ul>
+      <li><strong>401 Unauthorized</strong> – Authentication failed or missing</li>
+      <li><strong>403 Forbidden</strong> – Authenticated but not permitted</li>
+      <li><strong>400 Bad Request</strong> – Malformed request</li>
+      <li><strong>404 Not Found</strong> – Resource does not exist</li>
+    </ul>
+
+    <h3>🛡️ Example Request & Response:</h3>
+    <pre>
+POST /api/login
+{
+  "username": "user1",
+  "password": "wrongpass"
+}
+
+HTTP/1.1 401 Unauthorized
+{
+  "error": "Invalid credentials"
+}
+    </pre>
+  </section>
+
+  <section>
+    <h2>2. Role-Based Access - Forbidden Status</h2>
+    <p><strong>✅ Status Code: 403 Forbidden</strong></p>
+    <p>This indicates that the user is authenticated but lacks the required role or permission to access the resource.</p>
+
+    <h3>Comparison: 401 vs 403</h3>
+    <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr><th>Scenario</th><th>Status Code</th><th>Explanation</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>No credentials</td><td>401</td><td>Authentication required</td></tr>
+        <tr><td>Wrong credentials</td><td>401</td><td>Authentication failed</td></tr>
+        <tr><td>Lacks permission</td><td>403</td><td>Authenticated but not authorized</td></tr>
+      </tbody>
+    </table>
+
+    <h3>🧑‍💼 Example:</h3>
+    <pre>
+GET /api/admin/dashboard
+Authorization: Bearer valid-user-token
+
+HTTP/1.1 403 Forbidden
+{
+  "error": "Access denied: You do not have permission to access this resource."
+}
+    </pre>
+  </section>
+
+  <section>
+    <h2>3. Transaction Management in Microservices</h2>
+    <p>Traditional ACID transactions don't work in distributed microservices. Instead, we use <strong>eventual consistency</strong> with patterns like <strong>SAGA</strong>.</p>
+
+    <h3>Why Not Traditional Transactions?</h3>
+    <ul>
+      <li>Each microservice owns its own DB</li>
+      <li>No global transaction manager</li>
+      <li>Cross-service ACID guarantees are not practical</li>
+    </ul>
+
+    <h3>✅ Saga Pattern</h3>
+    <p>A Saga is a sequence of local transactions with either:</p>
+
+    <h4>🔹 a. Choreography (Event-Based)</h4>
+    <ul>
+      <li>Order Service → emits <code>OrderCreated</code></li>
+      <li>Inventory Service → listens and emits <code>StockReserved</code></li>
+      <li>Payment Service → emits <code>PaymentCompleted</code></li>
+      <li>Compensating transactions on failure</li>
+    </ul>
+
+    <h4>🔹 b. Orchestration (Command-Based)</h4>
+    <ul>
+      <li>Central orchestrator coordinates each service</li>
+      <li>Issues commands and receives results</li>
+      <li>Handles rollback through compensating actions</li>
+    </ul>
+
+    <h3>❌ Two-Phase Commit (2PC)</h3>
+    <ul>
+      <li>Not recommended</li>
+      <li>Blocking, not fault-tolerant</li>
+      <li>Tight coupling and complexity</li>
+    </ul>
+
+    <h3>Best Practices</h3>
+    <ul>
+      <li>Use Kafka or RabbitMQ for events</li>
+      <li>Design idempotent operations</li>
+      <li>Implement retry and rollback logic</li>
+      <li>Use <code>@Transactional</code> for local transactions</li>
+    </ul>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; 2025 | Tech Guide by ChatGPT | All rights reserved</p>
+</footer>
+
+</body>
+</html>

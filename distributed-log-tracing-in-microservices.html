@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distributed Log Tracing in Microservices</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; line-height: 1.6; }
+    h1, h2, h3 { color: #003366; }
+    pre, code { background: #f4f4f4; padding: 10px; border-radius: 5px; display: block; white-space: pre-wrap; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    th { background-color: #003366; color: white; }
+  </style>
+</head>
+<body>
+  <h1>Distributed Log Tracing in Microservices</h1>
+
+  <h2>✅ What Is Distributed Log Tracing?</h2>
+  <ul>
+    <li>Links log entries across services using a unique <strong>trace ID</strong></li>
+    <li>Answers: "What happened to request X?" across services</li>
+    <li>Tools: <strong>Spring Cloud Sleuth</strong>, <strong>Zipkin</strong>, <strong>OpenTelemetry</strong>, <strong>Jaeger</strong></li>
+  </ul>
+
+  <h2>✅ Key Concepts</h2>
+  <table>
+    <tr><th>Term</th><th>Description</th></tr>
+    <tr><td>Trace ID</td><td>Unique ID for an end-to-end request</td></tr>
+    <tr><td>Span ID</td><td>Unique ID for a single service/method call</td></tr>
+    <tr><td>Parent ID</td><td>Links the span to its caller</td></tr>
+  </table>
+
+  <h2>✅ Spring Boot Example: Sleuth + Zipkin</h2>
+
+  <h3>Service A: UserService</h3>
+  <pre><code>@RestController
+public class UserController {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @GetMapping("/get-user")
+    public String getUser() {
+        String response = restTemplate.getForObject("http://localhost:8081/get-order", String.class);
+        return "User details + " + response;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+}</code></pre>
+
+  <h3>Service B: OrderService</h3>
+  <pre><code>@RestController
+public class OrderController {
+
+    @GetMapping("/get-order")
+    public String getOrder() {
+        return "Order details";
+    }
+}</code></pre>
+
+  <h3>application.properties (both services)</h3>
+  <pre><code>spring.application.name=user-service   # or order-service
+spring.sleuth.sampler.probability=1.0
+spring.zipkin.base-url=http://localhost:9411
+spring.zipkin.enabled=true</code></pre>
+
+  <h2>✅ Dependencies</h2>
+  <pre><code>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-sleuth&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-zipkin&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+
+  <h2>✅ How It Works</h2>
+  <ul>
+    <li>Sleuth adds <code>traceId</code> and <code>spanId</code> to logs</li>
+    <li>Zipkin collects trace data and shows request flow</li>
+  </ul>
+
+  <h3>Sample Log</h3>
+  <pre><code>2025-06-23 12:00:00 [user-service,abcd1234abcd1234,abcd5678abcd5678] ...</code></pre>
+
+  <h2>✅ Visualization</h2>
+  <ul>
+    <li>Run Zipkin: <code>docker run -d -p 9411:9411 openzipkin/zipkin</code></li>
+    <li>Access UI at: <code>http://localhost:9411</code></li>
+  </ul>
+
+  <h2>✅ Benefits</h2>
+  <ul>
+    <li>Trace full request path across services</li>
+    <li>Quick debugging of latency/failure</li>
+    <li>Improved observability</li>
+  </ul>
+
+  <h2>✅ Summary</h2>
+  <table>
+    <tr><th>Tool</th><th>Role</th></tr>
+    <tr><td>Sleuth</td><td>Generates and propagates trace IDs</td></tr>
+    <tr><td>Zipkin</td><td>Collects and visualizes tracing data</td></tr>
+    <tr><td>Logs</td><td>Contain trace/span IDs for correlation</td></tr>
+  </table>
+</body>
+</html>

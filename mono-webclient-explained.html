@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What is Mono in WebClient?</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header, footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 15px;
+    }
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    section {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+      margin-bottom: 20px;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #e6f0ff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>What is Mono in WebClient?</h1>
+</header>
+
+<main>
+
+  <section>
+    <h2>🔍 Code Example</h2>
+    <pre><code>WebClient client = WebClient.create();
+Mono&lt;String&gt; response = client.get()
+    .uri("http://service/api")
+    .retrieve()
+    .bodyToMono(String.class);</code></pre>
+    <p><strong>Mono&lt;String&gt;</strong> means: "You'll get a String later, asynchronously."</p>
+  </section>
+
+  <section>
+    <h2>✅ What is Mono?</h2>
+    <ul>
+      <li><strong>Mono</strong> is a reactive type that represents <strong>0 or 1 result</strong>.</li>
+      <li>It is part of <strong>Project Reactor</strong> used in Spring WebFlux.</li>
+      <li>It is <strong>non-blocking</strong> and async—great for high-performance applications.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>📌 Think of Mono Like...</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Concept</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mono&lt;T&gt;</td>
+          <td>Will emit 0 or 1 item of type T (e.g., Mono&lt;String&gt;)</td>
+        </tr>
+        <tr>
+          <td>Promise / Future</td>
+          <td>Similar idea but Mono is reactive</td>
+        </tr>
+        <tr>
+          <td>Optional + Async</td>
+          <td>One item, maybe empty, and delivered in future</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>🚀 How to Use Mono</h2>
+
+    <h3>Option 1: Blocking (not preferred)</h3>
+    <pre><code>String result = response.block();</code></pre>
+    <p>Waits until the response is ready and gives the value.</p>
+
+    <h3>Option 2: Subscribing (reactive style)</h3>
+    <pre><code>response.subscribe(data -> System.out.println("Received: " + data));</code></pre>
+    <p>Registers a callback to be called when the data is available.</p>
+  </section>
+
+  <section>
+    <h2>📘 Summary Table</h2>
+    <table>
+      <tr>
+        <th>Aspect</th>
+        <th>Mono</th>
+      </tr>
+      <tr>
+        <td>Type</td>
+        <td>Reactive Publisher</td>
+      </tr>
+      <tr>
+        <td>Emits</td>
+        <td>0 or 1 item</td>
+      </tr>
+      <tr>
+        <td>Use Case</td>
+        <td>HTTP response, DB result, async computation</td>
+      </tr>
+      <tr>
+        <td>Blocking?</td>
+        <td>No (unless block() is called)</td>
+      </tr>
+      <tr>
+        <td>Library</td>
+        <td>Project Reactor (Spring WebFlux)</td>
+      </tr>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>Spring WebFlux Learning Page &copy; 2025</p>
+</footer>
+
+</body>
+</html>

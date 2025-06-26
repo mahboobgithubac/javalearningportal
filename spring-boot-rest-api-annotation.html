@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot and REST API Annotations Cheatsheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+    }
+    h2 {
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-left: 5px solid #007BFF;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      vertical-align: top;
+    }
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Spring Boot and REST API Annotations Cheatsheet</h1>
+
+  <h2>✅ Core Spring Boot Annotations</h2>
+  <table>
+    <tr><th>Annotation</th><th>Description</th></tr>
+    <tr><td><code>@SpringBootApplication</code></td><td>Combines <code>@Configuration</code>, <code>@EnableAutoConfiguration</code>, and <code>@ComponentScan</code>. Entry point of a Spring Boot app.</td></tr>
+    <tr><td><code>@EnableAutoConfiguration</code></td><td>Enables Spring Boot’s auto-configuration mechanism.</td></tr>
+    <tr><td><code>@ComponentScan</code></td><td>Tells Spring where to search for annotated components.</td></tr>
+    <tr><td><code>@Configuration</code></td><td>Indicates that the class can be used by Spring IoC as a source of bean definitions.</td></tr>
+  </table>
+
+  <h2>✅ Spring Bean & Dependency Injection Annotations</h2>
+  <table>
+    <tr><th>Annotation</th><th>Description</th></tr>
+    <tr><td><code>@Component</code></td><td>Generic stereotype for Spring-managed components.</td></tr>
+    <tr><td><code>@Service</code></td><td>Specialization of <code>@Component</code> for service layer classes.</td></tr>
+    <tr><td><code>@Repository</code></td><td>Specialization of <code>@Component</code> for DAO classes. Adds exception translation.</td></tr>
+    <tr><td><code>@Autowired</code></td><td>Automatically injects dependencies by type.</td></tr>
+    <tr><td><code>@Qualifier</code></td><td>Specifies the exact bean to inject when multiple are present.</td></tr>
+    <tr><td><code>@Primary</code></td><td>Marks a bean as the primary choice when multiple candidates are present.</td></tr>
+    <tr><td><code>@Lazy</code></td><td>Marks bean to be lazily initialized.</td></tr>
+    <tr><td><code>@Value("${property}")</code></td><td>Injects value from <code>application.properties</code>.</td></tr>
+  </table>
+
+  <h2>✅ REST API (Spring Web MVC) Annotations</h2>
+  <table>
+    <tr><th>Annotation</th><th>Description</th></tr>
+    <tr><td><code>@RestController</code></td><td>Combines <code>@Controller</code> and <code>@ResponseBody</code> for REST APIs.</td></tr>
+    <tr><td><code>@RequestMapping</code></td><td>Maps HTTP requests to handler methods/classes.</td></tr>
+    <tr><td><code>@GetMapping</code>, <code>@PostMapping</code>, <code>@PutMapping</code>, <code>@DeleteMapping</code>, <code>@PatchMapping</code></td><td>Shortcut for <code>@RequestMapping(method = ...)</code> for respective HTTP methods.</td></tr>
+    <tr><td><code>@PathVariable</code></td><td>Binds method parameter to a URI template variable.</td></tr>
+    <tr><td><code>@RequestParam</code></td><td>Extracts query parameters from URL.</td></tr>
+    <tr><td><code>@RequestBody</code></td><td>Binds the request body to a method parameter (usually JSON to object).</td></tr>
+    <tr><td><code>@ResponseBody</code></td><td>Returns object data (like JSON/XML) in the response body.</td></tr>
+    <tr><td><code>@ResponseStatus</code></td><td>Marks method/exception with a specific HTTP status.</td></tr>
+    <tr><td><code>@CrossOrigin</code></td><td>Enables Cross-Origin Resource Sharing (CORS) support.</td></tr>
+  </table>
+
+  <h2>✅ Data Persistence (Spring Data JPA)</h2>
+  <table>
+    <tr><th>Annotation</th><th>Description</th></tr>
+    <tr><td><code>@Entity</code></td><td>Marks a class as a JPA entity (table).</td></tr>
+    <tr><td><code>@Id</code></td><td>Specifies the primary key of an entity.</td></tr>
+    <tr><td><code>@GeneratedValue</code></td><td>Strategy to auto-generate primary key values.</td></tr>
+    <tr><td><code>@Table(name = "table_name")</code></td><td>Maps entity to a specific table.</td></tr>
+    <tr><td><code>@Column(name = "column_name")</code></td><td>Maps a field to a specific column.</td></tr>
+    <tr><td><code>@OneToOne</code>, <code>@OneToMany</code>, <code>@ManyToOne</code>, <code>@ManyToMany</code></td><td>Defines JPA relationships between entities.</td></tr>
+    <tr><td><code>@JoinColumn</code></td><td>Specifies foreign key column for relationships.</td></tr>
+  </table>
+
+  <h2>✅ Validation (Spring Boot + Hibernate Validator)</h2>
+  <table>
+    <tr><th>Annotation</th><th>Description</th></tr>
+    <tr><td><code>@Valid</code> / <code>@Validated</code></td><td>Triggers bean validation on a method parameter or field.</td></tr>
+    <tr><td><code>@NotNull</code>, <code>@NotBlank</code>, <code>@Size</code>, <code>@Min</code>, <code>@Max</code>, <code>@Email</code></td><td>Bean validation constraints for fields.</td></tr>
+    <tr><td><code>@Pattern(regexp = "...")</code></td><td>Validates string values using a regex pattern.</td></tr>
+  </table>
+
+  <h2>✅ Spring Boot Testing Annotations</h2>
+  <table>
+    <tr><th>Annotation</th><th>Description</th></tr>
+    <tr><td><code>@SpringBootTest</code></td><td>Loads full Spring context for integration testing.</td></tr>
+    <tr><td><code>@WebMvcTest</code></td><td>For testing Spring MVC controllers.</td></tr>
+    <tr><td><code>@DataJpaTest</code></td><td>For testing JPA repositories.</td></tr>
+    <tr><td><code>@MockBean</code></td><td>Creates and injects a mock bean.</td></tr>
+    <tr><td><code>@TestConfiguration</code></td><td>Custom configuration for test context.</td></tr>
+  </table>
+
+  <h2>✅ Other Useful Annotations</h2>
+  <table>
+    <tr><th>Annotation</th><th>Description</th></tr>
+    <tr><td><code>@Scheduled</code></td><td>Used to schedule tasks at fixed intervals.</td></tr>
+    <tr><td><code>@EnableScheduling</code></td><td>Enables scheduled tasks.</td></tr>
+    <tr><td><code>@Async</code></td><td>Marks a method to run asynchronously.</td></tr>
+    <tr><td><code>@EnableAsync</code></td><td>Enables asynchronous method execution.</td></tr>
+    <tr><td><code>@Profile</code></td><td>Specifies that a bean is loaded only in specific Spring profiles.</td></tr>
+    <tr><td><code>@PropertySource</code></td><td>Loads properties from an external <code>.properties</code> file.</td></tr>
+    <tr><td><code>@Bean</code></td><td>Declares a bean inside a <code>@Configuration</code> class.</td></tr>
+    <tr><td><code>@DependsOn</code></td><td>Defines the order of bean initialization.</td></tr>
+  </table>
+
+</body>
+</html>

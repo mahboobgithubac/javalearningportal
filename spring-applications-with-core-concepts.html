@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spring Applications with Core Concepts</title>
+  <meta name="description" content="List of Spring applications categorized by core concepts like DI, Spring MVC, Spring Boot, JPA, Security, AOP, WebFlux, and more." />
+  <meta name="author" content="Mahboob Anwar" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      color: #333;
+    }
+    header, footer {
+      background: #006699;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 2rem;
+      background: white;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+    h1, h2 {
+      color: #004d80;
+    }
+    ul {
+      margin: 0 0 1rem 1.5rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+    .concept {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #005a9c;
+    }
+    .app-title {
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Spring Applications with Core Concepts</h1>
+</header>
+
+<main>
+
+  <section>
+    <h2 class="concept">🔧 1. Dependency Injection (DI) / Inversion of Control (IoC)</h2>
+    <p><strong>Concept:</strong> Objects define their dependencies, and the container injects them.</p>
+    <ul>
+      <li><span class="app-title">Employee Management System</span> – Services and repositories injected using <code>@Autowired</code> or constructors.</li>
+      <li><span class="app-title">Online Shopping Cart</span> – ProductService injected into CartController.</li>
+      <li><span class="app-title">Student Management App</span> – StudentRepository injected into StudentService.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">🌐 2. Spring MVC (Model-View-Controller)</h2>
+    <p><strong>Concept:</strong> Web framework using DispatcherServlet to handle requests.</p>
+    <ul>
+      <li><span class="app-title">Blog Website</span> – CRUD for posts and comments via controllers and JSP/Thymeleaf.</li>
+      <li><span class="app-title">Job Portal</span> – Job listings and application forms.</li>
+      <li><span class="app-title">Customer Feedback Form</span> – Multi-page form with validation.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">💾 3. Spring Data JPA</h2>
+    <p><strong>Concept:</strong> Simplified database access using repository abstraction.</p>
+    <ul>
+      <li><span class="app-title">Inventory Management System</span> – ProductRepository using JpaRepository.</li>
+      <li><span class="app-title">Library System</span> – Book-Author relationships using ORM.</li>
+      <li><span class="app-title">Hospital Management App</span> – Patient-Doctor with @OneToMany, @ManyToOne.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">🔐 4. Spring Security</h2>
+    <p><strong>Concept:</strong> Authentication, authorization, CSRF protection, password encoding.</p>
+    <ul>
+      <li><span class="app-title">Online Exam Portal</span> – Admin vs student role-based access.</li>
+      <li><span class="app-title">E-commerce Site</span> – Login/registration and secure checkout.</li>
+      <li><span class="app-title">Employee Portal</span> – LDAP or DB authentication with JWT.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">💬 5. Spring Boot</h2>
+    <p><strong>Concept:</strong> Rapid development with embedded server and auto-configuration.</p>
+    <ul>
+      <li><span class="app-title">RESTful API for Product Catalog</span> – Built with @RestController and mappings.</li>
+      <li><span class="app-title">Expense Tracker Backend</span> – Simple REST API using H2 or MySQL.</li>
+      <li><span class="app-title">Weather Forecast App</span> – Exposes API for weather data.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">☁️ 6. Spring Cloud (Microservices)</h2>
+    <p><strong>Concept:</strong> Distributed microservice apps using Spring Cloud tools.</p>
+    <ul>
+      <li><span class="app-title">Online Food Delivery System</span> – User, Order, Restaurant, Payment microservices.</li>
+      <li><span class="app-title">E-commerce Platform</span> – With Eureka, Gateway, Config Server, Feign.</li>
+      <li><span class="app-title">Banking Microservices</span> – Services for Account, Transaction, Notification.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">🌀 7. Spring AOP (Aspect-Oriented Programming)</h2>
+    <p><strong>Concept:</strong> Cross-cutting concerns handled via aspects.</p>
+    <ul>
+      <li><span class="app-title">Audit Logging Web App</span> – Logs user actions using @Around advice.</li>
+      <li><span class="app-title">Performance Monitor</span> – Execution time measurement using AOP.</li>
+      <li><span class="app-title">Centralized Exception Logger</span> – Common logging for exceptions.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">📅 8. Spring Batch</h2>
+    <p><strong>Concept:</strong> Scheduled or large-volume batch processing.</p>
+    <ul>
+      <li><span class="app-title">Payroll Processing System</span> – Reads, calculates, and writes payslips.</li>
+      <li><span class="app-title">CSV to DB Import Tool</span> – ETL job for transforming bulk data.</li>
+      <li><span class="app-title">Report Generator</span> – Generates daily/weekly/monthly reports.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">✉️ 9. Spring Mail</h2>
+    <p><strong>Concept:</strong> Sending emails using JavaMailSender.</p>
+    <ul>
+      <li><span class="app-title">Password Reset Feature</span> – Send OTP or reset link.</li>
+      <li><span class="app-title">Order Confirmation Emails</span> – Auto-send after checkout.</li>
+      <li><span class="app-title">Newsletter System</span> – Email campaign using scheduler.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">🔄 10. Spring WebFlux (Reactive)</h2>
+    <p><strong>Concept:</strong> Reactive, non-blocking web apps using Project Reactor.</p>
+    <ul>
+      <li><span class="app-title">Chat Application</span> – Real-time messaging with WebFlux.</li>
+      <li><span class="app-title">Stock Price Dashboard</span> – SSE/WebSocket for updates.</li>
+      <li><span class="app-title">IoT Sensor Processor</span> – React to continuous sensor input.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="concept">🧩 BONUS: Combined Applications</h2>
+    <ul>
+      <li><span class="app-title">✅ Full-Stack Task Tracker</span> – Spring Boot + JPA + Security, with React/Angular frontend.</li>
+      <li><span class="app-title">🛍️ Online Store</span> – Microservices: Product, User, Cart, Order with Spring Cloud stack.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; 2025 Spring Projects Showcase by Mahboob Anwar</p>
+</footer>
+
+</body>
+</html>

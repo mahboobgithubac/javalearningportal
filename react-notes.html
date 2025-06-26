@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Topics with Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        pre {
+            background: #eef;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            overflow-x: auto;
+        }
+        code {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>React Topics with Definitions and Code Examples</h1>
+
+    <h2>1. What is React?</h2>
+    <p>React is a JavaScript library for building user interfaces. It allows developers to create reusable UI components and manage the view layer of web applications efficiently.</p>
+
+    <h2>2. JSX Syntax</h2>
+    <p>JSX stands for JavaScript XML. It allows us to write HTML in React.</p>
+    <pre><code>{`const element = <h1>Hello, world!</h1>;`}</code></pre>
+
+    <h2>3. Functional Component</h2>
+    <p>A functional component is a JavaScript function that returns JSX.</p>
+    <pre><code>{`function Welcome() {
+  return <h1>Hello from Functional Component</h1>;
+}`}</code></pre>
+
+    <h2>4. Props</h2>
+    <p>Props are inputs to components. They are passed as attributes in JSX.</p>
+    <pre><code>{`function Greet(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+<Greet name="Mahboob" />`}</code></pre>
+
+    <h2>5. useState Hook</h2>
+    <p>The <code>useState</code> hook lets you add state to functional components.</p>
+    <pre><code>{`import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  );
+}`}</code></pre>
+
+    <h2>6. useEffect Hook</h2>
+    <p><code>useEffect</code> lets you perform side effects like data fetching or updating the DOM.</p>
+    <pre><code>{`import React, { useEffect } from 'react';
+
+function Timer() {
+  useEffect(() => {
+    console.log('Component mounted');
+  }, []);
+
+  return <div>Check console log</div>;
+}`}</code></pre>
+
+    <h2>7. Conditional Rendering</h2>
+    <p>You can conditionally render elements in React using if statements or ternary operators.</p>
+    <pre><code>{`function Greeting(props) {
+  return (
+    <div>
+      {props.isLoggedIn ? <h1>Welcome back!</h1> : <h1>Please sign in.</h1>}
+    </div>
+  );
+}`}</code></pre>
+
+    <h2>8. List and Keys</h2>
+    <p>Keys help React identify which items have changed, are added, or removed.</p>
+    <pre><code>{`function ListItems() {
+  const items = ['Apple', 'Banana', 'Cherry'];
+  return (
+    <ul>
+      {items.map((item, index) => <li key={index}>{item}</li>)}
+    </ul>
+  );
+}`}</code></pre>
+
+    <h2>9. React Router Example</h2>
+    <p>React Router is used for client-side routing in single-page applications.</p>
+    <pre><code>{`import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+
+function App() {
+  return (
+    <Router>
+      <nav>
+        <Link to="/">Home</Link> | <Link to="/about">About</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </Router>
+  );
+}`}</code></pre>
+
+    <h2>10. Custom Hook Example</h2>
+    <p>You can create your own hooks to encapsulate logic that can be reused across components.</p>
+    <pre><code>{`function useTitle(title) {
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+}
+
+function Home() {
+  useTitle("Home Page");
+  return <h1>Home</h1>;
+}`}</code></pre>
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java 8 Object List Problem Solving (Employee)</title>
+  <meta name="description" content="Java 8 Stream API Object List Problem Solving using Employee class. Includes sorting, grouping, filtering, transformation examples.">
+  <meta name="keywords" content="Java 8, Stream API, Employee problems, Interview questions, Object list problems, Grouping, Sorting, Mapping">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; display: flex; }
+    nav { width: 260px; background-color: #2c3e50; color: white; height: 100vh; overflow-y: auto; position: fixed; }
+    nav h2 { text-align: center; padding: 15px 0; background: #1a252f; margin: 0; }
+    nav ul { list-style: none; padding: 0; }
+    nav li { padding: 10px 20px; cursor: pointer; }
+    nav li:hover { background-color: #34495e; }
+    main { margin-left: 260px; padding: 20px; background-color: #f4f4f4; flex: 1; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    section { margin-bottom: 20px; border: 1px solid #ccc; background: white; border-radius: 5px; }
+    section h3 { margin: 0; padding: 15px; background: #3498db; color: white; cursor: pointer; }
+    .content { padding: 15px; display: none; }
+    pre { background: #2d2d2d; color: white; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    code[class*="language-"] { font-size: 14px; }
+  </style>
+  <script>
+    function toggleContent(id) {
+      const content = document.getElementById(id);
+      content.style.display = content.style.display === "block" ? "none" : "block";
+    }
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</head>
+<body>
+  <nav>
+    <h2>Employee Q&A</h2>
+    <ul>
+<li onclick="scrollToSection('q1')">1. Sort employees by name</li><li onclick="scrollToSection('q2')">2. Sort employees by salary (descending)</li><li onclick="scrollToSection('q3')">3. Filter employees with salary > 50000</li><li onclick="scrollToSection('q4')">4. Find employee with max salary</li><li onclick="scrollToSection('q5')">5. Find youngest employee</li><li onclick="scrollToSection('q6')">6. List all employee names</li><li onclick="scrollToSection('q7')">7. Remove duplicate employees by ID</li><li onclick="scrollToSection('q8')">8. Group employees by department</li><li onclick="scrollToSection('q9')">9. Count employees per department</li><li onclick="scrollToSection('q10')">10. Average salary per department</li><li onclick="scrollToSection('q11')">11. Find highest-paid employee in each department</li><li onclick="scrollToSection('q12')">12. Calculate total salary of all employees</li><li onclick="scrollToSection('q13')">13. Group employee names by age</li><li onclick="scrollToSection('q14')">14. Check if any employee earns > 1 Lakh</li><li onclick="scrollToSection('q15')">15. Check if all employees are older than 18</li><li onclick="scrollToSection('q16')">16. Find first employee whose name starts with A</li><li onclick="scrollToSection('q17')">17. Find duplicate employee names</li><li onclick="scrollToSection('q18')">18. Create Map of employee ID to name</li><li onclick="scrollToSection('q19')">19. Group employees by department (already done)</li><li onclick="scrollToSection('q20')">20. Create comma-separated list of employee names</li><li onclick="scrollToSection('q21')">21. Find 2nd highest paid employee</li><li onclick="scrollToSection('q22')">22. Get top 3 highest paid employees</li><li onclick="scrollToSection('q23')">23. Find highest paid per department (already done)</li><li onclick="scrollToSection('q24')">24. Partition employees by age > 30</li><li onclick="scrollToSection('q25')">25. Find employee with the longest name</li><li onclick="scrollToSection('q26')">26. Flatten a list of employee lists</li><li onclick="scrollToSection('q27')">27. Get 2nd to 4th employee record (pagination)</li><li onclick="scrollToSection('q28')">28. Character frequency in all employee names</li><li onclick="scrollToSection('q29')">29. Calculate total experience (assumed field)</li><li onclick="scrollToSection('q30')">30. Sort departments by average salary descending</li>
+    </ul>
+  </nav>
+  <main>
+    <h1>Java 8 Employee Problem Solving</h1>
+
+    <section id="q1">
+      <h3 onclick="toggleContent('a1')">1. Sort employees by name</h3>
+      <div class="content" id="a1">
+        <pre><code class="language-java">employees.stream().sorted(Comparator.comparing(e -&gt; e.name)).forEach(System.out::println);</code></pre>
+      </div>
+    </section>
+
+    <section id="q2">
+      <h3 onclick="toggleContent('a2')">2. Sort employees by salary (descending)</h3>
+      <div class="content" id="a2">
+        <pre><code class="language-java">employees.stream().sorted(Comparator.comparingDouble(e -&gt; -e.salary)).forEach(System.out::println);</code></pre>
+      </div>
+    </section>
+
+    <section id="q3">
+      <h3 onclick="toggleContent('a3')">3. Filter employees with salary > 50000</h3>
+      <div class="content" id="a3">
+        <pre><code class="language-java">employees.stream().filter(e -&gt; e.salary &gt; 50000).forEach(System.out::println);</code></pre>
+      </div>
+    </section>
+
+    <section id="q4">
+      <h3 onclick="toggleContent('a4')">4. Find employee with max salary</h3>
+      <div class="content" id="a4">
+        <pre><code class="language-java">employees.stream().max(Comparator.comparingDouble(e -&gt; e.salary)).orElse(null);</code></pre>
+      </div>
+    </section>
+
+    <section id="q5">
+      <h3 onclick="toggleContent('a5')">5. Find youngest employee</h3>
+      <div class="content" id="a5">
+        <pre><code class="language-java">employees.stream().min(Comparator.comparingInt(e -&gt; e.age)).orElse(null);</code></pre>
+      </div>
+    </section>
+
+    <section id="q6">
+      <h3 onclick="toggleContent('a6')">6. List all employee names</h3>
+      <div class="content" id="a6">
+        <pre><code class="language-java">employees.stream().map(e -&gt; e.name).collect(Collectors.toList());</code></pre>
+      </div>
+    </section>
+
+    <section id="q7">
+      <h3 onclick="toggleContent('a7')">7. Remove duplicate employees by ID</h3>
+      <div class="content" id="a7">
+        <pre><code class="language-java">new ArrayList&lt;&gt;(employees.stream().collect(Collectors.toMap(e -&gt; e.id, Function.identity(), (e1, e2) -&gt; e1)).values());</code></pre>
+      </div>
+    </section>
+
+    <section id="q8">
+      <h3 onclick="toggleContent('a8')">8. Group employees by department</h3>
+      <div class="content" id="a8">
+        <pre><code class="language-java">employees.stream().collect(Collectors.groupingBy(e -&gt; e.department));</code></pre>
+      </div>
+    </section>
+
+    <section id="q9">
+      <h3 onclick="toggleContent('a9')">9. Count employees per department</h3>
+      <div class="content" id="a9">
+        <pre><code class="language-java">employees.stream().collect(Collectors.groupingBy(e -&gt; e.department, Collectors.counting()));</code></pre>
+      </div>
+    </section>
+
+    <section id="q10">
+      <h3 onclick="toggleContent('a10')">10. Average salary per department</h3>
+      <div class="content" id="a10">
+        <pre><code class="language-java">employees.stream().collect(Collectors.groupingBy(e -&gt; e.department, Collectors.averagingDouble(e -&gt; e.salary)));</code></pre>
+      </div>
+    </section>
+
+    <section id="q11">
+      <h3 onclick="toggleContent('a11')">11. Find highest-paid employee in each department</h3>
+      <div class="content" id="a11">
+        <pre><code class="language-java">employees.stream().collect(Collectors.groupingBy(e -&gt; e.department, Collectors.maxBy(Comparator.comparingDouble(e -&gt; e.salary))));</code></pre>
+      </div>
+    </section>
+
+    <section id="q12">
+      <h3 onclick="toggleContent('a12')">12. Calculate total salary of all employees</h3>
+      <div class="content" id="a12">
+        <pre><code class="language-java">employees.stream().mapToDouble(e -&gt; e.salary).sum();</code></pre>
+      </div>
+    </section>
+
+    <section id="q13">
+      <h3 onclick="toggleContent('a13')">13. Group employee names by age</h3>
+      <div class="content" id="a13">
+        <pre><code class="language-java">employees.stream().collect(Collectors.groupingBy(e -&gt; e.age, Collectors.mapping(e -&gt; e.name, Collectors.toList())));</code></pre>
+      </div>
+    </section>
+
+    <section id="q14">
+      <h3 onclick="toggleContent('a14')">14. Check if any employee earns > 1 Lakh</h3>
+      <div class="content" id="a14">
+        <pre><code class="language-java">employees.stream().anyMatch(e -&gt; e.salary &gt; 100000);</code></pre>
+      </div>
+    </section>
+
+    <section id="q15">
+      <h3 onclick="toggleContent('a15')">15. Check if all employees are older than 18</h3>
+      <div class="content" id="a15">
+        <pre><code class="language-java">employees.stream().allMatch(e -&gt; e.age &gt; 18);</code></pre>
+      </div>
+    </section>
+
+    <section id="q16">
+      <h3 onclick="toggleContent('a16')">16. Find first employee whose name starts with A</h3>
+      <div class="content" id="a16">
+        <pre><code class="language-java">employees.stream().filter(e -&gt; e.name.startsWith(&quot;A&quot;)).findFirst().orElse(null);</code></pre>
+      </div>
+    </section>
+
+    <section id="q17">
+      <h3 onclick="toggleContent('a17')">17. Find duplicate employee names</h3>
+      <div class="content" id="a17">
+        <pre><code class="language-java">employees.stream().collect(Collectors.groupingBy(e -&gt; e.name, Collectors.counting())).entrySet().stream().filter(e -&gt; e.getValue() &gt; 1).map(Map.Entry::getKey).collect(Collectors.toSet());</code></pre>
+      </div>
+    </section>
+
+    <section id="q18">
+      <h3 onclick="toggleContent('a18')">18. Create Map of employee ID to name</h3>
+      <div class="content" id="a18">
+        <pre><code class="language-java">employees.stream().collect(Collectors.toMap(e -&gt; e.id, e -&gt; e.name));</code></pre>
+      </div>
+    </section>
+
+    <section id="q19">
+      <h3 onclick="toggleContent('a19')">19. Group employees by department (already done)</h3>
+      <div class="content" id="a19">
+        <pre><code class="language-java">// Already done in Q8</code></pre>
+      </div>
+    </section>
+
+    <section id="q20">
+      <h3 onclick="toggleContent('a20')">20. Create comma-separated list of employee names</h3>
+      <div class="content" id="a20">
+        <pre><code class="language-java">employees.stream().map(e -&gt; e.name).collect(Collectors.joining(&quot;, &quot;));</code></pre>
+      </div>
+    </section>
+
+    <section id="q21">
+      <h3 onclick="toggleContent('a21')">21. Find 2nd highest paid employee</h3>
+      <div class="content" id="a21">
+        <pre><code class="language-java">employees.stream().sorted((e1, e2) -&gt; Double.compare(e2.salary, e1.salary)).skip(1).findFirst().orElse(null);</code></pre>
+      </div>
+    </section>
+
+    <section id="q22">
+      <h3 onclick="toggleContent('a22')">22. Get top 3 highest paid employees</h3>
+      <div class="content" id="a22">
+        <pre><code class="language-java">employees.stream().sorted((e1, e2) -&gt; Double.compare(e2.salary, e1.salary)).limit(3).forEach(System.out::println);</code></pre>
+      </div>
+    </section>
+
+    <section id="q23">
+      <h3 onclick="toggleContent('a23')">23. Find highest paid per department (already done)</h3>
+      <div class="content" id="a23">
+        <pre><code class="language-java">// Already done in Q11</code></pre>
+      </div>
+    </section>
+
+    <section id="q24">
+      <h3 onclick="toggleContent('a24')">24. Partition employees by age > 30</h3>
+      <div class="content" id="a24">
+        <pre><code class="language-java">employees.stream().collect(Collectors.partitioningBy(e -&gt; e.age &gt; 30));</code></pre>
+      </div>
+    </section>
+
+    <section id="q25">
+      <h3 onclick="toggleContent('a25')">25. Find employee with the longest name</h3>
+      <div class="content" id="a25">
+        <pre><code class="language-java">employees.stream().max(Comparator.comparingInt(e -&gt; e.name.length())).orElse(null);</code></pre>
+      </div>
+    </section>
+
+    <section id="q26">
+      <h3 onclick="toggleContent('a26')">26. Flatten a list of employee lists</h3>
+      <div class="content" id="a26">
+        <pre><code class="language-java">Arrays.asList(employees.subList(0, 3), employees.subList(3, 6)).stream().flatMap(Collection::stream).collect(Collectors.toList());</code></pre>
+      </div>
+    </section>
+
+    <section id="q27">
+      <h3 onclick="toggleContent('a27')">27. Get 2nd to 4th employee record (pagination)</h3>
+      <div class="content" id="a27">
+        <pre><code class="language-java">employees.stream().skip(1).limit(3).collect(Collectors.toList());</code></pre>
+      </div>
+    </section>
+
+    <section id="q28">
+      <h3 onclick="toggleContent('a28')">28. Character frequency in all employee names</h3>
+      <div class="content" id="a28">
+        <pre><code class="language-java">employees.stream().flatMap(e -&gt; e.name.chars().mapToObj(c -&gt; (char) c)).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));</code></pre>
+      </div>
+    </section>
+
+    <section id="q29">
+      <h3 onclick="toggleContent('a29')">29. Calculate total experience (assumed field)</h3>
+      <div class="content" id="a29">
+        <pre><code class="language-java">// employees.stream().mapToInt(e -&gt; e.experience).sum();</code></pre>
+      </div>
+    </section>
+
+    <section id="q30">
+      <h3 onclick="toggleContent('a30')">30. Sort departments by average salary descending</h3>
+      <div class="content" id="a30">
+        <pre><code class="language-java">avgSal.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList());</code></pre>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>compareTo() Implementation in Java</title>
+<link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+    h1, h2 { color: #2c3e50; }
+    code, pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; display: block; white-space: pre-wrap; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #eee; }
+  </style>
+</head>
+<body>
+  <h1>compareTo() Implementation in Java</h1>
+
+  <h2>✅ Syntax</h2>
+  <pre><code>public int compareTo(T other)</code></pre>
+
+  <ul>
+    <li>Returns 0 if objects are equal</li>
+    <li>Returns &lt; 0 if this is less than other</li>
+    <li>Returns &gt; 0 if this is greater than other</li>
+  </ul>
+
+  <h2>✅ Example: compareTo() by Age</h2>
+  <pre><code>public class Person implements Comparable&lt;Person&gt; {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Compare by age
+    @Override
+    public int compareTo(Person other) {
+        return Integer.compare(this.age, other.age);
+        // OR: return this.age - other.age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+}</code></pre>
+
+  <h2>✅ Usage Example</h2>
+  <pre><code>import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        List&lt;Person&gt; people = new ArrayList&lt;&gt;();
+        people.add(new Person("Alice", 30));
+        people.add(new Person("Bob", 25));
+        people.add(new Person("Charlie", 35));
+
+        Collections.sort(people); // Uses compareTo()
+
+        for (Person p : people) {
+            System.out.println(p.getName() + " - " + p.getAge());
+        }
+    }
+}</code></pre>
+
+  <h2>✅ To Compare by Name</h2>
+  <pre><code>@Override
+public int compareTo(Person other) {
+    return this.name.compareTo(other.name);
+}</code></pre>
+
+  <h2>✅ Notes</h2>
+  <ul>
+    <li>Should be consistent with equals(): if a.compareTo(b) == 0, then ideally a.equals(b) should be true</li>
+    <li>For custom sorting without modifying the class, use Comparator instead</li>
+  </ul>
+</body>
+</html>

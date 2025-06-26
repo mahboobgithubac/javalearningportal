@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RestTemplate Methods in Spring Boot</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f6f8;
+            color: #333;
+        }
+        header, footer {
+            background-color: #003366;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+        h1, h2 {
+            color: #003366;
+        }
+        section {
+            margin-bottom: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>RestTemplate Methods in Spring Boot</h1>
+</header>
+
+<main>
+
+    <section>
+        <h2>1. getForObject()</h2>
+        <p>Sends a GET request and returns the response body as an object.</p>
+        <pre><code>String result = restTemplate.getForObject("http://example.com/api/data", String.class);</code></pre>
+    </section>
+
+    <section>
+        <h2>2. getForEntity()</h2>
+        <p>Sends a GET request and returns the entire ResponseEntity (status, headers, and body).</p>
+        <pre><code>ResponseEntity&lt;String&gt; response = restTemplate.getForEntity("http://example.com/api/data", String.class);</code></pre>
+    </section>
+
+    <section>
+        <h2>3. postForObject()</h2>
+        <p>Sends a POST request and returns the response body as an object.</p>
+        <pre><code>MyResponse res = restTemplate.postForObject(
+    "http://example.com/api/save",
+    requestObject,
+    MyResponse.class);</code></pre>
+    </section>
+
+    <section>
+        <h2>4. postForEntity()</h2>
+        <p>Sends a POST request and returns the entire ResponseEntity.</p>
+        <pre><code>ResponseEntity&lt;MyResponse&gt; response = restTemplate.postForEntity(
+    "http://example.com/api/save",
+    requestObject,
+    MyResponse.class);</code></pre>
+    </section>
+
+    <section>
+        <h2>5. put()</h2>
+        <p>Sends a PUT request; returns nothing.</p>
+        <pre><code>restTemplate.put("http://example.com/api/update/1", updatedObject);</code></pre>
+    </section>
+
+    <section>
+        <h2>6. delete()</h2>
+        <p>Sends a DELETE request.</p>
+        <pre><code>restTemplate.delete("http://example.com/api/delete/1");</code></pre>
+    </section>
+
+    <section>
+        <h2>7. exchange()</h2>
+        <p>Flexible method allowing custom HTTP methods and headers.</p>
+        <pre><code>HttpHeaders headers = new HttpHeaders();
+headers.set("Authorization", "Bearer token");
+HttpEntity&lt;String&gt; entity = new HttpEntity&lt;&gt;(headers);
+
+ResponseEntity&lt;String&gt; response = restTemplate.exchange(
+    "http://example.com/api/secure-data",
+    HttpMethod.GET,
+    entity,
+    String.class);</code></pre>
+    </section>
+
+    <section>
+        <h2>8. execute()</h2>
+        <p>Lower-level method with full control over request and response handling.</p>
+        <pre><code>restTemplate.execute(
+    "http://example.com/api/custom",
+    HttpMethod.GET,
+    null,
+    clientHttpResponse -&gt; {
+        return new BufferedReader(
+            new InputStreamReader(clientHttpResponse.getBody())).readLine();
+    });</code></pre>
+    </section>
+
+    <section>
+        <h2>📦 Common Support Classes</h2>
+        <ul>
+            <li><code>HttpHeaders</code> – for custom headers</li>
+            <li><code>HttpEntity&lt;T&gt;</code> – wraps request body and headers</li>
+            <li><code>ResponseEntity&lt;T&gt;</code> – represents full HTTP response</li>
+            <li><code>UriComponentsBuilder</code> – for dynamic URL construction</li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    <p>Spring Boot & RestTemplate Reference &copy; 2025</p>
+</footer>
+
+</body>
+</html>

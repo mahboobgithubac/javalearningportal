@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Java 17 features, HTTP status codes for authentication, transaction management in microservices, and top interview questions.">
+  <meta name="keywords" content="Java 17, Microservices, Transaction Management, HTTP Status Codes, Interview Questions, Sealed Classes, Saga Pattern, REST API">
+  <meta name="author" content="ChatGPT">
+  <title>Java 17, HTTP Codes, Microservices Transactions & Interview Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0 20px;
+      background: #f5f5f5;
+    }
+    header, footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    section {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 900px;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 5px solid #ccc;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #aaa;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Java 17 + Microservices + HTTP Status Codes Guide</h1>
+  <p>Complete Cheat Sheet with Explanations and Interview Questions</p>
+</header>
+
+<section>
+  <h2>1. HTTP Status Codes - Authentication and Authorization</h2>
+
+  <h3>🔐 Wrong Credentials</h3>
+  <p><strong>Status Code:</strong> <code>401 Unauthorized</code> – The client failed to authenticate with the server.</p>
+
+  <h3>👮 Role-Based Access</h3>
+  <p><strong>Status Code:</strong> <code>403 Forbidden</code> – The client is authenticated but does not have permission to access the resource.</p>
+
+  <h3>Comparison Table</h3>
+  <table>
+    <tr><th>Scenario</th><th>Status Code</th><th>Meaning</th></tr>
+    <tr><td>Missing credentials</td><td>401</td><td>Authentication required</td></tr>
+    <tr><td>Wrong credentials</td><td>401</td><td>Authentication failed</td></tr>
+    <tr><td>No access rights</td><td>403</td><td>Authenticated but unauthorized</td></tr>
+  </table>
+
+  <h3>Example Response</h3>
+  <pre>
+GET /admin/data
+Authorization: Bearer valid-user-token
+
+HTTP/1.1 403 Forbidden
+{
+  "error": "Access denied"
+}
+  </pre>
+</section>
+
+<section>
+  <h2>2. Transaction Management in Microservices</h2>
+  <p>Traditional ACID transactions don't work in distributed services. Use SAGA for eventual consistency.</p>
+
+  <h3>Patterns</h3>
+
+  <h4>✅ Saga Pattern</h4>
+  <ul>
+    <li><strong>Choreography:</strong> Each service reacts to events from others.</li>
+    <li><strong>Orchestration:</strong> A central controller coordinates the flow.</li>
+  </ul>
+
+  <h4>❌ 2PC (Two-Phase Commit)</h4>
+  <p>Not scalable or fault-tolerant. Avoid in microservices.</p>
+
+  <h3>Best Practices</h3>
+  <ul>
+    <li>Use Kafka/RabbitMQ for communication</li>
+    <li>Design compensating transactions</li>
+    <li>Make operations idempotent</li>
+    <li>Use distributed tracing for observability</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3. Java 17 New Features</h2>
+  <p>Java 17 is an LTS release with several productivity, language, and performance enhancements.</p>
+
+  <h3>🚀 Major Features</h3>
+  <ul>
+    <li><strong>Sealed Classes</strong> (JEP 409)</li>
+    <li><strong>Pattern Matching for switch</strong> (Preview, JEP 406)</li>
+    <li><strong>Strong encapsulation of internals</strong> (JEP 403)</li>
+    <li><strong>New macOS Metal pipeline</strong> (JEP 382)</li>
+    <li><strong>Removed RMI Activation & AOT Compiler</strong></li>
+    <li><strong>Foreign Function & Memory API</strong> (Incubator)</li>
+  </ul>
+
+  <h3>Example: Sealed Classes</h3>
+  <pre>
+public sealed class Animal permits Dog, Cat {}
+final class Dog extends Animal {}
+final class Cat extends Animal {}
+  </pre>
+
+  <h3>Summary Table</h3>
+  <table>
+    <tr><th>Feature</th><th>JEP</th><th>Category</th></tr>
+    <tr><td>Sealed Classes</td><td>409</td><td>Language</td></tr>
+    <tr><td>Pattern Matching</td><td>406</td><td>Language (Preview)</td></tr>
+    <tr><td>Encapsulation</td><td>403</td><td>Security</td></tr>
+    <tr><td>Metal API</td><td>382</td><td>Platform (macOS)</td></tr>
+    <tr><td>Foreign Function API</td><td>412</td><td>Native Interop</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>4. Performance Optimization for Slow APIs</h2>
+
+  <h3>🔍 Analyze First</h3>
+  <ul>
+    <li>Use tools like Spring Actuator, Prometheus, or logs</li>
+    <li>Check DB, external APIs, or serialization bottlenecks</li>
+  </ul>
+
+  <h3>🚀 Optimization Tips</h3>
+  <ul>
+    <li>Database indexing, pagination, projections</li>
+    <li>Caching (Redis, @Cacheable)</li>
+    <li>Asynchronous processing (`@Async`, queues)</li>
+    <li>Reduce response size (DTOs, GZIP)</li>
+    <li>Optimize serialization and thread pools</li>
+  </ul>
+
+  <h3>Spring Boot Specifics</h3>
+  <pre>
+server:
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 1024
+  </pre>
+</section>
+
+<section>
+  <h2>5. Important Interview Questions</h2>
+  <ul>
+    <li>What is the difference between 401 and 403 HTTP status codes?</li>
+    <li>Explain Saga Pattern in microservices. When to use Orchestration vs Choreography?</li>
+    <li>What are sealed classes in Java 17? How do they help in design?</li>
+    <li>How can you handle transactions in a distributed microservice architecture?</li>
+    <li>What optimizations would you apply for a slow-loading API?</li>
+    <li>What is strong encapsulation in Java and why was it enforced in Java 17?</li>
+    <li>How do you handle failures in a microservice chain?</li>
+    <li>How do you cache REST API results in Spring Boot?</li>
+    <li>What are the benefits of using the Foreign Function API over JNI?</li>
+    <li>What is the role of message brokers in eventual consistency?</li>
+  </ul>
+</section>
+
+<footer>
+  <p>&copy; 2025 | Java & Microservices Guide by ChatGPT | All rights reserved.</p>
+</footer>
+
+</body>
+</html>

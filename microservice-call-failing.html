@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring Boot Microservices Exception Handling</title>
+  <meta name="description" content="Spring Boot Microservices - One service calls another and handles exceptions properly to respond to the client.">
+  <meta name="keywords" content="Spring Boot, Microservices, REST, Exception Handling, Java, Service Communication">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; background-color: #f4f4f4; }
+    h1, h2, h3 { color: #333; }
+    pre { background: #eee; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    code { color: #c7254e; background-color: #f9f2f4; padding: 2px 4px; border-radius: 4px; }
+    .section { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+
+  <h1>Spring Boot Microservices - Exception Handling Between Services</h1>
+
+  <div class="section">
+    <h2>Overview</h2>
+    <p>This project contains two microservices:</p>
+    <ul>
+      <li><strong>Service A</strong> – Calls Service B and handles exceptions.</li>
+      <li><strong>Service B</strong> – Responds normally or throws an exception.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🟦 Service A (Caller)</h2>
+
+    <h3>1. Main Application</h3>
+    <pre><code>@SpringBootApplication
+public class ServiceAApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceAApplication.class, args);
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+}</code></pre>
+
+    <h3>2. Controller</h3>
+    <pre><code>@RestController
+@RequestMapping("/api/service-a")
+public class ServiceAController {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @GetMapping("/call-b")
+    public ResponseEntity&lt;?&gt; callServiceB() {
+        try {
+            String data = restTemplate.getForObject("http://localhost:8082/api/service-b/data", String.class);
+            return ResponseEntity.ok(data);
+        } catch (HttpClientErrorException | HttpServerErrorException ex) {
+            Map&lt;String, Object&gt; error = new HashMap&lt;&gt;();
+            error.put("status", ex.getStatusCode().value());
+            error.put("error", ex.getStatusText());
+            error.put("message", "Handled by Service A: " + ex.getMessage());
+            return ResponseEntity.status(ex.getStatusCode()).body(error);
+        }
+    }
+}</code></pre>
+
+    <h3>3. application.properties</h3>
+    <pre><code>server.port=8081</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🟨 Service B (Provider)</h2>
+
+    <h3>1. Main Application</h3>
+    <pre><code>@SpringBootApplication
+public class ServiceBApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ServiceBApplication.class, args);
+    }
+}</code></pre>
+
+    <h3>2. Controller</h3>
+    <pre><code>@RestController
+@RequestMapping("/api/service-b")
+public class ServiceBController {
+
+    @GetMapping("/data")
+    public ResponseEntity&lt;?&gt; getData(@RequestParam(defaultValue = "true") boolean success) {
+        if (!success) {
+            throw new RuntimeException("Simulated failure in Service B");
+        }
+        return ResponseEntity.ok("Data from Service B");
+    }
+}</code></pre>
+
+    <h3>3. Global Exception Handler</h3>
+    <pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity&lt;?&gt; handleRuntimeException(RuntimeException ex) {
+        Map&lt;String, Object&gt; error = new HashMap&lt;&gt;();
+        error.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        error.put("error", "Internal Server Error");
+        error.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+}</code></pre>
+
+    <h3>4. application.properties</h3>
+    <pre><code>server.port=8082</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>✅ Test Scenarios</h2>
+    <h3>1. Success</h3>
+    <p><code>GET http://localhost:8081/api/service-a/call-b?success=true</code></p>
+    <p><strong>Response:</strong></p>
+    <pre><code>Data from Service B</code></pre>
+
+    <h3>2. Failure</h3>
+    <p><code>GET http://localhost:8081/api/service-a/call-b?success=false</code></p>
+    <p><strong>Response:</strong></p>
+    <pre><code>{
+  "status": 500,
+  "error": "Internal Server Error",
+  "message": "Handled by Service A: 500 Server Error: Internal Server Error"
+}</code></pre>
+  </div>
+
+  <footer style="text-align:center; margin-top:30px; color:#777;">
+    &copy; 2025 Spring Boot Microservices Example | Exception Handling Demo
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn various ways to iterate through List and Set in Java with examples, code snippets, and tricky interview questions and answers." />
+  <meta name="keywords" content="Java, List, Set, Iteration, Java 8, Stream, forEach, Interview Questions, Java Collections" />
+  <meta name="author" content="Java Guide" />
+  <title>Java List and Set Iteration with Interview Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header, footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: white;
+    }
+
+    h1, h2, h3 {
+      color: #003366;
+    }
+
+    pre {
+      background: #eee;
+      padding: 1rem;
+      overflow-x: auto;
+      border-left: 5px solid #003366;
+    }
+
+    code {
+      font-family: monospace;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .summary-table th, .summary-table td {
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      text-align: center;
+    }
+
+    .summary-table th {
+      background-color: #003366;
+      color: white;
+    }
+	body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header nav {
+                margin-top: 10px;
+            }
+        }
+		
+   
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+		 <div class="dropdown">
+		<a href="#">Concepts ▾</a>
+    <div class="dropdown-content">
+      <a href="mysql.html">MySQL</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <!--<a href="#">Concepts</a>-->
+		<div class="dropdown">
+        <a href="#">Projects</a> 
+		<div class="dropdown-content">
+      <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <a href="#">Contact</a>
+		 
+    </nav>
+</header>
+    <h1>Java List and Set Iteration with Tricky Interview Questions</h1>
+  
+
+  <main>
+    <h2>Ways to Iterate List and Set in Java</h2>
+
+    <h3>1. Enhanced For Loop</h3>
+    <pre><code>List&lt;String&gt; list = Arrays.asList("A", "B", "C");
+for (String item : list) {
+    System.out.println(item);
+}
+
+Set&lt;String&gt; set = new HashSet&lt;&gt;(list);
+for (String item : set) {
+    System.out.println(item);
+}</code></pre>
+
+    <h3>2. Iterator</h3>
+    <pre><code>Iterator&lt;String&gt; listIterator = list.iterator();
+while (listIterator.hasNext()) {
+    System.out.println(listIterator.next());
+}
+
+Iterator&lt;String&gt; setIterator = set.iterator();
+while (setIterator.hasNext()) {
+    System.out.println(setIterator.next());
+}</code></pre>
+
+    <h3>3. ListIterator (Only for List)</h3>
+    <pre><code>ListIterator&lt;String&gt; listItr = list.listIterator();
+while (listItr.hasNext()) {
+    System.out.println(listItr.next());
+}</code></pre>
+    <p>🔸 ListIterator allows bidirectional traversal and modification during iteration.</p>
+
+    <h3>4. Classic For Loop (Only for List)</h3>
+    <pre><code>for (int i = 0; i &lt; list.size(); i++) {
+    System.out.println(list.get(i));
+}</code></pre>
+
+    <h3>5. Java 8 Stream API</h3>
+    <pre><code>list.stream().forEach(System.out::println);
+set.stream().forEach(System.out::println);</code></pre>
+
+    <h3>6. Java 8 forEach with Lambda</h3>
+    <pre><code>list.forEach(item -&gt; System.out.println(item));
+set.forEach(item -&gt; System.out.println(item));</code></pre>
+
+    <h3>7. Java 8 Parallel Stream</h3>
+    <pre><code>list.parallelStream().forEach(System.out::println);
+set.parallelStream().forEach(System.out::println);</code></pre>
+
+    <h3>8. Enumeration (Legacy)</h3>
+    <pre><code>Vector&lt;String&gt; vector = new Vector&lt;&gt;(list);
+Enumeration&lt;String&gt; e = vector.elements();
+while (e.hasMoreElements()) {
+    System.out.println(e.nextElement());
+}</code></pre>
+
+    <h3>✅ Summary Table</h3>
+    <table class="summary-table">
+      <tr>
+        <th>Method</th><th>List</th><th>Set</th><th>Java Version</th>
+      </tr>
+      <tr><td>For-each</td><td>✅</td><td>✅</td><td>5+</td></tr>
+      <tr><td>Iterator</td><td>✅</td><td>✅</td><td>All</td></tr>
+      <tr><td>ListIterator</td><td>✅</td><td>❌</td><td>All</td></tr>
+      <tr><td>Classic for loop</td><td>✅</td><td>❌</td><td>All</td></tr>
+      <tr><td>Stream</td><td>✅</td><td>✅</td><td>8+</td></tr>
+      <tr><td>forEach with lambda</td><td>✅</td><td>✅</td><td>8+</td></tr>
+      <tr><td>Parallel Stream</td><td>✅</td><td>✅</td><td>8+</td></tr>
+      <tr><td>Enumeration</td><td>⚠️</td><td>⚠️</td><td>Legacy</td></tr>
+    </table>
+
+    <h2>Insert Value at Specific Index in List</h2>
+    <pre><code>List&lt;Integer&gt; numbers = new ArrayList&lt;&gt;(Arrays.asList(10, 20, 30, 35, 40, 50));
+
+// Add 25 at index 3
+numbers.add(3, 25);
+
+System.out.println(numbers); // Output: [10, 20, 30, 25, 35, 40, 50]</code></pre>
+
+    <h2>🔥 Tricky Interview Questions on List and Set</h2>
+
+    <h3>1. Can a List/Set contain null?</h3>
+    <pre><code>List&lt;String&gt; list = new ArrayList&lt;&gt;();
+list.add(null);
+list.add(null); // OK
+
+Set&lt;String&gt; set = new HashSet&lt;&gt;();
+set.add(null);
+set.add(null); // Still one null
+</code></pre>
+
+    <h3>2. What if you modify while iterating?</h3>
+    <pre><code>for (String item : list) {
+    list.remove(item); // ❌ ConcurrentModificationException
+}</code></pre>
+    <p>✅ Safe way:</p>
+    <pre><code>Iterator&lt;String&gt; it = list.iterator();
+while (it.hasNext()) {
+    if (condition) it.remove();
+}</code></pre>
+
+    <h3>3. Remove duplicates and maintain order</h3>
+    <pre><code>List&lt;Integer&gt; list = Arrays.asList(1, 2, 2, 3, 1);
+List&lt;Integer&gt; result = new ArrayList&lt;&gt;(new LinkedHashSet&lt;&gt;(list));
+System.out.println(result); // [1, 2, 3]</code></pre>
+
+    <h3>4. Difference between List.of() vs Arrays.asList()</h3>
+    <pre><code>List&lt;String&gt; list1 = List.of("A", "B");
+list1.add("C"); // ❌ UnsupportedOperationException
+
+List&lt;String&gt; list2 = Arrays.asList("A", "B");
+list2.set(0, "Z"); // ✅ Works
+list2.add("C"); // ❌ UnsupportedOperationException</code></pre>
+
+    <h3>5. Find Duplicates in List</h3>
+    <pre><code>Set&lt;String&gt; seen = new HashSet&lt;&gt;();
+Set&lt;String&gt; dupes = names.stream()
+    .filter(name -&gt; !seen.add(name))
+    .collect(Collectors.toSet());</code></pre>
+
+    <h3>6. Set Order Behavior</h3>
+    <p>
+      - HashSet: No order<br>
+      - LinkedHashSet: Insertion order<br>
+      - TreeSet: Sorted
+    </p>
+
+    <h3>7. Sort Set in Reverse</h3>
+    <pre><code>Set&lt;Integer&gt; set = new HashSet&lt;&gt;(Arrays.asList(5, 2, 9, 1));
+List&lt;Integer&gt; sorted = new ArrayList&lt;&gt;(set);
+sorted.sort(Comparator.reverseOrder());</code></pre>
+
+    <h3>8. equals() vs contains()</h3>
+    <p>contains() uses equals() internally. Override equals and hashCode for custom objects.</p>
+
+    <h3>9. Custom Objects in HashSet</h3>
+    <pre><code>class Book {
+    String name;
+    Book(String name) { this.name = name; }
+
+    public boolean equals(Object o) {
+        return (o instanceof Book) &amp;&amp; ((Book) o).name.equals(this.name);
+    }
+
+    public int hashCode() {
+        return name.hashCode();
+    }
+}</code></pre>
+
+    <h3>10. Convert Set to List and Sort</h3>
+    <pre><code>Set&lt;String&gt; set = new HashSet&lt;&gt;(Set.of("B", "A", "C"));
+List&lt;String&gt; sortedList = new ArrayList&lt;&gt;(set);
+Collections.sort(sortedList);</code></pre>
+  </main>
+
+<footer>
+    &copy; 2025 Java Learning Portal. All rights reserved.
+	
+	
+
+	<!-- hitwebcounter Code START -->
+	 <div style="margin-top:10px;">
+<a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=20836914&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>    
+</div>  
+
+                                 
+
+</footer>
+
+<script>
+    // Visit Counter using localStorage
+    const visitKey = 'javaLearningPortalVisits';
+    let count = localStorage.getItem(visitKey);
+
+    if (!count) {
+        count = 1;
+    } else {
+        count = parseInt(count) + 1;
+    }
+
+    localStorage.setItem(visitKey, count);
+    document.getElementById('visitCount').textContent = `👀 you have visited ${count} time(s) on this browser.`;
+	<!-- 100% privacy-first analytics -->
+
+
+</script>
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+</body>
+</html>

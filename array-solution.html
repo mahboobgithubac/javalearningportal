@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java 8 Array Problem Solving Cheat Sheet</title>
+  <meta name="description" content="Java 8 Stream API cheat sheet for array problems. Quick interview guide.">
+  <meta name="keywords" content="Java 8, Stream API, Cheat Sheet, Interview, Arrays, Java coding guide">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; display: flex; }
+    nav { width: 260px; background-color: #2c3e50; color: white; height: 100vh; overflow-y: auto; position: fixed; }
+    nav h2 { text-align: center; padding: 15px 0; background: #1a252f; margin: 0; }
+    nav ul { list-style: none; padding: 0; }
+    nav li { padding: 10px 20px; cursor: pointer; }
+    nav li:hover { background-color: #34495e; }
+    main { margin-left: 260px; padding: 20px; background-color: #f4f4f4; flex: 1; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    section { margin-bottom: 20px; border: 1px solid #ccc; background: white; border-radius: 5px; }
+    section h3 { margin: 0; padding: 15px; background: #3498db; color: white; cursor: pointer; }
+    .content { padding: 15px; display: none; }
+    pre { background: #2d2d2d; color: white; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    code[class*="language-"] { font-size: 14px; }
+    p { margin: 10px 0 0; }
+  </style>
+  <script>
+    function toggleContent(id) {
+      const content = document.getElementById(id);
+      content.style.display = content.style.display === "block" ? "none" : "block";
+    }
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+    }
+  </script>
+</head>
+<body>
+  <nav>
+    <h2>Problems List</h2>
+    <ul>
+      <li onclick="scrollToSection('q1')">1. Find the Maximum Number</li>
+      <li onclick="scrollToSection('q2')">2. Find the Minimum Number</li>
+      <li onclick="scrollToSection('q3')">3. Calculate the Sum</li>
+      <li onclick="scrollToSection('q4')">4. Calculate the Average</li>
+      <li onclick="scrollToSection('q5')">5. Count Even Numbers</li>
+      <li onclick="scrollToSection('q6')">6. Get a List of Squares</li>
+      <li onclick="scrollToSection('q7')">7. Filter Numbers Greater Than 10</li>
+      <li onclick="scrollToSection('q8')">8. Remove Duplicates</li>
+      <li onclick="scrollToSection('q9')">9. Sort in Ascending Order</li>
+      <li onclick="scrollToSection('q10')">10. Sort in Descending Order</li>
+      <li onclick="scrollToSection('q11')">11. Find Second Largest Number</li>
+      <li onclick="scrollToSection('q12')">12. Check if Array Contains 42</li>
+      <li onclick="scrollToSection('q13')">13. Convert int[] to List</li>
+      <li onclick="scrollToSection('q14')">14. Merge Two Arrays</li>
+      <li onclick="scrollToSection('q15')">15. Find Duplicates in Integer Array</li>
+    </ul>
+  </nav>
+  <main>
+    <h1>Java 8 Array Problem Solving Cheat Sheet</h1>
+		<b>Given Integer array:</b>
+ <pre><code class="language-java">int[] numbers = {1, 2, 3, 2, 4, 1, 5, 6, 5};</code></pre>
+  <pre><code class="language-java">
+ int[] arr = {1, 2, 3, 2, 4, 1, 5, 6, 5, 12, 15, 42};
+int[] arr2 = {7, 8, 9};
+ </code></pre>
+
+    <!-- Each Section: Title + Code + Output -->
+    <section id="q1"><h3 onclick="toggleContent('a1')">1. Find the Maximum Number</h3><div class="content" id="a1"><pre><code class="language-java">int max = Arrays.stream(arr).max().orElseThrow();</code></pre><p><strong>Output:</strong> Max = 6</p></div></section>
+
+    <section id="q2"><h3 onclick="toggleContent('a2')">2. Find the Minimum Number</h3><div class="content" id="a2"><pre><code class="language-java">int min = Arrays.stream(arr).min().orElseThrow();</code></pre><p><strong>Output:</strong> Min = 1</p></div></section>
+
+    <section id="q3"><h3 onclick="toggleContent('a3')">3. Calculate the Sum</h3><div class="content" id="a3"><pre><code class="language-java">int sum = Arrays.stream(arr).sum();</code></pre><p><strong>Output:</strong> Sum = 16</p></div></section>
+
+    <section id="q4"><h3 onclick="toggleContent('a4')">4. Calculate the Average</h3><div class="content" id="a4"><pre><code class="language-java">double average = Arrays.stream(arr).average().orElse(0.0);</code></pre><p><strong>Output:</strong> Average = 3.2</p></div></section>
+
+    <section id="q5"><h3 onclick="toggleContent('a5')">5. Count Even Numbers</h3><div class="content" id="a5"><pre><code class="language-java">long evenCount = Arrays.stream(arr).filter(n -> n % 2 == 0).count();</code></pre><p><strong>Output:</strong> Even Count = 2</p></div></section>
+
+    <section id="q6"><h3 onclick="toggleContent('a6')">6. Get a List of Squares</h3><div class="content" id="a6"><pre><code class="language-java">List&lt;Integer&gt; squares = Arrays.stream(arr)\n    .map(n -> n * n)\n    .boxed()\n    .collect(Collectors.toList());</code></pre><p><strong>Output:</strong> Squares = [1, 4, 9, 16]</p></div></section>
+
+    <section id="q7"><h3 onclick="toggleContent('a7')">7. Filter Numbers Greater Than 10</h3><div class="content" id="a7"><pre><code class="language-java">List&lt;Integer&gt; result = Arrays.stream(arr)\n    .filter(n -> n > 10)\n    .boxed()\n    .collect(Collectors.toList());</code></pre><p><strong>Output:</strong> Result = [12, 15]</p></div></section>
+
+    <section id="q8"><h3 onclick="toggleContent('a8')">8. Remove Duplicates</h3><div class="content" id="a8"><pre><code class="language-java">int[] distinct = Arrays.stream(arr).distinct().toArray();</code></pre><p><strong>Output:</strong> Distinct = [1, 2, 3, 4, 5]</p></div></section>
+
+    <section id="q9"><h3 onclick="toggleContent('a9')">9. Sort in Ascending Order</h3><div class="content" id="a9"><pre><code class="language-java">int[] ascSorted = Arrays.stream(arr).sorted().toArray();</code></pre><p><strong>Output:</strong> Ascending = [1, 2, 3, 4, 5]</p></div></section>
+
+    <section id="q10"><h3 onclick="toggleContent('a10')">10. Sort in Descending Order</h3><div class="content" id="a10"><pre><code class="language-java">int[] descSorted = Arrays.stream(arr)\n    .boxed()\n    .sorted(Comparator.reverseOrder())\n    .mapToInt(Integer::intValue)\n    .toArray();</code></pre><p><strong>Output:</strong> Descending = [5, 4, 3, 2, 1]</p></div></section>
+
+    <section id="q11"><h3 onclick="toggleContent('a11')">11. Find Second Largest Number</h3><div class="content" id="a11"><pre><code class="language-java">OptionalInt secondLargest = Arrays.stream(arr)\n    .distinct()\n    .boxed()\n    .sorted(Comparator.reverseOrder())\n    .skip(1)\n    .findFirst()\n    .mapToInt(Integer::intValue);</code></pre><p><strong>Output:</strong> Second Largest = 4</p></div></section>
+
+    <section id="q12"><h3 onclick="toggleContent('a12')">12. Check if Array Contains 42</h3><div class="content" id="a12"><pre><code class="language-java">boolean contains = Arrays.stream(arr).anyMatch(n -> n == 42);</code></pre><p><strong>Output:</strong> Contains = true/false</p></div></section>
+
+    <section id="q13"><h3 onclick="toggleContent('a13')">13. Convert int[] to List</h3><div class="content" id="a13"><pre><code class="language-java">List&lt;Integer&gt; list = Arrays.stream(arr).boxed().collect(Collectors.toList());</code></pre><p><strong>Output:</strong> List = [1, 2, 3]</p></div></section>
+
+    <section id="q14"><h3 onclick="toggleContent('a14')">14. Merge Two Arrays</h3><div class="content" id="a14"><pre><code class="language-java">int[] merged = IntStream.concat(Arrays.stream(arr1), Arrays.stream(arr2)).toArray();</code></pre><p><strong>Output:</strong> Merged = [1, 2, 3, 4, 5]</p></div></section>
+
+    <section id="q15"><h3 onclick="toggleContent('a15')">15. Find Duplicates in Integer Array</h3><div class="content" id="a15"><pre><code class="language-java">Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();\nSet&lt;Integer&gt; duplicates = Arrays.stream(arr)\n    .boxed()\n    .filter(n -> !seen.add(n))\n    .collect(Collectors.toSet());</code></pre><p><strong>Output:</strong> Duplicates = [1, 2, 5]</p></div></section>
+
+  </main>
+</body>
+</html>

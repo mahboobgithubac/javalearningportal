@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Distributed Log Tracing in Microservices</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            background-color: #e8e8e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #bbb;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .section {
+            background-color: #e3f2fd;
+            padding: 10px 15px;
+            margin-top: 20px;
+            border-left: 5px solid #1976d2;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>✅ What Is Distributed Log Tracing?</h1>
+    <p>It links log entries from multiple services using a unique <strong>trace ID</strong>.</p>
+    <p><em>Helps answer:</em> “What happened to request X?”</p>
+    <p><strong>Common tools:</strong> Spring Cloud Sleuth, Zipkin, OpenTelemetry, Jaeger, ELK Stack</p>
+
+    <h2>✅ Key Concepts</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Term</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Trace ID</td>
+                <td>Unique ID for the entire request lifecycle across services</td>
+            </tr>
+            <tr>
+                <td>Span ID</td>
+                <td>Unique ID for each service/method call</td>
+            </tr>
+            <tr>
+                <td>Parent ID</td>
+                <td>Links the current span to its caller span</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>✅ Spring Boot Example with Spring Cloud Sleuth + Zipkin</h2>
+
+    <div class="section">
+        <h3>🔹 Service A: <code>UserService</code></h3>
+        <pre><code>@RestController
+public class UserController {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @GetMapping("/get-user")
+    public String getUser() {
+        // This call is automatically traced
+        String response = restTemplate.getForObject("http://localhost:8081/get-order", String.class);
+        return "User details + " + response;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h3>🔹 Service B: <code>OrderService</code></h3>
+        <pre><code>@RestController
+public class OrderController {
+
+    @GetMapping("/get-order")
+    public String getOrder() {
+        return "Order details";
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h3>🔹 Common Configuration: <code>application.properties</code></h3>
+        <pre><code>spring.application.name=user-service   # or order-service
+spring.sleuth.sampler.probability=1.0  # Sample all requests
+spring.zipkin.base-url=http://localhost:9411
+spring.zipkin.enabled=true</code></pre>
+    </div>
+
+    <div class="section">
+        <h3>✅ Dependencies (<code>pom.xml</code>)</h3>
+        <pre><code>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-sleuth&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-zipkin&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+    </div>
+
+    <h2>✅ How It Works</h2>
+    <ul>
+        <li>Sleuth automatically creates <strong>trace/span IDs</strong> and adds them to logs.</li>
+        <li>Zipkin collects and visualizes trace data.</li>
+    </ul>
+
+    <div class="highlight">
+        <p><strong>Logs look like:</strong></p>
+        <pre><code>2025-06-23 12:00:00 [user-service,abcd1234abcd1234,abcd5678abcd5678] ...
+Format: [applicationName, traceId, spanId]</code></pre>
+    </div>
+
+    <h2>✅ Visualization</h2>
+    <p><strong>Run Zipkin server:</strong></p>
+    <pre><code>docker run -d -p 9411:9411 openzipkin/zipkin</code></pre>
+    <p><strong>Access:</strong> <a href="http://localhost:9411" target="_blank">http://localhost:9411</a></p>
+
+    <h2>✅ Benefits</h2>
+    <ul>
+        <li>End-to-end visibility</li>
+        <li>Easier debugging of failures</li>
+        <li>Detect performance bottlenecks</li>
+        <li>Trace request paths in logs</li>
+    </ul>
+
+    <h2>✅ Summary</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Tool</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Sleuth</td>
+                <td>Generates and propagates trace IDs</td>
+            </tr>
+            <tr>
+                <td>Zipkin</td>
+                <td>Collects and visualizes traces</td>
+            </tr>
+            <tr>
+                <td>Logs</td>
+                <td>Contain trace/span IDs</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

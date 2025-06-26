@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot CI/CD with GitHub Actions to Kubernetes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #aaa;
+      text-align: left;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ CI/CD Pipeline: GitHub Actions → Kubernetes (Spring Boot App)</h1>
+
+  <div class="section">
+    <h2>💡 Objective</h2>
+    <p>Every time you push to the <code>main</code> branch:</p>
+    <ul>
+      <li>Your Spring Boot app is built</li>
+      <li>Docker image is built and pushed to DockerHub (or ECR/GCR/ACR)</li>
+      <li>Kubernetes is updated with the new image version</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>📁 Directory Structure</h2>
+    <pre><code>spring-boot-k8s/
+├── src/
+├── Dockerfile
+├── pom.xml
+├── k8s/
+│   ├── deployment.yaml
+│   └── service.yaml
+├── .github/
+│   └── workflows/
+│       └── deploy.yml</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>1️⃣ Dockerfile</h2>
+    <pre><code>FROM openjdk:17-jdk-slim
+COPY target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>2️⃣ GitHub Actions Workflow (<code>.github/workflows/deploy.yml</code>)</h2>
+    <pre><code>name: CI/CD to Kubernetes
+
+on:
+  push:
+    branches: [main]
+
+env:
+  IMAGE_NAME: your-dockerhub-username/springboot-k8s
+  DEPLOYMENT_NAME: springboot-deployment
+  CONTAINER_NAME: springboot-container
+  NAMESPACE: default
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
+
+    - name: Log in to DockerHub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Build Docker Image
+      run: docker build -t $IMAGE_NAME:${{ github.sha }} .
+
+    - name: Push Docker Image
+      run: docker push $IMAGE_NAME:${{ github.sha }}
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: Set up Kubeconfig
+      run: echo "${{ secrets.KUBECONFIG }}" > kubeconfig && export KUBECONFIG=kubeconfig
+
+    - name: Update K8s Deployment Image
+      run: |
+        kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$IMAGE_NAME:${{ github.sha }} -n $NAMESPACE</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>3️⃣ Kubernetes Deployment (<code>k8s/deployment.yaml</code>)</h2>
+    <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot
+  template:
+    metadata:
+      labels:
+        app: springboot
+    spec:
+      containers:
+      - name: springboot-container
+        image: your-dockerhub-username/springboot-k8s
+        ports:
+        - containerPort: 8080</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>4️⃣ GitHub Secrets Required</h2>
+    <p>Go to your repo → <strong>Settings &gt; Secrets and Variables &gt; Actions</strong>:</p>
+    <table>
+      <tr><th>Secret Key</th><th>Value</th></tr>
+      <tr><td><code>DOCKER_USERNAME</code></td><td>Your DockerHub username</td></tr>
+      <tr><td><code>DOCKER_PASSWORD</code></td><td>Your DockerHub password/token</td></tr>
+      <tr><td><code>KUBECONFIG</code></td><td>Base64-encoded kubeconfig file</td></tr>
+    </table>
+
+    <p>To generate <code>KUBECONFIG</code> base64:</p>
+    <pre><code>cat ~/.kube/config | base64</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>✅ Result</h2>
+    <p>When you push code to the <code>main</code> branch:</p>
+    <ul>
+      <li>Spring Boot app is built</li>
+      <li>Docker image is pushed to DockerHub</li>
+      <li>Kubernetes Deployment is updated with new image</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🚀 Optional Additions</h2>
+    <ul>
+      <li>🔁 Auto-Rollback on failure</li>
+      <li>📈 Horizontal Pod Autoscaler</li>
+      <li>🔐 Secrets using K8s Secrets or Vault</li>
+      <li>🌐 Ingress + Domain with HTTPS</li>
+    </ul>
+  </div>
+
+</body>
+</html>

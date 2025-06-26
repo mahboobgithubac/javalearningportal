@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Service Mesh in Microservices</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8fafc;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #2d2d2d;
+      color: #003366;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #e3f2fd;
+    }
+    .diagram {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .section {
+      background-color: #e0f7fa;
+      border-left: 5px solid #00796b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ What is a Service Mesh in Microservices?</h1>
+  <p>
+    A <strong>service mesh</strong> is a dedicated infrastructure layer for managing service-to-service communication in microservices architecture. 
+    It provides observability, security, reliability, and traffic control—<em>without modifying application code</em>.
+  </p>
+
+  <h2>🎯 Key Responsibilities</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Responsibility</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Traffic Control</td>
+        <td>Routing, load balancing, retries, timeouts</td>
+      </tr>
+      <tr>
+        <td>Security</td>
+        <td>mTLS (mutual TLS), policy enforcement</td>
+      </tr>
+      <tr>
+        <td>Observability</td>
+        <td>Metrics, logging, distributed tracing</td>
+      </tr>
+      <tr>
+        <td>Resilience</td>
+        <td>Circuit breaking, rate limiting, fault injection</td>
+      </tr>
+      <tr>
+        <td>Zero Trust</td>
+        <td>AuthN, AuthZ per service identity</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🧩 How Does It Work?</h2>
+  <p>
+    A service mesh uses <strong>sidecar proxies</strong> (like Envoy) deployed alongside each service.
+    All communication between services goes through these proxies.
+  </p>
+
+  <div class="diagram">
+    <pre><code>+-----------+       +-----------+
+| Service A |<----->| Sidecar A |
++-----------+       +-----------+
+                            |
+                            v
+                     +-----------+
+                     | Sidecar B |
+                     +-----------+
+                            ^
+                     +-----------+
+                     | Service B |
+                     +-----------+</code></pre>
+    <p><em>All communication goes through the sidecar proxies. The control plane manages configuration and policies.</em></p>
+  </div>
+
+  <h2>🧰 Popular Service Mesh Tools</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Istio</td>
+        <td>Most widely used, integrates with Envoy proxy</td>
+      </tr>
+      <tr>
+        <td>Linkerd</td>
+        <td>Lightweight, simple alternative to Istio</td>
+      </tr>
+      <tr>
+        <td>Consul</td>
+        <td>Provides service discovery + service mesh</td>
+      </tr>
+      <tr>
+        <td>AWS App Mesh</td>
+        <td>Managed service mesh by AWS</td>
+      </tr>
+      <tr>
+        <td>Kuma</td>
+        <td>Service mesh from Kong, supports multi-mesh</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>📌 Features of Istio (as Example)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Traffic Splitting</td>
+        <td>Canary deployments, A/B testing</td>
+      </tr>
+      <tr>
+        <td>mTLS</td>
+        <td>Encrypted communication</td>
+      </tr>
+      <tr>
+        <td>Telemetry</td>
+        <td>Built-in metrics and logs</td>
+      </tr>
+      <tr>
+        <td>Tracing</td>
+        <td>Supports Zipkin, Jaeger</td>
+      </tr>
+      <tr>
+        <td>Gateways</td>
+        <td>Ingress/Egress control</td>
+      </tr>
+      <tr>
+        <td>Authorization</td>
+        <td>RBAC, OPA integration</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🛠️ Example: Enable mTLS and Retry (Istio YAML)</h2>
+  <pre><code>apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: my-service
+spec:
+  host: my-service
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 1
+        maxRequestsPerConnection: 1
+    outlierDetection:
+      consecutive5xxErrors: 1
+      interval: 1s
+      baseEjectionTime: 30s
+</code></pre>
+
+  <h2>✅ When to Use Service Mesh?</h2>
+  <ul>
+    <li>Advanced traffic control (e.g., retries, circuit breaker)</li>
+    <li>Secure communication between microservices</li>
+    <li>Observability of internal traffic</li>
+    <li>Compliance (audit logs, zero trust)</li>
+    <li>Centralized policy enforcement</li>
+  </ul>
+
+  <h2>❗ Considerations</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Pros</th>
+        <th>Cons</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Strong observability</td>
+        <td>Added complexity</td>
+      </tr>
+      <tr>
+        <td>Strong security (mTLS)</td>
+        <td>Performance overhead (sidecars)</td>
+      </tr>
+      <tr>
+        <td>Centralized traffic control</td>
+        <td>Requires DevOps expertise</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

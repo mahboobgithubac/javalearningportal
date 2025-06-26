@@ -1,0 +1,1938 @@
+<html><head><meta charset='UTF-8'><title>Spring Boot Interview Q&A</title></head><body>
+<h1>Spring Boot Interview Questions</h1>
+<p>Spring boot interview questions</p>
+<p>Spring Boot interview questions divided by difficulty level, along with brief answers. These will help Java developers prepare for both junior and senior-level interviews.</p>
+<p>🔹 Basic Level</p>
+<details><summary>1. What is Spring Boot?</summary>
+<p>Spring Boot is a framework that simplifies the development of Spring applications by providing:</p>
+</details>
+<p>Auto-configuration</p>
+<p>Embedded servers (like Tomcat)</p>
+<p>Opinionated starter dependencies</p>
+<p>Production-ready features (e.g., health checks, metrics)</p>
+<details><summary>2. What are the advantages of Spring Boot?</summary>
+<p>Reduces boilerplate code</p>
+</details>
+<p>No need for external server deployment (uses embedded servers)</p>
+<p>Auto-configuration based on classpath</p>
+<p>Starter templates for dependencies</p>
+<p>Production-ready features (Actuator)</p>
+<details><summary>3. What are Starters in Spring Boot?</summary>
+<p>Starters are pre-defined dependencies. Example:</p>
+</details>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<details><summary>4. How does Spring Boot auto-configuration work?</summary>
+<p>Spring Boot uses @EnableAutoConfiguration and classpath scanning to automatically configure beans based on the libraries present in the classpath.</p>
+</details>
+<details><summary>5. How do you create a Spring Boot application?</summary>
+<p>Use Spring Initializr ()</p>
+</details>
+<p>Annotate main class with @SpringBootApplication</p>
+<p>@SpringBootApplication</p>
+<p>public class App {</p>
+<p>public static void main(String[] args) {</p>
+<p>SpringApplication.run(App.class, args);</p>
+<p>}</p>
+<p>}</p>
+<details><summary>6. What is @SpringBootApplication?</summary>
+<p>It is a convenience annotation that includes:</p>
+</details>
+<p>@Configuration</p>
+<p>@EnableAutoConfiguration</p>
+<p>@ComponentScan</p>
+<p>🔹 Intermediate Level</p>
+<details><summary>7. What is Spring Boot Actuator?</summary>
+<p>Provides production-ready features like:</p>
+</details>
+<p>Health checks: /actuator/health</p>
+<p>Metrics: /actuator/metrics</p>
+<p>Info: /actuator/info</p>
+<details><summary>8. How do you handle exceptions in Spring Boot?</summary>
+<p>Using @ControllerAdvice and @ExceptionHandler:</p>
+</details>
+<p>@ControllerAdvice</p>
+<p>public class GlobalExceptionHandler {</p>
+<p>@ExceptionHandler(Exception.class)</p>
+<p>public ResponseEntity&lt;String&gt; handleException(Exception e) {</p>
+<p>return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());</p>
+<p>}</p>
+<p>}</p>
+<details><summary>9. How to connect Spring Boot with a database?</summary>
+<p>Via  application properties:</p>
+</details>
+<p>spring.datasource.url=jdbc:mysql://localhost:3306/db</p>
+<p>spring.datasource.username=root</p>
+<p>spring.datasource.password=pass</p>
+<p>spring.jpa.hibernate.ddl-auto=update</p>
+<details><summary>10. What is the difference between @Component, @Service, @Repository, and @Controller?</summary>
+<p>All are component stereotypes:</p>
+</details>
+<p>@Component: Generic component</p>
+<p>@Service: Business logic layer</p>
+<p>@Repository: DAO layer, enables exception translation</p>
+<p>@Controller: Web controller layer (MVC)</p>
+<details><summary>11. What are Profiles in Spring Boot?</summary>
+<p>Used to define environment-specific configurations using @Profile.</p>
+</details>
+<details><summary>12. How to configure properties in Spring Boot?</summary>
+<p>application.properties or application.yml</p>
+</details>
+<p>Use @Value or @ConfigurationProperties to bind values</p>
+<details><summary>13. How do you implement logging in Spring Boot?</summary>
+<p>Uses Spring Boot’s default logging (Logback). You can configure application.properties:</p>
+</details>
+<p>logging.level.root=INFO</p>
+<p>logging.level.org.springframework=DEBUG</p>
+<details><summary>14. How do you test a Spring Boot application?</summary>
+<p>@SpringBootTest for integration tests</p>
+</details>
+<p>@WebMvcTest, @DataJpaTest for slice tests</p>
+<p>🔹 Advanced Level</p>
+<details><summary>15. What is Spring Boot DevTools?</summary>
+<p>Enables live reload, automatic restarts, and better dev experience.</p>
+</details>
+<p>16. Explain the Spring Boot Starter Parent.</p>
+<p>Provides default configurations for Maven such as Java version, plugins, and dependency versions.</p>
+<details><summary>17. What is the use of CommandLineRunner and ApplicationRunner?</summary>
+<p>Used to run code after the application context is loaded:</p>
+</details>
+<p>@Bean</p>
+<p>public CommandLineRunner run() {</p>
+<p>return args -&gt; {</p>
+<p>System.out.println(&quot;Application started&quot;);</p>
+<p>};</p>
+<p>}</p>
+<details><summary>18. How does Spring Boot support microservices?</summary>
+<p>REST APIs (via Spring MVC)</p>
+</details>
+<p>Configuration (via Spring Cloud Config)</p>
+<p>Service Discovery (Eureka)</p>
+<p>Load balancing (Spring Cloud LoadBalancer / Ribbon)</p>
+<p>Resilience (Resilience4j)</p>
+<p>API Gateway (Spring Cloud Gateway)</p>
+<details><summary>19. What is the difference between Spring Boot and Spring MVC?</summary>
+<p>Spring Boot simplifies application setup with embedded servers and auto-configuration.</p>
+</details>
+<p>Spring MVC is a web framework; Spring Boot can run MVC apps easily.</p>
+<details><summary>20. What is the use of @EnableAutoConfiguration?</summary>
+<p>It tells Spring Boot to start auto-configuring beans based on the classpath.</p>
+</details>
+<p>🔹 Bonus: Microservice-Specific Spring Boot Questions</p>
+<details><summary>21. How do you create a REST API in Spring Boot?</summary>
+<p>@RestController</p>
+</details>
+<p>@RequestMapping(&quot;/api&quot;)</p>
+<p>public class UserController {</p>
+<p>@GetMapping(&quot;/users&quot;)</p>
+<p>public List&lt;User&gt; getUsers() {</p>
+<p>return userService.getAllUsers();</p>
+<p>}</p>
+<p>}</p>
+<details><summary>22. How do you implement security in Spring Boot?</summary>
+<p>Using Spring Security:</p>
+</details>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>Then configure a security config with WebSecurityConfigurerAdapter or newer SecurityFilterChain.</p>
+<details><summary>23. What is the difference between @RestController and @Controller?</summary>
+<p>@RestController = @Controller + @ResponseBody</p>
+</details>
+<p>Used for REST APIs where the return value is a JSON/XML object.</p>
+<details><summary>24. What are common annotations used in Spring Boot?</summary>
+<p>@SpringBootApplication</p>
+</details>
+<p>@RestController</p>
+<p>@RequestMapping</p>
+<p>@GetMapping, @PostMapping</p>
+<p>@Service, @Repository</p>
+<p>@Autowired, @Value</p>
+<p>@Entity, @Id</p>
+<p>@EnableJpaRepositories, @ComponentScan, @Configuration</p>
+<p>comprehensive list of commonly used Spring Boot and REST API annotations categorized by their purpose, with brief explanations and usage examples:</p>
+<p>✅ Core Spring Boot Annotations</p>
+<p>✅ Spring Bean &amp; Dependency Injection Annotations</p>
+<p>✅ REST API (Spring Web MVC) Annotations</p>
+<p>✅ Data Persistence (Spring Data JPA)</p>
+<p>✅ Validation (Spring Boot + Hibernate Validator)</p>
+<p>✅ Spring Boot Testing Annotations</p>
+<p>✅ Other Useful Annotations</p>
+<p>Create a spring boot rest api crud project for employee</p>
+<p>A complete Spring Boot REST API CRUD project for managing Employee entities. This example includes:</p>
+<p>Spring Boot setup</p>
+<p>REST controller</p>
+<p>Service layer</p>
+<p>Repository using Spring Data JPA</p>
+<p>MySQL integration</p>
+<p>Basic validation</p>
+<p>✅ Project Structure</p>
+<p>employee-crud-api/</p>
+<p>├── src/</p>
+<p>│   ├── main/</p>
+<p>│   │   ├── java/com/example/employee/</p>
+<p>│   │   │   ├── controller/EmployeeController.java</p>
+<p>│   │   │   ├── entity/Employee.java</p>
+<p>│   │   │   ├── repository/EmployeeRepository.java</p>
+<p>│   │   │   ├── service/EmployeeService.java</p>
+<p>│   │   │   ├── service/impl/EmployeeServiceImpl.java</p>
+<p>│   │   │   └── EmployeeCrudApiApplication.java</p>
+<p>│   │   └── resources/</p>
+<p>│   │       ├── application.properties</p>
+<p>└── pom.xml</p>
+<p>1️⃣ pom.xml</p>
+<p>&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; ...&gt;</p>
+<p>&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</p>
+<p>&lt;groupId&gt;com.example&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;employee-crud-api&lt;/artifactId&gt;</p>
+<p>&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</p>
+<p>&lt;packaging&gt;jar&lt;/packaging&gt;</p>
+<p>&lt;name&gt;employee-crud-api&lt;/name&gt;</p>
+<p>&lt;description&gt;Spring Boot Employee CRUD REST API&lt;/description&gt;</p>
+<p>&lt;parent&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</p>
+<p>&lt;version&gt;3.2.4&lt;/version&gt;</p>
+<p>&lt;relativePath/&gt;</p>
+<p>&lt;/parent&gt;</p>
+<p>&lt;dependencies&gt;</p>
+<p>&lt;!-- Spring Boot Web &amp; JPA --&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;!-- MySQL Driver --&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;com.mysql&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;</p>
+<p>&lt;scope&gt;runtime&lt;/scope&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;!-- Validation --&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;jakarta.validation&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;jakarta.validation-api&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;!-- Spring Boot DevTools (Optional) --&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;</p>
+<p>&lt;scope&gt;runtime&lt;/scope&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</p>
+<p>&lt;scope&gt;test&lt;/scope&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;/dependencies&gt;</p>
+<p>&lt;/project&gt;</p>
+<p>2️⃣ application.properties</p>
+<p>spring.datasource.url=jdbc:mysql://localhost:3306/employee_db</p>
+<p>spring.datasource.username=root</p>
+<p>spring.datasource.password=your_password</p>
+<p>spring.jpa.hibernate.ddl-auto=update</p>
+<p>spring.jpa.show-sql=true</p>
+<p>spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect</p>
+<p>server.port=8080</p>
+<p>3️⃣ Employee Entity</p>
+<p>package com.example.employee.entity;</p>
+<p>import jakarta.persistence.*;</p>
+<p>import jakarta.validation.constraints.NotBlank;</p>
+<p>@Entity</p>
+<p>public class Employee {</p>
+<p>@Id</p>
+<p>@GeneratedValue(strategy = GenerationType.IDENTITY)</p>
+<p>private Long id;</p>
+<p>@NotBlank(message = &quot;Name is mandatory&quot;)</p>
+<p>private String name;</p>
+<p>private String department;</p>
+<p>private String email;</p>
+<p>// Getters and Setters</p>
+<p>}</p>
+<p>4️⃣ Employee Repository</p>
+<p>package com.example.employee.repository;</p>
+<p>import com.example.employee.entity.Employee;</p>
+<p>import org.springframework.data.jpa.repository.JpaRepository;</p>
+<p>public interface EmployeeRepository extends JpaRepository&lt;Employee, Long&gt; {</p>
+<p>}</p>
+<p>5️⃣ Service Interface</p>
+<p>package com.example.employee.service;</p>
+<p>import com.example.employee.entity.Employee;</p>
+<p>import java.util.List;</p>
+<p>public interface EmployeeService {</p>
+<p>Employee save(Employee employee);</p>
+<p>List&lt;Employee&gt; findAll();</p>
+<p>Employee findById(Long id);</p>
+<p>Employee update(Long id, Employee employee);</p>
+<p>void delete(Long id);</p>
+<p>}</p>
+<p>6️⃣ Service Implementation</p>
+<p>package com.example.employee.service.impl;</p>
+<p>import com.example.employee.entity.Employee;</p>
+<p>import com.example.employee.repository.EmployeeRepository;</p>
+<p>import com.example.employee.service.EmployeeService;</p>
+<p>import org.springframework.beans.factory.annotation.Autowired;</p>
+<p>import org.springframework.stereotype.Service;</p>
+<p>import java.util.List;</p>
+<p>@Service</p>
+<p>public class EmployeeServiceImpl implements EmployeeService {</p>
+<p>@Autowired</p>
+<p>private EmployeeRepository repository;</p>
+<p>public Employee save(Employee employee) {</p>
+<p>return repository.save(employee);</p>
+<p>}</p>
+<p>public List&lt;Employee&gt; findAll() {</p>
+<p>return repository.findAll();</p>
+<p>}</p>
+<p>public Employee findById(Long id) {</p>
+<p>return repository.findById(id)</p>
+<p>.orElseThrow(() -&gt; new RuntimeException(&quot;Employee not found with ID &quot; + id));</p>
+<p>}</p>
+<p>public Employee update(Long id, Employee employee) {</p>
+<p>Employee existing = findById(id);</p>
+<p>existing.setName(employee.getName());</p>
+<p>existing.setEmail(employee.getEmail());</p>
+<p>existing.setDepartment(employee.getDepartment());</p>
+<p>return repository.save(existing);</p>
+<p>}</p>
+<p>public void delete(Long id) {</p>
+<p>repository.deleteById(id);</p>
+<p>}</p>
+<p>}</p>
+<p>7️⃣ REST Controller</p>
+<p>package com.example.employee.controller;</p>
+<p>import com.example.employee.entity.Employee;</p>
+<p>import com.example.employee.service.EmployeeService;</p>
+<p>import jakarta.validation.Valid;</p>
+<p>import org.springframework.beans.factory.annotation.Autowired;</p>
+<p>import org.springframework.web.bind.annotation.*;</p>
+<p>import java.util.List;</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/api/employees&quot;)</p>
+<p>@CrossOrigin</p>
+<p>public class EmployeeController {</p>
+<p>@Autowired</p>
+<p>private EmployeeService service;</p>
+<p>@PostMapping</p>
+<p>public Employee create(@Valid @RequestBody Employee employee) {</p>
+<p>return service.save(employee);</p>
+<p>}</p>
+<p>@GetMapping</p>
+<p>public List&lt;Employee&gt; getAll() {</p>
+<p>return service.findAll();</p>
+<p>}</p>
+<p>@GetMapping(&quot;/{id}&quot;)</p>
+<p>public Employee getById(@PathVariable Long id) {</p>
+<p>return service.findById(id);</p>
+<p>}</p>
+<p>@PutMapping(&quot;/{id}&quot;)</p>
+<p>public Employee update(@PathVariable Long id, @Valid @RequestBody Employee employee) {</p>
+<p>return service.update(id, employee);</p>
+<p>}</p>
+<p>@DeleteMapping(&quot;/{id}&quot;)</p>
+<p>public void delete(@PathVariable Long id) {</p>
+<p>service.delete(id);</p>
+<p>}</p>
+<p>}</p>
+<p>8️⃣ Main Application</p>
+<p>package com.example.employee;</p>
+<p>import org.springframework.boot.SpringApplication;</p>
+<p>import org.springframework.boot.autoconfigure.SpringBootApplication;</p>
+<p>@SpringBootApplication</p>
+<p>public class EmployeeCrudApiApplication {</p>
+<p>public static void main(String[] args) {</p>
+<p>SpringApplication.run(EmployeeCrudApiApplication.class, args);</p>
+<p>}</p>
+<p>}</p>
+<p>✅ API Endpoints</p>
+<p>Using response entity create controller class</p>
+<p>Here is the improved version of the EmployeeController using ResponseEntity for better control over HTTP responses, including status codes and headers.</p>
+<p>✅ EmployeeController.java (Using ResponseEntity)</p>
+<p>package com.example.employee.controller;</p>
+<p>import com.example.employee.entity.Employee;</p>
+<p>import com.example.employee.service.EmployeeService;</p>
+<p>import jakarta.validation.Valid;</p>
+<p>import org.springframework.beans.factory.annotation.Autowired;</p>
+<p>import org.springframework.http.ResponseEntity;</p>
+<p>import org.springframework.web.bind.annotation.*;</p>
+<p>import java.net.URI;</p>
+<p>import java.util.List;</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/api/employees&quot;)</p>
+<p>@CrossOrigin</p>
+<p>public class EmployeeController {</p>
+<p>@Autowired</p>
+<p>private EmployeeService service;</p>
+<p>// CREATE Employee</p>
+<p>@PostMapping</p>
+<p>public ResponseEntity&lt;Employee&gt; createEmployee(@Valid @RequestBody Employee employee) {</p>
+<p>Employee saved = service.save(employee);</p>
+<p>return ResponseEntity</p>
+<p>.created(URI.create(&quot;/api/employees/&quot; + saved.getId()))</p>
+<p>.body(saved);</p>
+<p>}</p>
+<p>// GET All Employees</p>
+<p>@GetMapping</p>
+<p>public ResponseEntity&lt;List&lt;Employee&gt;&gt; getAllEmployees() {</p>
+<p>List&lt;Employee&gt; employees = service.findAll();</p>
+<p>return ResponseEntity.ok(employees);</p>
+<p>}</p>
+<p>// GET Employee by ID</p>
+<p>@GetMapping(&quot;/{id}&quot;)</p>
+<p>public ResponseEntity&lt;Employee&gt; getEmployeeById(@PathVariable Long id) {</p>
+<p>Employee employee = service.findById(id);</p>
+<p>return ResponseEntity.ok(employee);</p>
+<p>}</p>
+<p>// UPDATE Employee</p>
+<p>@PutMapping(&quot;/{id}&quot;)</p>
+<p>public ResponseEntity&lt;Employee&gt; updateEmployee(@PathVariable Long id,</p>
+<p>@Valid @RequestBody Employee employeeDetails) {</p>
+<p>Employee updated = service.update(id, employeeDetails);</p>
+<p>return ResponseEntity.ok(updated);</p>
+<p>}</p>
+<p>// DELETE Employee</p>
+<p>@DeleteMapping(&quot;/{id}&quot;)</p>
+<p>public ResponseEntity&lt;Void&gt; deleteEmployee(@PathVariable Long id) {</p>
+<p>service.delete(id);</p>
+<p>return ResponseEntity.noContent().build();</p>
+<p>}</p>
+<p>}</p>
+<details><summary>Customize error format for validation (@Valid) failures?</summary>
+<p>customize error responses for @Valid validation failures (e.g. @NotBlank, @Email) using @RestControllerAdvice by handling MethodArgumentNotValidException.</p>
+</details>
+<p>✅ Step-by-Step: Customize Validation Error Format</p>
+<p>🔧 1. Extend the GlobalExceptionHandler:</p>
+<p>import org.springframework.web.bind.MethodArgumentNotValidException;</p>
+<p>@ExceptionHandler(MethodArgumentNotValidException.class)</p>
+<p>public ResponseEntity&lt;Object&gt; handleValidationErrors(MethodArgumentNotValidException ex) {</p>
+<p>Map&lt;String, Object&gt; errorDetails = new HashMap&lt;&gt;();</p>
+<p>errorDetails.put(&quot;timestamp&quot;, LocalDateTime.now());</p>
+<p>errorDetails.put(&quot;status&quot;, HttpStatus.BAD_REQUEST.value());</p>
+<p>errorDetails.put(&quot;error&quot;, &quot;Validation Failed&quot;);</p>
+<p>Map&lt;String, String&gt; fieldErrors = new HashMap&lt;&gt;();</p>
+<p>ex.getBindingResult().getFieldErrors().forEach(fieldError -&gt;</p>
+<p>fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage())</p>
+<p>);</p>
+<p>errorDetails.put(&quot;fieldErrors&quot;, fieldErrors);</p>
+<p>return new ResponseEntity&lt;&gt;(errorDetails, HttpStatus.BAD_REQUEST);</p>
+<p>}</p>
+<p>✅ Sample Employee.java with Validation</p>
+<p>@Entity</p>
+<p>public class Employee {</p>
+<p>@Id</p>
+<p>@GeneratedValue(strategy = GenerationType.IDENTITY)</p>
+<p>private Long id;</p>
+<p>@NotBlank(message = &quot;Name is mandatory&quot;)</p>
+<p>private String name;</p>
+<p>@Email(message = &quot;Invalid email format&quot;)</p>
+<p>private String email;</p>
+<p>private String department;</p>
+<p>// getters &amp; setters</p>
+<p>}</p>
+<p>🧪 Sample Request and Response</p>
+<p>❌ Request (POST)</p>
+<p>{</p>
+<p>&quot;name&quot;: &quot;&quot;,</p>
+<p>&quot;email&quot;: &quot;invalid_email&quot;</p>
+<p>}</p>
+<p>✅ Response (400 BAD REQUEST)</p>
+<p>{</p>
+<p>&quot;timestamp&quot;: &quot;2025-06-17T13:12:43.123&quot;,</p>
+<p>&quot;status&quot;: 400,</p>
+<p>&quot;error&quot;: &quot;Validation Failed&quot;,</p>
+<p>&quot;fieldErrors&quot;: {</p>
+<p>&quot;name&quot;: &quot;Name is mandatory&quot;,</p>
+<p>&quot;email&quot;: &quot;Invalid email format&quot;</p>
+<p>}</p>
+<p>}</p>
+<p>✅ Summary of Handled Exceptions</p>
+<details><summary>Return a custom class (like ApiError) instead of Map?</summary>
+<p>Returning a custom ApiError class provides a clean and consistent structure for all your API error responses. Here&#x27;s how to do it:</p>
+</details>
+<p>✅ Step-by-Step: Use a Custom ApiError Class</p>
+<p>🔧 1. Create the ApiError DTO</p>
+<p>package com.example.employee.exception;</p>
+<p>import java.time.LocalDateTime;</p>
+<p>import java.util.Map;</p>
+<p>public class ApiError {</p>
+<p>private LocalDateTime timestamp;</p>
+<p>private int status;</p>
+<p>private String error;</p>
+<p>private String message;</p>
+<p>private Map&lt;String, String&gt; fieldErrors;</p>
+<p>// Constructors</p>
+<p>public ApiError() {}</p>
+<p>public ApiError(LocalDateTime timestamp, int status, String error, String message) {</p>
+<p>this.timestamp = timestamp;</p>
+<p>this.status = status;</p>
+<p>this.error = error;</p>
+<p>this.message = message;</p>
+<p>}</p>
+<p>// Getters and Setters</p>
+<p>public LocalDateTime getTimestamp() {</p>
+<p>return timestamp;</p>
+<p>}</p>
+<p>public void setTimestamp(LocalDateTime timestamp) {</p>
+<p>this.timestamp = timestamp;</p>
+<p>}</p>
+<p>public int getStatus() {</p>
+<p>return status;</p>
+<p>}</p>
+<p>public void setStatus(int status) {</p>
+<p>this.status = status;</p>
+<p>}</p>
+<p>public String getError() {</p>
+<p>return error;</p>
+<p>}</p>
+<p>public void setError(String error) {</p>
+<p>this.error = error;</p>
+<p>}</p>
+<p>public String getMessage() {</p>
+<p>return message;</p>
+<p>}</p>
+<p>public void setMessage(String message) {</p>
+<p>this.message = message;</p>
+<p>}</p>
+<p>public Map&lt;String, String&gt; getFieldErrors() {</p>
+<p>return fieldErrors;</p>
+<p>}</p>
+<p>public void setFieldErrors(Map&lt;String, String&gt; fieldErrors) {</p>
+<p>this.fieldErrors = fieldErrors;</p>
+<p>}</p>
+<p>}</p>
+<p>🛡️ 2. Update GlobalExceptionHandler to use ApiError</p>
+<p>🔹 For Validation Errors:</p>
+<p>@ExceptionHandler(MethodArgumentNotValidException.class)</p>
+<p>public ResponseEntity&lt;ApiError&gt; handleValidationErrors(MethodArgumentNotValidException ex) {</p>
+<p>Map&lt;String, String&gt; fieldErrors = new HashMap&lt;&gt;();</p>
+<p>ex.getBindingResult().getFieldErrors().forEach(error -&gt;</p>
+<p>fieldErrors.put(error.getField(), error.getDefaultMessage())</p>
+<p>);</p>
+<p>ApiError apiError = new ApiError();</p>
+<p>apiError.setTimestamp(LocalDateTime.now());</p>
+<p>apiError.setStatus(HttpStatus.BAD_REQUEST.value());</p>
+<p>apiError.setError(&quot;Validation Failed&quot;);</p>
+<p>apiError.setMessage(&quot;Request contains invalid fields&quot;);</p>
+<p>apiError.setFieldErrors(fieldErrors);</p>
+<p>return new ResponseEntity&lt;&gt;(apiError, HttpStatus.BAD_REQUEST);</p>
+<p>}</p>
+<p>🔹 For Resource Not Found:</p>
+<p>@ExceptionHandler(ResourceNotFoundException.class)</p>
+<p>public ResponseEntity&lt;ApiError&gt; handleResourceNotFound(ResourceNotFoundException ex) {</p>
+<p>ApiError apiError = new ApiError(</p>
+<p>LocalDateTime.now(),</p>
+<p>HttpStatus.NOT_FOUND.value(),</p>
+<p>&quot;Not Found&quot;,</p>
+<p>ex.getMessage()</p>
+<p>);</p>
+<p>return new ResponseEntity&lt;&gt;(apiError, HttpStatus.NOT_FOUND);</p>
+<p>}</p>
+<p>🔹 For Generic Errors:</p>
+<p>@ExceptionHandler(Exception.class)</p>
+<p>public ResponseEntity&lt;ApiError&gt; handleGeneralError(Exception ex) {</p>
+<p>ApiError apiError = new ApiError(</p>
+<p>LocalDateTime.now(),</p>
+<p>HttpStatus.INTERNAL_SERVER_ERROR.value(),</p>
+<p>&quot;Internal Server Error&quot;,</p>
+<p>ex.getMessage()</p>
+<p>);</p>
+<p>return new ResponseEntity&lt;&gt;(apiError, HttpStatus.INTERNAL_SERVER_ERROR);</p>
+<p>}</p>
+<p>🧪 Sample Error Response (Validation)</p>
+<p>{</p>
+<p>&quot;timestamp&quot;: &quot;2025-06-17T13:30:00.000&quot;,</p>
+<p>&quot;status&quot;: 400,</p>
+<p>&quot;error&quot;: &quot;Validation Failed&quot;,</p>
+<p>&quot;message&quot;: &quot;Request contains invalid fields&quot;,</p>
+<p>&quot;fieldErrors&quot;: {</p>
+<p>&quot;name&quot;: &quot;Name is mandatory&quot;,</p>
+<p>&quot;email&quot;: &quot;Invalid email format&quot;</p>
+<p>}</p>
+<p>}</p>
+<p>✅ Benefits of Using ApiError Class</p>
+<p>Spring Boot, profiles</p>
+<p>Spring Boot, profiles are a powerful feature that allow you to define different configurations for different environments (like dev, test, prod, etc.).</p>
+<details><summary>✅ What Are Spring Profiles?</summary>
+<p>Profiles in Spring Boot let you:</p>
+</details>
+<p>Load different application-*.properties files per environment.</p>
+<p>Use different beans for different scenarios.</p>
+<p>Isolate configurations (DB, ports, logging) per environment.</p>
+<p>✅ How to Use Profiles</p>
+<p>1️⃣ Define profile-specific property files</p>
+<p>Create different configuration files:</p>
+<p>src/main/resources/</p>
+<p>├── application.properties</p>
+<p>├── application-dev.properties</p>
+<p>├── application-test.properties</p>
+<p>├── application-prod.properties</p>
+<p>2️⃣ Activate a Profile</p>
+<p>✅ Option 1: In application.properties</p>
+<p>spring.profiles.active=dev</p>
+<p>✅ Option 2: Via command line</p>
+<p>java -jar app.jar --spring.profiles.active=prod</p>
+<p>✅ Option 3: In IDE (like IntelliJ or Eclipse)</p>
+<p>Pass as VM option:</p>
+<p>-Dspring.profiles.active=dev</p>
+<p>3️⃣ Example: application-dev.properties</p>
+<p>properties</p>
+<p>server.port=8081</p>
+<p>spring.datasource.url=jdbc:mysql://localhost:3306/dev_db</p>
+<p>spring.datasource.username=dev_user</p>
+<p>application-prod.properties</p>
+<p>server.port=8080</p>
+<p>spring.datasource.url=jdbc:mysql://prod-server:3306/prod_db</p>
+<p>spring.datasource.username=prod_user</p>
+<p>4️⃣ Use @Profile Annotation in Beans</p>
+<p>@Configuration</p>
+<p>public class DataSourceConfig {</p>
+<p>@Bean</p>
+<p>@Profile(&quot;dev&quot;)</p>
+<p>public DataSource devDataSource() {</p>
+<p>// configure dev DataSource</p>
+<p>}</p>
+<p>@Bean</p>
+<p>@Profile(&quot;prod&quot;)</p>
+<p>public DataSource prodDataSource() {</p>
+<p>// configure prod DataSource</p>
+<p>}</p>
+<p>}</p>
+<p>5️⃣ Use Programmatically</p>
+<p>@Value(&quot;${spring.profiles.active}&quot;)</p>
+<p>private String activeProfile;</p>
+<p>Or from Environment:</p>
+<p>@Autowired</p>
+<p>private Environment env;</p>
+<p>String profile = env.getActiveProfiles()[0];</p>
+<p>✅ Summary Table</p>
+<p>A complete Spring Boot example showing how to use Spring Profiles (dev, prod) with different databases and configurations.</p>
+<p>✅ Use Case:</p>
+<p>Use H2 in-memory database for dev</p>
+<p>Use MySQL for prod</p>
+<p>📁 Project Structure Overview</p>
+<p>src/</p>
+<p>└── main/</p>
+<p>├── java/</p>
+<p>│   └── com.example.employee/</p>
+<p>│       ├── controller/</p>
+<p>│       ├── entity/</p>
+<p>│       ├── repository/</p>
+<p>│       ├── service/</p>
+<p>│       ├── config/</p>
+<p>│       └── EmployeeApplication.java</p>
+<p>└── resources/</p>
+<p>├── application.properties</p>
+<p>├── application-dev.properties</p>
+<p>└── application-prod.properties</p>
+<p>🛠️ 1. application.properties</p>
+<p># Common properties</p>
+<p>spring.application.name=EmployeeAPI</p>
+<p>spring.profiles.active=dev</p>
+<p>🛠️ 2. application-dev.properties</p>
+<p># H2 Database Config for Dev</p>
+<p>spring.datasource.url=jdbc:h2:mem:devdb</p>
+<p>spring.datasource.driver-class-name=org.h2.Driver</p>
+<p>spring.datasource.username=sa</p>
+<p>spring.datasource.password=</p>
+<p>spring.jpa.database-platform=org.hibernate.dialect.H2Dialect</p>
+<p>spring.h2.console.enabled=true</p>
+<p>spring.jpa.hibernate.ddl-auto=create-drop</p>
+<p>🛠️ 3. application-prod.properties</p>
+<p># MySQL Database Config for Prod</p>
+<p>spring.datasource.url=jdbc:mysql://localhost:3306/proddb</p>
+<p>spring.datasource.username=produser</p>
+<p>spring.datasource.password=prodpass</p>
+<p>spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver</p>
+<p>spring.jpa.hibernate.ddl-auto=update</p>
+<p>spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect</p>
+<p>📦 4. EmployeeApplication.java</p>
+<p>@SpringBootApplication</p>
+<p>public class EmployeeApplication {</p>
+<p>public static void main(String[] args) {</p>
+<p>SpringApplication.run(EmployeeApplication.class, args);</p>
+<p>}</p>
+<p>}</p>
+<p>👩‍💼 5. Employee.java (Entity)</p>
+<p>@Entity</p>
+<p>public class Employee {</p>
+<p>@Id</p>
+<p>@GeneratedValue(strategy = GenerationType.IDENTITY)</p>
+<p>private Long id;</p>
+<p>@NotBlank</p>
+<p>private String name;</p>
+<p>private String department;</p>
+<p>@Email</p>
+<p>private String email;</p>
+<p>// getters and setters</p>
+<p>}</p>
+<p>🧩 6. Repository, Service, Controller (Same for both)</p>
+<p>Nothing profile-specific here.</p>
+<p>🧪 7. Switching Between Profiles</p>
+<p>✅ Option 1: In application.properties</p>
+<p>spring.profiles.active=dev</p>
+<p>✅ Option 2: Run with profile from terminal</p>
+<p>java -jar employee-api.jar --spring.profiles.active=prod</p>
+<p>🔄 Optional: Profile-Specific Beans</p>
+<p>If needed, use @Profile(&quot;dev&quot;) or @Profile(&quot;prod&quot;) to inject specific components for each profile.</p>
+<p>@Configuration</p>
+<p>public class DataSourceConfig {</p>
+<p>@Bean</p>
+<p>@Profile(&quot;dev&quot;)</p>
+<p>public DataSource h2DataSource() {</p>
+<p>return DataSourceBuilder.create()</p>
+<p>.url(&quot;jdbc:h2:mem:testdb&quot;)</p>
+<p>.username(&quot;sa&quot;)</p>
+<p>.build();</p>
+<p>}</p>
+<p>@Bean</p>
+<p>@Profile(&quot;prod&quot;)</p>
+<p>public DataSource mysqlDataSource() {</p>
+<p>return DataSourceBuilder.create()</p>
+<p>.url(&quot;jdbc:mysql://localhost:3306/proddb&quot;)</p>
+<p>.username(&quot;produser&quot;)</p>
+<p>.password(&quot;prodpass&quot;)</p>
+<p>.build();</p>
+<p>}</p>
+<p>}</p>
+<p>✅ Summary</p>
+<p>profile-based logging in Spring Boot by creating profile-specific logback-spring.xml or using application-{profile}.properties for logging settings.</p>
+<p>✅ Option 1: Profile-Based Logging via application-{profile}.properties</p>
+<p>🔹 application-dev.properties</p>
+<p># Dev Logging</p>
+<p>logging.level.root=DEBUG</p>
+<p>logging.level.org.springframework.web=DEBUG</p>
+<p>logging.pattern.console=%d{HH:mm:ss.SSS} [%-5level] %logger{36} - %msg%n</p>
+<p>🔹 application-prod.properties</p>
+<p># Prod Logging</p>
+<p>logging.level.root=INFO</p>
+<p>logging.level.org.springframework.web=ERROR</p>
+<p>logging.file.name=logs/employee-app.log</p>
+<p>logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</p>
+<p>This approach is simple and sufficient for most applications.</p>
+<p>✅ Option 2: Advanced Logging with logback-spring.xml</p>
+<p>Use logback-spring.xml in src/main/resources.</p>
+<p>🔹 Base logback-spring.xml</p>
+<p>&lt;configuration&gt;</p>
+<p>&lt;!-- Activate Spring profiles --&gt;</p>
+<p>&lt;springProfile name=&quot;dev&quot;&gt;</p>
+<p>&lt;appender name=&quot;CONSOLE&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;</p>
+<p>&lt;encoder&gt;</p>
+<p>&lt;pattern&gt;%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;</p>
+<p>&lt;/encoder&gt;</p>
+<p>&lt;/appender&gt;</p>
+<p>&lt;root level=&quot;DEBUG&quot;&gt;</p>
+<p>&lt;appender-ref ref=&quot;CONSOLE&quot;/&gt;</p>
+<p>&lt;/root&gt;</p>
+<p>&lt;/springProfile&gt;</p>
+<p>&lt;springProfile name=&quot;prod&quot;&gt;</p>
+<p>&lt;appender name=&quot;FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&gt;</p>
+<p>&lt;file&gt;logs/app.log&lt;/file&gt;</p>
+<p>&lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&gt;</p>
+<p>&lt;fileNamePattern&gt;logs/app-%d{yyyy-MM-dd}.log&lt;/fileNamePattern&gt;</p>
+<p>&lt;maxHistory&gt;7&lt;/maxHistory&gt;</p>
+<p>&lt;/rollingPolicy&gt;</p>
+<p>&lt;encoder&gt;</p>
+<p>&lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n&lt;/pattern&gt;</p>
+<p>&lt;/encoder&gt;</p>
+<p>&lt;/appender&gt;</p>
+<p>&lt;root level=&quot;INFO&quot;&gt;</p>
+<p>&lt;appender-ref ref=&quot;FILE&quot;/&gt;</p>
+<p>&lt;/root&gt;</p>
+<p>&lt;/springProfile&gt;</p>
+<p>&lt;/configuration&gt;</p>
+<p>✅ Spring Boot automatically picks logback-spring.xml and processes springProfile tags based on spring.profiles.active.</p>
+<p>✅ Switching Between Profiles</p>
+<p>Set the active profile in:</p>
+<p># application.properties</p>
+<p>spring.profiles.active=dev</p>
+<p>Or via CLI:</p>
+<p>java -jar your-app.jar --spring.profiles.active=prod</p>
+<p>🔍 Result</p>
+<p>Multiple databases configuration</p>
+<p>multiple databases in Spring Boot is a common requirement for real-world apps (e.g., separating read/write DBs, legacy &amp; new DBs, etc.).</p>
+<p>Below is a complete step-by-step guide to configure multiple data sources (e.g., primary = MySQL, secondary = PostgreSQL) with Spring Data JPA.</p>
+<p>✅ Use Case Example</p>
+<p>Primary DB (MySQL) → Manages Employee entity</p>
+<p>Secondary DB (PostgreSQL) → Manages Department entity</p>
+<p>🔧 Project Structure</p>
+<p>src/main/java/</p>
+<p>└── com.example.multidb/</p>
+<p>├── employee/             # MySQL</p>
+<p>│   ├── entity/Employee.java</p>
+<p>│   ├── repo/EmployeeRepository.java</p>
+<p>├── department/           # PostgreSQL</p>
+<p>│   ├── entity/Department.java</p>
+<p>│   ├── repo/DepartmentRepository.java</p>
+<p>├── config/</p>
+<p>│   ├── PrimaryDataSourceConfig.java</p>
+<p>│   └── SecondaryDataSourceConfig.java</p>
+<p>└── MultiDbApplication.java</p>
+<p>🛠️ 1. Add Dependencies (pom.xml)</p>
+<p>&lt;dependencies&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;mysql&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.postgresql&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;postgresql&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>&lt;/dependencies&gt;</p>
+<p>⚙️ 2. application.properties</p>
+<p># PRIMARY DB - MySQL</p>
+<p>spring.datasource.primary.url=jdbc:mysql://localhost:3306/employeedb</p>
+<p>spring.datasource.primary.username=root</p>
+<p>spring.datasource.primary.password=pass</p>
+<p>spring.datasource.primary.driver-class-name=com.mysql.cj.jdbc.Driver</p>
+<p># SECONDARY DB - PostgreSQL</p>
+<p>spring.datasource.secondary.url=jdbc:postgresql://localhost:5432/departmentdb</p>
+<p>spring.datasource.secondary.username=postgres</p>
+<p>spring.datasource.secondary.password=pass</p>
+<p>spring.datasource.secondary.driver-class-name=org.postgresql.Driver</p>
+<p>🧩 3. PrimaryDataSourceConfig.java (MySQL)</p>
+<p>@Configuration</p>
+<p>@EnableTransactionManagement</p>
+<p>@EnableJpaRepositories(</p>
+<p>basePackages = &quot;com.example.multidb.employee.repo&quot;,</p>
+<p>entityManagerFactoryRef = &quot;primaryEntityManager&quot;,</p>
+<p>transactionManagerRef = &quot;primaryTransactionManager&quot;</p>
+<p>)</p>
+<p>public class PrimaryDataSourceConfig {</p>
+<p>@Primary</p>
+<p>@Bean</p>
+<p>@ConfigurationProperties(prefix = &quot;spring.datasource.primary&quot;)</p>
+<p>public DataSource primaryDataSource() {</p>
+<p>return DataSourceBuilder.create().build();</p>
+<p>}</p>
+<p>@Primary</p>
+<p>@Bean</p>
+<p>public LocalContainerEntityManagerFactoryBean primaryEntityManager(</p>
+<p>EntityManagerFactoryBuilder builder) {</p>
+<p>return builder</p>
+<p>.dataSource(primaryDataSource())</p>
+<p>.packages(&quot;com.example.multidb.employee.entity&quot;)</p>
+<p>.persistenceUnit(&quot;primary&quot;)</p>
+<p>.build();</p>
+<p>}</p>
+<p>@Primary</p>
+<p>@Bean</p>
+<p>public PlatformTransactionManager primaryTransactionManager(</p>
+<p>@Qualifier(&quot;primaryEntityManager&quot;) EntityManagerFactory emf) {</p>
+<p>return new JpaTransactionManager(emf);</p>
+<p>}</p>
+<p>}</p>
+<p>🧩 4. SecondaryDataSourceConfig.java (PostgreSQL)</p>
+<p>@Configuration</p>
+<p>@EnableTransactionManagement</p>
+<p>@EnableJpaRepositories(</p>
+<p>basePackages = &quot;com.example.multidb.department.repo&quot;,</p>
+<p>entityManagerFactoryRef = &quot;secondaryEntityManager&quot;,</p>
+<p>transactionManagerRef = &quot;secondaryTransactionManager&quot;</p>
+<p>)</p>
+<p>public class SecondaryDataSourceConfig {</p>
+<p>@Bean</p>
+<p>@ConfigurationProperties(prefix = &quot;spring.datasource.secondary&quot;)</p>
+<p>public DataSource secondaryDataSource() {</p>
+<p>return DataSourceBuilder.create().build();</p>
+<p>}</p>
+<p>@Bean</p>
+<p>public LocalContainerEntityManagerFactoryBean secondaryEntityManager(</p>
+<p>EntityManagerFactoryBuilder builder) {</p>
+<p>return builder</p>
+<p>.dataSource(secondaryDataSource())</p>
+<p>.packages(&quot;com.example.multidb.department.entity&quot;)</p>
+<p>.persistenceUnit(&quot;secondary&quot;)</p>
+<p>.build();</p>
+<p>}</p>
+<p>@Bean</p>
+<p>public PlatformTransactionManager secondaryTransactionManager(</p>
+<p>@Qualifier(&quot;secondaryEntityManager&quot;) EntityManagerFactory emf) {</p>
+<p>return new JpaTransactionManager(emf);</p>
+<p>}</p>
+<p>}</p>
+<p>📦 5. Entity + Repo Example</p>
+<p>✅ Employee.java (MySQL)</p>
+<p>@Entity</p>
+<p>public class Employee {</p>
+<p>@Id</p>
+<p>@GeneratedValue</p>
+<p>private Long id;</p>
+<p>private String name;</p>
+<p>}</p>
+<p>✅ EmployeeRepository.java</p>
+<p>@Repository</p>
+<p>public interface EmployeeRepository extends JpaRepository&lt;Employee, Long&gt; {}</p>
+<p>✅ Department.java (PostgreSQL)</p>
+<p>@Entity</p>
+<p>public class Department {</p>
+<p>@Id</p>
+<p>@GeneratedValue</p>
+<p>private Long id;</p>
+<p>private String name;</p>
+<p>}</p>
+<p>✅ DepartmentRepository.java</p>
+<p>@Repository</p>
+<p>public interface DepartmentRepository extends JpaRepository&lt;Department, Long&gt; {}</p>
+<p>🚀 6. Accessing Repos in Services</p>
+<p>@Service</p>
+<p>public class EmployeeService {</p>
+<p>@Autowired</p>
+<p>private EmployeeRepository employeeRepository;</p>
+<p>// use employeeRepository</p>
+<p>}</p>
+<p>@Service</p>
+<p>public class DepartmentService {</p>
+<p>@Autowired</p>
+<p>private DepartmentRepository departmentRepository;</p>
+<p>// use departmentRepository</p>
+<p>}</p>
+<p>✅ Summary</p>
+<p>Spring Boot REST API CRUD app for Employee, with Swagger UI (Springdoc OpenAPI) integration</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springdoc&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;springdoc-openapi-starter-webmvc-ui&lt;/artifactId&gt;</p>
+<p>&lt;version&gt;2.5.0&lt;/version&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>. EmployeeController.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/api/employees&quot;)</p>
+<p>@Tag(name = &quot;Employees&quot;, description = &quot;Employee management API&quot;)</p>
+<p>public class EmployeeController {</p>
+<p>@Autowired</p>
+<p>private EmployeeService service;</p>
+<p>@Operation(summary = &quot;Get all employees with pagination&quot;)</p>
+<p>@GetMapping</p>
+<p>public ResponseEntity&lt;Page&lt;Employee&gt;&gt; getAllEmployees(</p>
+<p>@RequestParam(defaultValue = &quot;0&quot;) int page,</p>
+<p>@RequestParam(defaultValue = &quot;5&quot;) int size,</p>
+<p>@RequestParam(defaultValue = &quot;id,asc&quot;) String[] sort) {</p>
+<p>Sort.Direction dir = Sort.Direction.fromString(sort[1]);</p>
+<p>Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sort[0]));</p>
+<p>return ResponseEntity.ok(service.getAllEmployees(pageable));</p>
+<p>}</p>
+<p>@Operation(summary = &quot;Get employee by ID&quot;)</p>
+<p>@GetMapping(&quot;/{id}&quot;)</p>
+<p>public ResponseEntity&lt;Employee&gt; getEmployee(@PathVariable Long id) {</p>
+<p>return ResponseEntity.ok(service.getEmployeeById(id));</p>
+<p>}</p>
+<p>@Operation(summary = &quot;Add a new employee&quot;)</p>
+<p>@PostMapping</p>
+<p>public ResponseEntity&lt;Employee&gt; create(@RequestBody Employee emp) {</p>
+<p>return new ResponseEntity&lt;&gt;(service.save(emp), HttpStatus.CREATED);</p>
+<p>}</p>
+<p>@Operation(summary = &quot;Delete an employee&quot;)</p>
+<p>@DeleteMapping(&quot;/{id}&quot;)</p>
+<p>public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {</p>
+<p>service.delete(id);</p>
+<p>return ResponseEntity.noContent().build();</p>
+<p>}</p>
+<p>}</p>
+<p>7. application.properties</p>
+<p>spring.datasource.url=jdbc:h2:mem:testdb</p>
+<p>spring.datasource.driver-class-name=org.h2.Driver</p>
+<p>spring.datasource.username=sa</p>
+<p>spring.datasource.password=</p>
+<p>spring.jpa.hibernate.ddl-auto=update</p>
+<p>spring.h2.console.enabled=true</p>
+<p># swagger config</p>
+<p>springdoc.swagger-ui.path=/api-docs</p>
+<p>6. OpenAPIConfig.java</p>
+<p>@Configuration</p>
+<p>public class OpenAPIConfig {</p>
+<p>@Bean</p>
+<p>public OpenAPI employeeOpenAPI() {</p>
+<p>return new OpenAPI()</p>
+<p>.info(new Info()</p>
+<p>.title(&quot;Employee Management REST API&quot;)</p>
+<p>.version(&quot;1.0&quot;)</p>
+<p>.description(&quot;CRUD + Pagination API for Employee entity&quot;)</p>
+<p>.contact(new Contact()</p>
+<p>.name(&quot;Mahboob Anwar&quot;)</p>
+<p>.email(&quot;mahboob@example.com&quot;)));</p>
+<p>}</p>
+<p>}</p>
+<p>Run and Test</p>
+<p>Swagger UI:</p>
+<p>http://localhost:8080/api-docs</p>
+<p>summary of the Swagger (Springdoc OpenAPI) annotations used in the provided Spring Boot REST API example:</p>
+<p>✅ Swagger/OpenAPI Annotations Used</p>
+<p>Example Usages</p>
+<p>🔹 @Tag</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Tag(name = &quot;Employees&quot;, description = &quot;Employee management API&quot;)</p>
+<p>@RestController</p>
+<p>public class EmployeeController { ... }</p>
+<p>Used to group endpoints in Swagger UI with a readable name.</p>
+<p>🔹 @Operation</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Operation(summary = &quot;Get all employees with pagination&quot;)</p>
+<p>@GetMapping</p>
+<p>public ResponseEntity&lt;Page&lt;Employee&gt;&gt; getAllEmployees(...) { ... }</p>
+<p>Adds a readable label and description to each endpoint.</p>
+<p>🔹 OpenAPI Configuration (OpenAPIConfig.java)</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Bean</p>
+<p>public OpenAPI customOpenAPI() {</p>
+<p>return new OpenAPI()</p>
+<p>.info(new Info()</p>
+<p>.title(&quot;Employee Management API&quot;)</p>
+<p>.version(&quot;1.0&quot;)</p>
+<p>.description(&quot;CRUD + Pagination for Employee&quot;)</p>
+<p>.contact(new Contact().name(&quot;Mahboob Anwar&quot;).email(&quot;mahboob@example.com&quot;)));</p>
+<p>}</p>
+<p>Customizes the Swagger UI title, description, version, and contact info.</p>
+<p>✅ Optional Advanced Annotations</p>
+<p>✅ 1. @ApiResponse – Describe HTTP responses</p>
+<p>Use this to document what kind of HTTP status codes and messages your endpoint may return.</p>
+<p>🔹 Example:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Operation(summary = &quot;Get employee by ID&quot;)</p>
+<p>@ApiResponses(value = {</p>
+<p>@ApiResponse(responseCode = &quot;200&quot;, description = &quot;Employee found&quot;),</p>
+<p>@ApiResponse(responseCode = &quot;404&quot;, description = &quot;Employee not found&quot;),</p>
+<p>@ApiResponse(responseCode = &quot;500&quot;, description = &quot;Internal server error&quot;)</p>
+<p>})</p>
+<p>@GetMapping(&quot;/{id}&quot;)</p>
+<p>public ResponseEntity&lt;Employee&gt; getEmployee(@PathVariable Long id) {</p>
+<p>...</p>
+<p>}</p>
+<p>✅ 2. @Parameter – Describe method parameters</p>
+<p>Use it to add description, example, or mark a parameter as required/optional.</p>
+<p>🔹 Example:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Operation(summary = &quot;Get all employees&quot;)</p>
+<p>@GetMapping</p>
+<p>public ResponseEntity&lt;Page&lt;Employee&gt;&gt; getAllEmployees(</p>
+<p>@Parameter(description = &quot;Page number (0-based index)&quot;, example = &quot;0&quot;)</p>
+<p>@RequestParam(defaultValue = &quot;0&quot;) int page,</p>
+<p>@Parameter(description = &quot;Number of records per page&quot;, example = &quot;5&quot;)</p>
+<p>@RequestParam(defaultValue = &quot;5&quot;) int size,</p>
+<p>@Parameter(description = &quot;Sort field and direction&quot;, example = &quot;name,asc&quot;)</p>
+<p>@RequestParam(defaultValue = &quot;id,asc&quot;) String[] sort</p>
+<p>) {</p>
+<p>...</p>
+<p>}</p>
+<p>✅ 3. @RequestBody – Describe request body schema</p>
+<p>Use it to document the structure of the JSON input expected.</p>
+<p>🔹 Example:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Operation(summary = &quot;Add a new employee&quot;)</p>
+<p>@PostMapping</p>
+<p>public ResponseEntity&lt;Employee&gt; create(</p>
+<p>@RequestBody(</p>
+<p>description = &quot;Employee object to create&quot;,</p>
+<p>required = true,</p>
+<p>content = @Content(</p>
+<p>schema = @Schema(implementation = Employee.class),</p>
+<p>examples = @ExampleObject(</p>
+<p>value = &quot;{\&quot;name\&quot;: \&quot;John Doe\&quot;, \&quot;department\&quot;: \&quot;IT\&quot;, \&quot;email\&quot;: \&quot;john@example.com\&quot;}&quot;</p>
+<p>)</p>
+<p>)</p>
+<p>)</p>
+<p>@Valid @RequestBody Employee employee</p>
+<p>) {</p>
+<p>...</p>
+<p>}</p>
+<p>✅ 4. @Schema – Customize field descriptions in model classes</p>
+<p>Use inside your DTO or Entity to describe model fields.</p>
+<p>🔹 Example:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public class Employee {</p>
+<p>@Schema(description = &quot;Unique identifier of the employee&quot;, example = &quot;1&quot;)</p>
+<p>private Long id;</p>
+<p>@Schema(description = &quot;Full name of the employee&quot;, example = &quot;Alice Smith&quot;, required = true)</p>
+<p>private String name;</p>
+<p>@Schema(description = &quot;Department name&quot;, example = &quot;Finance&quot;)</p>
+<p>private String department;</p>
+<p>@Schema(description = &quot;Employee&#x27;s email&quot;, example = &quot;alice@company.com&quot;)</p>
+<p>private String email;</p>
+<p>// getters/setters</p>
+<p>}</p>
+<p>✅ Summary Table</p>
+<p>✅ Full Example: EmployeeController.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>package com.example.employeeapi.controller;</p>
+<p>import com.example.employeeapi.entity.Employee;</p>
+<p>import com.example.employeeapi.service.EmployeeService;</p>
+<p>import io.swagger.v3.oas.annotations.Operation;</p>
+<p>import io.swagger.v3.oas.annotations.media.Content;</p>
+<p>import io.swagger.v3.oas.annotations.media.ExampleObject;</p>
+<p>import io.swagger.v3.oas.annotations.media.Schema;</p>
+<p>import io.swagger.v3.oas.annotations.parameters.RequestBody;</p>
+<p>import io.swagger.v3.oas.annotations.responses.ApiResponse;</p>
+<p>import io.swagger.v3.oas.annotations.tags.Tag;</p>
+<p>import org.springframework.beans.factory.annotation.Autowired;</p>
+<p>import org.springframework.http.*;</p>
+<p>import org.springframework.web.bind.annotation.*;</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/api/employees&quot;)</p>
+<p>@Tag(name = &quot;Employees&quot;, description = &quot;Employee management API&quot;)</p>
+<p>public class EmployeeController {</p>
+<p>@Autowired</p>
+<p>private EmployeeService employeeService;</p>
+<p>@Operation(summary = &quot;Create a new employee&quot;)</p>
+<p>@ApiResponse(responseCode = &quot;201&quot;, description = &quot;Employee created successfully&quot;)</p>
+<p>@PostMapping</p>
+<p>public ResponseEntity&lt;Employee&gt; createEmployee(</p>
+<p>@io.swagger.v3.oas.annotations.parameters.RequestBody(</p>
+<p>description = &quot;Employee object to be created&quot;,</p>
+<p>required = true,</p>
+<p>content = @Content(</p>
+<p>schema = @Schema(implementation = Employee.class),</p>
+<p>examples = @ExampleObject(</p>
+<p>name = &quot;Employee Example&quot;,</p>
+<p>summary = &quot;Example employee payload&quot;,</p>
+<p>value = &quot;{ \&quot;name\&quot;: \&quot;John Doe\&quot;, \&quot;department\&quot;: \&quot;IT\&quot;, \&quot;email\&quot;: \&quot;john.doe@example.com\&quot; }&quot;</p>
+<p>)</p>
+<p>)</p>
+<p>)</p>
+<p>@RequestBody Employee employee</p>
+<p>) {</p>
+<p>Employee saved = employeeService.save(employee);</p>
+<p>return new ResponseEntity&lt;&gt;(saved, HttpStatus.CREATED);</p>
+<p>}</p>
+<p>An example for the response body for updating (PUT) with validation and error responses</p>
+<p>A complete example that includes:</p>
+<p>✅ PUT endpoint for updating an employee</p>
+<p>✅ Validation using @Valid and Bean Validation annotations</p>
+<p>✅ Custom Swagger documentation for both request and response bodies</p>
+<p>✅ Error response documentation for invalid input</p>
+<p>✅ EmployeeController.java – Full Example with PUT, Validation, and Swagger Docs</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/api/employees&quot;)</p>
+<p>@Tag(name = &quot;Employees&quot;, description = &quot;Employee management API&quot;)</p>
+<p>public class EmployeeController {</p>
+<p>@Autowired</p>
+<p>private EmployeeService employeeService;</p>
+<p>@Operation(</p>
+<p>summary = &quot;Update an existing employee&quot;,</p>
+<p>description = &quot;Updates the employee details by ID&quot;</p>
+<p>)</p>
+<p>@ApiResponses(value = {</p>
+<p>@ApiResponse(responseCode = &quot;200&quot;, description = &quot;Employee updated successfully&quot;,</p>
+<p>content = @Content(schema = @Schema(implementation = Employee.class))),</p>
+<p>@ApiResponse(responseCode = &quot;400&quot;, description = &quot;Invalid input data&quot;,</p>
+<p>content = @Content(schema = @Schema(example = &quot;{\&quot;message\&quot;: \&quot;Validation failed\&quot;}&quot;))),</p>
+<p>@ApiResponse(responseCode = &quot;404&quot;, description = &quot;Employee not found&quot;)</p>
+<p>})</p>
+<p>@PutMapping(&quot;/{id}&quot;)</p>
+<p>public ResponseEntity&lt;Employee&gt; updateEmployee(</p>
+<p>@PathVariable Long id,</p>
+<p>@io.swagger.v3.oas.annotations.parameters.RequestBody(</p>
+<p>description = &quot;Updated employee data&quot;,</p>
+<p>required = true,</p>
+<p>content = @Content(</p>
+<p>schema = @Schema(implementation = Employee.class),</p>
+<p>examples = @ExampleObject(</p>
+<p>name = &quot;Update Example&quot;,</p>
+<p>value = &quot;{ \&quot;name\&quot;: \&quot;Jane Smith\&quot;, \&quot;department\&quot;: \&quot;HR\&quot;, \&quot;email\&quot;: \&quot;jane.smith@example.com\&quot; }&quot;</p>
+<p>)</p>
+<p>)</p>
+<p>)</p>
+<p>@Valid @RequestBody Employee updatedEmployee</p>
+<p>) {</p>
+<p>Employee existing = employeeService.getEmployeeById(id);</p>
+<p>existing.setName(updatedEmployee.getName());</p>
+<p>existing.setDepartment(updatedEmployee.getDepartment());</p>
+<p>existing.setEmail(updatedEmployee.getEmail());</p>
+<p>return ResponseEntity.ok(employeeService.save(existing));</p>
+<p>}</p>
+<p>}</p>
+<p>✅ Caching in Spring Boot (Using @Cacheable, @CachePut, @CacheEvict)</p>
+<p>Spring Boot makes it easy to add caching to your application with minimal configuration. It supports various cache providers like:</p>
+<p>In-Memory (default)</p>
+<p>EhCache</p>
+<p>Redis</p>
+<p>Caffeine</p>
+<p>Hazelcast</p>
+<p>Dependency for caching in Spring Boot.</p>
+<p>Add Dependency</p>
+<p>If you&#x27;re using Spring Boot’s default simple in-memory caching, no additional dependencies are required beyond the usual Spring Boot starter.</p>
+<p>However, if you want to be explicit or plan to use advanced caching providers later (like EhCache, Redis, Caffeine), you can include the base dependency like this:</p>
+<p>🧩 Option 1: Default Simple In-Memory Caching (No extra dependency needed)</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>You&#x27;re already good to go — caching annotations like @Cacheable will work.</p>
+<p>🧩 Option 2: If You Want Explicit Caching Support</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>✅ This adds Spring’s core caching abstraction and support for annotations like @Cacheable, @CachePut, and @CacheEvict.</p>
+<p>🧩 Optional: For Redis Caching</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>🧩 Optional: For Caffeine Caching</p>
+<p>xml</p>
+<p>CopyEdit</p>
+<p>&lt;dependency&gt;</p>
+<p>&lt;groupId&gt;com.github.ben-manes.caffeine&lt;/groupId&gt;</p>
+<p>&lt;artifactId&gt;caffeine&lt;/artifactId&gt;</p>
+<p>&lt;/dependency&gt;</p>
+<p>✅ Summary</p>
+<p>🔹 1. Basic Caching Setup (In-Memory with SimpleCacheManager)</p>
+<p>✅ Step 1: Add Dependency (if using just simple caching, no need for external dependency)</p>
+<p>Spring Boot already includes caching support via spring-boot-starter.</p>
+<p>✅ Step 2: Enable Caching in Main Class</p>
+<p>@SpringBootApplication</p>
+<p>@EnableCaching</p>
+<p>public class EmployeeApiApplication {</p>
+<p>public static void main(String[] args) {</p>
+<p>SpringApplication.run(EmployeeApiApplication.class, args);</p>
+<p>}</p>
+<p>}</p>
+<p>✅ Step 3: Use @Cacheable, @CachePut, @CacheEvict</p>
+<p>In your EmployeeService.java:</p>
+<p>@Service</p>
+<p>public class EmployeeService {</p>
+<p>@Autowired</p>
+<p>private EmployeeRepository repo;</p>
+<p>// Cache employee by ID</p>
+<p>@Cacheable(value = &quot;employees&quot;, key = &quot;#id&quot;)</p>
+<p>public Employee getEmployeeById(Long id) {</p>
+<p>System.out.println(&quot;Fetching from DB...&quot;);</p>
+<p>return repo.findById(id).orElseThrow(() -&gt; new RuntimeException(&quot;Not found&quot;));</p>
+<p>}</p>
+<p>// Update employee and update the cache</p>
+<p>@CachePut(value = &quot;employees&quot;, key = &quot;#employee.id&quot;)</p>
+<p>public Employee updateEmployee(Employee employee) {</p>
+<p>return repo.save(employee);</p>
+<p>}</p>
+<p>// Remove employee from cache on delete</p>
+<p>@CacheEvict(value = &quot;employees&quot;, key = &quot;#id&quot;)</p>
+<p>public void deleteEmployee(Long id) {</p>
+<p>repo.deleteById(id);</p>
+<p>}</p>
+<p>}</p>
+<p>✅ Step 4: Configure Cache (Optional for simple usage)</p>
+<p>properties</p>
+<p>CopyEdit</p>
+<p># Default TTL or other cache manager settings can be added with providers like EhCache or Redis</p>
+<p>🧪 Example Flow</p>
+<p>First call to getEmployeeById(1) hits the DB and caches the result.</p>
+<p>Subsequent calls fetch from the cache, not the DB.</p>
+<p>updateEmployee() updates both DB and cache.</p>
+<p>deleteEmployee() removes from both DB and cache.</p>
+<p>🔄 Summary of Annotations</p>
+<p>In the annotation:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Cacheable(value = &quot;employees&quot;, key = &quot;#id&quot;)</p>
+<p>✅ #id is correct — it refers to the method parameter named id.</p>
+<p>✅ Explanation:</p>
+<p>value = &quot;employees&quot; → This is the cache name (can be anything you define).</p>
+<p>key = &quot;#id&quot; → This is the cache key, referencing the method parameter id.</p>
+<p>So if your method looks like this:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public Employee getEmployeeById(Long id)</p>
+<p>Then #id refers directly to the id argument passed in.</p>
+<p>🔁 Alternate Examples:</p>
+<p>🔹 Multiple parameters:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Cacheable(value = &quot;employees&quot;, key = &quot;#name + &#x27;-&#x27; + #dept&quot;)</p>
+<p>public Employee findByNameAndDept(String name, String dept) { ... }</p>
+<p>🔹 Use full parameter object (e.g., DTO):</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Cacheable(value = &quot;searchCache&quot;, key = &quot;#searchRequest.query&quot;)</p>
+<p>public List&lt;Employee&gt; search(SearchRequest searchRequest) { ... }</p>
+<p>✅ Tip: You can also omit key if using simple IDs</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Cacheable(&quot;employees&quot;)</p>
+<p>public Employee getEmployeeById(Long id)</p>
+<p>This works, but Spring uses all method parameters as the cache key by default.</p>
+<details><summary>if data are updated then how to reload updated data in cache?</summary>
+<p>ChatGPT said:</p>
+</details>
+<p>Excellent question! When data is updated, you should refresh or update the cache to ensure consistency.</p>
+<p>In Spring Cache, this is done using:</p>
+<p>✅ @CachePut — Update Cache After Method Execution</p>
+<p>When you update or save an entity, use @CachePut to reload the updated data into the cache.</p>
+<p>🔹 Example: Updating an Employee</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@CachePut(value = &quot;employees&quot;, key = &quot;#employee.id&quot;)</p>
+<p>public Employee updateEmployee(Employee employee) {</p>
+<p>return repository.save(employee); // This will also update the cache</p>
+<p>}</p>
+<p>@CachePut ensures:</p>
+<p>The method is always executed</p>
+<p>The return value is stored in the cache with the given key</p>
+<p>No need to fetch again manually</p>
+<p>✅ Full Workflow Example:</p>
+<p>🔹 1. Get Employee by ID (uses cache):</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Cacheable(value = &quot;employees&quot;, key = &quot;#id&quot;)</p>
+<p>public Employee getEmployeeById(Long id) {</p>
+<p>System.out.println(&quot;Fetching from DB...&quot;);</p>
+<p>return repository.findById(id).orElseThrow();</p>
+<p>}</p>
+<p>🔹 2. Update Employee (refreshes the cache):</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@CachePut(value = &quot;employees&quot;, key = &quot;#employee.id&quot;)</p>
+<p>public Employee updateEmployee(Employee employee) {</p>
+<p>return repository.save(employee); // DB + cache both updated</p>
+<p>}</p>
+<p>🔹 3. Delete Employee (evicts from cache):</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@CacheEvict(value = &quot;employees&quot;, key = &quot;#id&quot;)</p>
+<p>public void deleteEmployee(Long id) {</p>
+<p>repository.deleteById(id);</p>
+<p>}</p>
+<details><summary>⚠️ What Happens If You Don&#x27;t Use @CachePut?</summary>
+<p>The old/stale data stays in the cache even after DB is updated.</p>
+</details>
+<p>@Cacheable won&#x27;t re-execute the method since the cache entry already exists.</p>
+<p>✅ Summary Table</p>
+<p>where do we use these cache annotation in controller/service/??class</p>
+<p>ChatGPT said:</p>
+<p>Great question!</p>
+<details><summary>✅ Where to Use Cache Annotations in Spring Boot?</summary>
+<p>You should use caching annotations like @Cacheable, @CachePut, and @CacheEvict primarily in the Service layer — not in the Controller.</p>
+</details>
+<p>✅ Best Practice: Use in Service Layer</p>
+<details><summary>🔹 Why?</summary>
+<p>Controllers handle HTTP logic (requests/responses).</p>
+</details>
+<p>Services contain business logic, where caching is more relevant.</p>
+<p>Caching is a cross-cutting concern, and Spring manages it best when applied to Spring-managed beans like services.</p>
+<p>✅ Typical Usage in EmployeeService.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Service</p>
+<p>public class EmployeeService {</p>
+<p>@Autowired</p>
+<p>private EmployeeRepository repo;</p>
+<p>@Cacheable(value = &quot;employees&quot;, key = &quot;#id&quot;)</p>
+<p>public Employee getEmployeeById(Long id) {</p>
+<p>return repo.findById(id).orElseThrow();</p>
+<p>}</p>
+<p>@CachePut(value = &quot;employees&quot;, key = &quot;#employee.id&quot;)</p>
+<p>public Employee updateEmployee(Employee employee) {</p>
+<p>return repo.save(employee);</p>
+<p>}</p>
+<p>@CacheEvict(value = &quot;employees&quot;, key = &quot;#id&quot;)</p>
+<p>public void deleteEmployee(Long id) {</p>
+<p>repo.deleteById(id);</p>
+<p>}</p>
+<p>}</p>
+<p>❌ Don&#x27;t Use in Controller Layer</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>// ❌ Avoid this</p>
+<p>@RestController</p>
+<p>public class EmployeeController {</p>
+<p>@Cacheable(value = &quot;employees&quot;, key = &quot;#id&quot;) // NOT RECOMMENDED</p>
+<p>@GetMapping(&quot;/{id}&quot;)</p>
+<p>public Employee getEmployee(@PathVariable Long id) {</p>
+<p>...</p>
+<p>}</p>
+<p>}</p>
+<details><summary>Why not?</summary>
+<p>Controller methods are not designed for caching logic.</p>
+</details>
+<p>Cache annotations may not behave correctly due to Spring proxying limitations in Controllers.</p>
+<p>✅ Summary</p>
+<p>transaction management in Spring Boot, including:</p>
+<p>✅ What it is</p>
+<p>✅ When and why to use it</p>
+<p>✅ How to use @Transactional</p>
+<p>✅ Example with multiple DB operations</p>
+<p>✅ Rollback on failure</p>
+<details><summary>✅ What is Transaction Management?</summary>
+<p>In Spring Boot, transaction management ensures that a sequence of operations either all succeed or all fail (atomicity). This helps maintain data integrity.</p>
+</details>
+<p>Spring uses @Transactional to define boundaries of a transaction.</p>
+<p>✅ Common Use Cases</p>
+<p>Inserting data into multiple tables</p>
+<p>Updating related records together</p>
+<p>Rolling back if any step fails (e.g., exception thrown)</p>
+<details><summary>✅ How to Enable It?</summary>
+<p>Add @EnableTransactionManagement (optional in Spring Boot—it’s on by default).</p>
+</details>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@SpringBootApplication</p>
+<p>public class MyApp {</p>
+<p>public static void main(String[] args) {</p>
+<p>SpringApplication.run(MyApp.class, args);</p>
+<p>}</p>
+<p>}</p>
+<p>✅ Example: @Transactional in a Service Method</p>
+<p>🎯 Scenario:</p>
+<p>You have two tables: Employee and EmployeeAudit</p>
+<p>You want to create an employee and also log an audit record in a single transaction</p>
+<p>1. Employee.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Entity</p>
+<p>public class Employee {</p>
+<p>@Id @GeneratedValue</p>
+<p>private Long id;</p>
+<p>private String name;</p>
+<p>private String department;</p>
+<p>}</p>
+<p>2. EmployeeAudit.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Entity</p>
+<p>public class EmployeeAudit {</p>
+<p>@Id @GeneratedValue</p>
+<p>private Long id;</p>
+<p>private String action;</p>
+<p>private LocalDateTime timestamp;</p>
+<p>}</p>
+<p>3. EmployeeRepository.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public interface EmployeeRepository extends JpaRepository&lt;Employee, Long&gt; {}</p>
+<p>4. EmployeeAuditRepository.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public interface EmployeeAuditRepository extends JpaRepository&lt;EmployeeAudit, Long&gt; {}</p>
+<p>5. EmployeeService.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Service</p>
+<p>public class EmployeeService {</p>
+<p>@Autowired</p>
+<p>private EmployeeRepository employeeRepository;</p>
+<p>@Autowired</p>
+<p>private EmployeeAuditRepository auditRepository;</p>
+<p>@Transactional</p>
+<p>public void createEmployeeWithAudit(Employee emp) {</p>
+<p>// Save employee</p>
+<p>employeeRepository.save(emp);</p>
+<p>// Simulate failure</p>
+<p>if (emp.getName().equals(&quot;fail&quot;)) {</p>
+<p>throw new RuntimeException(&quot;Simulated failure&quot;);</p>
+<p>}</p>
+<p>// Save audit log</p>
+<p>EmployeeAudit audit = new EmployeeAudit();</p>
+<p>audit.setAction(&quot;Created employee: &quot; + emp.getName());</p>
+<p>audit.setTimestamp(LocalDateTime.now());</p>
+<p>auditRepository.save(audit);</p>
+<p>}</p>
+<p>}</p>
+<p>✅ If the name is &quot;fail&quot;, the method throws an exception, and neither the employee nor audit log is saved.</p>
+<p>6. EmployeeController.java (for testing)</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/api/employees&quot;)</p>
+<p>public class EmployeeController {</p>
+<p>@Autowired</p>
+<p>private EmployeeService service;</p>
+<p>@PostMapping</p>
+<p>public String create(@RequestBody Employee emp) {</p>
+<p>try {</p>
+<p>service.createEmployeeWithAudit(emp);</p>
+<p>return &quot;Success&quot;;</p>
+<p>} catch (Exception e) {</p>
+<p>return &quot;Transaction rolled back: &quot; + e.getMessage();</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>🔁 Transaction Attributes (Optional)</p>
+<p>You can configure transaction behavior using:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Transactional(</p>
+<p>propagation = Propagation.REQUIRED,</p>
+<p>isolation = Isolation.READ_COMMITTED,</p>
+<p>rollbackFor = Exception.class,</p>
+<p>timeout = 5</p>
+<p>)</p>
+<p>✅ Summary</p>
+<details><summary>Example with rollback for checked exceptions?</summary>
+<p>ChatGPT said:</p>
+</details>
+<p>Yes! By default, Spring&#x27;s @Transactional only rolls back on unchecked (runtime) exceptions.
+If you want to rollback on checked exceptions, you must explicitly declare it using the rollbackFor attribute.</p>
+<p>✅ Scenario: Rollback on Checked Exception</p>
+<p>Let’s simulate a case where:</p>
+<p>You save an Order</p>
+<p>Then throw a custom checked exception</p>
+<p>You want the transaction to roll back, even though it&#x27;s a checked exception</p>
+<p>🔧 Step-by-Step Example</p>
+<p>✅ 1. Custom Checked Exception</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public class InvalidOrderException extends Exception {</p>
+<p>public InvalidOrderException(String message) {</p>
+<p>super(message);</p>
+<p>}</p>
+<p>}</p>
+<p>✅ 2. Service Method with Rollback for Checked Exception</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Service</p>
+<p>public class OrderService {</p>
+<p>@Autowired</p>
+<p>private OrderRepository orderRepo;</p>
+<p>@Transactional(rollbackFor = InvalidOrderException.class)</p>
+<p>public void placeOrder(Order order) throws InvalidOrderException {</p>
+<p>orderRepo.save(order);</p>
+<p>if (order.getQuantity() &lt;= 0) {</p>
+<p>throw new InvalidOrderException(&quot;Quantity must be greater than zero&quot;);</p>
+<p>}</p>
+<p>// more logic...</p>
+<p>}</p>
+<p>}</p>
+<p>@Transactional(rollbackFor = InvalidOrderException.class) tells Spring to rollback even though InvalidOrderException is checked.</p>
+<p>✅ 3. Controller or Test</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@RestController</p>
+<p>public class OrderController {</p>
+<p>@Autowired</p>
+<p>private OrderService orderService;</p>
+<p>@PostMapping(&quot;/api/orders&quot;)</p>
+<p>public String createOrder(@RequestBody Order order) {</p>
+<p>try {</p>
+<p>orderService.placeOrder(order);</p>
+<p>return &quot;Order placed successfully&quot;;</p>
+<p>} catch (InvalidOrderException e) {</p>
+<p>return &quot;Failed to place order: &quot; + e.getMessage();</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>✅ 4. Unit Test Example</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@SpringBootTest</p>
+<p>@Transactional</p>
+<p>@Rollback</p>
+<p>public class OrderServiceTest {</p>
+<p>@Autowired</p>
+<p>private OrderService service;</p>
+<p>@Autowired</p>
+<p>private OrderRepository orderRepo;</p>
+<p>@Test</p>
+<p>public void testRollbackForCheckedException() {</p>
+<p>Order order = new Order();</p>
+<p>order.setProduct(&quot;Tablet&quot;);</p>
+<p>order.setQuantity(0); // invalid</p>
+<p>Assertions.assertThrows(InvalidOrderException.class, () -&gt; {</p>
+<p>service.placeOrder(order);</p>
+<p>});</p>
+<p>Assertions.assertEquals(0, orderRepo.count()); // rollback confirmed</p>
+<p>}</p>
+<p>}</p>
+<p>✅ Summary</p>
+<p>🧠 Interview Tip</p>
+<p>“Spring only rolls back on unchecked exceptions by default. For checked exceptions, we need to explicitly use rollbackFor = YourException.class on the @Transactional annotation.”</p>
+<details><summary>Nested transactions with different rollback rules?</summary>
+<p>ChatGPT said:</p>
+</details>
+<p>Great! Let&#x27;s explore nested transactions in Spring Boot with different rollback rules — a powerful but tricky topic often discussed in interviews.</p>
+<details><summary>🔁 What Are Nested Transactions?</summary>
+<p>Nested transactions allow:</p>
+</details>
+<p>A parent transaction to begin</p>
+<p>A child transaction to run independently</p>
+<p>If the child fails, it can be rolled back without affecting the parent (depending on configuration)</p>
+<p>☝️ Spring uses savepoints (if supported by your database) to simulate true nested transactions.</p>
+<p>✅ Key Concepts</p>
+<p>🧪 Use Case: Parent Method Calls Two Child Methods</p>
+<p>Method A (parent) saves a user and calls:</p>
+<p>Method B (child): succeeds</p>
+<p>Method C (child): fails with checked exception</p>
+<p>✅ Example</p>
+<p>📄 1. UserService.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Service</p>
+<p>public class UserService {</p>
+<p>@Autowired</p>
+<p>private UserRepository userRepo;</p>
+<p>@Autowired</p>
+<p>private AuditService auditService;</p>
+<p>@Transactional</p>
+<p>public void registerUser(User user) {</p>
+<p>userRepo.save(user);</p>
+<p>auditService.saveAuditSuccess(user.getId());</p>
+<p>try {</p>
+<p>auditService.saveAuditFailure(user.getId());  // fails</p>
+<p>} catch (AuditException e) {</p>
+<p>System.out.println(&quot;Child transaction failed, parent continues&quot;);</p>
+<p>}</p>
+<p>}</p>
+<p>}</p>
+<p>📄 2. AuditService.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Service</p>
+<p>public class AuditService {</p>
+<p>@Autowired</p>
+<p>private AuditRepository auditRepo;</p>
+<p>@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = AuditException.class)</p>
+<p>public void saveAuditSuccess(Long userId) {</p>
+<p>auditRepo.save(new AuditLog(userId, &quot;SUCCESS&quot;));</p>
+<p>}</p>
+<p>@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = AuditException.class)</p>
+<p>public void saveAuditFailure(Long userId) throws AuditException {</p>
+<p>auditRepo.save(new AuditLog(userId, &quot;FAILURE&quot;));</p>
+<p>if (true) throw new AuditException(&quot;Simulated failure&quot;);</p>
+<p>}</p>
+<p>}</p>
+<p>📄 3. AuditException.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public class AuditException extends Exception {</p>
+<p>public AuditException(String message) {</p>
+<p>super(message);</p>
+<p>}</p>
+<p>}</p>
+<p>🔁 Behavior</p>
+<p>✅ User is saved
+✅ &quot;SUCCESS&quot; audit is saved
+❌ &quot;FAILURE&quot; audit is rolled back only</p>
+<p>🧠 Interview Summary</p>
+<p>Use REQUIRES_NEW to isolate nested transactions</p>
+<p>Use rollbackFor = ... for checked exceptions</p>
+<p>Catch exceptions in parent to prevent full rollback</p>
+<p>Avoid overusing nested transactions — can make debugging harder</p>
+<p>Spring Boot REST API example using JWT (JSON Web Tokens) for authentication and authorization. This is suitable for real-world apps and interview explanations.</p>
+<p>✅ Features Covered</p>
+<p>User registration and login</p>
+<p>JWT token generation and validation</p>
+<p>Secured REST endpoints</p>
+<p>Stateless authentication (no sessions)</p>
+<p>Role-based access control (optional)</p>
+<p>📦 Project Structure</p>
+<p>swift</p>
+<p>CopyEdit</p>
+<p>src/main/java/com/example/jwtdemo/</p>
+<p>├── controller/</p>
+<p>│   └── AuthController.java</p>
+<p>├── dto/</p>
+<p>│   └── AuthRequest.java</p>
+<p>│   └── AuthResponse.java</p>
+<p>├── entity/</p>
+<p>│   └── User.java</p>
+<p>├── repo/</p>
+<p>│   └── UserRepository.java</p>
+<p>├── security/</p>
+<p>│   ├── JwtUtil.java</p>
+<p>│   ├── JwtFilter.java</p>
+<p>│   └── SecurityConfig.java</p>
+<p>├── service/</p>
+<p>│   └── CustomUserDetailsService.java</p>
+<p>└── JwtDemoApplication.java</p>
+<p>✅ 1. User.java (Entity)</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Entity</p>
+<p>public class User {</p>
+<p>@Id @GeneratedValue</p>
+<p>private Long id;</p>
+<p>private String username;</p>
+<p>private String password;</p>
+<p>// Optional: private String role;</p>
+<p>// Getters and Setters</p>
+<p>}</p>
+<p>✅ 2. UserRepository.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public interface UserRepository extends JpaRepository&lt;User, Long&gt; {</p>
+<p>Optional&lt;User&gt; findByUsername(String username);</p>
+<p>}</p>
+<p>✅ 3. AuthRequest.java and AuthResponse.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public class AuthRequest {</p>
+<p>private String username;</p>
+<p>private String password;</p>
+<p>}</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public class AuthResponse {</p>
+<p>private String token;</p>
+<p>public AuthResponse(String token) {</p>
+<p>this.token = token;</p>
+<p>}</p>
+<p>// Getter</p>
+<p>}</p>
+<p>✅ 4. CustomUserDetailsService.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Service</p>
+<p>public class CustomUserDetailsService implements UserDetailsService {</p>
+<p>@Autowired</p>
+<p>private UserRepository repo;</p>
+<p>@Override</p>
+<p>public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {</p>
+<p>User user = repo.findByUsername(username)</p>
+<p>.orElseThrow(() -&gt; new UsernameNotFoundException(&quot;User not found&quot;));</p>
+<p>return new org.springframework.security.core.userdetails.User(</p>
+<p>user.getUsername(), user.getPassword(), new ArrayList&lt;&gt;());</p>
+<p>}</p>
+<p>}</p>
+<p>✅ 5. JwtUtil.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Component</p>
+<p>public class JwtUtil {</p>
+<p>private String secret = &quot;mysecret&quot;; // Use a secure key in prod</p>
+<p>public String generateToken(String username) {</p>
+<p>return Jwts.builder()</p>
+<p>.setSubject(username)</p>
+<p>.setIssuedAt(new Date())</p>
+<p>.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))</p>
+<p>.signWith(SignatureAlgorithm.HS256, secret).compact();</p>
+<p>}</p>
+<p>public String extractUsername(String token) {</p>
+<p>return Jwts.parser().setSigningKey(secret).parseClaimsJws(token)</p>
+<p>.getBody().getSubject();</p>
+<p>}</p>
+<p>public boolean validateToken(String token, UserDetails userDetails) {</p>
+<p>return extractUsername(token).equals(userDetails.getUsername());</p>
+<p>}</p>
+<p>}</p>
+<p>✅ 6. JwtFilter.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Component</p>
+<p>public class JwtFilter extends OncePerRequestFilter {</p>
+<p>@Autowired private JwtUtil jwtUtil;</p>
+<p>@Autowired private CustomUserDetailsService userDetailsService;</p>
+<p>@Override</p>
+<p>protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,</p>
+<p>FilterChain filterChain) throws ServletException, IOException {</p>
+<p>String authHeader = request.getHeader(&quot;Authorization&quot;);</p>
+<p>String token = null, username = null;</p>
+<p>if (authHeader != null &amp;&amp; authHeader.startsWith(&quot;Bearer &quot;)) {</p>
+<p>token = authHeader.substring(7);</p>
+<p>username = jwtUtil.extractUsername(token);</p>
+<p>}</p>
+<p>if (username != null &amp;&amp; SecurityContextHolder.getContext().getAuthentication() == null) {</p>
+<p>UserDetails userDetails = userDetailsService.loadUserByUsername(username);</p>
+<p>if (jwtUtil.validateToken(token, userDetails)) {</p>
+<p>UsernamePasswordAuthenticationToken authToken =</p>
+<p>new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());</p>
+<p>authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));</p>
+<p>SecurityContextHolder.getContext().setAuthentication(authToken);</p>
+<p>}</p>
+<p>}</p>
+<p>filterChain.doFilter(request, response);</p>
+<p>}</p>
+<p>}</p>
+<p>✅ 7. SecurityConfig.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Configuration</p>
+<p>@EnableWebSecurity</p>
+<p>public class SecurityConfig {</p>
+<p>@Autowired private CustomUserDetailsService userDetailsService;</p>
+<p>@Autowired private JwtFilter jwtFilter;</p>
+<p>@Bean</p>
+<p>public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {</p>
+<p>http.csrf().disable()</p>
+<p>.authorizeHttpRequests()</p>
+<p>.requestMatchers(&quot;/auth/**&quot;).permitAll()</p>
+<p>.anyRequest().authenticated()</p>
+<p>.and()</p>
+<p>.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);</p>
+<p>http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);</p>
+<p>return http.build();</p>
+<p>}</p>
+<p>@Bean</p>
+<p>public AuthenticationManager authenticationManager(</p>
+<p>AuthenticationConfiguration config) throws Exception {</p>
+<p>return config.getAuthenticationManager();</p>
+<p>}</p>
+<p>@Bean</p>
+<p>public PasswordEncoder passwordEncoder() {</p>
+<p>return new BCryptPasswordEncoder();</p>
+<p>}</p>
+<p>}</p>
+<p>✅ 8. AuthController.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/auth&quot;)</p>
+<p>public class AuthController {</p>
+<p>@Autowired private AuthenticationManager authManager;</p>
+<p>@Autowired private CustomUserDetailsService userDetailsService;</p>
+<p>@Autowired private JwtUtil jwtUtil;</p>
+<p>@Autowired private UserRepository repo;</p>
+<p>@Autowired private PasswordEncoder encoder;</p>
+<p>@PostMapping(&quot;/register&quot;)</p>
+<p>public String register(@RequestBody AuthRequest request) {</p>
+<p>User user = new User();</p>
+<p>user.setUsername(request.getUsername());</p>
+<p>user.setPassword(encoder.encode(request.getPassword()));</p>
+<p>repo.save(user);</p>
+<p>return &quot;User registered&quot;;</p>
+<p>}</p>
+<p>@PostMapping(&quot;/login&quot;)</p>
+<p>public ResponseEntity&lt;?&gt; login(@RequestBody AuthRequest request) {</p>
+<p>Authentication auth = authManager.authenticate(</p>
+<p>new UsernamePasswordAuthenticationToken(</p>
+<p>request.getUsername(), request.getPassword())</p>
+<p>);</p>
+<p>String token = jwtUtil.generateToken(request.getUsername());</p>
+<p>return ResponseEntity.ok(new AuthResponse(token));</p>
+<p>}</p>
+<p>}</p>
+<p>✅ 9. JwtDemoApplication.java</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@SpringBootApplication</p>
+<p>public class JwtDemoApplication {</p>
+<p>public static void main(String[] args) {</p>
+<p>SpringApplication.run(JwtDemoApplication.class, args);</p>
+<p>}</p>
+<p>}</p>
+<p>🔐 Example Secured Endpoint</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/api&quot;)</p>
+<p>public class HelloController {</p>
+<p>@GetMapping(&quot;/hello&quot;)</p>
+<p>public String hello() {</p>
+<p>return &quot;Hello, secure world!&quot;;</p>
+<p>}</p>
+<p>}</p>
+<p>🔄 Test with Postman</p>
+<p>POST /auth/register
+Body: { &quot;username&quot;: &quot;john&quot;, &quot;password&quot;: &quot;1234&quot; }</p>
+<p>POST /auth/login
+Body: { &quot;username&quot;: &quot;john&quot;, &quot;password&quot;: &quot;1234&quot; }
+➤ Returns JWT token</p>
+<p>GET /api/hello
+Header: Authorization: Bearer &lt;token&gt;</p>
+<p>Spring Boot JWT example to support Role-Based Access Control (RBAC) — such as allowing admins to access certain APIs, while users have restricted access.</p>
+<p>✅ Overview</p>
+<p>We will:</p>
+<p>Add a role field in the User entity (e.g., ROLE_ADMIN, ROLE_USER)</p>
+<p>Assign roles at registration</p>
+<p>Modify JWT to include roles</p>
+<p>Secure endpoints based on role using Spring Security</p>
+<p>🛠 Step-by-Step Guide</p>
+<p>✅ 1. Update User Entity</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@Entity</p>
+<p>public class User {</p>
+<p>@Id @GeneratedValue</p>
+<p>private Long id;</p>
+<p>private String username;</p>
+<p>private String password;</p>
+<p>private String role; // ROLE_USER or ROLE_ADMIN</p>
+<p>}</p>
+<p>✅ 2. Modify CustomUserDetailsService</p>
+<p>Update to load roles as authorities:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public class CustomUserDetailsService implements UserDetailsService {</p>
+<p>@Autowired private UserRepository repo;</p>
+<p>@Override</p>
+<p>public UserDetails loadUserByUsername(String username) {</p>
+<p>User user = repo.findByUsername(username)</p>
+<p>.orElseThrow(() -&gt; new UsernameNotFoundException(&quot;User not found&quot;));</p>
+<p>return new org.springframework.security.core.userdetails.User(</p>
+<p>user.getUsername(),</p>
+<p>user.getPassword(),</p>
+<p>Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))</p>
+<p>);</p>
+<p>}</p>
+<p>}</p>
+<p>✅ 3. Update JwtUtil to Include Role (Optional)</p>
+<p>Optional: If you want to store the role in the token claims:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>public String generateToken(UserDetails userDetails) {</p>
+<p>Map&lt;String, Object&gt; claims = new HashMap&lt;&gt;();</p>
+<p>claims.put(&quot;role&quot;, userDetails.getAuthorities().iterator().next().getAuthority());</p>
+<p>return Jwts.builder()</p>
+<p>.setClaims(claims)</p>
+<p>.setSubject(userDetails.getUsername())</p>
+<p>.setIssuedAt(new Date())</p>
+<p>.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))</p>
+<p>.signWith(SignatureAlgorithm.HS256, secret)</p>
+<p>.compact();</p>
+<p>}</p>
+<p>✅ 4. Modify AuthController to Set Role on Registration</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@PostMapping(&quot;/register&quot;)</p>
+<p>public String register(@RequestBody AuthRequest request) {</p>
+<p>User user = new User();</p>
+<p>user.setUsername(request.getUsername());</p>
+<p>user.setPassword(encoder.encode(request.getPassword()));</p>
+<p>// Set default role</p>
+<p>user.setRole(&quot;ROLE_USER&quot;); // or ROLE_ADMIN</p>
+<p>repo.save(user);</p>
+<p>return &quot;User registered&quot;;</p>
+<p>}</p>
+<p>You can also let the client choose role, or use admin dashboard to promote a user.</p>
+<p>✅ 5. Secure Endpoints with @PreAuthorize or antMatchers</p>
+<p>Option A: Using @PreAuthorize (preferred)</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@RestController</p>
+<p>@RequestMapping(&quot;/api&quot;)</p>
+<p>public class HelloController {</p>
+<p>@GetMapping(&quot;/user&quot;)</p>
+<p>@PreAuthorize(&quot;hasRole(&#x27;USER&#x27;) or hasRole(&#x27;ADMIN&#x27;)&quot;)</p>
+<p>public String userEndpoint() {</p>
+<p>return &quot;Hello User&quot;;</p>
+<p>}</p>
+<p>@GetMapping(&quot;/admin&quot;)</p>
+<p>@PreAuthorize(&quot;hasRole(&#x27;ADMIN&#x27;)&quot;)</p>
+<p>public String adminEndpoint() {</p>
+<p>return &quot;Hello Admin&quot;;</p>
+<p>}</p>
+<p>}</p>
+<p>➤ Enable method security:</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>@EnableGlobalMethodSecurity(prePostEnabled = true)</p>
+<p>@Configuration</p>
+<p>public class SecurityConfig {</p>
+<p>...</p>
+<p>}</p>
+<p>Option B: Using antMatchers in Security Config</p>
+<p>java</p>
+<p>CopyEdit</p>
+<p>http.authorizeHttpRequests()</p>
+<p>.requestMatchers(&quot;/api/admin&quot;).hasRole(&quot;ADMIN&quot;)</p>
+<p>.requestMatchers(&quot;/api/user&quot;).hasAnyRole(&quot;USER&quot;, &quot;ADMIN&quot;)</p>
+<p>.anyRequest().authenticated();</p>
+<p>✅ Example Test Cases</p>
+<p>✅ Summary</p>
+</details>
+</body></html>

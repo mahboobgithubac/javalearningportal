@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POST API Example - Microservice Architecture</title>
+	<link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        header, footer {
+            background-color: #003366;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        h1, h2 {
+            color: #003366;
+        }
+        section {
+            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+            max-width: 900px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 5px;
+        }
+        code {
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+   
+</header>
+
+<section>
+ <h1>Microservice POST API Example using Spring Boot</h1>
+    <h2>🎯 Scenario</h2>
+    <p><strong>POST</strong> <code>/bookings</code> is called in <strong>BookingService</strong> to make a new booking. <br>
+    It internally makes a <strong>POST</strong> request to <strong>PaymentService</strong> to process payment.</p>
+</section>
+
+<section>
+    <h2>1. BookingService - Controller</h2>
+    <pre><code>@RestController
+@RequestMapping("/bookings")
+public class BookingController {
+
+    @Autowired
+    private BookingService bookingService;
+
+    @PostMapping
+    public ResponseEntity&lt;String&gt; createBooking(@RequestBody BookingRequest request) {
+        bookingService.processBooking(request);
+        return ResponseEntity.ok("Booking successful");
+    }
+}
+</code></pre>
+</section>
+
+<section>
+    <h2>2. BookingService - Service Class</h2>
+    <pre><code>@Service
+public class BookingService {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    public void processBooking(BookingRequest request) {
+        // Call Payment microservice
+        PaymentRequest paymentRequest = new PaymentRequest(request.getAmount(), request.getUserId());
+        ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
+            "http://PAYMENT-SERVICE/payments",
+            paymentRequest,
+            String.class
+        );
+
+        // Handle response (e.g., validate, retry logic)
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Payment failed");
+        }
+    }
+}
+</code></pre>
+</section>
+
+<section>
+    <h2>3. Models</h2>
+    <pre><code>@Data
+public class BookingRequest {
+    private String userId;
+    private double amount;
+    private String showId;
+}
+
+@Data
+public class PaymentRequest {
+    private double amount;
+    private String userId;
+
+    public PaymentRequest(double amount, String userId) {
+        this.amount = amount;
+        this.userId = userId;
+    }
+}
+</code></pre>
+</section>
+
+<section>
+    <h2>4. Configuration</h2>
+    <pre><code>@Configuration
+public class AppConfig {
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+}
+</code></pre>
+</section>
+
+<footer>
+    <p>Spring Boot Microservice Example &copy; 2025</p>
+</footer>
+
+</body>
+</html>

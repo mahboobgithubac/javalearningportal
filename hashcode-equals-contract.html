@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Learn about Java hashCode() and equals() contract with real-world examples. Ideal for interview prep and Java developers." />
+    <meta name="keywords" content="Java, hashCode, equals, Java tutorials, Java interview, Java Learning Portal, HashMap, HashSet, Java collections" />
+    <meta name="author" content="Java Learning Portal" />
+    <meta property="og:title" content="Java hashCode() and equals() Contract - Java Learning Portal" />
+    <meta property="og:description" content="Understand the importance of overriding hashCode() and equals() in Java with practical examples and best practices." />
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/226/226777.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://your-domain.com/java-hashcode-equals.html" />
+
+    <title>Java hashCode() and equals() Contract</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/226/226777.png" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+        /* Your existing styles remain unchanged */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+        header nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h1, h2 {
+            color: #003366;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 12px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            header nav {
+                margin-top: 10px;
+            }
+        }
+    </style>
+
+   
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+          <a href="index.html">Home</a>
+        <a href="#">Concepts</a>
+        <a href="#">Projects</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
+
+<div id="header-container"></div>
+
+<main class="container">
+    <section class="intro">
+        <p><strong>Welcome to the Java Learning Portal!</strong> This platform provides concise and practical explanations of core Java concepts with real-world examples. Perfect for students, developers, and interview preparation. Explore each concept below to strengthen your understanding of Java fundamentals.</p>
+    </section>
+
+    <h1>Java <code>hashCode()</code> and <code>equals()</code> Contract</h1>
+
+    <h2>✅ Contract Overview</h2>
+    <ul>
+        <li>If two objects are equal (<code>equals()</code> returns true), they must have the same <code>hashCode()</code>.</li>
+        <li>If two objects have the same <code>hashCode()</code>, they are not necessarily equal.</li>
+        <li>If <code>equals()</code> is overridden, <code>hashCode()</code> must also be overridden.</li>
+    </ul>
+
+    <h2>🔍 Why It Matters</h2>
+    <p>Collections like <code>HashMap</code> and <code>HashSet</code> use the <code>hashCode()</code> to find the bucket and <code>equals()</code> to check for equality. Violating the contract can break their behavior.</p>
+
+    <h2>🔁 Detailed Rules</h2>
+    <p>Given two objects <code>x</code> and <code>y</code>:</p>
+    <ul>
+        <li>If <code>x.equals(y)</code> is <code>true</code>, then <code>x.hashCode() == y.hashCode()</code> must be <code>true</code>.</li>
+        <li>If <code>x.hashCode() == y.hashCode()</code>, then <code>x.equals(y)</code> may be <code>true</code> or <code>false</code>.</li>
+        <li>If <code>x.equals(y)</code> is <code>false</code>, they can still have the same <code>hashCode()</code>.</li>
+        <li>Both methods must be consistent: results should not change if the object state doesn't change.</li>
+    </ul>
+
+    <h2>📦 Real-World Example</h2>
+    <pre><code>class Person {
+    String name;
+    int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person p = (Person) o;
+        return age == p.age &amp;&amp; name.equals(p.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+}</code></pre>
+
+    <p>This ensures that <code>HashMap&lt;Person, String&gt;</code> or <code>HashSet&lt;Person&gt;</code> behaves as expected.</p>
+
+    <h2 class="warning">❌ What Happens If You Break the Contract?</h2>
+    <ul>
+        <li>If <code>equals()</code> is true but <code>hashCode()</code> is different, collections may not find or store the object correctly.</li>
+        <li>You may get duplicates or missing entries in <code>HashMap</code> or <code>HashSet</code>.</li>
+    </ul>
+
+    <h2 class="highlight">✅ Best Practice</h2>
+    <ul>
+        <li>Always override <code>hashCode()</code> and <code>equals()</code> together.</li>
+        <li>Use <code>Objects.equals()</code> and <code>Objects.hash()</code> to simplify implementation.</li>
+    </ul>
+
+    <div class="visit-counter" id="visitCount">Loading visit counter...</div>
+</main>
+
+<footer>
+    &copy; 2025 Java Learning Portal. All rights reserved.
+	
+	
+<!--	 <div style="margin-top:10px;">
+    <a href="https://www.hitwebcounter.com" target="_blank">
+      <img src="https://hitwebcounter.com/counter/counter.php?page=20836914&style=0006&nbdigits=5&type=page&initCount=0" 
+           title="Web Counter" alt="Visit counter" border="0" />
+    </a>
+  </div>
+	->
+	<!-- hitwebcounter Code START -->
+<a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=20836914&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>      
+</footer>
+<script>
+    // Visit Counter using localStorage
+    const visitKey = 'javaLearningPortalVisits';
+    let count = localStorage.getItem(visitKey);
+
+    if (!count) {
+        count = 1;
+    } else {
+        count = parseInt(count) + 1;
+    }
+
+    localStorage.setItem(visitKey, count);
+    document.getElementById('visitCount').textContent = `👀 you have visited ${count} time(s) on this browser.`;
+</script>
+
+</body>
+</html>

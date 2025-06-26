@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java TreeSet with Example | Java Collections Guide</title>
+  <meta name="description" content="Learn how to use TreeSet in Java with examples. Understand sorting, custom comparators, and key features of TreeSet in the Java Collections Framework." />
+  <meta name="keywords" content="Java TreeSet, TreeSet Example, Java Collections, Sorted Set, Java Programming" />
+  <meta name="author" content="Mahboob Java Guide" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    header, footer {
+      background-color: #343a40;
+      color: #fff;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    h1, h2 {
+      color: #007bff;
+    }
+    main {
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    pre {
+      background-color: #eee;
+      padding: 1rem;
+      overflow-x: auto;
+      border-left: 4px solid #007bff;
+    }
+    footer p {
+      margin: 0;
+    }
+	 body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        header .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            color: #003366;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+
+        .intro {
+            margin-bottom: 30px;
+            font-size: 16px;
+            background-color: #eaf0f6;
+            padding: 20px;
+            border-left: 5px solid #003366;
+            border-radius: 4px;
+        }
+
+        .visit-counter {
+            margin-top: 40px;
+            font-size: 14px;
+            text-align: center;
+            color: #555;
+        }
+
+        footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            header nav {
+                margin-top: 10px;
+            }
+        }
+		
+   
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  nav a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    min-width: 160px;
+    z-index: 1;
+  }
+  .dropdown-content a {
+    display: block;
+    padding: 10px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+        <h1 style="margin: 0;">Java Learning Portal</h1>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+		 <div class="dropdown">
+		<a href="#">Concepts ▾</a>
+    <div class="dropdown-content">
+      <a href="mysql.html">MySQL</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <!--<a href="#">Concepts</a>-->
+		<div class="dropdown">
+        <a href="#">Projects</a> 
+		<div class="dropdown-content">
+      <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+      <a href="#">Java</a>
+      <a href="#">Spring Boot</a>
+      <a href="#">REST API</a>
+      <a href="#">Microservices</a>
+    </div>
+  </div>
+        <a href="#">Contact</a>
+		 
+    </nav>
+</header>
+
+  <h1 style="padding-left: 6em;">Java Collections Guide</h1>
+  <p style="padding-left: 14em;"><b>Understand TreeSet with Examples and Best Practices</b></p>
+
+
+<main>
+  <h2>✅ TreeSet in Java (with Example)</h2>
+  <p>A <code>TreeSet</code> in Java is part of the <strong>java.util</strong> package and implements the <strong>Set</strong> interface. It uses a <strong>Red-Black Tree</strong> internally to store elements in <strong>sorted order</strong> and does <strong>not allow duplicates</strong>.</p>
+
+  <h3>🔍 Key Features of TreeSet:</h3>
+  <ul>
+    <li>Sorted: Elements are automatically stored in <strong>ascending order</strong> (natural ordering) or by a <strong>custom comparator</strong>.</li>
+    <li>No Duplicates: Duplicate elements are ignored.</li>
+    <li>Null: Allows <strong>at most one null element</strong>, and only if using natural ordering.</li>
+    <li>Thread-safe: <strong>Not</strong> synchronized; use <code>Collections.synchronizedSet()</code> for thread safety.</li>
+  </ul>
+
+  <h3>📦 TreeSet Declaration:</h3>
+  <pre><code>TreeSet&lt;Type&gt; setName = new TreeSet&lt;&gt;();</code></pre>
+
+  <h3>✅ Example: Natural Ordering (Ascending)</h3>
+  <pre><code>import java.util.TreeSet;
+
+public class TreeSetExample {
+    public static void main(String[] args) {
+        TreeSet&lt;Integer&gt; numbers = new TreeSet&lt;&gt;();
+
+        numbers.add(40);
+        numbers.add(10);
+        numbers.add(30);
+        numbers.add(20);
+        numbers.add(10); // duplicate, will be ignored
+
+        System.out.println("TreeSet (Sorted): " + numbers);
+    }
+}</code></pre>
+  <p><strong>Output:</strong><br><code>TreeSet (Sorted): [10, 20, 30, 40]</code></p>
+
+  <h3>✅ Example: String Sorting</h3>
+  <pre><code>TreeSet&lt;String&gt; names = new TreeSet&lt;&gt;();
+names.add("Alice");
+names.add("Charlie");
+names.add("Bob");
+
+System.out.println(names); // Output: [Alice, Bob, Charlie]</code></pre>
+
+  <h3>✅ Example: Custom Comparator (Descending Order)</h3>
+  <pre><code>import java.util.*;
+
+public class CustomComparatorTreeSet {
+    public static void main(String[] args) {
+        TreeSet&lt;Integer&gt; set = new TreeSet&lt;&gt;(Collections.reverseOrder());
+
+        set.add(100);
+        set.add(50);
+        set.add(75);
+        set.add(25);
+
+        System.out.println("TreeSet Descending: " + set);
+    }
+}</code></pre>
+  <p><strong>Output:</strong><br><code>TreeSet Descending: [100, 75, 50, 25]</code></p>
+
+  <h3>⚠️ Common Pitfalls:</h3>
+  <ul>
+    <li>Adding incompatible types (e.g., integers and strings) will throw <code>ClassCastException</code>.</li>
+    <li><code>NullPointerException</code> if null is added in a non-empty set or with custom comparators.</li>
+  </ul>
+
+  <h3>📚 When to Use TreeSet?</h3>
+  <ul>
+    <li>When you need <strong>sorted elements</strong>.</li>
+    <li><strong>Duplicates are not allowed</strong>.</li>
+    <li>Fast search, removal, and insertion in sorted order.</li>
+  </ul>
+
+  <p><strong>Tip:</strong> Use TreeSet for sorted high scores, usernames, or anytime ordering matters!</p>
+</main>
+
+<footer>
+    &copy; 2025 Java Learning Portal. All rights reserved.
+	
+<!-- hitwebcounter Code START -->
+ <div style="margin-top:10px;">
+<a href="https://www.hitwebcounter.com" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=20923573&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" Alt="Visit counter For Websites"   border="0" /></a>                                    
+    </div>                                  
+
+</footer>
+
+<script>
+    // Visit Counter using localStorage
+    const visitKey = 'javaLearningPortalVisits';
+    let count = localStorage.getItem(visitKey);
+
+    if (!count) {
+        count = 1;
+    } else {
+        count = parseInt(count) + 1;
+    }
+
+    localStorage.setItem(visitKey, count);
+    document.getElementById('visitCount').textContent = `👀 you have visited ${count} time(s) on this browser.`;
+	<!-- 100% privacy-first analytics -->
+
+
+</script>
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+
+</body>
+</html>
