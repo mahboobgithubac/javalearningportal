@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Can We Overload REST APIs?</title>
+ 
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code {
+      /*background-color: #f4f4f4;*/
+      padding: 2px 5px;
+      font-family: monospace;
+      color: #d6336c;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 12px;
+      border-left: 5px solid #3498db;
+      overflow-x: auto;
+    }
+  table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #2c3e50;
+      color: white;
+    }
+    .note {
+      background-color: #fcf8e3;
+      padding: 10px;
+      border-left: 5px solid #f0ad4e;
+      margin-top: 10px;
+    }
+    .summary {
+      background-color: #e8f5e9;
+      border-left: 5px solid #4caf50;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+
+  <h1>Can We Overload REST APIs?</h1>
+
+  <p>Yes, you <strong>can overload REST APIs</strong>, but with certain design constraints. In Spring Boot, this means using the same endpoint with different parameter combinations, HTTP methods, or content types—unlike traditional Java method overloading.</p>
+
+  <h2>✅ Ways to "Overload" REST APIs</h2>
+
+  <h3>1. Query Parameter Overloading</h3>
+  <p>Same URL path with different query parameters:</p>
+
+  <pre><code>// ❌ This will NOT work (ambiguous)
+@GetMapping("/search")
+public ResponseEntity&lt;?&gt; searchByName(@RequestParam String name) { }
+
+@GetMapping("/search")
+public ResponseEntity&lt;?&gt; searchByNameAndCity(@RequestParam String name, @RequestParam String city) { }
+</code></pre>
+
+  <p><strong>✔ Recommended Approach:</strong> Combine logic into one method:</p>
+
+  <pre><code>@GetMapping("/search")
+public ResponseEntity&lt;?&gt; search(@RequestParam String name,
+                                @RequestParam(required = false) String city) {
+    if(city != null) {
+        return service.searchByNameAndCity(name, city);
+    }
+    return service.searchByName(name);
+}
+</code></pre>
+
+  <h3>2. Different HTTP Methods on Same Path</h3>
+  <p>This is valid and widely used in REST design:</p>
+
+  <pre><code>@GetMapping("/user/{id}")
+public User getUser(@PathVariable Long id) { }
+
+@PostMapping("/user")
+public User createUser(@RequestBody User user) { }
+</code></pre>
+
+  <h3>3. Path Variable Overloading</h3>
+  <p>Different endpoints to represent specific resources:</p>
+
+  <pre><code>@GetMapping("/product/{id}")
+public Product getById(@PathVariable Long id) { }
+
+@GetMapping("/product/{id}/details")
+public ProductDetails getDetails(@PathVariable Long id) { }
+</code></pre>
+
+  <h3>4. Content-Type Based Overloading</h3>
+  <p>Different behavior based on content type:</p>
+
+  <pre><code>@PostMapping(value = "/upload", consumes = "application/json")
+public ResponseEntity&lt;?&gt; uploadJson(@RequestBody MyDto dto) { }
+
+@PostMapping(value = "/upload", consumes = "multipart/form-data")
+public ResponseEntity&lt;?&gt; uploadFile(@RequestParam MultipartFile file) { }
+</code></pre>
+
+  <h2>❌ What You Can't Do</h2>
+  <div class="note">
+    Spring does <strong>not allow</strong> overloading with the same HTTP method and path, even if parameter sets differ:
+  </div>
+
+  <pre><code>@GetMapping("/user")
+public User getUser(@RequestParam String name) { }
+
+@GetMapping("/user")
+public User getUser(@RequestParam String name, @RequestParam int age) { }
+</code></pre>
+
+  <p><strong>Result:</strong> Runtime error — ambiguous mapping.</p>
+
+  <h2>✅ Best Practices</h2>
+  <ul>
+    <li>Use <code>@RequestParam(required = false)</code> for optional params</li>
+    <li>Design endpoints to be <strong>unambiguous and self-explanatory</strong></li>
+    <li>Use versioning in the path if needed: <code>/v1/user</code>, <code>/v2/user</code></li>
+  </ul>
+
+  <h2>🔑 Summary Table</h2>
+  <table>
+    <tr>
+      <th>Technique</th>
+      <th>Allowed?</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <td>Same path, different query params</td>
+      <td>⚠️ No</td>
+      <td>Combine into one method with optional params</td>
+    </tr>
+    <tr>
+      <td>Different HTTP methods</td>
+      <td>✅ Yes</td>
+      <td>Common REST pattern</td>
+    </tr>
+    <tr>
+      <td>Different content types</td>
+      <td>✅ Yes</td>
+      <td>Use <code>@PostMapping(consumes=...)</code></td>
+    </tr>
+    <tr>
+      <td>Same path, different path variables</td>
+      <td>✅ Yes</td>
+      <td>Just ensure no ambiguity</td>
+    </tr>
+    <tr>
+      <td>Traditional Java-style overloading</td>
+      <td>❌ No</td>
+      <td>Not supported in REST APIs</td>
+    </tr>
+  </table>
+
+
+</body>
+</html>

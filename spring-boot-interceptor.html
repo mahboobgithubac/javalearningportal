@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spring Boot Interceptor Example</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f8;
+      color: #333;
+    }
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    h1, h2 {
+      color: #004080;
+    }
+    main {
+      padding: 30px;
+      max-width: 960px;
+      margin: auto;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 15px;
+     overflow-x: auto;
+      border-left: 5px solid #004080;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    footer {
+      background-color: #004080;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+  <div class="logo">
+    <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+    <h1 style="margin: 0;">Java Learning Portal</h1>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <div class="dropdown">
+      <a href="#">Concepts ▾</a>
+      <div class="dropdown-content">
+        <a href="mysql.html">MySQL</a>
+        <a href="#">Java</a>
+        <a href="#">Spring Boot</a>
+        <a href="#">REST API</a>
+        <a href="#">Microservices</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <a href="#">Projects</a>
+      <div class="dropdown-content">
+        <a href="gems-tracking-tool.html">Spring Boot with React project</a>
+        <a href="#">Java</a>
+        <a href="#">Spring Boot</a>
+        <a href="#">REST API</a>
+        <a href="#">Microservices</a>
+      </div>
+    </div>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+			
+  <main>
+ 
+    <div class="section">
+	
+	 <h1>Spring Boot Interceptor Example</h1>
+			<p style="font-size: 18px; color: #555; margin-top: 10px;">
+  <em>Explore how <strong>Spring Boot interceptors</strong> allow you to manage and manipulate HTTP requests before they reach your controllers.</em>
+</p>
+
+			<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f9f9f9; border-left: 5px solid #004080; margin-bottom: 20px;">
+  <h2 style="color: #004080;">Spring Boot Interceptor Overview</h2>
+ <p style="font-size: 16px; color: #333;">
+    In <strong>Spring Boot</strong>, an <strong>interceptor</strong> is a component that intercepts 
+    HTTP requests and responses <strong>before or after</strong> they reach the <strong>controller layer</strong>. 
+    It is part of the <strong>Spring Web MVC</strong> framework and implements the 
+    <code>HandlerInterceptor</code> interface.
+  </p>
+
+  <p>
+    
+    This is useful for:
+  </p>
+  <ul>
+    <li>🔍 <strong>Logging</strong></li>
+    <li>🔐 <strong>Authentication/Authorization</strong></li>
+    <li>🔧 <strong>Request modification</strong></li>
+    <li>📤 <strong>Response post-processing</strong></li>
+  </ul>
+</div>
+
+      <h2>✅ Interceptor Flow</h2>
+      <pre><code>Client → DispatcherServlet → Interceptor (preHandle)
+       → Controller → Interceptor (postHandle, afterCompletion)</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>✅ Steps to Implement Interceptor</h2>
+
+      <h3>🔹 1. Create a Custom Interceptor</h3>
+      <pre><code>import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+public class MyRequestInterceptor implements HandlerInterceptor {
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)<br/> throws Exception {
+        System.out.println("🔍 PreHandle: Intercepting request - " + request.getRequestURI());
+        return true; // return false to stop request
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+                           org.springframework.web.servlet.ModelAndView modelAndView) throws Exception {
+        System.out.println("✅ PostHandle: Executed after controller, before view render");
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
+        System.out.println("🧹 AfterCompletion: Request completed");
+    }
+}
+</code></pre>
+
+      <h3>🔹 2. Register the Interceptor</h3>
+      <pre><code>import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new MyRequestInterceptor())
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/public/**");
+    }
+}</code></pre>
+
+      <h3>🔹 3. Sample Controller</h3>
+      <pre><code>import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+public class TestController {
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "Hello from API!";
+    }
+
+    @GetMapping("/public/hello")
+    public String publicHello() {
+        return "Hello from Public API!";
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>✅ Output Example</h2>
+      <pre><code>🔍 PreHandle: Intercepting request - /api/hello
+✅ PostHandle: Executed after controller, before view render
+🧹 AfterCompletion: Request completed</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>✅ Key Points</h2>
+      <ul>
+        <li><strong>preHandle</strong>: Executed before controller method. Return <code>false</code> to abort request.</li>
+        <li><strong>postHandle</strong>: After controller execution, before view rendering.</li>
+        <li><strong>afterCompletion</strong>: Always called after the request completes.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>✅ Use Cases</h2>
+      <ul>
+        <li>JWT Validation</li>
+        <li>Logging Requests/Responses</li>
+        <li>Authentication Checks</li>
+        <li>Header Modification</li>
+        <li>Execution Time Tracking</li>
+      </ul>
+    </div>
+	  <div class="section">
+      <h2>⚠️ Exception Handling in Interceptors</h2>
+
+      <h3>🔸 Exception in <code>preHandle()</code></h3>
+      <p>If an exception is thrown here, the request is not forwarded to the controller. You can handle and respond directly:</p>
+      <pre><code>@Override
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    try {
+        String header = request.getHeader("X-Auth");
+        if (header == null) {
+            throw new RuntimeException("Missing authentication header");
+        }
+        return true;
+    } catch (Exception ex) {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.getWriter().write("Interceptor error: " + ex.getMessage());
+        return false;
+    }
+}</code></pre>
+
+      <h3>🔸 Global Exception Handler</h3>
+      <p>For general exceptions not handled in interceptors:</p>
+      <pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;String&gt; handleAll(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body("Global Error: " + ex.getMessage());
+    }
+}</code></pre>
+<h3>🔸 Exception in <code>postHandle()</code></h3>
+<p>If an exception is thrown here, it will be logged but not handled by Spring's <code>@ControllerAdvice</code>. It does not affect request flow, but can disrupt view rendering.</p>
+<pre><code>@Override
+public void postHandle(HttpServletRequest request, HttpServletResponse response,
+                       Object handler, ModelAndView modelAndView) throws Exception {
+    throw new RuntimeException("Exception in postHandle");
+}</code></pre>
+
+<h3>🔸 Exception in <code>afterCompletion()</code></h3>
+<p>This method runs after the complete request cycle. Any exception thrown here is logged but silently ignored by Spring.</p>
+<pre><code>@Override
+public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                             Object handler, Exception ex) throws Exception {
+    throw new RuntimeException("Exception in afterCompletion");
+}</code></pre>
+
+      <h3>🔸 Summary Table</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Exception Behavior</th>
+            <th>Recovery Option</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>preHandle()</code></td>
+            <td>Stops request flow</td>
+            <td>Return false, write to response</td>
+          </tr>
+          <tr>
+            <td><code>postHandle()</code></td>
+            <td>Not called if controller throws</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><code>afterCompletion()</code></td>
+            <td>Always called</td>
+            <td>Log error, cleanup logic</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Java Learning Portal | All Rights Reserved
+  </footer>
+</body>
+</html>
+	
+	<!--
+	
+  </main>
+
+  <footer>
+    &copy; 2025 Java Learning Portal | All Rights Reserved
+  </footer>
+</body>
+</html>-->

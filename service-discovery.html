@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Service Discovery in Microservices</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #0d6efd;
+    }
+    code, pre {
+      background-color: #eee;
+      padding: 0.5rem;
+      display: block;
+      border-left: 4px solid #0d6efd;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+    table, th, td {
+      border: 1px solid #dee2e6;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+    }
+    th {
+      background-color: #e9ecef;
+    }
+    ul {
+      margin-bottom: 1rem;
+    }
+    .section {
+      margin-bottom: 2rem;
+    }
+    .highlight {
+      background-color: #d1e7dd;
+      border-left: 5px solid #0f5132;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔍 Service Discovery in Microservices</h1>
+
+  <div class="section">
+    <p><strong>Service Discovery</strong> enables microservices to find and communicate with each other dynamically without hardcoding network locations. This is essential in cloud environments where services scale frequently.</p>
+  </div>
+
+  <div class="section">
+    <h2>✅ Why Service Discovery?</h2>
+    <ul>
+      <li>Services scale dynamically.</li>
+      <li>IP addresses and ports change frequently.</li>
+      <li>Manual service registration/configuration is error-prone.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>📚 Types of Service Discovery</h2>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Example</th>
+      </tr>
+      <tr>
+        <td><strong>Client-side discovery</strong></td>
+        <td>Client queries the service registry to get instance info and calls it directly.</td>
+        <td>Netflix Eureka + Ribbon</td>
+      </tr>
+      <tr>
+        <td><strong>Server-side discovery</strong></td>
+        <td>Client sends a request to a load balancer which queries the registry and forwards it.</td>
+        <td>Spring Cloud Gateway, AWS ELB</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>🧠 How it Works</h2>
+    <ul>
+      <li><strong>Service Registry</strong>: A central server (e.g., Eureka) that holds information about services.</li>
+      <li><strong>Service Provider</strong>: Registers itself with the registry.</li>
+      <li><strong>Service Consumer</strong>: Queries the registry to find available services.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>⚙️ Example: Spring Cloud with Netflix Eureka</h2>
+
+    <h3>1. Add Dependencies (Maven)</h3>
+    <pre><code>&lt;!-- Eureka Server --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Eureka Client --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+    <h3>2. Eureka Server</h3>
+    <pre><code>@SpringBootApplication
+@EnableEurekaServer
+public class EurekaServerApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(EurekaServerApplication.class, args);
+  }
+}</code></pre>
+
+    <h4>application.yml</h4>
+    <pre><code>server:
+  port: 8761
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+</code></pre>
+
+    <h3>3. Eureka Client</h3>
+    <pre><code>@SpringBootApplication
+@EnableEurekaClient
+public class ProductServiceApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(ProductServiceApplication.class, args);
+  }
+}</code></pre>
+
+    <h4>application.yml</h4>
+    <pre><code>spring:
+  application:
+    name: product-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+</code></pre>
+
+    <h3>4. Accessing Other Services</h3>
+    <pre><code>@Autowired
+private RestTemplate restTemplate;
+
+public String getUserData() {
+    return restTemplate.getForObject("http://user-service/users/1", String.class);
+}
+</code></pre>
+    <p>Spring uses the service name (e.g., <code>user-service</code>) to find instances via Eureka.</p>
+  </div>
+
+  <div class="section">
+    <h2>🧰 Tools for Service Discovery</h2>
+    <table>
+      <tr>
+        <th>Tool</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td><strong>Eureka</strong></td>
+        <td>Centralized</td>
+        <td>Netflix's service registry; widely used in Spring Cloud.</td>
+      </tr>
+      <tr>
+        <td><strong>Consul</strong></td>
+        <td>Centralized + DNS</td>
+        <td>Supports health checks, KV store, and multi-datacenter discovery.</td>
+      </tr>
+      <tr>
+        <td><strong>Zookeeper</strong></td>
+        <td>Centralized</td>
+        <td>Highly consistent; used in distributed systems like Kafka.</td>
+      </tr>
+      <tr>
+        <td><strong>Kubernetes DNS</strong></td>
+        <td>DNS-based</td>
+        <td>Services are discoverable via internal DNS in K8s clusters.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="highlight">
+    <strong>Summary:</strong>  
+    Service Discovery enables scalable, reliable service-to-service communication in dynamic environments. It can be client- or server-side and is supported by tools like Eureka, Consul, and Kubernetes DNS.
+  </div>
+
+</body>
+</html>

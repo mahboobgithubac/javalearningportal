@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Handling Optional Parameters in Spring Boot REST APIs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background-color: #f7f7f7;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #2980b9;
+      margin-top: 30px;
+    }
+    details {
+      margin: 15px 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-left: 5px solid #2980b9;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+    }
+    code, pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      display: block;
+      border-left: 3px solid #2980b9;
+      overflow-x: auto;
+    }
+    .note {
+      background: #e7f3fe;
+      border-left: 4px solid #2196F3;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <h1>Handling Optional Parameters in Spring Boot REST APIs</h1>
+
+  <p>This guide demonstrates how to design Spring Boot REST API endpoints that accept optional input parameters. Depending on the use case, you can pass 3 or 5 parameters flexibly.</p>
+
+  <h2>✅ Use Case</h2>
+  <p>A  /process  endpoint accepts up to 5 parameters (param1    to param5   ). Sometimes you send 3, sometimes all 5.</p>
+<!--<p>A <code>/process</code> endpoint accepts up to 5 parameters (<code>param1</code> to <code>param5</code>). Sometimes you send 3, sometimes all 5.</p>
+-->
+  <h2>✅ Option 1: Using <code>@RequestParam</code> (Query Parameters)</h2>
+  <details open>
+    <summary>🔧 Controller Code</summary>
+    <pre>@RestController
+@RequestMapping("/api")
+public class ParamController {
+
+    @GetMapping("/process")
+    public ResponseEntity&lt;String&gt; process(
+            @RequestParam(required = false) String param1,
+            @RequestParam(required = false) String param2,
+            @RequestParam(required = false) String param3,
+            @RequestParam(required = false) String param4,
+            @RequestParam(required = false) String param5) {
+
+        StringBuilder response = new StringBuilder("Received: ");
+        if (param1 != null) response.append("param1=").append(param1).append(" ");
+        if (param2 != null) response.append("param2=").append(param2).append(" ");
+        if (param3 != null) response.append("param3=").append(param3).append(" ");
+        if (param4 != null) response.append("param4=").append(param4).append(" ");
+        if (param5 != null) response.append("param5=").append(param5);
+
+        return ResponseEntity.ok(response.toString());
+    }
+}</pre>
+  </details>
+
+  <div class="note">
+    <strong>Example Requests:</strong><br>
+    <code>GET /api/process?param1=hello&amp;param3=world</code><br>
+    <code>GET /api/process?param1=a&amp;param2=b&amp;param3=c&amp;param4=d&amp;param5=e</code>
+  </div>
+
+  <h2>✅ Option 2: Using <code>@RequestBody</code> (JSON Payload)</h2>
+
+  <details>
+    <summary>🧾 DTO Class</summary>
+    <pre><code>public class ParamRequest {
+    private String param1;
+    private String param2;
+    private String param3;
+    private String param4;
+    private String param5;
+
+    // Getters and Setters
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>🔧 Controller Code</summary>
+    <pre><code>@RestController
+@RequestMapping("/api")
+public class ParamBodyController {
+
+    @PostMapping("/process")
+    public ResponseEntity&lt;String&gt; processRequest(@RequestBody ParamRequest request) {
+        StringBuilder response = new StringBuilder("Received: ");
+        if (request.getParam1() != null) response.append("param1=").append(request.getParam1()).append(" ");
+        if (request.getParam2() != null) response.append("param2=").append(request.getParam2()).append(" ");
+        if (request.getParam3() != null) response.append("param3=").append(request.getParam3()).append(" ");
+        if (request.getParam4() != null) response.append("param4=").append(request.getParam4()).append(" ");
+        if (request.getParam5() != null) response.append("param5=").append(request.getParam5());
+
+        return ResponseEntity.ok(response.toString());
+    }
+}</code></pre>
+  </details>
+
+  <div class="note">
+    <strong>Example JSON Body (3 Params):</strong>
+    <pre>{
+  "param1": "apple",
+  "param3": "banana",
+  "param5": "cherry"
+}</pre>
+    <strong>Example JSON Body (All Params):</strong>
+    <pre>{
+  "param1": "a",
+  "param2": "b",
+  "param3": "c",
+  "param4": "d",
+  "param5": "e"
+}</pre>
+  </div>
+
+  <h2>✅ When to Use Which?</h2>
+  <table border="1" cellpadding="6" style="border-collapse: collapse;">
+    <thead>
+      <tr style="background-color:#f0f0f0;">
+        <th>Approach</th>
+        <th>Best For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>@RequestParam</code></td>
+        <td>Simple filter/search endpoints (GET)</td>
+      </tr>
+      <tr>
+        <td><code>@RequestBody</code></td>
+        <td>Structured input (POST/PUT with JSON)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    &copy; 2025 Java Learning Portal &mdash; Built with Spring Boot
+  </div>
+</body>
+</html>

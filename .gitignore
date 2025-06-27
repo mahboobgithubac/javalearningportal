@@ -1,0 +1,23 @@
+# Ignore backup files
+*.bak
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# npm or frontend build output (optional if you're using any tools)
+node_modules/
+dist/
+build/
+
+# System specific
+ehthumbs.db

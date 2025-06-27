@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Step-by-step guide to adding new files, pushing to GitHub, and deploying to Netlify."/>
+  <title>Add New Files & Push to GitHub</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #0d6efd;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #eee;
+      padding: 10px;
+      border-left: 4px solid #0d6efd;
+      overflow-x: auto;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚀 Add New Files and Deploy with GitHub + Netlify</h1>
+
+  <p>Follow these steps to add new HTML, CSS, or JS files to your project and deploy them using GitHub and Netlify.</p>
+
+  <h2>📁 1. Place New Files</h2>
+  <p>Add your new files (e.g., <code>spring-boot-interview.html</code>, <code>new-style.css</code>) into your <code>main/</code> folder or project root.</p>
+
+  <h2>🧾 2. Stage the New Files</h2>
+  <p>From your project folder, open terminal or command prompt and run:</p>
+
+  <pre><code>git add .</code></pre>
+
+  <p>This adds all new or modified files. To add only HTML files:</p>
+
+  <pre><code>git add *.html</code></pre>
+
+  <h2>💬 3. Commit the Changes</h2>
+  <p>Write a meaningful commit message:</p>
+
+  <pre><code>git commit -m "Add new tutorial page: spring-boot-interview.html"</code></pre>
+
+  <h2>🚀 4. Push to GitHub</h2>
+  <p>Push your changes to the main branch (or master if that’s your branch name):</p>
+
+  <pre><code>git push origin main</code></pre>
+
+  <h2>🌐 5. Netlify Auto Deploys</h2>
+  <p>Netlify will automatically detect the GitHub changes and deploy your new pages in about 30 seconds.</p>
+
+  <h2>✅ 6. Access the New Page</h2>
+  <p>Visit your live page at:</p>
+
+  <pre><code>https://your-site-name.netlify.app/spring-boot-interview.html</code></pre>
+
+  <h2>🔁 Summary</h2>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr><th>Step</th><th>Command</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Add all changes</td><td><code>git add .</code></td></tr>
+      <tr><td>Commit</td><td><code>git commit -m "your message"</code></td></tr>
+      <tr><td>Push</td><td><code>git push origin main</code></td></tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

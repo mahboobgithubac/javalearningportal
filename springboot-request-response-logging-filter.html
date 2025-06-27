@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring Boot Request/Response Logging Filter</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header, footer {
+      background: #004080;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    main {
+      max-width: 960px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #004080;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 15px;
+      overflow-x: auto;
+      border-left: 4px solid #004080;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  
+</header>
+
+<main>
+
+  <div class="section">
+  <h1>Spring Boot Request & Response Logging Using Filter</h1>
+  <p>Track full request and response bodies across all endpoints</p>
+    <h2>✅ Why Use a Filter?</h2>
+    <p>Interceptors can't access the request and response body streams. To log body content, we must use a <code>Filter</code> and wrap both streams.</p>
+  </div>
+
+  <div class="section">
+    <h2>🔧 1. Create the Logging Filter</h2>
+    <pre><code>package com.example.filter;
+
+import org.springframework.stereotype.Component;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.*;
+
+@Component
+public class RequestResponseLoggingFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+        throws IOException, ServletException {
+
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+
+        CachedBodyHttpServletRequest wrappedRequest = new CachedBodyHttpServletRequest(request);
+        CachedBodyHttpServletResponse wrappedResponse = new CachedBodyHttpServletResponse(response);
+
+        long start = System.currentTimeMillis();
+
+        chain.doFilter(wrappedRequest, wrappedResponse);
+
+        long duration = System.currentTimeMillis() - start;
+
+        String requestBody = new String(wrappedRequest.getCachedBody(), request.getCharacterEncoding());
+        String responseBody = new String(wrappedResponse.getCachedBody(), response.getCharacterEncoding());
+
+        System.out.println("🔵 Method: " + request.getMethod());
+        System.out.println("🔵 URI: " + request.getRequestURI());
+        System.out.println("📥 Request Body: " + requestBody);
+        System.out.println("📤 Response Body: " + responseBody);
+        System.out.println("⏱️ Duration: " + duration + "ms");
+
+        // Copy captured response back to real output
+        ServletOutputStream out = response.getOutputStream();
+        out.write(wrappedResponse.getCachedBody());
+        out.flush();
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🧱 2. Create Cached Request Wrapper</h2>
+    <pre><code>public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
+    private final byte[] cachedBody;
+
+    public CachedBodyHttpServletRequest(HttpServletRequest request) throws IOException {
+        super(request);
+        InputStream requestInputStream = request.getInputStream();
+        this.cachedBody = requestInputStream.readAllBytes();
+    }
+
+    public byte[] getCachedBody() {
+        return cachedBody;
+    }
+
+    @Override
+    public ServletInputStream getInputStream() {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(this.cachedBody);
+        return new ServletInputStream() {
+            public boolean isFinished() { return byteArrayInputStream.available() == 0; }
+            public boolean isReady() { return true; }
+            public void setReadListener(ReadListener readListener) {}
+            public int read() { return byteArrayInputStream.read(); }
+        };
+    }
+
+    @Override
+    public BufferedReader getReader() throws IOException {
+        return new BufferedReader(new InputStreamReader(getInputStream()));
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🧱 3. Create Cached Response Wrapper</h2>
+    <pre><code>public class CachedBodyHttpServletResponse extends HttpServletResponseWrapper {
+    private final ByteArrayOutputStream cachedOutputStream = new ByteArrayOutputStream();
+    private final ServletOutputStream outputStream = new ServletOutputStream() {
+        @Override
+        public boolean isReady() { return true; }
+        @Override
+        public void setWriteListener(WriteListener listener) {}
+        @Override
+        public void write(int b) throws IOException {
+            cachedOutputStream.write(b);
+        }
+    };
+
+    public CachedBodyHttpServletResponse(HttpServletResponse response) {
+        super(response);
+    }
+
+    public byte[] getCachedBody() {
+        return cachedOutputStream.toByteArray();
+    }
+
+    @Override
+    public ServletOutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    @Override
+    public PrintWriter getWriter() {
+        return new PrintWriter(outputStream, true);
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🧪 4. Sample Controller (for 50 endpoints)</h2>
+    <pre><code>@RestController
+@RequestMapping("/api")
+public class BulkController {
+    @PostMapping("/endpoint1")
+    public String handle(@RequestBody String body) {
+        return "Received at endpoint1: " + body;
+    }
+    // Copy and create endpoint2, endpoint3 ... endpoint50
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>📦 5. Output Sample</h2>
+    <pre><code>🔵 Method: POST
+🔵 URI: /api/endpoint1
+📥 Request Body: {"name":"Mahboob"}
+📤 Response Body: Received at endpoint1: {"name":"Mahboob"}
+⏱️ Duration: 12ms</code></pre>
+  </div>
+
+</main>
+
+<footer>
+  &copy; 2025 Java Learning Portal | Request & Response Filter Logging Example
+</footer>
+
+</body>
+</html>

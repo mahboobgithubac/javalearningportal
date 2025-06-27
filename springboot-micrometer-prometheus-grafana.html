@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Micrometer + Prometheus + Grafana Integration with Spring Boot</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #2d3e50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 20px 40px;
+    }
+    h1, h2, h3 {
+      color: #2d3e50;
+    }
+    code {
+     
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-left: 5px solid #2d3e50;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    footer {
+      background-color: #2d3e50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Micrometer + Prometheus + Grafana Integration</h1>
+  <p>Spring Boot Observability with Real-Time Dashboards</p>
+</header>
+
+<main>
+<h1>📊 Overview: Micrometer, Prometheus, and Grafana</h1>
+
+  <div class="section">
+    <h2><span class="checkmark">✅</span> What is Micrometer?</h2>
+    <p>
+      Micrometer is a metrics instrumentation library for Java applications. It acts as a facade to multiple monitoring systems like Prometheus, Graphite, New Relic, etc.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="checkmark">✅</span> What is Prometheus?</h2>
+    <p>
+      Prometheus is an open-source monitoring and alerting toolkit designed for reliability and scalability. It scrapes metrics from HTTP endpoints and stores them in a time-series database.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="checkmark">✅</span> What is Grafana?</h2>
+    <p>
+      Grafana is a visualization tool that reads data from sources like Prometheus to create dashboards, graphs, and alerts.
+    </p>
+  </div>
+
+  <h2>Summary</h2>
+  <ul>
+    <li><strong>Micrometer:</strong> Java metrics instrumentation facade</li>
+    <li><strong>Prometheus:</strong> Time-series database for scraping metrics</li>
+    <li><strong>Grafana:</strong> Visualization tool for metrics dashboards</li>
+  </ul>
+
+  <h2>🚀 Step-by-Step Setup</h2>
+
+  <h3>1️⃣ Add Dependencies</h3>
+  <pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.micrometer&lt;/groupId&gt;
+        &lt;artifactId&gt;micrometer-registry-prometheus&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+
+  <h3>2️⃣ Configure Application</h3>
+  <pre><code>management.endpoints.web.exposure.include=health,info,prometheus
+management.endpoint.prometheus.enabled=true</code></pre>
+
+  <h3>3️⃣ Start Spring Boot</h3>
+  <p>Run and visit: <code>http://localhost:8080/actuator/prometheus</code></p>
+
+  <h3>4️⃣ Prometheus Configuration</h3>
+  <pre><code>global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'spring-boot-app'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:8080']</code></pre>
+
+  <h3>5️⃣ Run Prometheus</h3>
+  <pre><code>docker run -d -p 9090:9090 \
+  -v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml \
+  prom/prometheus</code></pre>
+  <p>Access at: <code>http://localhost:9090</code></p>
+
+  <h3>6️⃣ Run Grafana</h3>
+  <pre><code>docker run -d -p 3000:3000 grafana/grafana</code></pre>
+  <p>Access at: <code>http://localhost:3000</code> | Default login: <code>admin / admin</code></p>
+
+  <h3>7️⃣ Add Prometheus as Data Source</h3>
+  <ol>
+    <li>Open Grafana → Configuration → Data Sources</li>
+    <li>Select Prometheus</li>
+    <li>Set URL to <code>http://localhost:9090</code> or <code>http://host.docker.internal:9090</code></li>
+  </ol>
+
+  <h3>8️⃣ Create Grafana Dashboard</h3>
+  <ul>
+    <li>Create new panel → use PromQL query like <code>jvm_memory_used_bytes</code></li>
+    <li>Try other queries: <code>http_server_requests_seconds_count</code>, <code>process_cpu_usage</code></li>
+  </ul>
+
+  <h2>📌 Example Metrics from Micrometer</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>jvm_memory_used_bytes</td><td>JVM memory usage</td></tr>
+      <tr><td>jvm_threads_live</td><td>Live threads count</td></tr>
+      <tr><td>process_cpu_usage</td><td>CPU usage of the process</td></tr>
+      <tr><td>http_server_requests_seconds_count</td><td>HTTP request count</td></tr>
+      <tr><td>system_cpu_count</td><td>Number of processors</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🛠️ Optional: Add Custom Metrics</h2>
+  <pre><code>@Autowired
+private MeterRegistry registry;
+
+@PostConstruct
+public void customMetrics() {
+    Gauge.builder("my.custom.metric", () -&gt; 42).register(registry);
+}</code></pre>
+
+  <p>Check at: <code>http://localhost:8080/actuator/prometheus</code></p>
+
+</main>
+
+<footer>
+  <p>&copy; 2025 Java Learning Portal | Powered by Spring Boot, Prometheus, Grafana</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>application.properties vs application.yml in Spring Boot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #34495e;
+    }
+    code, pre {
+      background: #eee;
+      padding: 10px;
+      display: block;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    th {
+      background: #f0f0f0;
+      text-align: left;
+    }
+    .note {
+      background-color: #fff3cd;
+      border-left: 6px solid #ffeeba;
+      padding: 10px;
+      margin: 20px 0;
+    }
+    .highlight {
+      background-color: #dff0d8;
+      border-left: 6px solid #3c763d;
+      padding: 10px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Difference Between application.properties  and  application.yml file in Spring Boot</h1>
+
+  <h2>📌 Key Differences</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>application.properties</th>
+        <th>application.yml</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>File Extension</td>
+        <td>.properties</td>
+        <td>.yml or .yaml</td>
+      </tr>
+      <tr>
+        <td>Syntax Format</td>
+        <td>Key-value pair</td>
+        <td>Hierarchical (indentation-based)</td>
+      </tr>
+      <tr>
+        <td>Structure</td>
+        <td>Flat and less readable for nested configs</td>
+        <td>Cleaner and more readable for nested configs</td>
+      </tr>
+      <tr>
+        <td>Array/List Support</td>
+        <td>Indexed keys or comma-separated values</td>
+        <td>Natural list support with dashes (-)</td>
+      </tr>
+      <tr>
+        <td>Readability</td>
+        <td>Can be verbose</td>
+        <td>More concise</td>
+      </tr>
+      <tr>
+        <td>Usage Preference</td>
+        <td>Simpler configurations</td>
+        <td>Complex/nested configurations</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>📘 Example Comparison</h2>
+
+  <h3>application.properties</h3>
+  <pre><code>server.port=8081
+spring.datasource.url=jdbc:mysql://localhost:3306/test
+spring.datasource.username=root
+spring.datasource.password=pass
+spring.jpa.hibernate.ddl-auto=update
+myapp.names[0]=John
+myapp.names[1]=Jane</code></pre>
+
+  <h3>application.yml</h3>
+  <pre><code>server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+myapp:
+  names:
+    - John
+    - Jane</code></pre>
+
+  <h2>✅ If Both Files Exist: Which One Wins?</h2>
+  <div class="note">
+    <strong>Spring Boot loads both</strong> <code>application.yml</code> and <code>application.properties</code>, but if the same key is defined in both files, <strong><code>application.properties</code> takes precedence</strong>.
+  </div>
+
+  <h3>Example:</h3>
+  <p><strong>application.yml:</strong></p>
+  <pre><code>server:
+  port: 8080</code></pre>
+
+  <p><strong>application.properties:</strong></p>
+  <pre><code>server.port=9090</code></pre>
+
+  <div class="highlight">
+    ✅ The application will run on port <strong>9090</strong> (from <code>application.properties</code>).
+  </div>
+
+  <h2>✅ Best Practice</h2>
+  <ul>
+    <li>Avoid defining the same keys in both files.</li>
+    <li>Stick to one format consistently throughout your project.</li>
+  </ul>
+
+  <h2>🔧 How Spring Boot Loads Configurations</h2>
+  <p>Spring Boot uses a defined order when loading config files (via <code>ConfigFileApplicationListener</code>):</p>
+  <ol>
+    <li><code>application.properties</code> (highest file priority)</li>
+    <li><code>application.yml</code></li>
+    <li>Profile-specific files like <code>application-dev.properties</code></li>
+    <li>External sources (e.g., command-line args, env vars)</li>
+  </ol>
+
+</body>
+</html>
