@@ -1,0 +1,57 @@
+✅ Step-by-Step Commands to Push All New & Updated Files
+🔍 1. Make Sure You’re in the Project Folder
+If your files are inside a main/ folder, navigate to it:
+
+cmd
+Copy
+Edit
+cd path\to\main
+📦 2. Stage All New & Modified Files (Excludes .bak via .gitignore)
+cmd
+Copy
+Edit
+git add .
+This command:
+
+Adds all newly created files
+
+Stages all modified files
+
+Ignores anything in .gitignore (like .bak, node_modules, etc.)
+
+💬 3. Commit Your Changes
+Give a clear message, e.g.:
+
+cmd
+Copy
+Edit
+git commit -m "Add new pages and update existing content"
+🚀 4. Push to GitHub
+c
+Copy
+Edit
+git push origin main
+Use origin master if your branch is named master.
+
+✅ What Happens Next?
+GitHub receives the changes
+
+Netlify automatically redeploys your site
+
+Your new and updated pages go live in ~30 seconds
+
+🧪 To Verify Deployment:
+Visit your Netlify site URL
+Example:
+
+arduino
+Copy
+Edit
+https://your-site-name.netlify.app/
+Open your updated or new pages
+Example:
+
+arduino
+Copy
+Edit
+https://your-site-name.netlify.app/spring-boot-tips.html
