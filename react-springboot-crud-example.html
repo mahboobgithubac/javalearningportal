@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>React + Spring Boot CRUD Example</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 40px; line-height: 1.6; }
+    h1, h2, h3 { color: #343a40; }
+    pre { background: #e9ecef; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    code { font-family: Consolas, monospace; color: #d63384; }
+    .section { margin-bottom: 40px; }
+    .note { background: #fff3cd; padding: 10px; border-left: 5px solid #ffeeba; margin: 10px 0; border-radius: 5px; }
+  </style>
+</head>
+<body>
+
+<h1>React + Spring Boot CRUD Example</h1>
+
+<div class="section">
+  <h2>✅ Project Overview</h2>
+  <ul>
+    <li><strong>Frontend:</strong> React + Axios</li>
+    <li><strong>Backend:</strong> Spring Boot + JPA + H2/MySQL</li>
+    <li><strong>Operations:</strong> Create, Read, Update, Delete (CRUD)</li>
+    <li><strong>Entity:</strong> <code>Employee</code> with <code>id</code>, <code>name</code>, <code>email</code></li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>🔧 Spring Boot Backend Setup</h2>
+
+  <h3>1. Maven Dependencies</h3>
+  <pre><code>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+    &lt;artifactId&gt;h2&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+
+  <h3>2. Employee Entity</h3>
+  <pre><code>@Entity
+public class Employee {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  private String name;
+  private String email;
+
+  // Getters and Setters
+}
+</code></pre>
+
+  <h3>3. Repository</h3>
+  <pre><code>public interface EmployeeRepository extends JpaRepository&lt;Employee, Long&gt; {}
+</code></pre>
+
+  <h3>4. REST Controller</h3>
+  <pre><code>@RestController
+@RequestMapping("/api/employees")
+@CrossOrigin(origins = "http://localhost:3000")
+public class EmployeeController {
+  @Autowired
+  private EmployeeRepository repo;
+
+  @GetMapping
+  public List&lt;Employee&gt; getAll() {
+    return repo.findAll();
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity&lt;Employee&gt; getById(@PathVariable Long id) {
+    return repo.findById(id).map(ResponseEntity::ok)
+      .orElse(ResponseEntity.notFound().build());
+  }
+
+  @PostMapping
+  public Employee create(@RequestBody Employee e) {
+    return repo.save(e);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity&lt;Employee&gt; update(@PathVariable Long id, @RequestBody Employee updated) {
+    return repo.findById(id).map(emp -&gt; {
+      emp.setName(updated.getName());
+      emp.setEmail(updated.getEmail());
+      return ResponseEntity.ok(repo.save(emp));
+    }).orElse(ResponseEntity.notFound().build());
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
+    return repo.findById(id).map(emp -&gt; {
+      repo.delete(emp);
+      return ResponseEntity.ok().build();
+    }).orElse(ResponseEntity.notFound().build());
+  }
+}
+</code></pre>
+
+  <h3>5. application.properties</h3>
+  <pre><code>spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=update
+spring.h2.console.enabled=true
+</code></pre>
+</div>
+
+<div class="section">
+  <h2>⚛️ React Frontend Setup</h2>
+
+  <h3>1. Install Axios</h3>
+  <pre><code>npm install axios</code></pre>
+
+  <h3>2. EmployeeService.js</h3>
+  <pre><code>import axios from 'axios';
+
+const API_URL = 'http://localhost:8080/api/employees';
+
+export const getAllEmployees = () =&gt; axios.get(API_URL);
+export const getEmployee = (id) =&gt; axios.get(`${API_URL}/${id}`);
+export const createEmployee = (emp) =&gt; axios.post(API_URL, emp);
+export const updateEmployee = (id, emp) =&gt; axios.put(`${API_URL}/${id}`, emp);
+export const deleteEmployee = (id) =&gt; axios.delete(`${API_URL}/${id}`);
+</code></pre>
+
+  <h3>3. App.js</h3>
+  <pre><code>import React, { useEffect, useState } from 'react';
+import * as service from './EmployeeService';
+
+function App() {
+  const [employees, setEmployees] = useState([]);
+  const [form, setForm] = useState({ id: '', name: '', email: '' });
+
+  useEffect(() =&gt; {
+    loadEmployees();
+  }, []);
+
+  const loadEmployees = async () =&gt; {
+    const res = await service.getAllEmployees();
+    setEmployees(res.data);
+  };
+
+  const handleSubmit = async (e) =&gt; {
+    e.preventDefault();
+    if (form.id) {
+      await service.updateEmployee(form.id, form);
+    } else {
+      await service.createEmployee(form);
+    }
+    setForm({ id: '', name: '', email: '' });
+    loadEmployees();
+  };
+
+  const handleEdit = (emp) =&gt; setForm(emp);
+  const handleDelete = async (id) =&gt; {
+    await service.deleteEmployee(id);
+    loadEmployees();
+  };
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Employee Manager&lt;/h2&gt;
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;input
+          value={form.name}
+          onChange={e =&gt; setForm({ ...form, name: e.target.value })}
+          placeholder="Name"
+        /&gt;
+        &lt;input
+          value={form.email}
+          onChange={e =&gt; setForm({ ...form, email: e.target.value })}
+          placeholder="Email"
+        /&gt;
+        &lt;button type="submit"&gt;{form.id ? 'Update' : 'Add'}&lt;/button&gt;
+      &lt;/form&gt;
+
+      &lt;table&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;&lt;th&gt;ID&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Email&lt;/th&gt;&lt;th&gt;Actions&lt;/th&gt;&lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          {employees.map(emp =&gt; (
+            &lt;tr key={emp.id}&gt;
+              &lt;td&gt;{emp.id}&lt;/td&gt;
+              &lt;td&gt;{emp.name}&lt;/td&gt;
+              &lt;td&gt;{emp.email}&lt;/td&gt;
+              &lt;td&gt;
+                &lt;button onClick={() =&gt; handleEdit(emp)}&gt;Edit&lt;/button&gt;
+                &lt;button onClick={() =&gt; handleDelete(emp.id)}&gt;Delete&lt;/button&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          ))}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default App;
+</code></pre>
+</div>
+
+<div class="section">
+  <h2>🚀 Run & Test</h2>
+  <ul>
+    <li><strong>Start Backend:</strong> <code>./mvnw spring-boot:run</code></li>
+    <li><strong>Start React Frontend:</strong> <code>npm start</code></li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>✅ Output</h2>
+  <p>You will get a fully working Employee Management system with the ability to:</p>
+  <ul>
+    <li>Add new employees</li>
+    <li>Edit employee details</li>
+    <li>Delete employees</li>
+    <li>View all employees</li>
+  </ul>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular Decorators Explained</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fdfdfd;
+      color: #333;
+      margin: 20px;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    .qa-section {
+      background: #ffffff;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-left: 5px solid #007acc;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 12px;
+      overflow: auto;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 5px;
+      font-family: Consolas, monospace;
+    }
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="qa-section">
+    <h2>Q: What are decorators in Angular?</h2>
+    <p><strong>Answer:</strong> Decorators are a core concept in Angular that allow you to attach metadata to classes, methods, properties, or parameters. Angular uses this metadata to understand how to process a class or a member of a class.</p>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: What are the common types of Angular decorators?</h2>
+    <p><strong>Answer:</strong> Angular provides several built-in decorators, such as:</p>
+    <ul>
+      <li><code>@Component</code></li>
+      <li><code>@NgModule</code></li>
+      <li><code>@Injectable</code></li>
+      <li><code>@Input</code></li>
+      <li><code>@Output</code></li>
+      <li><code>@HostListener</code></li>
+      <li><code>@ViewChild</code></li>
+    </ul>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: What does <code>@Component</code> do?</h2>
+    <p><strong>Answer:</strong> It marks a class as an Angular component and provides configuration metadata such as the selector, template, and styles.</p>
+    <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-hello',
+  template: '&lt;p&gt;Hello from component!&lt;/p&gt;'
+})
+export class HelloComponent { }</code></pre>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: What does <code>@NgModule</code> do?</h2>
+    <p><strong>Answer:</strong> It declares a class as an Angular module and provides metadata about the module’s components, directives, services, and other modules it uses.</p>
+    <pre><code>import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: What is the use of <code>@Injectable</code>?</h2>
+    <p><strong>Answer:</strong> It marks a class as available to be injected as a dependency.</p>
+    <pre><code>import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DataService {
+  getData() {
+    return ['Item1', 'Item2'];
+  }
+}</code></pre>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: How does <code>@Input</code> work?</h2>
+    <p><strong>Answer:</strong> It allows data to be passed from a parent component to a child component.</p>
+    <pre><code>import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  template: '&lt;p&gt;Received: {{ message }}&lt;/p&gt;'
+})
+export class ChildComponent {
+  @Input() message: string;
+}</code></pre>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: What is <code>@Output</code> used for?</h2>
+    <p><strong>Answer:</strong> It allows a child component to send events/data to the parent component using <code>EventEmitter</code>.</p>
+    <pre><code>import { Component, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  template: '&lt;button (click)="send()&gt;Send&lt;/button&gt;'
+})
+export class ChildComponent {
+  @Output() notify = new EventEmitter&lt;string&gt;();
+
+  send() {
+    this.notify.emit('Hello from child!');
+  }
+}</code></pre>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: What does <code>@ViewChild</code> do?</h2>
+    <p><strong>Answer:</strong> It allows a component to access a child component, directive, or DOM element from the template.</p>
+    <pre><code>import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+@Component({
+  selector: 'app-parent',
+  template: '&lt;input #inputBox type="text"&gt;'
+})
+export class ParentComponent implements AfterViewInit {
+  @ViewChild('inputBox') inputRef: ElementRef;
+
+  ngAfterViewInit() {
+    this.inputRef.nativeElement.value = 'Set via ViewChild';
+  }
+}</code></pre>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Singleton Design Pattern in Java - All Implementation Scenarios</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    details {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin: 10px 0;
+      padding: 10px 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    summary {
+      font-weight: bold;
+      font-size: 1.1em;
+      cursor: pointer;
+      color: #1a73e8;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 5px solid #1a73e8;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    th {
+      background-color: #1a73e8;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Singleton Design Pattern in Java - All Scenarios</h1>
+
+  <details>
+    <summary>1. Basic Singleton (Eager Initialization)</summary>
+    <pre><code>public class EagerSingleton {
+    private static final EagerSingleton instance = new EagerSingleton();
+
+    private EagerSingleton() {}
+
+    public static EagerSingleton getInstance() {
+        return instance;
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>2. Lazy Initialization (Not Thread-safe)</summary>
+    <pre><code>public class LazySingleton {
+    private static LazySingleton instance;
+
+    private LazySingleton() {}
+
+    public static LazySingleton getInstance() {
+        if (instance == null)
+            instance = new LazySingleton();
+        return instance;
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>3. Thread-safe Singleton (Synchronized Method)</summary>
+    <pre><code>public class ThreadSafeSingleton {
+    private static ThreadSafeSingleton instance;
+
+    private ThreadSafeSingleton() {}
+
+    public static synchronized ThreadSafeSingleton getInstance() {
+        if (instance == null)
+            instance = new ThreadSafeSingleton();
+        return instance;
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>4. Double-Checked Locking</summary>
+    <pre><code>public class DCLSingleton {
+    private static volatile DCLSingleton instance;
+
+    private DCLSingleton() {}
+
+    public static DCLSingleton getInstance() {
+        if (instance == null) {
+            synchronized (DCLSingleton.class) {
+                if (instance == null)
+                    instance = new DCLSingleton();
+            }
+        }
+        return instance;
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>5. Bill Pugh Singleton</summary>
+    <pre><code>public class BillPughSingleton {
+    private BillPughSingleton() {}
+
+    private static class Holder {
+        private static final BillPughSingleton INSTANCE = new BillPughSingleton();
+    }
+
+    public static BillPughSingleton getInstance() {
+        return Holder.INSTANCE;
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>6. Enum Singleton</summary>
+    <pre><code>public enum EnumSingleton {
+    INSTANCE;
+
+    public void doSomething() {
+        System.out.println("Singleton using Enum");
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>7. Serializable Singleton with readResolve()</summary>
+    <pre><code>import java.io.*;
+
+public class SerializableSingleton implements Serializable {
+    private static final SerializableSingleton instance = new SerializableSingleton();
+
+    private SerializableSingleton() {}
+
+    public static SerializableSingleton getInstance() {
+        return instance;
+    }
+
+    protected Object readResolve() {
+        return instance;
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>8. Prevent Singleton Break by Reflection</summary>
+    <pre><code>public class SafeSingleton {
+    private static boolean instanceCreated = false;
+    private static final SafeSingleton instance = new SafeSingleton();
+
+    private SafeSingleton() {
+        if (instanceCreated)
+            throw new RuntimeException("Use getInstance()");
+        instanceCreated = true;
+    }
+
+    public static SafeSingleton getInstance() {
+        return instance;
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>9. Prevent Singleton Break by Cloning</summary>
+  
+  <pre><code>public class Singleton implements Cloneable {
+
+    private static final Singleton instance = new Singleton();
+
+    private Singleton() {
+        // private constructor
+    }
+
+    public static Singleton getInstance() {
+        return instance;
+    }
+
+    // ✅ Return same instance even if clone is called
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return instance;
+    }
+}
+  </code></pre>
+
+  </details>
+
+  <h2>🧠 When to Use Singleton?</h2>
+  <table>
+    <tr><th>Use Case</th><th>Example</th></tr>
+    <tr><td>Logging</td><td>Logger.getInstance().log(...)</td></tr>
+    <tr><td>Configuration Manager</td><td>Load once and reuse</td></tr>
+    <tr><td>Thread Pools</td><td>Centralized control</td></tr>
+    <tr><td>Caches</td><td>Avoid redundant cache instances</td></tr>
+    <tr><td>Database Connection Pool</td><td>Reuse a single pool</td></tr>
+  </table>
+
+  <h2>⚠️ Singleton Anti-Patterns & Cautions</h2>
+  <ul>
+    <li>Makes <strong>unit testing harder</strong> (global state)</li>
+    <li>Often misused as a <strong>global variable substitute</strong></li>
+    <li>Introduces <strong>tight coupling</strong> and hidden dependencies</li>
+    <li>Use <strong>Bill Pugh</strong> or <strong>Enum</strong> in multi-threaded apps</li>
+  </ul>
+</body>
+</html>

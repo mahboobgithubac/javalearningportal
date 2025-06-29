@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular + Spring Boot CRUD Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code, pre {
+      background: #f4f4f4;
+      padding: 10px;
+      display: block;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #f8f8f8;
+    }
+    .highlight {
+      background: #e7f4ff;
+      border-left: 4px solid #2196F3;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Angular + Spring Boot CRUD Example</h1>
+
+  <div class="section">
+    <h2>✅ Overview</h2>
+    <ul>
+      <li><strong>Frontend:</strong> Angular (with HttpClient & FormsModule)</li>
+      <li><strong>Backend:</strong> Spring Boot</li>
+      <li><strong>Entity:</strong> Employee with <code>id</code>, <code>name</code>, and <code>email</code></li>
+      <li><strong>Operations:</strong> Create, Read, Update, Delete (CRUD)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🔧 Spring Boot Backend</h2>
+    <p>Use the same Spring Boot setup from the React CRUD example:</p>
+    <ul>
+      <li>Entity: <code>Employee</code></li>
+      <li>Repository: <code>EmployeeRepository</code></li>
+      <li>Controller: <code>EmployeeController</code></li>
+      <li>Add CORS: <code>@CrossOrigin(origins = "http://localhost:4200")</code></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>⚙️ Angular Frontend</h2>
+    
+    <h3>Step 1: Create Angular App</h3>
+    <pre><code>ng new employee-crud
+cd employee-crud
+ng serve</code></pre>
+
+    <h3>Step 2: Add HTTP & Forms Module</h3>
+    <p>In <code>app.module.ts</code>:</p>
+    <pre><code>import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [BrowserModule, HttpClientModule, FormsModule],
+})
+export class AppModule {}</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>📁 Folder Structure</h3>
+    <pre><code>src/
+├── app/
+│   ├── employee.service.ts
+│   ├── employee.ts
+│   ├── employee-form.component.ts
+│   ├── employee-list.component.ts
+│   └── app.component.ts</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>3. Model: employee.ts</h3>
+    <pre><code>export interface Employee {
+  id?: number;
+  name: string;
+  email: string;
+}</code></pre>
+
+    <h3>4. Service: employee.service.ts</h3>
+    <pre><code>import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Employee } from './employee';
+import { Observable } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class EmployeeService {
+  private baseUrl = 'http://localhost:8080/api/employees';
+
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable&lt;Employee[]&gt; {
+    return this.http.get&lt;Employee[]&gt;(this.baseUrl);
+  }
+
+  create(emp: Employee): Observable&lt;Employee&gt; {
+    return this.http.post&lt;Employee&gt;(this.baseUrl, emp);
+  }
+
+  update(emp: Employee): Observable&lt;Employee&gt; {
+    return this.http.put&lt;Employee&gt;(`${this.baseUrl}/${emp.id}`, emp);
+  }
+
+  delete(id: number): Observable&lt;void&gt; {
+    return this.http.delete&lt;void&gt;(`${this.baseUrl}/${id}`);
+  }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>5. Form Component: employee-form.component.ts</h3>
+    <pre><code>import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Employee } from './employee';
+
+@Component({
+  selector: 'app-employee-form',
+  template: \`
+    &lt;h3&gt;{{ employee.id ? 'Edit' : 'Add' }} Employee&lt;/h3&gt;
+    &lt;form (ngSubmit)="submit()"&gt;
+      &lt;input [(ngModel)]="employee.name" name="name" placeholder="Name" required /&gt;
+      &lt;input [(ngModel)]="employee.email" name="email" placeholder="Email" required /&gt;
+      &lt;button type="submit"&gt;Save&lt;/button&gt;
+    &lt;/form&gt;
+  \`
+})
+export class EmployeeFormComponent {
+  @Input() employee: Employee = { name: '', email: '' };
+  @Output() onSave = new EventEmitter&lt;Employee&gt;();
+
+  submit() {
+    this.onSave.emit(this.employee);
+    this.employee = { name: '', email: '' };
+  }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>6. List Component: employee-list.component.ts</h3>
+    <pre><code>import { Component, OnInit } from '@angular/core';
+import { Employee } from './employee';
+import { EmployeeService } from './employee.service';
+
+@Component({
+  selector: 'app-employee-list',
+  template: \`
+    &lt;app-employee-form [employee]="selected" (onSave)="save($event)"&gt;&lt;/app-employee-form&gt;
+
+    &lt;h3&gt;Employee List&lt;/h3&gt;
+    &lt;table&gt;
+      &lt;thead&gt;&lt;tr&gt;&lt;th&gt;ID&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Email&lt;/th&gt;&lt;th&gt;Actions&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr *ngFor="let emp of employees"&gt;
+          &lt;td&gt;{{ emp.id }}&lt;/td&gt;
+          &lt;td&gt;{{ emp.name }}&lt;/td&gt;
+          &lt;td&gt;{{ emp.email }}&lt;/td&gt;
+          &lt;td&gt;
+            &lt;button (click)="edit(emp)"&gt;Edit&lt;/button&gt;
+            &lt;button (click)="remove(emp.id!)"&gt;Delete&lt;/button&gt;
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  \`
+})
+export class EmployeeListComponent implements OnInit {
+  employees: Employee[] = [];
+  selected: Employee = { name: '', email: '' };
+
+  constructor(private service: EmployeeService) {}
+
+  ngOnInit() {
+    this.load();
+  }
+
+  load() {
+    this.service.getAll().subscribe(data =&gt; (this.employees = data));
+  }
+
+  save(emp: Employee) {
+    if (emp.id) {
+      this.service.update(emp).subscribe(() =&gt; this.load());
+    } else {
+      this.service.create(emp).subscribe(() =&gt; this.load());
+    }
+    this.selected = { name: '', email: '' };
+  }
+
+  edit(emp: Employee) {
+    this.selected = { ...emp };
+  }
+
+  remove(id: number) {
+    this.service.delete(id).subscribe(() =&gt; this.load());
+  }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h3>7. Root Component: app.component.ts</h3>
+    <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: \`&lt;app-employee-list&gt;&lt;/app-employee-list&gt;\`
+})
+export class AppComponent {}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🚀 Run the App</h2>
+    <p><strong>Backend:</strong></p>
+    <pre><code>./mvnw spring-boot:run</code></pre>
+    <p><strong>Frontend:</strong></p>
+    <pre><code>ng serve</code></pre>
+    <p>Open: <a href="http://localhost:4200" target="_blank">http://localhost:4200</a></p>
+  </div>
+
+  <div class="section highlight">
+    <h2>✅ Output</h2>
+    <ul>
+      <li>🟢 Add new employees</li>
+      <li>🟡 Edit existing employees</li>
+      <li>🔴 Delete employees</li>
+      <li>🔵 View all employees</li>
+    </ul>
+  </div>
+
+</body>
+</html>

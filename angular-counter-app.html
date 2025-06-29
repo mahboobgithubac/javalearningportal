@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Angular Counter App Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧮 Angular Counter App Example</h1>
+
+  <p>This is a simple counter app built with Angular. It demonstrates component-based development, two-way data binding, and event handling in Angular.</p>
+
+  <h2>✅ Step 1: Create Angular App</h2>
+  <pre><code>ng new counter-app
+cd counter-app
+ng serve</code></pre>
+
+  <h2>✅ Step 2: Update app.component.ts</h2>
+  <p>This file holds the main logic of the counter.</p>
+  <pre><code>import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  count = 0;
+
+  increment() {
+    this.count++;
+  }
+
+  decrement() {
+    this.count--;
+  }
+
+  reset() {
+    this.count = 0;
+  }
+}
+</code></pre>
+
+  <h2>✅ Step 3: Update app.component.html</h2>
+  <p>This file contains the HTML layout and buttons to trigger events.</p>
+  <pre><code>&lt;div style="text-align:center; margin-top: 50px;"&gt;
+  &lt;h1&gt;Angular Counter App&lt;/h1&gt;
+  &lt;h2&gt;Count: {{ count }}&lt;/h2&gt;
+  &lt;button (click)="increment()"&gt;➕ Increment&lt;/button&gt;
+  &lt;button (click)="decrement()"&gt;➖ Decrement&lt;/button&gt;
+  &lt;button (click)="reset()"&gt;🔁 Reset&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+
+  <h2>✅ Step 4: Optional Styling in app.component.css</h2>
+  <pre><code>button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+}</code></pre>
+
+  <h2>🚀 Output</h2>
+  <ul>
+    <li>🟢 Click <code>Increment</code> to increase the count</li>
+    <li>🔴 Click <code>Decrement</code> to decrease the count</li>
+    <li>🔁 Click <code>Reset</code> to reset to 0</li>
+  </ul>
+
+  <h2>🌐 Run the App</h2>
+  <p>Once the server is running, open the app in your browser:</p>
+  <pre><code>http://localhost:4200</code></pre>
+
+  <hr>
+
+
+</body>
+</html>

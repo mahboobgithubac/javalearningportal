@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stored Procedure in Spring Boot JPA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 12px;
+      border-left: 4px solid #3498db;
+      overflow-x: auto;
+    }
+    nav {
+      background: #3498db;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    nav li {
+      display: inline;
+      margin-right: 15px;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Using Stored Procedure in Spring Boot JPA</h1>
+
+  <nav>
+    <ul>
+      <li><a href="#named">1. Using @NamedStoredProcedureQuery</a></li>
+      <li><a href="#procedure">2. Using @Procedure</a></li>
+      <li><a href="#entitymanager">3. Using EntityManager</a></li>
+      <li><a href="#when-to-use">4. When to Use What?</a></li>
+      <li><a href="#properties">5. Application Properties</a></li>
+    </ul>
+  </nav>
+
+  <section id="named">
+    <h2>1. Using <code>@NamedStoredProcedureQuery</code></h2>
+
+    <h3>🔹 Stored Procedure (MySQL)</h3>
+    <pre><code>DELIMITER //
+CREATE PROCEDURE get_employee_by_dept(IN deptId INT)
+BEGIN
+  SELECT * FROM employee WHERE department_id = deptId;
+END //
+DELIMITER ;</code></pre>
+
+    <h3>🔹 Entity Class</h3>
+    <pre><code>@Entity
+@NamedStoredProcedureQuery(
+  name = "Employee.getByDept",
+  procedureName = "get_employee_by_dept",
+  resultClasses = Employee.class,
+  parameters = {
+    @StoredProcedureParameter(mode = ParameterMode.IN, name = "deptId", type = Integer.class)
+  }
+)
+public class Employee {
+  @Id
+  private Long id;
+  private String name;
+  private int departmentId;
+  // Getters and Setters
+}</code></pre>
+
+    <h3>🔹 Repository</h3>
+    <pre><code>public interface EmployeeRepository extends JpaRepository&lt;Employee, Long&gt; {
+  @Procedure(name = "Employee.getByDept")
+  List&lt;Employee&gt; getEmployeesByDepartment(@Param("deptId") Integer deptId);
+}</code></pre>
+  </section>
+
+  <section id="procedure">
+    <h2>2. Using <code>@Procedure</code> Annotation</h2>
+
+    <h3>🔹 Stored Procedure</h3>
+    <pre><code>CREATE PROCEDURE count_employees(IN deptId INT, OUT total INT)
+BEGIN
+  SELECT COUNT(*) INTO total FROM employee WHERE department_id = deptId;
+END;</code></pre>
+
+    <h3>🔹 Repository</h3>
+    <pre><code>public interface EmployeeRepository extends JpaRepository&lt;Employee, Long&gt; {
+  @Procedure(procedureName = "count_employees")
+  int countEmployees(@Param("deptId") Integer deptId);
+}</code></pre>
+
+    <p><strong>Note:</strong> Use <code>EntityManager</code> for procedures with OUT parameters.</p>
+  </section>
+
+  <section id="entitymanager">
+    <h2>3. Using <code>EntityManager</code> for Full Control</h2>
+
+    <h3>🔹 Service Code</h3>
+    <pre><code>@Service
+public class EmployeeService {
+
+  @PersistenceContext
+  private EntityManager entityManager;
+
+  public List&lt;Employee&gt; getEmployeesByDept(Integer deptId) {
+    StoredProcedureQuery query = entityManager
+      .createStoredProcedureQuery("get_employee_by_dept", Employee.class)
+      .registerStoredProcedureParameter("deptId", Integer.class, ParameterMode.IN)
+      .setParameter("deptId", deptId);
+
+    return query.getResultList();
+  }
+}</code></pre>
+  </section>
+
+  <section id="when-to-use">
+    <h2>4. When to Use What?</h2>
+    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+      <thead style="background-color: #e0f7fa;">
+        <tr>
+          <th>Approach</th>
+          <th>Best Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>@NamedStoredProcedureQuery</code></td>
+          <td>Complex procedures with multiple params or returning entity list</td>
+        </tr>
+        <tr>
+          <td><code>@Procedure</code></td>
+          <td>Simple IN/OUT calls (single value return)</td>
+        </tr>
+        <tr>
+          <td><code>EntityManager</code></td>
+          <td>Full control, OUT params, multiple results, dynamic logic</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="properties">
+    <h2>5. Application Properties Example (MySQL)</h2>
+    <pre><code>spring.datasource.url=jdbc:mysql://localhost:3306/yourdb
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true</code></pre>
+  </section>
+
+</body>
+</html>

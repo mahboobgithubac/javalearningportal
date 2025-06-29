@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>React + Redux Interview Q&A - Basics</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 40px; }
+    h1, h2 { color: #2c3e50; }
+h1 {
+  text-align: center;
+}
+    .qa { background: #fff; border-radius: 5px; padding: 20px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .question { font-weight: bold; color: #007BFF; margin-bottom: 10px; }
+    pre { background: #eee; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    code { font-family: Consolas, monospace; }
+	 .question {
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+	 
+   /* .answer {
+      display: none;
+      margin-top: 5px;
+      padding-left: 15px;
+      border-left: 3px solid #007BFF;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      padding: 10px;
+    }
+	.question:hover {
+      color: #007BFF;
+	  table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+	 .qa{
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }*/
+	.qa {
+      background: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .question {
+      font-weight: bold;
+      color: #007BFF;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .question:hover {
+      color: #0056b3;
+    }
+    .answer {
+      display: none;
+      padding: 10px;
+      margin-top: 10px;
+      background-color: #f9f9f9;
+      border-left: 4px solid #007BFF;
+      border-radius: 4px;
+    }
+	
+	#expandBtn {
+  display: block;
+  margin: 2px 1175px;
+  padding: 5px 5px;
+  background-color: #007BFF;
+  width: 100px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: right; /* Optional */
+  
+  #scrollTopBtn, #scrollBottomBtn {
+    position: fixed;
+    right: 20px;
+    padding: 12px 16px;
+    font-size: 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 999;
+  }
+  #scrollTopBtn { bottom: 80px; }
+  #scrollBottomBtn { bottom: 20px; }
+  #scrollTopBtn:hover, #scrollBottomBtn:hover {
+    background-color: #0056b3;
+  }
+}
+	
+  </style>
+  <script>
+  /*document.querySelectorAll('.question').forEach(q => {
+    q.addEventListener('click', () => {
+      const answer = q.nextElementSibling;
+      answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+    });
+  });*/
+   // Toggle logic for all questions
+   document.addEventListener("DOMContentLoaded", function () {
+    const questions = document.querySelectorAll(".question");
+    const answers = document.querySelectorAll(".answer");
+    const expandBtn = document.getElementById("expandBtn");
+
+    // Toggle individual answers on question click
+    questions.forEach(question => {
+      question.addEventListener("click", () => {
+        const answer = question.nextElementSibling;
+        const isVisible = answer.style.display === "block";
+        answers.forEach(ans => ans.style.display = "none");
+        answer.style.display = isVisible ? "none" : "block";
+      });
+    });
+
+    // Expand/Collapse All toggle
+    expandBtn.addEventListener("click", () => {
+      const allExpanded = Array.from(answers).every(ans => ans.style.display === "block");
+      answers.forEach(ans => ans.style.display = allExpanded ? "none" : "block");
+      expandBtn.textContent = allExpanded ? "Expand All" : "Collapse All";
+    });
+  });
+  
+
+  document.getElementById("scrollTopBtn").onclick = function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  document.getElementById("scrollBottomBtn").onclick = function () {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  };
+
+  
+</script>
+<script>
+  document.querySelectorAll('.question').forEach(function(question) {
+    question.addEventListener('click', function() {
+	alert("clicked");
+      const answer = this.nextElementSibling;
+      if (answer.style.display === 'block') {
+        answer.style.display = 'none';
+      } else {
+        answer.style.display = 'block';
+      }
+    });
+  });
+</script>
+
+
+
+</head>
+<body>
+
+<h1>React + Redux Interview Questions and Answers</h1>   <button id="expandBtn">Expand All</button>
+<h2>✅ Basics of Redux</h2>
+
+ 
+
+<div class="qa">
+  <div class="question">1. What is Redux and why is it used in React?</div>
+  <div class="answer">
+    Redux is a predictable state container for JavaScript applications. It helps manage the state of your app in a centralized store, making debugging and testing easier.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">2. What are the core principles of Redux?</div>
+  <div class="answer">
+    <ul>
+      <li>Single source of truth (store)</li>
+      <li>State is read-only (immutability)</li>
+      <li>Changes are made using pure functions (reducers)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">3. What are the main components of Redux architecture?</div>
+  <div class="answer">
+    <ul>
+      <li><strong>Store</strong>: Holds the state</li>
+      <li><strong>Actions</strong>: Describe what happened</li>
+      <li><strong>Reducers</strong>: Specify how the state changes</li>
+    </ul>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">4. What is a store in Redux?</div>
+  <div class="answer">
+    A store is an object that holds the application state and provides methods like <code>getState()</code>, <code>dispatch()</code>, and <code>subscribe()</code>.
+    <pre><code>import { createStore } from 'redux';
+
+const store = createStore(reducer);</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">5. What are actions in Redux?</div>
+  <div class="answer">
+    Actions are plain JavaScript objects that describe a change. They must have a <code>type</code> property.
+    <pre><code>{
+  type: 'INCREMENT',
+  payload: 1
+}</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">6. What are reducers in Redux?</div>
+  <div class="answer">
+    Reducers are pure functions that take the current state and an action and return a new state.
+    <pre><code>const counterReducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT': return state + 1;
+    case 'DECREMENT': return state - 1;
+    default: return state;
+  }
+};</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">7. What is the role of <code>dispatch()</code> in Redux?</div>
+  <div class="answer">
+    <code>dispatch()</code> sends an action to the store to update the state.
+    <pre><code>store.dispatch({ type: 'INCREMENT' });</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">8. What is the difference between <code>mapStateToProps</code> and <code>mapDispatchToProps</code>?</div>
+  <div class="answer">
+    <ul>
+      <li><code>mapStateToProps</code> maps state to component props.</li>
+      <li><code>mapDispatchToProps</code> maps dispatchable actions to props.</li>
+    </ul>
+    <pre><code>const mapStateToProps = state => ({ count: state.count });
+const mapDispatchToProps = dispatch => ({
+  increment: () => dispatch({ type: 'INCREMENT' })
+});</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">9. How does Redux ensure immutability of state?</div>
+  <div class="answer">
+    By convention, reducers return new state objects using spread operators or helper libraries like Immer.
+    <pre><code>return { ...state, count: state.count + 1 };</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">10. How is Redux different from React's Context API?</div>
+  <div class="answer">
+    <ul>
+      <li>Context is ideal for simple state sharing (like theme, auth).</li>
+      <li>Redux is better for complex, structured, and large-scale applications with tools and middleware support.</li>
+    </ul>
+  </div>
+</div>
+<!-- Save this as part of your full HTML file, continuing from the previous section -->
+<h2>⚛️ React-Redux Integration</h2>
+
+<div class="qa">
+  <div class="question">11. How do you connect Redux to a React application?</div>
+  <div class="answer">
+    By wrapping your app in a <code>&lt;Provider&gt;</code> component and using hooks like <code>useSelector</code> and <code>useDispatch</code> or the <code>connect()</code> HOC.
+    <pre><code>import { Provider } from 'react-redux';
+import store from './store';
+
+const App = () => (
+  &lt;Provider store={store}&gt;
+    &lt;MyComponent /&gt;
+  &lt;/Provider&gt;
+);</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">12. What is the purpose of the <code>Provider</code> component in React-Redux?</div>
+  <div class="answer">
+    The <code>Provider</code> makes the Redux store available to all nested components that connect to the store.
+    <pre><code>&lt;Provider store={store}&gt;
+  &lt;App /&gt;
+&lt;/Provider&gt;</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">13. What is the <code>connect()</code> function in React-Redux?</div>
+  <div class="answer">
+    <code>connect()</code> is a Higher-Order Component (HOC) used to map Redux state and dispatch to component props.
+    <pre><code>import { connect } from 'react-redux';
+
+const MyComponent = ({ count, increment }) => (
+  &lt;button onClick={increment}&gt;Count: {count}&lt;/button&gt;
+);
+
+const mapState = state => ({ count: state.count });
+const mapDispatch = dispatch => ({
+  increment: () => dispatch({ type: 'INCREMENT' })
+});
+
+export default connect(mapState, mapDispatch)(MyComponent);</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">14. What is the use of the <code>useSelector()</code> hook?</div>
+  <div class="answer">
+    It allows functional components to access Redux state directly.
+    <pre><code>import { useSelector } from 'react-redux';
+
+const count = useSelector(state => state.count);</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">15. What is the use of the <code>useDispatch()</code> hook?</div>
+  <div class="answer">
+    It provides a reference to the Redux <code>dispatch</code> function, allowing you to send actions.
+    <pre><code>import { useDispatch } from 'react-redux';
+
+const dispatch = useDispatch();
+dispatch({ type: 'INCREMENT' });</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">16. When should you use <code>connect()</code> vs <code>useSelector/useDispatch</code>?</div>
+  <div class="answer">
+    <ul>
+      <li><code>connect()</code> is ideal for class components or optimization with memoization.</li>
+      <li><code>useSelector</code> and <code>useDispatch</code> are cleaner for functional components using hooks.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">17. Can you use Redux with functional components?</div>
+  <div class="answer">
+    Yes, using hooks like <code>useSelector</code> and <code>useDispatch</code> in function components is the modern standard.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">18. How does data flow in Redux architecture?</div>
+  <div class="answer">
+    <code>View → dispatch(action) → middleware (optional) → reducer → new state → re-render view</code>.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">19. What is meant by “single source of truth” in Redux?</div>
+  <div class="answer">
+    Redux stores the entire application state in one centralized store object, which is the source of truth for the UI.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">20. What happens when you dispatch an action?</div>
+  <div class="answer">
+    Redux sends the action to reducers, which calculate the new state and trigger re-rendering in connected components.
+  </div>
+</div>
+<h2>🔁 Redux State and Data Flow</h2>
+
+<div class="qa">
+  <div class="question">21. How does Redux handle async operations?</div>
+  <div class="answer">
+    Redux by itself is synchronous. To handle async operations like API calls, you use middleware such as <strong>Redux Thunk</strong> or <strong>Redux Saga</strong>.
+    <pre><code>// Example using Redux Thunk
+export const fetchData = () => {
+  return async dispatch => {
+    const response = await fetch('/api/data');
+    const data = await response.json();
+    dispatch({ type: 'SET_DATA', payload: data });
+  };
+};</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">22. What is middleware in Redux?</div>
+  <div class="answer">
+    Middleware in Redux provides a third-party extension point between dispatching an action and the moment it reaches the reducer.
+    <pre><code>// Example: Logger middleware
+const logger = store => next => action => {
+  console.log('Dispatching', action);
+  let result = next(action);
+  console.log('Next state', store.getState());
+  return result;
+};</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">23. What is the role of Redux Thunk?</div>
+  <div class="answer">
+    Redux Thunk allows action creators to return a function instead of an action, enabling delayed or conditional dispatch.
+    <pre><code>const fetchUsers = () => async dispatch => {
+  const res = await fetch('/api/users');
+  const data = await res.json();
+  dispatch({ type: 'SET_USERS', payload: data });
+};</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">24. How does Redux Saga differ from Redux Thunk?</div>
+  <div class="answer">
+    Redux Saga uses generator functions to handle asynchronous side effects in a more declarative way compared to Thunk.
+    <pre><code>// Example using Redux Saga
+function* fetchUserSaga() {
+  const response = yield call(fetch, '/api/user');
+  const data = yield response.json();
+  yield put({ type: 'SET_USER', payload: data });
+}</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">25. What is an action creator?</div>
+  <div class="answer">
+    An action creator is a function that returns an action object.
+    <pre><code>const increment = () => ({ type: 'INCREMENT' });</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">26. What are higher-order reducers?</div>
+  <div class="answer">
+    A higher-order reducer is a function that takes a reducer and returns a new reducer with enhanced behavior.
+    <pre><code>const resettableReducer = reducer => (state, action) => {
+  if (action.type === 'RESET') {
+    return reducer(undefined, {});
+  }
+  return reducer(state, action);
+};</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">27. What is reselect and why is it useful?</div>
+  <div class="answer">
+    Reselect is a library for creating memoized selectors that improve performance by avoiding unnecessary recalculations.
+    <pre><code>import { createSelector } from 'reselect';
+
+const selectUsers = state => state.users;
+const selectActiveUsers = createSelector(
+  [selectUsers],
+  users => users.filter(user => user.active)
+);</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">28. How do you handle deeply nested state in Redux?</div>
+  <div class="answer">
+    Use normalization with libraries like <code>normalizr</code>, or split state into smaller pieces and use selectors to access nested data.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">29. What is normalization in Redux state?</div>
+  <div class="answer">
+    Normalization flattens nested data structures to keep the Redux store flat and relational.
+    <pre><code>// Normalized format
+{
+  users: {
+    byId: {
+      1: { id: 1, name: 'Alice' },
+      2: { id: 2, name: 'Bob' }
+    },
+    allIds: [1, 2]
+  }
+}</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">30. What is the difference between <code>combineReducers</code> and nesting reducers manually?</div>
+  <div class="answer">
+    <code>combineReducers</code> is a utility that automatically splits the state and delegates to corresponding reducers. Manual nesting gives more control.
+    <pre><code>import { combineReducers } from 'redux';
+
+const rootReducer = combineReducers({
+  user: userReducer,
+  posts: postsReducer
+});</code></pre>
+  </div>
+</div>
+<h2>🧠 Advanced Concepts + Redux Toolkit</h2>
+
+<div class="qa">
+  <div class="question">31. How do you debug Redux applications?</div>
+  <div class="answer">
+    You can use tools like the <strong>Redux DevTools Extension</strong> to inspect actions, state changes, and time-travel through your Redux store.
+    <pre><code>// Add Redux DevTools support
+const store = configureStore({
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== 'production',
+});</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">32. What is Redux Toolkit?</div>
+  <div class="answer">
+    Redux Toolkit (RTK) is the official, recommended way to write Redux logic. It reduces boilerplate and includes utilities like <code>createSlice</code> and <code>createAsyncThunk</code>.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">33. What problems does Redux Toolkit solve?</div>
+  <div class="answer">
+    It simplifies store setup, reduces boilerplate in reducers/actions, and encourages best practices like using Immer and RTK Query for API calls.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">34. What is <code>createSlice</code> in Redux Toolkit?</div>
+  <div class="answer">
+    <code>createSlice</code> lets you define reducers and actions together in one place.
+    <pre><code>import { createSlice } from '@reduxjs/toolkit';
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: 0,
+  reducers: {
+    increment: state => state + 1,
+    decrement: state => state - 1,
+  }
+});
+
+export const { increment, decrement } = counterSlice.actions;
+export default counterSlice.reducer;</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">35. What is <code>createAsyncThunk</code>?</div>
+  <div class="answer">
+    <code>createAsyncThunk</code> simplifies async logic by generating actions for pending, fulfilled, and rejected states.
+    <pre><code>import { createAsyncThunk } from '@reduxjs/toolkit';
+
+export const fetchUser = createAsyncThunk('user/fetch', async () => {
+  const response = await fetch('/api/user');
+  return await response.json();
+});</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">36. How do you use Redux Toolkit with TypeScript?</div>
+  <div class="answer">
+    Redux Toolkit works well with TypeScript. You define types for state and actions using interfaces or types.
+    <pre><code>interface CounterState {
+  value: number;
+}
+
+const initialState: CounterState = { value: 0 };
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment: state => { state.value++ },
+  }
+});</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">37. What is the <code>configureStore()</code> method in Redux Toolkit?</div>
+  <div class="answer">
+    <code>configureStore</code> wraps <code>createStore</code> and automatically sets up good defaults like Redux DevTools, middleware, and combining reducers.
+    <pre><code>import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './slices';
+
+const store = configureStore({ reducer: rootReducer });</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">38. How do you handle side effects in Redux?</div>
+  <div class="answer">
+    You use middleware like Redux Thunk or Redux Saga to handle side effects such as API calls, logging, or timers.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">39. How do you structure a large Redux application?</div>
+  <div class="answer">
+    Use feature-based folders with slices:
+    <pre><code>src/
+├── features/
+│   ├── auth/
+│   │   ├── authSlice.js
+│   ├── posts/
+│   │   ├── postsSlice.js
+└── store.js</code></pre>
+    Keep logic modular, and use RTK to organize slices per feature.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">40. How do you persist Redux state in localStorage?</div>
+  <div class="answer">
+    You manually save and load state from localStorage or use libraries like <code>redux-persist</code>.
+    <pre><code>// Save to localStorage
+store.subscribe(() => {
+  localStorage.setItem('state', JSON.stringify(store.getState()));
+});
+
+// Load from localStorage
+const persistedState = JSON.parse(localStorage.getItem('state') || '{}');
+const store = createStore(rootReducer, persistedState);</code></pre>
+  </div>
+</div>
+<div class="qa">
+  <div class="question">41. How do you test Redux actions and reducers?</div>
+  <div class="answer">
+    <strong>Reducers:</strong> Test them as pure functions by passing state and action.<br/>
+    <strong>Actions:</strong> For async actions, use libraries like <code>redux-mock-store</code> and <code>redux-thunk</code>.
+    <pre><code>// Testing a reducer
+expect(counterReducer(0, { type: 'INCREMENT' })).toBe(1);</code></pre>
+    <pre><code>// Testing a thunk action
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+
+const mockStore = configureStore([thunk]);
+const store = mockStore({});
+
+await store.dispatch(fetchUsers());
+const actions = store.getActions();
+expect(actions[0].type).toBe('users/fetch/pending');</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">42. How do you test components connected to Redux?</div>
+  <div class="answer">
+    Use <code>Provider</code> from <code>react-redux</code> to wrap components in test files. For example:
+    <pre><code>import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import store from './store';
+
+render(
+  &lt;Provider store={store}&gt;
+    &lt;MyComponent /&gt;
+  &lt;/Provider&gt;
+);</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">43. What are best practices for Redux state management?</div>
+  <div class="answer">
+    <ul>
+      <li>Keep state flat and normalized</li>
+      <li>Use Redux Toolkit to reduce boilerplate</li>
+      <li>Split logic by feature modules</li>
+      <li>Use selectors and memoization</li>
+      <li>Write tests for reducers and thunks</li>
+    </ul>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">44. How can you optimize Redux performance?</div>
+  <div class="answer">
+    <ul>
+      <li>Use memoized selectors via Reselect</li>
+      <li>Avoid deeply nested state trees</li>
+      <li>Prevent unnecessary re-renders using <code>React.memo</code>, <code>useMemo</code>, or <code>shouldComponentUpdate</code></li>
+    </ul>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">45. What is RTK Query?</div>
+  <div class="answer">
+    RTK Query is a data-fetching and caching tool built into Redux Toolkit. It reduces the need for thunks and simplifies API logic.
+    <pre><code>const api = createApi({
+  reducerPath: 'api',
+  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+  endpoints: builder => ({
+    getPosts: builder.query({
+      query: () => '/posts',
+    }),
+  }),
+});</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">46. How do you handle errors in Redux?</div>
+  <div class="answer">
+    You can handle errors inside thunks or async actions by dispatching an error action or using <code>createAsyncThunk</code>’s reject handling.
+    <pre><code>try {
+  const response = await fetch(...);
+  dispatch({ type: 'SUCCESS', payload: response });
+} catch (error) {
+  dispatch({ type: 'ERROR', payload: error.message });
+}</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">47. Can you dispatch multiple actions from one place?</div>
+  <div class="answer">
+    Yes. Inside a thunk or saga, you can dispatch multiple actions as needed:
+    <pre><code>dispatch(actionOne());
+dispatch(actionTwo());</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">48. How do you share state between reducers?</div>
+  <div class="answer">
+    Use selectors to read shared state across reducers. Avoid direct access. For shared updates, use combined actions or meta reducers.
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">49. How do you reset Redux state?</div>
+  <div class="answer">
+    Dispatch a special RESET action and return initial state in your root reducer.
+    <pre><code>const rootReducer = (state, action) => {
+  if (action.type === 'RESET_STATE') {
+    return appReducer(undefined, action);
+  }
+  return appReducer(state, action);
+};</code></pre>
+  </div>
+</div>
+
+<div class="qa">
+  <div class="question">50. Is Redux still relevant in modern React?</div>
+  <div class="answer">
+    Yes, Redux is still relevant for complex applications. However, for small-to-medium apps, Context API, Zustand, Recoil, or React Query may be sufficient.
+  </div>
+</div>
+<button id="scrollTopBtn" title="Go to top">⬆</button>
+<button id="scrollBottomBtn" title="Go to bottom">⬇</button>
+</body>
+</html>

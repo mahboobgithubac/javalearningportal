@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Constructor vs ngOnInit in Angular</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    .qa-section {
+      margin-bottom: 30px;
+      background: #ffffff;
+      padding: 20px;
+      border-left: 5px solid #3498db;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background-color: #fff;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      overflow: auto;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 5px;
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="qa-section">
+    <h2>Q: What is the difference between <code>constructor</code> and <code>ngOnInit</code> in Angular?</h2>
+    <p><strong>Answer:</strong></p>
+
+    <table>
+      <tr>
+        <th>Feature</th>
+        <th><code>constructor()</code></th>
+        <th><code>ngOnInit()</code></th>
+      </tr>
+      <tr>
+        <td><strong>Purpose</strong></td>
+        <td>Used to inject dependencies</td>
+        <td>Used to perform component initialization</td>
+      </tr>
+      <tr>
+        <td><strong>Called When</strong></td>
+        <td>Immediately when the component is created</td>
+        <td>After Angular has initialized the component's inputs</td>
+      </tr>
+      <tr>
+        <td><strong>Part of Angular Lifecycle?</strong></td>
+        <td>No ❌</td>
+        <td>Yes ✅</td>
+      </tr>
+      <tr>
+        <td><strong>Used For</strong></td>
+        <td>Setting up dependency injection</td>
+        <td>Fetching data, initializing values, calling services</td>
+      </tr>
+      <tr>
+        <td><strong>Receives Inputs?</strong></td>
+        <td>Inputs are <strong>not</strong> available</td>
+        <td>Inputs are available and can be used</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: Can you give an example demonstrating the difference?</h2>
+    <p><strong>Answer:</strong></p>
+    <pre><code>import { Component, OnInit, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-user',
+  template: `&lt;p&gt;User: {{ name }}&lt;/p&gt;`
+})
+export class UserComponent implements OnInit {
+  
+  @Input() name: string;
+
+  constructor() {
+    console.log('Constructor called');
+    console.log('Name in constructor:', this.name); // ❌ undefined
+  }
+
+  ngOnInit() {
+    console.log('ngOnInit called');
+    console.log('Name in ngOnInit:', this.name); // ✅ Correct value
+  }
+}
+    </code></pre>
+  </div>
+
+  <div class="qa-section">
+    <h2>Q: When should you use <code>constructor</code> vs <code>ngOnInit</code>?</h2>
+    <p><strong>Answer:</strong></p>
+    <ul>
+      <li>Use <code>constructor()</code> for basic setup and injecting services.</li>
+      <li>Use <code>ngOnInit()</code> to access inputs, fetch data, and initialize logic that depends on the component being fully loaded.</li>
+    </ul>
+  </div>
+
+</body>
+</html>

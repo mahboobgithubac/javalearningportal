@@ -30,7 +30,7 @@ git commit -m "Add new pages and update existing content"
 c
 Copy
 Edit
-git push origin main
+git push origin master
 Use origin master if your branch is named master.
 
 ✅ What Happens Next?

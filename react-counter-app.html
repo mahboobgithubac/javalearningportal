@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>React Counter App Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    pre {
+      background: #eee;
+      padding: 15px;
+      overflow-x: auto;
+      border-left: 4px solid #007bff;
+    }
+    code {
+      font-family: Consolas, monospace;
+      font-size: 14px;
+    }
+    .note {
+      background-color: #e0f7fa;
+      padding: 10px;
+      margin-top: 20px;
+      border-left: 4px solid #00bcd4;
+    }
+  </style>
+</head>
+<body>
+  <h1>✅ React Counter App Example</h1>
+
+  <p>This is a simple React Counter App using a functional component and the <code>useState</code> hook.</p>
+
+  <h2>📄 <code>CounterApp.jsx</code></h2>
+  <pre><code>import React, { useState } from 'react';
+
+function CounterApp() {
+  const [count, setCount] = useState(0);
+
+  const increase = () => setCount(count + 1);
+  const decrease = () => setCount(count - 1);
+  const reset = () => setCount(0);
+
+  return (
+    &lt;div style={styles.container}&gt;
+      &lt;h1&gt;React Counter App&lt;/h1&gt;
+      &lt;h2 style={styles.counter}&gt;{count}&lt;/h2&gt;
+      &lt;div style={styles.buttonContainer}&gt;
+        &lt;button onClick={increase} style={styles.button}&gt;+&lt;/button&gt;
+        &lt;button onClick={decrease} style={styles.button}&gt;-&lt;/button&gt;
+        &lt;button onClick={reset} style={styles.button}&gt;Reset&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+
+const styles = {
+  container: {
+    textAlign: 'center',
+    marginTop: '50px',
+    fontFamily: 'Arial'
+  },
+  counter: {
+    fontSize: '4rem',
+    margin: '20px 0'
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '10px'
+  },
+  button: {
+    padding: '10px 20px',
+    fontSize: '1.5rem',
+    cursor: 'pointer'
+  }
+};
+
+export default CounterApp;
+</code></pre>
+
+  <h2>📄 <code>index.js</code> (Entry Point)</h2>
+  <pre><code>import React from 'react';
+import ReactDOM from 'react-dom/client';
+import CounterApp from './CounterApp';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(&lt;CounterApp /&gt;);</code></pre>
+
+  <h2>📄 <code>index.html</code></h2>
+  <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;
+  &lt;title&gt;React Counter App&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="root"&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+  <div class="note">
+    <strong>🔧 Run the App:</strong><br/>
+    If you're using Create React App, follow these commands:
+    <pre><code>npx create-react-app counter-app
+cd counter-app
+# Replace App.js content with CounterApp.jsx
+npm start</code></pre>
+
+<a href="counter-demo.html" target="_blank">Demo</a>
+  </div>
+</body>
+</html>
