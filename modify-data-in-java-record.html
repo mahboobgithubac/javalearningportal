@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>How to Modify Data in Java Record Classes?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #333;
+    }
+    code {
+      background-color: #f0f0f0;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 3px solid #ccc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    th {
+      background-color: #f1f1f1;
+      text-align: left;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>How to Modify Data in Java Record Classes?</h1>
+
+    <h2>❌ Short Answer:</h2>
+    <p>
+      You <strong>cannot modify</strong> data inside a record after it's created — <strong>records are immutable by design</strong>.
+    </p>
+
+    <h2>🔍 Why Records Are Immutable</h2>
+    <p>
+      In a <code>record</code>, all fields (called <em>components</em>) are:
+    </p>
+    <ul>
+      <li><code>private final</code></li>
+      <li>Initialized <strong>once</strong> via the constructor</li>
+      <li>Only readable via auto-generated getters</li>
+    </ul>
+
+    <pre><code>public record User(String name, int age) {}</code></pre>
+
+    <p>Behind the scenes:</p>
+    <pre><code>private final String name;
+private final int age;</code></pre>
+
+    <p>No setters are generated, so you cannot write:</p>
+    <pre><code>user.age = 30; // ❌ Not allowed</code></pre>
+
+    <h2>✅ So How Can You "Modify" a Record?</h2>
+    <p>
+      You create a <strong>new instance</strong> with the modified values.
+    </p>
+
+    <h3>✨ Example:</h3>
+    <pre><code>User user1 = new User("Alice", 25);
+
+// "Modify" age by creating a new User
+User user2 = new User(user1.name(), 30);</code></pre>
+
+    <h2>🛠️ Helper Method for Updating Fields</h2>
+    <p>You can define methods like <code>withX()</code> to simulate mutation:</p>
+    <pre><code>public record User(String name, int age) {
+    public User withAge(int newAge) {
+        return new User(this.name, newAge);
+    }
+
+    public User withName(String newName) {
+        return new User(newName, this.age);
+    }
+}</code></pre>
+
+    <p>Usage:</p>
+    <pre><code>User updated = user1.withAge(30);</code></pre>
+
+    <h2>✅ Summary Table</h2>
+    <table>
+      <tr>
+        <th>Action</th>
+        <th>Possible in Record?</th>
+        <th>How?</th>
+      </tr>
+      <tr>
+        <td>Modify field</td>
+        <td>❌ No</td>
+        <td>Not allowed directly</td>
+      </tr>
+      <tr>
+        <td>Update a value</td>
+        <td>✅ Yes</td>
+        <td>Create a new instance</td>
+      </tr>
+      <tr>
+        <td>Provide update logic</td>
+        <td>✅ Yes</td>
+        <td>Use custom methods like <code>withAge()</code></td>
+      </tr>
+    </table>
+
+    <h2>🔚 Final Thought</h2>
+    <p>
+      Use <strong><code>record</code></strong> when your object is meant to be <strong>immutable</strong>. If you need to modify the object frequently, stick to traditional classes or use <code>@Data</code> with setters in <strong>Lombok</strong>.
+    </p>
+  </div>
+</body>
+</html>
