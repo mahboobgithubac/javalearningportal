@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Summing Numbers Using Java 8 Stream API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+        }
+        header, footer {
+            background-color: #004466;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 2rem;
+            max-width: 900px;
+            margin: auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #003344;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        code {
+            color: #c7254e;
+        }
+        details {
+            background: #eef;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 5px solid #227;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+        }
+        ul {
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Summing Numbers Using Java 8 Stream API</h1>
+    </header>
+
+    <main>
+        <p>
+            Java 8 introduced the powerful Stream API, which allows you to perform functional-style operations on collections and arrays. One of the most common use-cases is calculating the <strong>sum of numbers</strong>.
+        </p>
+
+        <h2>✔️ Example 1: Sum of Integer List</h2>
+        <pre><code>List&lt;Integer&gt; numbers = Arrays.asList(10, 20, 30, 40);
+
+int sum = numbers.stream()
+                 .mapToInt(Integer::intValue)
+                 .sum();
+
+System.out.println("Sum = " + sum);</code></pre>
+
+        <details>
+            <summary>Explanation</summary>
+            <p>
+                - <code>stream()</code>: Converts the list into a Stream.<br>
+                - <code>mapToInt()</code>: Converts each Integer to an int.<br>
+                - <code>sum()</code>: Terminal operation to get the total.
+            </p>
+        </details>
+
+        <h2>✔️ Example 2: Sum Using reduce()</h2>
+        <pre><code>List&lt;Integer&gt; numbers = Arrays.asList(5, 15, 25, 35);
+
+int sum = numbers.stream()
+                 .reduce(0, Integer::sum);
+
+System.out.println("Sum = " + sum);</code></pre>
+
+        <details>
+            <summary>Explanation</summary>
+            <p>
+                - <code>reduce(0, Integer::sum)</code> starts with 0 and adds each element.<br>
+                - Useful for more flexible or custom logic.
+            </p>
+        </details>
+
+        <h2>✔️ Example 3: Sum of Object Field Values</h2>
+        <pre><code>class Product {
+    int price;
+    Product(int price) { this.price = price; }
+    public int getPrice() { return price; }
+}
+
+List&lt;Product&gt; products = Arrays.asList(
+    new Product(100),
+    new Product(200),
+    new Product(300)
+);
+
+int total = products.stream()
+                    .mapToInt(Product::getPrice)
+                    .sum();
+
+System.out.println("Total Price = " + total);</code></pre>
+
+        <details>
+            <summary>Explanation</summary>
+            <p>
+                - This pattern is great for summing values from object fields.<br>
+                - <code>mapToInt()</code> converts field values to a stream of int.
+            </p>
+        </details>
+
+        <h2>✔️ Example 4: Sum of Array Elements</h2>
+        <pre><code>int[] numbers = {7, 14, 21, 28};
+
+int sum = Arrays.stream(numbers).sum();
+
+System.out.println("Sum = " + sum);</code></pre>
+
+        <details>
+            <summary>Explanation</summary>
+            <p>
+                - <code>Arrays.stream()</code> turns array into IntStream.<br>
+                - <code>sum()</code> then performs the accumulation.
+            </p>
+        </details>
+
+        <h2>✔️ Example 5: Sum Using IntStream.range()</h2>
+        <pre><code>int sum = IntStream.range(1, 6)  // 1 to 5
+                   .sum();
+
+System.out.println("Sum = " + sum);</code></pre>
+
+        <details>
+            <summary>Explanation</summary>
+            <p>
+                - <code>IntStream.range(1, 6)</code> creates a range from 1 to 5.<br>
+                - Efficient for summing sequences without needing a collection.
+            </p>
+        </details>
+
+        <h2>📝 Summary</h2>
+        <ul>
+            <li><strong>List + mapToInt + sum()</strong>: Clean and simple for summing `List&lt;Integer&gt;`.</li>
+            <li><strong>List + reduce()</strong>: Offers control with a custom accumulator.</li>
+            <li><strong>List of Objects + mapToInt()</strong>: Best for summing object fields like price or salary.</li>
+            <li><strong>Array + Arrays.stream()</strong>: Most direct way to sum primitive arrays.</li>
+            <li><strong>IntStream.range()</strong>: Ideal for summing over a numeric range (e.g., 1 to N).</li>
+        </ul>
+    </main>
+
+    <footer>
+        &copy; 2025 Java Stream Tutorial Blog | All rights reserved.
+    </footer>
+</body>
+</html>

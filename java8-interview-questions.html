@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Top Java 8 Interview Questions and Answers</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header, footer {
+      background-color: #003366;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #002244;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+    code {
+      color: #c7254e;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+    .question {
+      font-weight: bold;
+      color: #004466;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Top Java 8 Interview Questions and Answers</h1>
+  </header>
+  <main>
+
+    <section>
+      <p>This blog covers frequently asked Java 8 interview questions with answers and code examples. Great for job seekers and Java enthusiasts!</p>
+    </section>
+
+    <section>
+      <p class="question">1. What are the main features introduced in Java 8?</p>
+      <p><strong>Answer:</strong> Key features include:</p>
+      <ul>
+        <li>Lambda Expressions</li>
+        <li>Stream API</li>
+        <li>Functional Interfaces</li>
+        <li>Default and Static Methods in Interfaces</li>
+        <li>Optional Class</li>
+        <li>Date and Time API</li>
+        <li>Method and Constructor References</li>
+      </ul>
+    </section>
+
+    <section>
+      <p class="question">2. What is a Lambda Expression?</p>
+      <p><strong>Answer:</strong> A lambda expression is an anonymous function. It enables functional programming.</p>
+      <pre><code>List&lt;String&gt; list = Arrays.asList("A", "B", "C");
+list.forEach(s -&gt; System.out.println(s));</code></pre>
+    </section>
+
+    <section>
+      <p class="question">3. What is a Functional Interface?</p>
+      <p><strong>Answer:</strong> An interface with a single abstract method. Annotated with <code>@FunctionalInterface</code>.</p>
+      <pre><code>@FunctionalInterface
+interface MyFunc {
+    void execute();
+}</code></pre>
+    </section>
+
+    <section>
+      <p class="question">4. What is the Stream API?</p>
+      <p><strong>Answer:</strong> The Stream API provides functional-style operations on collections.</p>
+      <pre><code>List&lt;Integer&gt; list = Arrays.asList(1, 2, 3, 4, 5);
+int sum = list.stream()
+              .filter(n -&gt; n % 2 == 0)
+              .mapToInt(Integer::intValue)
+              .sum();</code></pre>
+    </section>
+
+    <section>
+      <p class="question">5. What is the difference between <code>map()</code> and <code>flatMap()</code>?</p>
+      <p><strong>Answer:</strong></p>
+      <ul>
+        <li><code>map()</code>: Transforms each element; may return nested streams.</li>
+        <li><code>flatMap()</code>: Flattens multiple streams into one.</li>
+      </ul>
+      <pre><code>List&lt;String&gt; words = Arrays.asList("Hello", "World");
+
+List&lt;String&gt; chars = words.stream()
+    .flatMap(w -&gt; Arrays.stream(w.split("")))
+    .collect(Collectors.toList());</code></pre>
+    </section>
+
+    <section>
+      <p class="question">6. What is the Optional class?</p>
+      <p><strong>Answer:</strong> <code>Optional</code> is a container to avoid null values.</p>
+      <pre><code>Optional&lt;String&gt; name = Optional.ofNullable(getName());
+name.ifPresent(System.out::println);</code></pre>
+    </section>
+
+    <section>
+      <p class="question">7. How are default methods used in interfaces?</p>
+      <p><strong>Answer:</strong> Java 8 allows default methods with implementation in interfaces.</p>
+      <pre><code>interface MyInterface {
+    default void show() {
+        System.out.println("Default Method");
+    }
+}</code></pre>
+    </section>
+
+    <section>
+      <p class="question">8. What is the new Date and Time API?</p>
+      <p><strong>Answer:</strong> Java 8 introduced <code>java.time</code> package for better date/time handling.</p>
+      <pre><code>LocalDate today = LocalDate.now();
+LocalDate birthday = LocalDate.of(1990, Month.JANUARY, 1);</code></pre>
+    </section>
+
+    <section>
+      <p class="question">9. How do you use Method References?</p>
+      <p><strong>Answer:</strong> Method references shorten lambda syntax.</p>
+      <pre><code>list.forEach(System.out::println);</code></pre>
+    </section>
+
+    <section>
+      <p class="question">10. What are some built-in functional interfaces?</p>
+      <p><strong>Answer:</strong> Java 8 provides many functional interfaces in <code>java.util.function</code>:</p>
+      <ul>
+        <li><code>Predicate&lt;T&gt;</code> – returns boolean</li>
+        <li><code>Function&lt;T,R&gt;</code> – takes T, returns R</li>
+        <li><code>Supplier&lt;T&gt;</code> – supplies a value</li>
+        <li><code>Consumer&lt;T&gt;</code> – performs an action</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>✅ Summary</h2>
+      <p>Java 8 brought functional programming into Java. Understanding lambda, streams, and Optionals is key for modern Java development and interviews.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; 2025 Java Interview Hub | All rights reserved.
+  </footer>
+</body>
+</html>

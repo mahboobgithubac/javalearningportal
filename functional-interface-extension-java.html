@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java 9 to Java 17 New Features</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    .version {
+      background: #fff;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-left: 5px solid #3498db;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    code, pre {
+      background: #eee;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background: #2d2d2d;
+      color: #eee;
+      padding: 12px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #3498db;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Java 9 to Java 17: New Features Overview</h1>
+
+  <!-- Existing sections here -->
+
+  <div class="version">
+    <h2>📘 Can a Functional Interface Extend Another Interface?</h2>
+    <p><strong>Yes!</strong> In Java, a functional interface can extend another interface if:</p>
+    <ul>
+      <li>It doesn't add another abstract method, OR</li>
+      <li>It only inherits a single abstract method, possibly with the same signature</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h3>✅ Example 1: Extending Another Functional Interface</h3>
+    <pre><code>@FunctionalInterface
+interface A {
+    void doSomething();
+}
+
+@FunctionalInterface
+interface B extends A {
+    // Still a functional interface
+}</code></pre>
+  </div>
+
+  <div class="version">
+    <h3>❌ Example 2: Invalid – Adds Second Abstract Method</h3>
+    <pre><code>@FunctionalInterface
+interface A {
+    void doSomething();
+}
+
+@FunctionalInterface
+interface C extends A {
+    void anotherThing(); // ❌ Two abstract methods now
+}</code></pre>
+    <p><strong>Compilation Error:</strong> Unexpected @FunctionalInterface annotation</p>
+  </div>
+
+  <div class="version">
+    <h3>✅ Example 3: Extending a Non-Functional Interface</h3>
+    <pre><code>interface Marker {
+    default void info() {
+        System.out.println("I'm a marker interface");
+    }
+}
+
+@FunctionalInterface
+interface D extends Marker {
+    void run();
+}</code></pre>
+  </div>
+
+  <div class="version">
+    <h3>✅ Example 4: Overlapping Abstract Methods (Same Signature)</h3>
+    <pre><code>@FunctionalInterface
+interface X {
+    void process(String s);
+}
+
+@FunctionalInterface
+interface Y {
+    void process(String s);
+}
+
+@FunctionalInterface
+interface Z extends X, Y {
+    // Valid since both signatures are the same
+}</code></pre>
+  </div>
+
+  <div class="version">
+    <h2>🔍 Summary Table</h2>
+    <table>
+      <thead>
+        <tr><th>Scenario</th><th>Functional?</th><th>Explanation</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Extends functional interface with same method</td><td>✅</td><td>Only one abstract method</td></tr>
+        <tr><td>Adds another abstract method</td><td>❌</td><td>Violates single abstract method rule</td></tr>
+        <tr><td>Extends non-functional interface (no abstract methods)</td><td>✅</td><td>Still only one abstract method</td></tr>
+        <tr><td>Overlapping abstract methods with same signature</td><td>✅</td><td>Considered one method</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

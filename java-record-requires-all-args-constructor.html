@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Why Java Record Requires All-Args Constructor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: #ffffff;
+      padding: 30px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      color: #333;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background: #f9f9f9;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Why Java Record Classes Require All-Args Constructor and Don't Support No-Args Constructor</h1>
+
+    <h2>❓ What's the Issue?</h2>
+    <p>
+      Java <code>record</code> classes do <strong>not</strong> support a no-argument constructor by design. You must initialize all components via the all-args constructor.
+    </p>
+
+    <h2>🔹 1. Design Philosophy of <code>record</code>s</h2>
+    <p>
+      A <code>record</code> in Java is meant to be:
+    </p>
+    <ul>
+      <li><strong>Immutable</strong></li>
+      <li><strong>Compact</strong></li>
+      <li><strong>Transparent data carrier</strong></li>
+    </ul>
+
+    <pre><code>public record User(String name, int age) {}</code></pre>
+
+    <p>Automatically generates a constructor like:</p>
+    <pre><code>public User(String name, int age) {
+    this.name = name;
+    this.age = age;
+}</code></pre>
+
+    <p>
+      Java does not allow field declarations inside records — only components. All components <strong>must</strong> be initialized.
+    </p>
+
+    <h2>🔹 2. No Fields = No Defaults</h2>
+    <p>You cannot do:</p>
+    <pre><code>public User() { // ❌ Compilation Error
+    this.name = "default";
+    this.age = 0;
+}</code></pre>
+
+    <p>Because:</p>
+    <ul>
+      <li>Fields are <strong>implicitly final</strong></li>
+      <li>Must be initialized in constructor</li>
+      <li>Cannot leave any component uninitialized</li>
+    </ul>
+
+    <h2>🔹 3. Immutability Contract</h2>
+    <p>
+      Allowing a no-arg constructor would break immutability and require the compiler to assign default values like <code>null</code> or <code>0</code>, which goes against the <strong>strict immutability contract</strong> of records.
+    </p>
+
+    <h2>🛠️ Workarounds</h2>
+    <p>If you <strong>really need</strong> a no-arg constructor (e.g., for Jackson, JPA):</p>
+
+    <h3>✅ Use a Normal Class with Lombok:</h3>
+    <pre><code>@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDTO {
+    private String name;
+    private int age;
+}</code></pre>
+
+    <h3>✅ Or Use a Static Factory Method:</h3>
+    <pre><code>public record User(String name, int age) {
+    public static User defaultUser() {
+        return new User("default", 0);
+    }
+}</code></pre>
+
+    <h2>✅ Summary</h2>
+    <table>
+      <tr>
+        <th>Reason</th>
+        <th>Explanation</th>
+      </tr>
+      <tr>
+        <td>Design Intent</td>
+        <td>Records are meant to be fully initialized and immutable</td>
+      </tr>
+      <tr>
+        <td>Compiler Behavior</td>
+        <td>All components are <code>final</code> and must be initialized via the constructor</td>
+      </tr>
+      <tr>
+        <td>No Field Declaration</td>
+        <td>You cannot manually assign fields later — only components exist</td>
+      </tr>
+      <tr>
+        <td>Immutability</td>
+        <td>Allowing default values would violate the immutability contract</td>
+      </tr>
+    </table>
+
+    <h2>🔚 Final Thought</h2>
+    <p>
+      Java records enforce <strong>safety, immutability, and simplicity</strong>. If you need flexible constructors or mutable data, use a classic class with or without Lombok.
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interview Prep Topics Sidebar</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 300px;
+      background-color: #f4f4f4;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .category {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .category h3 {
+      margin: 0;
+      padding: 10px;
+      background: #ddd;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .category ul {
+      list-style: none;
+      padding-left: 20px;
+      margin: 0;
+      display: none;
+    }
+
+    .category.active ul {
+      display: block;
+    }
+
+    .category ul li {
+      margin: 5px 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="category">
+    <h3>Java Core</h3>
+    <ul>
+      <li><a href="hashcode-equals-contract.html">hashCode & equals</a></li>
+      <li><a href="java-inheritance-polymorphism.html">OOP Concepts</a></li>
+      <li><a href="#">Streams & Lambdas</a></li>
+    </ul>
+  </div>
+
+  <div class="category">
+    <h3>Hibernate</h3>
+    <ul>
+      <li><a href="hibernate-association-mapping.html">Hibernate Association Mapping</a></li>
+      <li><a href="hibernate-n-plus-one-problem.html">Hibernate N+1 Problem</a></li>
+    </ul>
+  </div>
+
+  <div class="category">
+    <h3>Spring and Spring MVC</h3>
+    <ul>
+      <li><a href="dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="qualifier.html">@Qualifier Annotation Example</a></li>
+      <li><a href="spring-annptations.html">Spring Annotations with Examples</a></li>
+      <li><a href="#">REST API</a></li>
+    </ul>
+  </div>
+
+  <div class="category">
+    <h3>Spring Boot</h3>
+    <ul>
+      <li><a href="SpringBoot_Interview_Questions.html">Spring Boot Basics</a></li>
+      <li><a href="spring-boot-rest-api-annotation.html">REST API Annotations</a></li>
+      <li><a href="spring-boot-interceptor.html">Interceptor</a></li>
+      <li><a href="springboot-restapi-optional-parameters.html">Handling Optional Parameters</a></li>
+      <li><a href="springboot-request-response-logging-filter.html">Request/Response Logging with Filter</a></li>
+      <li><a href="springboot-interceptor-vs-filter.html">Interceptor vs Filter</a></li>
+      <li><a href="spring-boot-microservices-exception-handling.html">Microservices Exception Handling</a></li>
+      <li><a href="private-public-key.html">Private and Public Key</a></li>
+      <li><a href="secure-rest-api.html">REST API Security</a></li>
+      <li><a href="performance-improvement-of-slow-loading-api.html">Performance Improvement of Slow API</a></li>
+      <li><a href="rest-api-status-codes.html">HTTP Status Codes</a></li>
+      <li><a href="crud-rest-api.html">CRUD Example</a></li>
+      <li><a href="employee-rest-api.html">CRUD Example 2</a></li>
+      <li><a href="springboot-rest-api-crud-example-test.cases.html">CRUD Test Cases</a></li>
+      <li><a href="advanced-spring-boot-interview.html">Advanced REST API Questions</a></li>
+      <li><a href="cicd-springboot-pipeline.html">CI/CD Pipeline</a></li>
+      <li><a href="springboot-k8s-integration.html">Kubernetes Integration</a></li>
+      <li><a href="github-action.html">Kubernetes CI/CD GitHub Actions</a></li>
+      <li><a href="jwt-microservices-security.html">JWT + Microservices Security</a></li>
+      <li><a href="employee-crud-app.html">Employee CRUD</a></li>
+      <li><a href="employee-crud-app-using-response-entity.html">EmployeeController using ResponseEntity</a></li>
+      <li><a href="global-exception-handling-springboot.html">@RestControllerAdvice Exception Handling</a></li>
+      <li><a href="custom-validation-error-handling.html">Custom Validation Error Handling</a></li>
+      <li><a href="spring-boot-profiles-db-example.html">Profiles</a></li>
+      <li><a href="spring-boot-multiple-databases.html">Multiple Databases</a></li>
+      <li><a href="springboot-swagger-integration.html">Swagger Integration</a></li>
+      <li><a href="spring-boot-cache.html">Caching</a></li>
+      <li><a href="spring-boot-transaction.html">Transaction</a></li>
+      <li><a href="dto-entity-difference.html">DTO vs Entity</a></li>
+      <li><a href="rest-api-overloading-guide.html">REST API Overloading</a></li>
+      <li><a href="spring-config-files-comparison.html">application.properties vs application.yml</a></li>
+      <li><a href="fetch-millions-of-records.html">Process Millions of Records</a></li>
+      <li><a href="springboot-jpa-stored-procedure.html">Stored Procedure in Spring Boot</a></li>
+    </ul>
+  </div>
+
+  <div class="category">
+    <h3>Microservices</h3>
+    <ul>
+      <li><a href="spring-boot-microservice-guide.html">Microservice Guide</a></li>
+      <li><a href="microservice-design-patterens.html">Design Patterns</a></li>
+      <li><a href="service-discovery.html">Service Discovery</a></li>
+      <li><a href="common-service-failures.html">Common Failures</a></li>
+      <li><a href="post-api-call-in-microservices.html">Post API Call</a></li>
+      <li><a href="resttemplate-methods.html">RestTemplate Methods</a></li>
+      <li><a href="restTemplate-webClient-feignClient-diff.html">RestTemplate vs WebClient vs FeignClient</a></li>
+      <li><a href="mono-webclient-explained.html">Mono WebClient</a></li>
+      <li><a href="distributed-log-tracing-in-microservices.html">Distributed Log Tracing</a></li>
+      <li><a href="detect-service-failure.html">Detecting Service Failures</a></li>
+      <li><a href="service-mesh.html">Service Mesh</a></li>
+      <li><a href="http- status-codes-and-transaction-management-in-microservices.html">HTTP Status & Transaction Mgmt</a></li>
+      <li><a href="microservices-exception-handling.html">Service-to-Service Exception Handling</a></li>
+      <li><a href="feign-client-project.html">Feign Client Project</a></li>
+      <li><a href="springboot-micrometer-prometheus-grafana.html">Micrometer + Prometheus + Grafana</a></li>
+    </ul>
+  </div>
+
+  <div class="category">
+    <h3>Problem Solving</h3>
+    <ul>
+      <li><a href="no-of-coins.html">Count no of coins</a></li>
+      <li><a href="array-solution.html">Java 8 Arrays based questions</a></li>
+      <li><a href="listps.html">Java 8 List based questions</a></li>
+      <li><a href="even-odd-thread.html">Even Odd Thread Printing</a></li>
+      <li><a href="java8-misclaneous-qa.html">Miscellaneous Java 8 Questions</a></li>
+      <li><a href="java8-date-time-parallelstream-examples.html">Java 8 Date/Time & Parallel Stream</a></li>
+      <li><a href="second-occurrence-java.html">Find Second Occurrence of a Character</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="content">
+  <h1>Welcome to Interview Prep Web App</h1>
+  <p>Select a topic from the sidebar to begin.</p>
+</div>
+
+<script>
+  document.querySelectorAll('.category h3').forEach(header => {
+    header.addEventListener('click', () => {
+      header.parentElement.classList.toggle('active');
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Composition vs Aggregation in Java (Library-Book Example)</title>
+  	<link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -35,7 +36,36 @@
   </style>
 </head>
 <body>
-
+<header>
+						<div class="logo">
+							<img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Java Logo">
+								<h1 style="margin: 0;">Java Learning Portal</h1>
+							</div>
+							<nav>
+								<a href="index.html">Home</a>
+								<div class="dropdown">
+									<a href="#">Concepts ▾</a>
+											<div class="dropdown-content">
+												<a href="mysql.html">MySQL</a>
+												<a href="#">Java</a>
+												<a href="#">Spring Boot</a>
+												<a href="#">REST API</a>
+												<a href="#">Microservices</a>
+											</div>
+										</div>
+												<div class="dropdown">
+													<a href="#">Projects</a>
+													<div class="dropdown-content">
+														<a href="gems-tracking-tool.html">Spring Boot with React project</a>
+														<a href="#">Java</a>
+														<a href="#">Spring Boot</a>
+														<a href="#">REST API</a>
+														<a href="#">Microservices</a>
+													</div>
+												</div>
+								<a href="#">Contact</a>
+							</nav>
+						</header>
   <h1>Composition vs Aggregation in Java</h1>
 
   <p>In Java, <strong>Composition</strong> and <strong>Aggregation</strong> are two types of "has-a" relationships used to model real-world associations between objects.</p>
@@ -151,6 +181,30 @@ Library library = new Library(bookList);</code></pre>
       <td>Loosely Coupled</td>
     </tr>
   </table>
+<footer>
+															&copy; 2025 Java Learning Portal. All rights reserved.
+																	<div style="margin-top:10px;">
+																				<a href="https://www.hitwebcounter.com" target="_blank">
+																					<img src="https://hitwebcounter.com/counter/counter.php?page=20923573&style=0001&nbdigits=5&type=page&initCount=0" title="Counter Widget" alt="Visit counter For Websites" border="0"/>
+																				</a>
+																			</div>
+																			<a href="visit-stat.html" target="_blank">stat</a>
+																			<a href="traffic.html" target="_blank">traffic</a>
+																		</footer>
+																		<script>
+  // Visit Counter using localStorage
+  const visitKey = 'javaLearningPortalVisits';
+  let count = localStorage.getItem(visitKey);
 
-</body>
-</html>
+  if (!count) {
+    count = 1;
+  } else {
+    count = parseInt(count) + 1;
+  }
+
+  localStorage.setItem(visitKey, count);
+  document.getElementById('visitCount').textContent = `👀 You have visited ${count} time(s) on this browser.`;
+</script>
+																		<script async src="https://scripts.simpleanalyticscdn.com/latest.js"/>
+																	</body>
+																</html>

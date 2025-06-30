@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Use of Functional Interfaces in Java</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    .section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid #3498db;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    code, pre {
+     
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 12px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #3498db;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-Time Use of Functional Interfaces in Java Projects</h1>
+
+  <div class="section">
+    <h2>✅ What is a Functional Interface?</h2>
+    <p>A <strong>Functional Interface</strong> is an interface with a single abstract method (SAM). It's used with <strong>lambda expressions</strong> and <strong>method references</strong> to write concise, functional-style code.</p>
+    <pre><code>@FunctionalInterface
+public interface MyFunctional {
+    void execute();
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🔧 Real-Time Use Cases</h2>
+    <h3>1. Event Handling (GUI / APIs)</h3>
+    <pre><code>button.setOnClickListener(() -> System.out.println("Clicked!"));</code></pre>
+
+    <h3>2. Data Filtering & Processing</h3>
+    <pre><code>List&lt;String&gt; names = List.of("Alice", "Bob", "Charlie");
+names.stream()
+     .filter(name -> name.startsWith("A"))
+     .map(String::toUpperCase)
+     .forEach(System.out::println);</code></pre>
+
+    <h3>3. Strategy Pattern with Lambdas</h3>
+    <pre><code>@FunctionalInterface
+interface PaymentStrategy {
+    void pay(double amount);
+}
+
+processPayment(1000, amount -> System.out.println("Paid via UPI: " + amount));</code></pre>
+
+    <h3>4. Asynchronous/Multithreading</h3>
+    <pre><code>ExecutorService executor = Executors.newFixedThreadPool(2);
+executor.submit(() -> System.out.println("Running async task"));</code></pre>
+
+    <h3>5. Custom Business Logic Interface</h3>
+    <pre><code>@FunctionalInterface
+interface Validator&lt;T&gt; {
+    boolean validate(T input);
+}
+
+Validator&lt;String&gt; emailValidator = email -> email.contains("@");</code></pre>
+
+    <h3>6. REST API Logic Composition</h3>
+    <pre><code>public &lt;T, R&gt; R handleRequest(T input, Function&lt;T, R&gt; processor) {
+    return processor.apply(input);
+}
+
+handleRequest("java", s -> s.toUpperCase());</code></pre>
+
+    <h3>7. Sorting with Comparator</h3>
+    <pre><code>employees.sort((e1, e2) -> e1.getSalary() - e2.getSalary());</code></pre>
+
+    <h3>8. Builder Pattern with Consumer</h3>
+    <pre><code>public class UserBuilder {
+    private String name;
+    private int age;
+
+    public UserBuilder with(Consumer&lt;UserBuilder&gt; consumer) {
+        consumer.accept(this);
+        return this;
+    }
+
+    public User build() {
+        return new User(name, age);
+    }
+}</code></pre>
+
+    <h3>9. Validation Pipelines</h3>
+    <pre><code>Predicate&lt;String&gt; isNotNull = s -> s != null;
+Predicate&lt;String&gt; isEmail = s -> s.contains("@");
+
+boolean isValid = isNotNull.and(isEmail).test("user@example.com");</code></pre>
+
+    <h3>10. Retry/Error Handling</h3>
+    <pre><code>@FunctionalInterface
+interface Retryable {
+    void run() throws Exception;
+}
+
+void retry(Retryable task, int maxTries) {
+    for (int i = 0; i &lt; maxTries; i++) {
+        try {
+            task.run();
+            break;
+        } catch (Exception e) {
+            System.out.println("Retry #" + (i + 1));
+        }
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>📋 Common Functional Interfaces</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Interface</th>
+          <th>Method</th>
+          <th>Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Function&lt;T, R&gt;</code></td><td><code>R apply(T)</code></td><td>Mapping/conversion</td></tr>
+        <tr><td><code>Predicate&lt;T&gt;</code></td><td><code>boolean test(T)</code></td><td>Filtering</td></tr>
+        <tr><td><code>Consumer&lt;T&gt;</code></td><td><code>void accept(T)</code></td><td>Processing values</td></tr>
+        <tr><td><code>Supplier&lt;T&gt;</code></td><td><code>T get()</code></td><td>Supplying values</td></tr>
+        <tr><td><code>Runnable</code></td><td><code>void run()</code></td><td>Tasks with no return</td></tr>
+        <tr><td><code>Callable&lt;T&gt;</code></td><td><code>T call()</code></td><td>Tasks with result</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

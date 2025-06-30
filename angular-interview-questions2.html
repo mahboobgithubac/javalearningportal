@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Angular Interview Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      color: #c0392b;
+    }
+    h2 {
+      color: #2c3e50;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+    h3 {
+      color: #34495e;
+      margin-top: 20px;
+    }
+    ol {
+      padding-left: 25px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Angular Interview Questions</h1>
+
+  <ol>
+    <!-- 🌟 Basic -->
+    <h2>🌟 Basic Angular Interview Questions</h2>
+    <li>What is Angular?</li>
+    <li>Difference between AngularJS and Angular (2+)?</li>
+    <li>What are components in Angular?</li>
+    <li>What is a module in Angular?</li>
+    <li>What is data binding in Angular?</li>
+    <li>What is interpolation?</li>
+    <li>Explain property binding vs event binding.</li>
+    <li>What is two-way data binding in Angular?</li>
+    <li>What are directives? Types of directives?</li>
+    <li>What is a service in Angular?</li>
+    <li>What is dependency injection?</li>
+    <li>What is the purpose of <code>NgModule</code>?</li>
+    <li>What is the Angular CLI? How do you create a project?</li>
+    <li>What is the lifecycle of a component in Angular?</li>
+    <li>What is <code>ngOnInit()</code>? When is it called?</li>
+
+    <!-- ⚙️ Intermediate -->
+    <h2>⚙️ Intermediate Angular Interview Questions</h2>
+
+    <h3>🔄 Routing and Navigation</h3>
+    <li>What is Angular Router?</li>
+    <li>How do you set up routing in Angular?</li>
+    <li>What are route guards (<code>CanActivate</code>, <code>CanDeactivate</code>, etc.)?</li>
+    <li>How to pass data in routes (params and query params)?</li>
+    <li>What is lazy loading in Angular routing?</li>
+
+    <h3>📦 Services and Dependency Injection</h3>
+    <li>What is the difference between a service and a factory?</li>
+    <li>What is providedIn: 'root' in Angular services?</li>
+    <li>How does Angular's hierarchical injector work?</li>
+
+    <h3>📁 Forms</h3>
+    <li>Difference between Template-driven and Reactive forms?</li>
+    <li>How do you create a reactive form in Angular?</li>
+    <li>What is FormBuilder in Angular?</li>
+    <li>How do you validate a form?</li>
+
+    <!-- 🚀 Advanced -->
+    <h2>🚀 Advanced Angular Interview Questions</h2>
+
+    <h3>🧠 Change Detection & Performance</h3>
+    <li>What is change detection in Angular?</li>
+    <li>Difference between default and OnPush change detection strategy?</li>
+    <li>How do you optimize performance in large Angular applications?</li>
+
+    <h3>🧵 Observables & RxJS</h3>
+    <li>What are Observables?</li>
+    <li>Difference between Observable and Promise?</li>
+    <li>What are common RxJS operators (map, switchMap, mergeMap, etc.)?</li>
+    <li>What is a Subject and BehaviorSubject?</li>
+    <li>How do you handle async operations using RxJS?</li>
+
+    <h3>🧩 Advanced Concepts</h3>
+    <li>What is a dynamic component in Angular?</li>
+    <li>How do you use <code>ng-content</code> and content projection?</li>
+    <li>What is a custom pipe and how to create one?</li>
+    <li>How do you handle error handling globally in Angular?</li>
+    <li>What is Angular Universal?</li>
+    <li>What are interceptors? How do you use them?</li>
+    <li>Explain Angular compiler types: JIT vs AOT.</li>
+    <li>What is Ahead-of-Time (AOT) compilation?</li>
+    <li>What are pure and impure pipes?</li>
+
+    <!-- 🧪 Testing -->
+    <h2>🧪 Testing in Angular</h2>
+    <li>How do you test Angular components and services?</li>
+    <li>What is TestBed in Angular testing?</li>
+    <li>How do you write unit tests for Angular services using Jasmine/Karma?</li>
+
+    <!-- 🧷 Miscellaneous -->
+    <h2>🧷 Miscellaneous / Scenario-Based</h2>
+    <li>How do you share data between components?</li>
+    <li>What is the purpose of <code>ngZone</code>?</li>
+    <li>How to implement authentication and route protection in Angular?</li>
+    <li>How do you use environment variables in Angular?</li>
+    <li>How do you handle HTTP calls and APIs?</li>
+    <li>How would you organize a large Angular project?</li>
+
+    <!-- 📐 Architecture -->
+    <h2>📐 Architecture & Design</h2>
+    <li>What are the core building blocks of Angular?</li>
+    <li>What is the difference between declarations, imports, providers, and bootstrap in NgModule?</li>
+    <li>What are standalone components in Angular 14+?</li>
+    <li>What is a feature module vs a shared module?</li>
+    <li>When and why would you use a shared module?</li>
+    <li>How would you structure a scalable Angular app?</li>
+
+    <!-- 🔐 Security -->
+    <h2>🔐 Security & Access Control</h2>
+    <li>How does Angular protect against XSS?</li>
+    <li>How to secure an Angular route with guards and token-based authentication?</li>
+    <li>How can you prevent CSRF in Angular apps?</li>
+    <li>What are DOM sanitizers in Angular?</li>
+
+    <!-- ⚙️ HTTP -->
+    <h2>⚙️ Advanced HTTP & Networking</h2>
+    <li>How do you create a global HTTP interceptor?</li>
+    <li>How do you handle HTTP error responses globally?</li>
+    <li>How do you cancel HTTP requests in Angular?</li>
+    <li>How can you retry failed HTTP requests?</li>
+    <li>What is the difference between <code>HttpClient.get()</code> and <code>HttpClient.request()</code>?</li>
+
+    <!-- 🧠 State Management -->
+    <h2>🧠 State Management</h2>
+    <li>What is state management in Angular?</li>
+    <li>Difference between using services vs NgRx for state management?</li>
+    <li>What is NgRx? What are actions, reducers, selectors, and effects?</li>
+    <li>How do you persist state across page reloads in Angular?</li>
+    <li>What are alternatives to NgRx (e.g., Akita, NGXS, ComponentStore)?</li>
+
+    <!-- 🛠 Tooling -->
+    <h2>🛠 Tooling & Build</h2>
+    <li>What are schematics in Angular CLI?</li>
+    <li>What is Angular Language Service?</li>
+    <li>How do you debug Angular applications?</li>
+    <li>How to enable production build optimizations?</li>
+    <li>What are the different build configurations in <code>angular.json</code>?</li>
+
+    <!-- 🎯 Real World -->
+    <h2>🎯 Real-world Scenarios & Best Practices</h2>
+    <li>How do you implement role-based access control (RBAC) in Angular?</li>
+    <li>How do you handle file uploads in Angular?</li>
+    <li>What are memory leaks in Angular? How to prevent them?</li>
+    <li>When should you use <code>trackBy</code> in <code>ngFor</code>?</li>
+    <li>What is <code>async</code> pipe? How does it work under the hood?</li>
+    <li>How to manage and preload large data sets efficiently in Angular?</li>
+    <li>How to use <code>ViewChild</code> and <code>ContentChild</code>?</li>
+    <li>How do you render dynamic forms based on JSON configuration?</li>
+    <li>How do you use Angular Elements to integrate Angular components into non-Angular apps?</li>
+    <li>How do you optimize Angular applications for performance?</li>
+  </ol>
+</body>
+</html>

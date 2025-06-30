@@ -97,7 +97,7 @@ public class Passport {
   <h2>🔁 2. One-to-Many & Many-to-One Association</h2>
   <h3>Example: A <span class="highlight">Department</span> has many <span class="highlight">Employees</span></h3>
 
-  <h4>Department.java (One-to-Many)</h4>
+  <h2>🧩 Department Entity</h2>
   <pre><code>@Entity
 public class Department {
     @Id
@@ -107,16 +107,50 @@ public class Department {
     private List&lt;Employee&gt; employees;
 }</code></pre>
 
-  <h4>Employee.java (Many-to-One)</h4>
+ 
+
+  <ul>
+    <li><code>@Entity</code>: Marks this class as a JPA entity.</li>
+    <li><code>@Id</code>: Denotes the primary key field.</li>
+    <li>
+      <code>@OneToMany(mappedBy = "department", cascade = CascadeType.ALL)</code>: Defines a one-to-many relationship.
+      <ul>
+        <li><strong>mappedBy</strong>: References the <code>department</code> field in the <code>Employee</code> entity.</li>
+        <li><strong>cascade = CascadeType.ALL</strong>: All operations (persist, remove, etc.) cascade to employees.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>👨‍💼 Employee Entity</h2>
   <pre><code>@Entity
 public class Employee {
     @Id
     private Long id;
 
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 }</code></pre>
+
+  <p>
+    ✅ The <code>Employee</code> entity has a <code>@ManyToOne</code> relationship back to the <code>Department</code>.
+  </p>
+
+  <ul>
+    <li><code>@ManyToOne</code>: Many employees can belong to one department.</li>
+    <li><code>@JoinColumn(name = "department_id")</code>: Specifies the foreign key column in the <code>Employee</code> table.</li>
+  </ul>
+
+  <h2>✅ Summary</h2>
+  <p>
+    This models a typical parent-child relationship in databases:
+  </p>
+  <ul>
+    <li>One <strong>Department</strong> can have multiple <strong>Employees</strong>.</li>
+    <li>Each <strong>Employee</strong> is associated with one <strong>Department</strong>.</li>
+  </ul>
 
   <h2>🔗 3. Many-to-Many Association</h2>
   <h3>Example: <span class="highlight">Student</span> enrolls in multiple <span class="highlight">Courses</span></h3>

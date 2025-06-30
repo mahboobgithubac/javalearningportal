@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Collection Enhancements (Java 9 to 17)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        nav {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        nav h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        nav a {
+            color: white;
+            display: block;
+            text-decoration: none;
+            margin: 8px 0;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            flex: 1;
+            padding: 30px;
+        }
+        section {
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2>Java Collection Enhancements</h2>
+        <a href="#factory-methods">1. Factory Methods</a>
+        <a href="#map-entry">2. Map.entry()</a>
+        <a href="#stream-enhancements">3. Stream API Enhancements</a>
+        <a href="#collectors-enhancements">4. Collectors Enhancements</a>
+        <a href="#copyof">5. List.copyOf()</a>
+        <a href="#optional-stream">6. Optional.toStream()</a>
+        <a href="#ofnullable">7. Stream.ofNullable()</a>
+        <a href="#performance">8. Performance Improvements</a>
+        <a href="#teeing">9. Collectors.teeing()</a>
+        <a href="#pattern-matching">10. Pattern Matching</a>
+    </nav>
+    <main>
+        <h1>Java Collection Enhancements (Java 9 to 17)</h1>
+
+        <section id="factory-methods">
+            <h2>1. Factory Methods for Collections (Java 9)</h2>
+            <pre><code>List<String> names = List.of("Alice", "Bob", "Charlie");
+Set<Integer> nums = Set.of(1, 2, 3);
+Map<Integer, String> map = Map.of(1, "One", 2, "Two");</code></pre>
+            <p>Immutable collections that throw exceptions on modification and do not allow nulls.</p>
+        </section>
+
+        <section id="map-entry">
+            <h2>2. Convenient Map.entry() for Map.ofEntries()</h2>
+            <pre><code>Map<Integer, String> map = Map.ofEntries(
+    Map.entry(1, "One"),
+    Map.entry(2, "Two"),
+    Map.entry(3, "Three")
+);</code></pre>
+        </section>
+
+        <section id="stream-enhancements">
+            <h2>3. Stream API Enhancements (Java 9)</h2>
+            <pre><code>List<Integer> result = List.of(1, 2, 3, 4, 5, 0, 6, 7).stream()
+    .takeWhile(n -> n > 0)
+    .collect(Collectors.toList());</code></pre>
+        </section>
+
+        <section id="collectors-enhancements">
+            <h2>4. Collectors Enhancements (Java 9)</h2>
+            <pre><code>Map<Boolean, List<Integer>> partitioned = List.of(1, 2, 3, 4, 5).stream()
+    .collect(Collectors.partitioningBy(n -> n % 2 == 0,
+        Collectors.filtering(n -> n > 2, Collectors.toList())));</code></pre>
+        </section>
+
+        <section id="copyof">
+            <h2>5. Immutable Collections via List.copyOf(), Set.copyOf() (Java 10)</h2>
+            <pre><code>List<String> copyList = List.copyOf(originalList);
+Set<String> copySet = Set.copyOf(originalSet);</code></pre>
+        </section>
+
+        <section id="optional-stream">
+            <h2>6. Optional.toStream() (Java 9)</h2>
+            <pre><code>Optional<String> name = Optional.of("Java");
+name.stream()
+    .map(String::toUpperCase)
+    .forEach(System.out::println);</code></pre>
+        </section>
+
+        <section id="ofnullable">
+            <h2>7. Stream.ofNullable() (Java 9)</h2>
+            <pre><code>Stream<String> stream = Stream.ofNullable(null); // Empty stream</code></pre>
+        </section>
+
+        <section id="performance">
+            <h2>8. Performance Improvements (Java 11 - 17)</h2>
+            <p>Internal enhancements for memory usage, class data sharing, and iteration performance for core collections.</p>
+        </section>
+
+        <section id="teeing">
+            <h2>9. Collectors.teeing() (Java 12)</h2>
+            <pre><code>var result = Stream.of(1, 2, 3, 4, 5)
+    .collect(Collectors.teeing(
+        Collectors.summingInt(i -> i),
+        Collectors.counting(),
+        (sum, count) -> sum / count
+    ));</code></pre>
+        </section>
+
+        <section id="pattern-matching">
+            <h2>10. Pattern Matching with Collections (Java 16)</h2>
+            <pre><code>if (obj instanceof List&lt;String&gt; list) {
+    list.forEach(System.out::println);
+}</code></pre>
+        </section>
+
+  <h3><a href="takewhile-java9-example.html"> Java 9 Stream.takeWhile() Example</a></h3>
+    </main>
+</body>
+</html>

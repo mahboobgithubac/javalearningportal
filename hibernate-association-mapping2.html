@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JPA OneToMany Relationship: Department - Employee</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f9f9f9;
+    }
+    pre {
+      background-color: #eee;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JPA OneToMany Relationship Example</h1>
+
+  <h2>🧩 Department Entity</h2>
+  <pre><code>@Entity
+public class Department {
+    @Id
+    private Long id;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    private List&lt;Employee&gt; employees;
+}</code></pre>
+
+  <p>
+    ✅ This class is a JPA entity representing a one-to-many relationship with the <code>Employee</code> entity.
+  </p>
+
+  <ul>
+    <li><code>@Entity</code>: Marks this class as a JPA entity.</li>
+    <li><code>@Id</code>: Denotes the primary key field.</li>
+    <li>
+      <code>@OneToMany(mappedBy = "department", cascade = CascadeType.ALL)</code>: Defines a one-to-many relationship.
+      <ul>
+        <li><strong>mappedBy</strong>: References the <code>department</code> field in the <code>Employee</code> entity.</li>
+        <li><strong>cascade = CascadeType.ALL</strong>: All operations (persist, remove, etc.) cascade to employees.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>👨‍💼 Employee Entity</h2>
+  <pre><code>@Entity
+public class Employee {
+    @Id
+    private Long id;
+
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+}</code></pre>
+
+  <p>
+    ✅ The <code>Employee</code> entity has a <code>@ManyToOne</code> relationship back to the <code>Department</code>.
+  </p>
+
+  <ul>
+    <li><code>@ManyToOne</code>: Many employees can belong to one department.</li>
+    <li><code>@JoinColumn(name = "department_id")</code>: Specifies the foreign key column in the <code>Employee</code> table.</li>
+  </ul>
+
+  <h2>✅ Summary</h2>
+  <p>
+    This models a typical parent-child relationship in databases:
+  </p>
+  <ul>
+    <li>One <strong>Department</strong> can have multiple <strong>Employees</strong>.</li>
+    <li>Each <strong>Employee</strong> is associated with one <strong>Department</strong>.</li>
+  </ul>
+
+</body>
+</html>

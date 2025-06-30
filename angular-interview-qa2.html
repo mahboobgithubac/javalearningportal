@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Angular Interview Questions and Answers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #006699;
+      padding-top: 80px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      background-color: #004466;
+      padding: 10px 20px;
+      z-index: 1000;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 12px;
+      background-color: #0077aa;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      background-color: #005577;
+    }
+
+    section {
+      padding: 20px;
+    }
+
+    details {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+    }
+
+    summary {
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #333;
+    }
+
+    code {
+      background-color: #f4f4f4;
+      padding: 4px 6px;
+      display: inline-block;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#q1">What is Angular?</a>
+    <a href="#q2">AngularJS vs Angular</a>
+    <a href="#q3">Components</a>
+    <a href="#q4">Modules</a>
+    <a href="#q5">Data Binding</a>
+    <a href="#q6">Interpolation</a>
+    <a href="#q7">Property vs Event Binding</a>
+    <a href="#q8">Two-way Binding</a>
+    <a href="#q9">Directives</a>
+    <a href="#q10">Service</a>
+    <a href="#q11">Dependency Injection</a>
+    <a href="#q12">NgModule</a>
+    <a href="#q13">Angular CLI</a>
+    <a href="#q14">Lifecycle</a>
+    <a href="#q15">ngOnInit</a>
+  </nav>
+
+  <h1>Angular Interview Questions and Answers</h1>
+
+  <section id="q1">
+    <details open>
+      <summary>1. What is Angular?</summary>
+      <p>Angular is a TypeScript-based open-source front-end web application framework developed by Google for building single-page applications (SPA).</p>
+    </details>
+  </section>
+
+  <section id="q2">
+    <details>
+      <summary>2. Difference between AngularJS and Angular (2+)?</summary>
+      <ul>
+        <li><strong>AngularJS</strong>: JavaScript-based, uses controllers, developed before Angular 2.</li>
+        <li><strong>Angular</strong>: TypeScript-based, uses components, introduced with Angular 2.</li>
+      </ul>
+      <pre><code>// AngularJS
+$scope.message = "Hello";
+
+// Angular (2+)
+export class AppComponent {
+  message = "Hello";
+}</code></pre>
+    </details>
+  </section>
+
+  <section id="q3">
+    <details>
+      <summary>3. What are components in Angular?</summary>
+      <p>Components are the building blocks of Angular applications. Each component controls a part of the screen called a view.</p>
+      <pre><code>@Component({
+  selector: 'app-root',
+  template: '&lt;h1&gt;{{title}}&lt;/h1&gt;'
+})
+export class AppComponent {
+  title = 'My App';
+}</code></pre>
+    </details>
+  </section>
+
+  <section id="q4">
+    <details>
+      <summary>4. What is a module in Angular?</summary>
+      <p>A module is a container for components, directives, pipes, and services.</p>
+      <pre><code>@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }</code></pre>
+    </details>
+  </section>
+
+  <section id="q5">
+    <details>
+      <summary>5. What is data binding in Angular?</summary>
+      <p>Data binding is the mechanism to synchronize data between the model (component) and the view (template).</p>
+    </details>
+  </section>
+
+  <section id="q6">
+    <details>
+      <summary>6. What is interpolation?</summary>
+      <p>Interpolation binds data from the component to the view using double curly braces <code>{{ }}</code>.</p>
+      <pre><code>&lt;h1&gt;{{title}}&lt;/h1&gt;</code></pre>
+    </details>
+  </section>
+
+  <section id="q7">
+    <details>
+      <summary>7. Explain property binding vs event binding.</summary>
+      <p><strong>Property Binding:</strong> Binds data from component to DOM property.</p>
+      <pre><code>&lt;img [src]="imageUrl"&gt;</code></pre>
+      <p><strong>Event Binding:</strong> Binds DOM events to component methods.</p>
+      <pre><code>&lt;button (click)="onClick()"&gt;Click Me&lt;/button&gt;</code></pre>
+    </details>
+  </section>
+
+  <section id="q8">
+    <details>
+      <summary>8. What is two-way data binding in Angular?</summary>
+      <p>Two-way binding combines property and event binding using <code>[(ngModel)]</code>.</p>
+      <pre><code>&lt;input [(ngModel)]="username"&gt;
+&lt;p&gt;Welcome {{username}}&lt;/p&gt;</code></pre>
+    </details>
+  </section>
+
+  <section id="q9">
+    <details>
+      <summary>9. What are directives? Types of directives?</summary>
+      <p>Directives are classes that add behavior to elements.</p>
+      <ul>
+        <li><strong>Component</strong> – Directive with a template.</li>
+        <li><strong>Structural</strong> – Change DOM structure: <code>*ngIf</code>, <code>*ngFor</code>.</li>
+        <li><strong>Attribute</strong> – Change appearance/behavior: <code>ngClass</code>, <code>ngStyle</code>.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section id="q10">
+    <details>
+      <summary>10. What is a service in Angular?</summary>
+      <p>A service is a class that holds business logic and reusable data. It can be injected into components.</p>
+      <pre><code>@Injectable()
+export class DataService {
+  getData() {
+    return ['One', 'Two'];
+  }
+}</code></pre>
+    </details>
+  </section>
+
+  <section id="q11">
+    <details>
+      <summary>11. What is dependency injection?</summary>
+      <p>Dependency Injection (DI) is a design pattern where components get dependencies from external sources rather than creating them.</p>
+      <pre><code>constructor(private dataService: DataService) { }</code></pre>
+    </details>
+  </section>
+
+  <section id="q12">
+    <details>
+      <summary>12. What is the purpose of NgModule?</summary>
+      <p><code>NgModule</code> defines an Angular module. It helps group related components, pipes, directives, and services.</p>
+    </details>
+  </section>
+
+  <section id="q13">
+    <details>
+      <summary>13. What is the Angular CLI? How do you create a project?</summary>
+      <p>Angular CLI is a command-line interface tool to create, manage, and build Angular apps.</p>
+      <pre><code>npm install -g @angular/cli
+ng new my-app
+cd my-app
+ng serve</code></pre>
+    </details>
+  </section>
+
+  <section id="q14">
+    <details>
+      <summary>14. What is the lifecycle of a component in Angular?</summary>
+      <p>Angular provides lifecycle hooks that give visibility into key events:</p>
+      <ul>
+        <li><code>ngOnInit</code> – after component initialized</li>
+        <li><code>ngOnChanges</code> – on input changes</li>
+        <li><code>ngOnDestroy</code> – before component is destroyed</li>
+        <li>Others: <code>ngDoCheck</code>, <code>ngAfterViewInit</code>, etc.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section id="q15">
+    <details>
+      <summary>15. What is ngOnInit()? When is it called?</summary>
+      <p><code>ngOnInit()</code> is a lifecycle hook that is called once after the component is initialized.</p>
+      <pre><code>export class MyComponent implements OnInit {
+  ngOnInit() {
+    console.log('Component initialized');
+  }
+}</code></pre>
+    </details>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java 8 Stream – Create Name-Length Map with Duplicate Merging</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #333;
+        }
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+            overflow-x: auto;
+        }
+        .qa-section {
+            margin-bottom: 30px;
+        }
+        .question {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .answer {
+            margin-top: 10px;
+            color: #34495e;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Java 8 Stream – Create Name-Length Map with Duplicate Merging</h1>
+
+    <div class="qa-section">
+        <div class="question">
+            1. Given an array of names:
+        </div>
+        <pre>
+String[] nameArr = {"Mahboob", "Anwar", "Rahul", "Kumar", "Rahul"};
+        </pre>
+        <div class="answer">
+            Write a Java 8 program using Stream API to create a <code>Map&lt;String, Integer&gt;</code> where:
+            <ul>
+                <li>The key is the name.</li>
+                <li>The value is the total length of the name.</li>
+                <li>If a name occurs more than once, its lengths should be summed.</li>
+            </ul>
+            <strong>Answer:</strong>
+            <pre>
+import java.util.*;
+import java.util.stream.*;
+
+public class NameLengthCounter {
+    public static void main(String[] args) {
+        String[] nameArr = {"Mahboob", "Anwar", "Rahul", "Kumar", "Rahul"};
+
+        Map&lt;String, Integer&gt; nameLengthMap = Arrays.stream(nameArr)
+                .collect(Collectors.toMap(
+                        name -&gt; name,
+                        name -&gt; name.length(),
+                        Integer::sum
+                ));
+
+        nameLengthMap.forEach((name, lengthSum) -&gt; 
+            System.out.println(name + " -&gt; " + lengthSum));
+    }
+}
+            </pre>
+            <strong>Output:</strong>
+            <pre>
+Mahboob -> 7
+Anwar   -> 5
+Rahul   -> 10
+Kumar   -> 5
+            </pre>
+        </div>
+    </div>
+
+    <div class="qa-section">
+        <div class="question">2. How would you handle duplicate keys in a <code>Collectors.toMap()</code> operation using Java 8 Stream API?</div>
+        <div class="answer">
+            By providing a merge function as the third parameter in <code>Collectors.toMap()</code>. In this case, we use <code>Integer::sum</code> to add the values when duplicate keys are found.
+        </div>
+    </div>
+
+    <div class="qa-section">
+        <div class="question">3. What is the purpose of the merge function in <code>Collectors.toMap()</code> and how does <code>Integer::sum</code> help in this case?</div>
+        <div class="answer">
+            The merge function resolves conflicts when the same key appears more than once. <code>Integer::sum</code> adds the existing and new values, ensuring the total length is accumulated for repeated names.
+        </div>
+    </div>
+
+    <div class="qa-section">
+        <div class="question">4. Rewrite the above logic without using <code>Collectors.toMap()</code>. Can you achieve the same using <code>groupingBy</code> and <code>summingInt</code>?</div>
+        <div class="answer">
+            Yes, you can:
+            <pre>
+Map&lt;String, Integer&gt; nameLengthMap = Arrays.stream(nameArr)
+    .collect(Collectors.groupingBy(
+        Function.identity(),
+        Collectors.summingInt(String::length)
+    ));
+            </pre>
+        </div>
+    </div>
+
+    <div class="qa-section">
+        <div class="question">
+            5. What will be the output of the program if the array contains:<br>
+            <code>{"Alice", "Bob", "Alice", "Bob", "Bob"}</code>?
+        </div>
+        <div class="answer">
+            <strong>Answer:</strong><br>
+            - Alice occurs twice → 5 + 5 = 10<br>
+            - Bob occurs three times → 3 + 3 + 3 = 9<br>
+            <strong>Result:</strong>
+            <pre>
+Alice -> 10
+Bob   -> 9
+            </pre>
+        </div>
+    </div>
+
+</body>
+</html>

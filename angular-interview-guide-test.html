@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Angular Interview Q&A Guide</title>
+  <style>
+    body { display: flex; margin:0; font-family: Arial, sans-serif; }
+    nav { position: fixed; top: 0; left: 0; width: 250px; height: 100vh; overflow-y: auto; background: #2c3e50; color: white; padding: 1em; }
+    nav h2 { color: #ecf0f1; margin-top:1em; }
+    nav a { color: #bdc3c7; text-decoration: none; display: block; margin: .5em 0; }
+    nav a:hover { color: white; }
+    main { margin-left: 270px; padding: 2em; max-width: 800px; }
+    section { margin-bottom: 3em; }
+    h2.section-title { border-bottom:2px solid #ccc; padding-bottom:.3em; }
+    pre { background: #f4f4f4; padding:1em; overflow-x:auto; }
+    code { font-family: Consolas, monospace; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <h1>Angular Q&A</h1>
+    <h2>Basics</h2>
+    <a href="#q1">1. What is Angular?</a>
+    <a href="#q2">2. Difference AngularJS & Angular?</a>
+    <h2>Routing</h2>
+    <a href="#q3">3. What is Angular Router?</a>
+    <h2>Services & DI</h2>
+    <a href="#q4">4. What is a service?</a>
+  </nav>
+
+  <main>
+    <section id="basics">
+      <h2 class="section-title">🌟 Basics</h2>
+      <h3 id="q1">1. What is Angular?</h3>
+      <p><strong>Answer:</strong> Angular is a modern, component-based framework for building single‑page web applications using TypeScript, maintained by Google.</p>
+      <pre><code>// app.component.ts
+import { Component } from '@angular/core';
+@Component({
+  selector: 'app-root',
+  template: '&lt;h1&gt;Hello Angular&lt;/h1&gt;',
+})
+export class AppComponent {}
+</code></pre>
+
+      <h3 id="q2">2. Difference between AngularJS vs Angular (2+)?</h3>
+      <p><strong>Answer:</strong> AngularJS (v1.x) is JavaScript‑based and uses MVC; Angular 2+ is written in TypeScript, uses components, offers better performance, mobile support, and improved tooling.</p>
+    </section>
+
+    <section id="routing">
+      <h2 class="section-title">⚙️ Routing & Navigation</h2>
+      <h3 id="q3">3. What is Angular Router?</h3>
+      <p><strong>Answer:</strong> The Angular Router enables navigation between views, supports lazy loading, parameters, and guards.</p>
+      <pre><code>// app-routing.module.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './home.component';
+import { AboutComponent } from './about.component';
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'about', component: AboutComponent },
+];
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {}
+</code></pre>
+    </section>
+
+    <section id="services">
+      <h2 class="section-title">📦 Services & Dependency Injection</h2>
+      <h3 id="q4">4. What is a service in Angular?</h3>
+      <p><strong>Answer:</strong> A service is a reusable class used for shared logic—often for data access—which you can inject into components via Angular's DI system.</p>
+      <pre><code>// data.service.ts
+import { Injectable } from '@angular/core';
+@Injectable({ providedIn: 'root' })
+export class DataService {
+  getItems() { return ['One','Two','Three']; }
+}
+
+// app.component.ts
+import { Component } from '@angular/core';
+import { DataService } from './data.service';
+
+@Component({ selector: 'app-root', template: '&lt;ul&gt;&lt;li *ngFor="let i of items"&gt;{{i}}&lt;/li&gt;&lt;/ul&gt;' })
+export class AppComponent {
+  items = this.data.getItems();
+  constructor(private data: DataService) {}
+}
+</code></pre>
+    </section>
+  </main>
+</body>
+</html>

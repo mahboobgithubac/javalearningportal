@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java 9 to Java 17 New Features</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    h1, h2 {
+      color: #005f99;
+    }
+    .version {
+      background-color: #fff;
+      margin: 20px 0;
+      padding: 15px;
+      border-left: 5px solid #005f99;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    code {
+   
+	  
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    pre {
+
+      color: #f8f8f2;
+      padding: 10px;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #005f99;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Java 9 to Java 17: New Features Overview</h1>
+
+  <div class="version">
+    <h2>✅ Java 9 (Sep 2017)</h2>
+    <ul>
+      <li>Module System (Project Jigsaw)</li>
+      <li>JShell (REPL)</li>
+      <li>Improved Javadoc with search and HTML5</li>
+      <li>Private Interface Methods</li>
+      <li>Collection Factory Methods: <code>List.of()</code>, <code>Map.of()</code></li>
+      <li>Stream API: <code>takeWhile()</code>, <code>dropWhile()</code>, <code>iterate()</code></li>
+      <li>Try-With-Resources Enhancement</li>
+      <li>Compact Strings</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h2>✅ Java 10 (Mar 2018)</h2>
+    <ul>
+      <li><code>var</code> for local variables</li>
+      <li>Application Class-Data Sharing (AppCDS)</li>
+      <li>GC Interface</li>
+      <li>Root Certificates</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h2>✅ Java 11 (Sep 2018) – LTS</h2>
+    <ul>
+      <li><code>var</code> in lambda params</li>
+      <li>New String methods: <code>isBlank()</code>, <code>lines()</code>, <code>strip()</code>, <code>repeat()</code></li>
+      <li>File methods: <code>readString()</code>, <code>writeString()</code></li>
+      <li><code>HttpClient</code> becomes standard</li>
+      <li>Removed Java EE, CORBA</li>
+      <li>Single-file program execution</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h2>✅ Java 12 (Mar 2019)</h2>
+    <ul>
+      <li>Switch Expressions (Preview)</li>
+      <li>Compact Number Formatting</li>
+      <li>Shenandoah GC</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h2>✅ Java 13 (Sep 2019)</h2>
+    <ul>
+      <li>Text Blocks (Preview)</li>
+      <li>Second preview of Switch Expressions</li>
+      <li>Dynamic CDS Archives</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h2>✅ Java 14 (Mar 2020)</h2>
+    <ul>
+      <li>Switch Expressions (Standard)</li>
+      <li>Helpful NPE Messages</li>
+      <li>Records (Preview)</li>
+      <li>Pattern Matching for <code>instanceof</code> (Preview)</li>
+      <li>Foreign-Memory Access API (Incubator)</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h2>✅ Java 15 (Sep 2020)</h2>
+    <ul>
+      <li>Text Blocks (Standard)</li>
+      <li>Sealed Classes (Preview)</li>
+      <li>Hidden Classes</li>
+      <li>ZGC production-ready</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h2>✅ Java 16 (Mar 2021)</h2>
+    <ul>
+      <li>Records (Standard)</li>
+      <li>Pattern Matching for <code>instanceof</code></li>
+      <li>Sealed Classes (2nd Preview)</li>
+      <li>Vector API (Incubator)</li>
+      <li>Foreign Linker API (Incubator)</li>
+    </ul>
+  </div>
+
+  <div class="version">
+    <h2>✅ Java 17 (Sep 2021) – LTS</h2>
+    <ul>
+      <li>Sealed Classes (Standard)</li>
+      <li>Pattern Matching for <code>switch</code> (Preview)</li>
+      <li>Enhanced Random Generators</li>
+      <li>Foreign Function & Memory API (Incubator)</li>
+      <li>Removed: Applet, RMI Activation, Security Manager</li>
+    </ul>
+  </div>
+
+  <h2>🧠 Summary Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Java Version</th>
+        <th>Key Features</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Java 9</td><td>Modules, JShell, Stream Enhancements</td></tr>
+      <tr><td>Java 10</td><td><code>var</code> keyword</td></tr>
+      <tr><td>Java 11</td><td><code>HttpClient</code>, String & File APIs, <code>var</code> in lambdas</td></tr>
+      <tr><td>Java 12</td><td>Switch expressions (preview)</td></tr>
+      <tr><td>Java 13</td><td>Text blocks (preview)</td></tr>
+      <tr><td>Java 14</td><td>Records (preview), Helpful NPE</td></tr>
+      <tr><td>Java 15</td><td>Sealed classes (preview), Text blocks</td></tr>
+      <tr><td>Java 16</td><td>Records, Pattern Matching, Vector API</td></tr>
+      <tr><td>Java 17</td><td>Sealed classes, LTS, Pattern Matching</td></tr>
+    </tbody>
+  </table>
+  
+<h3><a href="java-collections-enhancements-java9-to-java17.html">Java 9 to Java 17 Features with Collection Enhancements</a></h3>
+<h3><a href="functional-interface-extension-java.html">Can a Functional Interface Extend Another Interface in Java?</a></h3>
+<h3><a href="real-time-functional-interface-usage.html">Real-Time Uses of Functional Interfaces in Java with Examples</a></h3>
+<h3><a href="why-use-record-instead-of-lombok.html">Why Use Record Class in Java Instead of DTO + Lombok?</a></h3>
+<h3><a href="java-record-requires-all-args-constructor.html">Why Java Record Requires All-Args Constructor and Does Not Allow No-Arg Constructor</a></h3>
+<h3><a href="java-record-canonical-constructor.html">What is a Canonical Constructor in Java Records?</a></h3>
+     
+</body>
+</html>

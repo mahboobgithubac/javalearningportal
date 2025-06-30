@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What is a Canonical Constructor in Java Records?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #333;
+    }
+    code {
+      background-color: #f0f0f0;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 3px solid #ccc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    th {
+      background-color: #f1f1f1;
+      text-align: left;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>What is a Canonical Constructor in Java Records?</h1>
+
+    <h2>🔹 Definition</h2>
+    <p>
+      A <strong>canonical constructor</strong> is the <strong>primary constructor</strong> that is <strong>automatically generated</strong> for a Java <code>record</code>. It includes <strong>all components</strong> (i.e., fields) declared in the record header — and is the only way to set values in a record because records are immutable.
+    </p>
+
+    <h2>🔹 Example</h2>
+    <pre><code>public record User(String name, int age) {}</code></pre>
+    <p>
+      Java automatically generates the following <strong>canonical constructor</strong>:
+    </p>
+    <pre><code>public User(String name, int age) {
+    this.name = name;
+    this.age = age;
+}</code></pre>
+
+    <p>This constructor is called the <strong>canonical constructor</strong> because:</p>
+    <ul>
+      <li>It includes <strong>exactly the same parameters</strong> as the record components.</li>
+      <li>It initializes the components (which are implicitly <code>private final</code>).</li>
+      <li>It is <strong>mandatory</strong> — every record must have one.</li>
+    </ul>
+
+    <h2>🔹 Why is it called "canonical"?</h2>
+    <p>
+      In Java language design, <strong>"canonical"</strong> means <strong>standard</strong> or <strong>official</strong>. The canonical constructor is the <strong>standard, main constructor</strong> of a record that matches its declared components in <strong>order and type</strong>.
+    </p>
+
+    <h2>🔹 Can You Customize the Canonical Constructor?</h2>
+    <p>Yes — you can override it to include validation or logic:</p>
+    <pre><code>public record User(String name, int age) {
+    public User {
+        if (age &lt; 0) throw new IllegalArgumentException("Age cannot be negative");
+    }
+}</code></pre>
+    <p>
+      This is still the canonical constructor — you're just adding a custom body.
+    </p>
+    <p>
+      <strong>Note:</strong> You don’t need to write the parameter list again; Java uses the record components automatically.
+    </p>
+
+    <h2>✅ Summary Table</h2>
+    <table>
+      <tr>
+        <th>Term</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>Canonical Constructor</td>
+        <td>The main constructor for a record with all declared components</td>
+      </tr>
+      <tr>
+        <td>Automatically Generated</td>
+        <td>Yes, unless you define your own version</td>
+      </tr>
+      <tr>
+        <td>Can Add Logic?</td>
+        <td>Yes — inside <code>public RecordName { ... }</code> block</td>
+      </tr>
+      <tr>
+        <td>Purpose</td>
+        <td>To initialize all fields and enforce immutability</td>
+      </tr>
+    </table>
+
+    <h2>🔚 Final Thought</h2>
+    <p>
+      The canonical constructor is at the heart of Java's <code>record</code> feature — enforcing simplicity, immutability, and transparency for data carriers. Use it when your class is just holding data without needing complex behavior.
+    </p>
+  </div>
+</body>
+</html>
