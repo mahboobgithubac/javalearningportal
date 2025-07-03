@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>12-Factor API in Microservices</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    h2 {
+      margin-top: 40px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #fff;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #ecf0f1;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>12-Factor API in Microservices</h1>
+
+  <p>The 12-Factor App methodology is a set of best practices for building scalable, maintainable, and portable applications. It is especially suited for cloud-native microservices and APIs.</p>
+
+  <h2>1. Codebase</h2>
+  <p>One codebase tracked in revision control, many deploys. Each microservice should have its own repository, ideally with Git.</p>
+
+  <h2>2. Dependencies</h2>
+  <p>Explicitly declare and isolate dependencies. Use build tools like <code>pom.xml</code> (Maven), <code>package.json</code> (Node.js), etc. Use Docker for environment isolation.</p>
+
+  <h2>3. Config</h2>
+  <p>Store config in the environment. All configuration (like DB URLs, secrets) should come from environment variables. Use centralized config servers like Spring Cloud Config.</p>
+
+  <h2>4. Backing Services</h2>
+  <p>Treat backing services (DB, Redis, RabbitMQ) as attached resources. You should be able to swap them with minimal code changes.</p>
+
+  <h2>5. Build, Release, Run</h2>
+  <p>Strictly separate build, release, and run stages. Each stage should be reproducible and separately managed.</p>
+
+  <h2>6. Processes</h2>
+  <p>Execute the app as one or more stateless processes. Persist data in external systems like databases or object stores.</p>
+
+  <h2>7. Port Binding</h2>
+  <p>Export services via port binding. Microservices should self-host (e.g., use embedded Tomcat in Spring Boot) and listen on ports defined in configuration.</p>
+
+  <h2>8. Concurrency</h2>
+  <p>Scale out via the process model. Run multiple instances of microservices for load balancing and fault tolerance.</p>
+
+  <h2>9. Disposability</h2>
+  <p>Fast startup and graceful shutdown. Properly handle shutdown signals and free resources to support container orchestration and scaling.</p>
+
+  <h2>10. Dev/Prod Parity</h2>
+  <p>Keep development, staging, and production as similar as possible using containers and infrastructure-as-code tools like Docker and Terraform.</p>
+
+  <h2>11. Logs</h2>
+  <p>Treat logs as event streams. Write logs to <code>stdout</code> and <code>stderr</code>, and use log aggregators like ELK Stack or CloudWatch.</p>
+
+  <h2>12. Admin Processes</h2>
+  <p>Run admin or one-time tasks (like DB migrations) as one-off processes separate from the app's main logic.</p>
+
+  <h2>Example in a Spring Boot Microservice</h2>
+  <table>
+    <tr>
+      <th>Factor</th>
+      <th>Spring Boot Example</th>
+    </tr>
+    <tr>
+      <td>Config</td>
+      <td><code>@Value</code>, externalized <code>application.properties</code>, Spring Cloud Config</td>
+    </tr>
+    <tr>
+      <td>Port Binding</td>
+      <td><code>server.port=8081</code></td>
+    </tr>
+    <tr>
+      <td>Logs</td>
+      <td>Use <code>Slf4j</code> and output to stdout</td>
+    </tr>
+    <tr>
+      <td>Dependencies</td>
+      <td>Declare in <code>pom.xml</code></td>
+    </tr>
+    <tr>
+      <td>Backing Services</td>
+      <td>Use <code>spring.datasource.url</code> for DB</td>
+    </tr>
+    <tr>
+      <td>Dev/Prod Parity</td>
+      <td>Use Docker, same image for all environments</td>
+    </tr>
+    <tr>
+      <td>Disposability</td>
+      <td>Use <code>@PreDestroy</code> for graceful shutdown</td>
+    </tr>
+  </table>
+
+  <h2>Summary</h2>
+  <table>
+    <tr>
+      <th>Principle</th>
+      <th>Goal</th>
+    </tr>
+    <tr><td>1. Codebase</td><td>One codebase per microservice</td></tr>
+    <tr><td>2. Dependencies</td><td>Explicit and isolated</td></tr>
+    <tr><td>3. Config</td><td>Environment-driven</td></tr>
+    <tr><td>4. Backing Services</td><td>Treat as external resources</td></tr>
+    <tr><td>5. Build/Release/Run</td><td>Clearly separated stages</td></tr>
+    <tr><td>6. Processes</td><td>Stateless application logic</td></tr>
+    <tr><td>7. Port Binding</td><td>Self-contained HTTP server</td></tr>
+    <tr><td>8. Concurrency</td><td>Scale via processes/instances</td></tr>
+    <tr><td>9. Disposability</td><td>Fast startup and shutdown</td></tr>
+    <tr><td>10. Dev/Prod Parity</td><td>Keep environments similar</td></tr>
+    <tr><td>11. Logs</td><td>Streamed to stdout/stderr</td></tr>
+    <tr><td>12. Admin Tasks</td><td>One-off processes for management</td></tr>
+  </table>
+
+</body>
+</html>

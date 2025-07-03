@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Converting Monolith to Microservices</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 40px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #005a9c;
+    }
+    pre {
+      background: #eee;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    code {
+      background: #f2f2f2;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #e3e3e3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ How to Convert a Monolithic Application to Microservices</h1>
+
+  <h2>1. Understand the Monolith</h2>
+  <ul>
+    <li>Analyze current codebase: domain models, modules, dependencies.</li>
+    <li>Use tools: <strong>SonarQube, dependency graphs, tracing (Zipkin, Jaeger)</strong>.</li>
+  </ul>
+
+  <h2>2. Identify Microservice Boundaries</h2>
+  <ul>
+    <li>Apply <strong>Domain-Driven Design (DDD)</strong>.</li>
+    <li>Define <strong>Bounded Contexts</strong> based on business capabilities.</li>
+    <li>Examples: User Service, Order Service, Payment Service.</li>
+  </ul>
+
+  <h2>3. Strangle the Monolith</h2>
+  <p>Use the <strong>Strangler Fig Pattern</strong>:</p>
+  <pre>
+Client
+  |
+  --> API Gateway
+        |--> New Microservice (e.g., Order)
+        |--> Legacy Monolith (rest of the app)
+  </pre>
+
+  <h2>4. Extract a Single Microservice First</h2>
+  <ul>
+    <li>Start small with low-risk module (e.g., Auth, Email).</li>
+    <li>Ensure clear boundaries and minimal dependencies.</li>
+  </ul>
+
+  <h2>5. Set Up Microservices Infrastructure</h2>
+  <ul>
+    <li><strong>API Gateway</strong> (Spring Cloud Gateway, Kong)</li>
+    <li><strong>Service Discovery</strong> (Eureka, Consul)</li>
+    <li><strong>Configuration Server</strong> (Spring Cloud Config)</li>
+    <li><strong>Central Logging</strong> (ELK stack)</li>
+    <li><strong>Monitoring</strong> (Prometheus, Grafana)</li>
+    <li><strong>Security</strong> (OAuth2, JWT)</li>
+  </ul>
+
+  <h2>6. Data Decoupling</h2>
+  <ul>
+    <li>Move away from shared databases.</li>
+    <li>Each microservice has its own <strong>private database</strong>.</li>
+    <li>Use messaging (Kafka, RabbitMQ) for data sync.</li>
+  </ul>
+
+  <h2>7. Communication Between Services</h2>
+  <ul>
+    <li><strong>Synchronous:</strong> REST API, gRPC</li>
+    <li><strong>Asynchronous:</strong> Kafka, RabbitMQ</li>
+    <li>Use well-defined DTOs and contracts.</li>
+  </ul>
+
+  <h2>8. Refactor and Route</h2>
+  <ul>
+    <li>Redirect traffic to new service via API Gateway.</li>
+    <li>Ensure compatibility with the old system.</li>
+  </ul>
+
+  <h2>9. Test Extensively</h2>
+  <ul>
+    <li>Unit & Integration Tests</li>
+    <li>Contract Tests (Pact)</li>
+    <li>End-to-End (E2E) Tests</li>
+  </ul>
+
+  <h2>10. Repeat Iteratively</h2>
+  <ul>
+    <li>Gradually extract services.</li>
+    <li>Monitor performance, stability, and communication overhead.</li>
+  </ul>
+
+  <h2>🚀 Final Architecture (Example)</h2>
+  <pre>
+                        +-------------------+
+                        |    API Gateway    |
+                        +-------------------+
+                          |      |      |
+             +------------+      |      +-------------+
+             |                   |                    |
+     +--------------+    +---------------+     +--------------+
+     | User Service |    | Order Service |     | Payment Svc  |
+     +--------------+    +---------------+     +--------------+
+           |                    |                     |
+      +----------+       +----------+           +----------+
+      | DB Users |       | DB Orders|           | DB Paymt |
+      +----------+       +----------+           +----------+
+  </pre>
+
+  <h2>📌 Best Practices</h2>
+  <ul>
+    <li>Use CI/CD for automated deployments.</li>
+    <li>Version your APIs.</li>
+    <li>Implement circuit breakers (Resilience4j).</li>
+    <li>Enable distributed tracing.</li>
+    <li>Document services using Swagger/OpenAPI.</li>
+  </ul>
+
+  <h2>🛠 Tools and Technologies</h2>
+  <table>
+    <tr>
+      <th>Category</th>
+      <th>Tools / Technologies</th>
+    </tr>
+    <tr>
+      <td>Language</td>
+      <td>Java (Spring Boot), Node.js, Go, etc.</td>
+    </tr>
+    <tr>
+      <td>API Gateway</td>
+      <td>Spring Cloud Gateway, Kong, NGINX</td>
+    </tr>
+    <tr>
+      <td>Service Discovery</td>
+      <td>Eureka, Consul</td>
+    </tr>
+    <tr>
+      <td>Messaging</td>
+      <td>Kafka, RabbitMQ</td>
+    </tr>
+    <tr>
+      <td>Config Management</td>
+      <td>Spring Cloud Config, Consul KV</td>
+    </tr>
+    <tr>
+      <td>Monitoring & Logging</td>
+      <td>Prometheus, Grafana, ELK/EFK Stack</td>
+    </tr>
+    <tr>
+      <td>CI/CD</td>
+      <td>Jenkins, GitHub Actions, GitLab CI</td>
+    </tr>
+    <tr>
+      <td>Containerization</td>
+      <td>Docker, Kubernetes</td>
+    </tr>
+  </table>
+
+</body>
+</html>

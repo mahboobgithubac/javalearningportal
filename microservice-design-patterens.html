@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Microservice Design Patterns for Modern Applications</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      line-height: 1.6;
+      background-color: #f4f4f4;
+    }
+    header, footer {
+      background: #333;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 960px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    pre {
+      background-color: #eee;
+      padding: 10px;
+      overflow: auto;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Microservice Design Patterns for Modern Applications</h1>
+    <p>Exploring CQRS, Outbox, Saga, and more for scalable and resilient systems.</p>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <section>
+      <h2>Microservice Design Patterns — Summary for System Design Interviews & Architecture</h2>
+
+      <h3>1. CQRS (Command Query Responsibility Segregation)</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Same model used for reads and writes becomes complex and unscalable</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Split system into write model (Command) and read model (Query)</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Spring Boot, Kafka (for event propagation), MongoDB (read model), JPA (write)</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Order service uses JPA for writes and MongoDB for fast order status queries</td>
+        </tr>
+      </table>
+
+      <h3>2. Outbox Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Dual writes (DB + Kafka) can cause data loss or inconsistency</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Write event to <strong>outbox table</strong> inside DB transaction, then publish asynchronously</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Spring Boot + JPA + Debezium or polling mechanism</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>When an order is created, store event in outbox → Kafka publisher reads from outbox and emits message</td>
+        </tr>
+      </table>
+
+      <h3>3. Saga Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>No distributed transactions across microservices</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Break long transactions into local ones, coordinate with events (choreography) or orchestrator</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Kafka, Spring Boot, Camunda/Temporal (for orchestration)</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Place Order → Reserve Inventory → Process Payment → Ship — rollback if payment fails</td>
+        </tr>
+      </table>
+
+      <h3>4. API Gateway Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Each microservice exposed directly causes chaos</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Use centralized gateway to route requests, handle auth, rate limiting</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Spring Cloud Gateway, Netflix Zuul</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td><code>/api/orders</code> → forwarded to Order Service; handles JWT, retries, etc.</td>
+        </tr>
+      </table>
+
+      <h3>5. Service Registry & Discovery</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Services move, scale dynamically — how do others find them?</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Use a registry where services register themselves and discover others</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Eureka, Consul, Spring Cloud</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Order Service registers with Eureka; API Gateway discovers services via Eureka</td>
+        </tr>
+      </table>
+
+      <h3>6. Circuit Breaker Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>One service failure causes system-wide slowdown or failure</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Detect failing services and “break the circuit” temporarily</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Resilience4j, Netflix Hystrix</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Payment service down → circuit opens → fallback to error message</td>
+        </tr>
+      </table>
+
+      <h3>7. Retry and Timeout Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Transient failures in microservices (e.g., network glitches)</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Retry with backoff, and apply timeouts to avoid blocking</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Resilience4j, Spring Retry</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Retry failed inventory update 3 times with 2s backoff</td>
+        </tr>
+      </table>
+
+      <h3>8. Bulkhead Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>One service failure consumes all system resources</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Isolate failures in compartments (like ship bulkheads)</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Resilience4j bulkheads</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Payment failures don’t affect inventory or order services</td>
+        </tr>
+      </table>
+
+      <h3>9. Strangler Fig Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Need to gradually migrate monolith to microservices</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>New features built as microservices, while legacy functionality is redirected over time</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Product search built as microservice, while legacy still handles checkout</td>
+        </tr>
+      </table>
+
+      <h3>10. Event Sourcing Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Can’t track how/why data changed over time</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Store state as a sequence of events instead of snapshots</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Kafka, Event Store, Spring Boot</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Order lifecycle is tracked via OrderCreated, OrderPaid, OrderShipped events</td>
+        </tr>
+      </table>
+
+      <h3>11. Database-per-Service Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Shared database creates tight coupling and deployment problems</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Each service owns its own DB schema</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Order Service uses MySQL, Inventory uses PostgreSQL</td>
+        </tr>
+      </table>
+
+      <h3>12. Sidecar Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Repetitive cross-cutting concerns like logging and monitoring</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Deploy helper containers (sidecars) alongside your services</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Istio, Envoy (in Kubernetes)</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Envoy handles metrics and traffic routing per service pod</td>
+        </tr>
+      </table>
+
+      <h3>13. Command Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Mixing business logic and request handling</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Encapsulate actions as command objects</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Axon Framework (for DDD, CQRS), Spring Boot</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td><code>CreateOrderCommand</code>, <code>CancelOrderCommand</code></td>
+        </tr>
+      </table>
+
+      <h3>14. Reactive Microservices Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Blocking I/O operations can lead to performance bottlenecks</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Implement non-blocking, reactive streams and an event-driven model</td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Spring WebFlux, Project Reactor, Kafka</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Real-time order status updates pushed to clients</td>
+        </tr>
+      </table>
+
+      <h3>15. Retry-Dead Letter Pattern</h3>
+      <table>
+        <tr>
+          <th>Detail</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>Problem</td>
+          <td>Permanent failures might retry indefinitely</td>
+        </tr>
+        <tr>
+          <td>Solution</td>
+          <td>Retry a fixed number of times and then send to a <strong>Dead Letter Queue (DLQ)</strong></td>
+        </tr>
+        <tr>
+          <td>Tools</td>
+          <td>Kafka DLQ, RabbitMQ DLQ</td>
+        </tr>
+        <tr>
+          <td>Example</td>
+          <td>Failed PaymentEvent processed 3x → moved to DLQ for manual inspection</td>
+        </tr>
+      </table>
+
+      <h2>Bonus: Pattern Combinations</h2>
+      <table>
+        <tr>
+          <th>Pattern Combo</th>
+          <th>Use Case</th>
+        </tr>
+        <tr>
+          <td>CQRS + Event Sourcing</td>
+          <td>Real-time systems with full audit/history (e.g., Order System)</td>
+        </tr>
+        <tr>
+          <td>Saga + Outbox</td>
+          <td>Reliable distributed transactions with guaranteed event delivery</td>
+        </tr>
+        <tr>
+          <td>Gateway + Circuit Breaker + Retry</td>
+          <td>Resilient communication with external APIs</td>
+        </tr>
+        <tr>
+          <td>Event Sourcing + Projections + Kafka</td>
+          <td>Live dashboards, analytics, and materialized views</td>
+        </tr>
+      </table>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Microservice Insights. All Rights Reserved.</p>
+    <p>
+      <a href="https://example.com" target="_blank" style="color:#fff;">Visit our main site</a>
+    </p>
+  </footer>
+</body>
+</html>

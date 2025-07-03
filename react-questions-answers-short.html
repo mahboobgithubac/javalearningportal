@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>React & Redux Interview Questions – Collapsible Answers</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+    h1 { color: #333; }
+    .faq { margin-bottom: 10px; }
+    .faq-question {
+      background: #007BFF; color: white; padding: 10px; cursor: pointer;
+      border: none; width: 100%; text-align: left; outline: none;
+      font-size: 16px;
+    }
+    .faq-answer {
+      background: white; padding: 10px;
+/*	  display: none;*/
+      border-left: 4px solid #007BFF;
+    }
+    pre { background: #eee; padding: 10px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>React & Redux Interview Questions</h1>
+
+  <div class="faq"><button class="faq-question">1. What is React?</button>
+    <div class="faq-answer">
+      <p>React is an open-source JS library by Facebook for building UI components in single-page applications. Uses component-based, declarative approach with virtual DOM.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">2. What are the key features of React?</button>
+    <div class="faq-answer">
+      <ul>
+        <li><strong>JSX</strong> – Syntax to define UI</li>
+        <li><strong>Components</strong> – Reusable building blocks</li>
+        <li><strong>Virtual DOM</strong> – Efficient updates</li>
+        <li><strong>One-way data binding</strong> – Predictable flow</li>
+        <li><strong>Declarative UI</strong> – Describe how UI looks</li>
+        <li><strong>Hooks</strong> – Functional state & lifecycle</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">3. What is JSX?</button>
+    <div class="faq-answer">
+      <p>JSX stands for JavaScript XML. It allows writing HTML-like syntax in JS, which gets transformed to React.createElement calls.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">4. What is the virtual DOM, and how does React use it?</button>
+    <div class="faq-answer">
+      <p>Virtual DOM is an in-memory representation of the real DOM. React diff compares new virtual DOM to previous one, then applies minimal updates to real DOM.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">5. Explain the difference between a functional component and a class component.</button>
+    <div class="faq-answer">
+      <p>Functional components are plain JS functions that can use hooks. Class components use ES6 classes and lifecycle methods (render, componentDidMount, etc.).</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">6. What are props in React?</button>
+    <div class="faq-answer">
+      <p>Props are inputs passed to components. They are read-only and allow parent components to configure children.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">7. What is state in React?</button>
+    <div class="faq-answer">
+      <p>State is internal data managed within a component, usually via useState (functional) or this.state (class). Changing state triggers re-renders.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">8. How does React handle events?</button>
+    <div class="faq-answer">
+      <p>React uses synthetic events to normalize browser differences. Events are passed as camelCase props (e.g., onClick).</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">9. What is the purpose of key in a list?</button>
+    <div class="faq-answer">
+      <p>Key helps React identify which items have changed, added, or removed. Should be unique and stable across renders.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">10. What is the difference between controlled and uncontrolled components?</button>
+    <div class="faq-answer">
+      <p>Controlled components have inputs managed by React state. Uncontrolled use refs and DOM for values.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">11. What is the purpose of useState in React?</button>
+    <div class="faq-answer">
+      <p>useState adds state to functional components. Returns a state variable and setter function.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">12. How does useEffect work?</button>
+    <div class="faq-answer">
+      <p>useEffect runs side effects after render. You can specify dependencies, cleanup functions, and run-once or run-every-update effects.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">13. What is the significance of dependency arrays in useEffect?</button>
+    <div class="faq-answer">
+      <p>The dependency array controls when effect runs. Empty means run once on mount. Missing array runs on every render. Listing values triggers on their change.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">14. What are hooks in React? Name a few commonly used ones.</button>
+    <div class="faq-answer">
+      <p>Hooks let functional components use state and lifecycle. Common: useState, useEffect, useContext, useRef, useCallback, useMemo.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">15. What is the difference between useRef and useState?</button>
+    <div class="faq-answer">
+      <p>useRef holds a mutable object that persists across renders without causing re-render. useState updates cause renders.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">16. What is context in React and when would you use it?</button>
+    <div class="faq-answer">
+      <p>Context provides a way to pass data through component tree without passing props manually. Ideal for themes, auth, locale.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">17. What is prop drilling, and how can it be avoided?</button>
+    <div class="faq-answer">
+      <p>Prop drilling is passing props through intermediate components. Avoid via context or Redux.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">18. How do you optimize performance in a React application?</button>
+    <div class="faq-answer">
+      <ul>
+        <li>Memoize components (React.memo), values (useMemo), and callbacks (useCallback)</li>
+        <li>Lazy load components (React.lazy)</li>
+        <li>Avoid unnecessary re-renders</li>
+        <li>Use virtualization for lists</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">19. How do you implement conditional rendering?</button>
+    <div class="faq-answer">
+      <p>Use JS conditions: ternary (cond ? <A/> : <B/>), && operator, or conditional components.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">20. What is memoization in React? Explain React.memo and useMemo.</button>
+    <div class="faq-answer">
+      <p>Memoization caches values or components to avoid recalculations/rerenders. React.memo wraps components; useMemo caches values between renders.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">21. Explain how reconciliation works in React.</button>
+    <div class="faq-answer">
+      <p>Reconciliation is React’s diffing process. It compares virtual DOM trees and updates only changed parts in the real DOM.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">22. What are Higher-Order Components (HOCs)?</button>
+    <div class="faq-answer">
+      <p>An HOC is a function that takes a component and returns a new component with added functionality.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">23. What are render props?</button>
+    <div class="faq-answer">
+      <p>Render props pattern passes a function prop to component which returns JSX, allowing dynamic rendering based on logic shared.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">24. What is the purpose of useCallback?</button>
+    <div class="faq-answer">
+      <p>useCallback memoizes a function, preventing re-creation unless dependencies change; useful for passing stable callbacks.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">25. What is lazy loading in React? How do you implement it?</button>
+    <div class="faq-answer">
+      <p>Lazy loading delays loading components until needed. Use React.lazy and Suspense:</p>
+      <pre><code>const MyComp = React.lazy(() => import('./MyComp'));</code></pre>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">26. How does React handle error boundaries?</button>
+    <div class="faq-answer">
+      <p>Error boundaries are class components implementing componentDidCatch to catch errors in subtree and render fallback UI.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">27. What are forward refs?</button>
+    <div class="faq-answer">
+      <p>forwardRef passes ref through component to a child DOM or class component: React.forwardRef.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">28. Explain suspense and concurrent rendering in React.</button>
+    <div class="faq-answer">
+      <p>Suspense lets UI “wait” for async data/components. Concurrent rendering allows React to interrupt renders to keep UI responsive.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">29. How does server-side rendering (SSR) work in React?</button>
+    <div class="faq-answer">
+      <p>SSR renders React components to HTML on server and sends it to client for faster load and SEO.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">30. What is hydration in React?</button>
+    <div class="faq-answer">
+      <p>Hydration is attaching event listeners to SSR-rendered HTML on client to make it interactive.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">31. What is Redux?</button>
+    <div class="faq-answer">
+      <p>Redux is a predictable state container for JS apps with a single source of truth and strict unidirectional data flow.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">32. What are the core principles of Redux?</button>
+    <div class="faq-answer">
+      <ul>
+        <li>Single source of truth</li>
+        <li>State is read-only</li>
+        <li>Changes via pure functions (reducers)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">33. What is a store in Redux?</button>
+    <div class="faq-answer">
+      <p>Store holds the complete app state and provides methods like getState(), dispatch(), and subscribe().</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">34. What is an action in Redux?</button>
+    <div class="faq-answer">
+      <p>Action is a plain JS object describing state change, with type and optional payload.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">35. What is a reducer?</button>
+    <div class="faq-answer">
+      <p>A reducer is a pure function (state, action) → new state. No side-effects.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">36. What is the use of dispatch in Redux?</button>
+    <div class="faq-answer">
+      <p>dispatch() sends an action to the store, triggering reducers and state updates.</p>
+    </div>
+  </div>
+  
+  <div class="faq"><button class="faq-question">37. What is the purpose of the connect() function?</button>
+    <div class="faq-answer">
+      <p>connect() links React components to Redux store, mapping state and dispatch to props.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">38. What is middleware in Redux?</button>
+    <div class="faq-answer">
+      <p>Middleware intercepts actions between dispatch and reducer to enable async, logging, error handling, etc.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">39. How do you set up a basic Redux flow?</button>
+    <div class="faq-answer">
+      <p>Define actions/reducers, create store, wrap app with <code>&lt;Provider&gt;</code>, dispatch actions from components.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">40. What is the difference between Redux and Context API?</button>
+    <div class="faq-answer">
+      <p>Context is for passing data through tree; Redux is a full state-management solution with reducers, middleware, devtools.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">41. What are thunk and saga in Redux?</button>
+    <div class="faq-answer">
+      <p>Redux-thunk and Redux-saga are middleware for handling async operations. Thunk uses functions, Saga uses generator effects.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">42. Explain the use of useSelector and useDispatch in React Redux.</button>
+    <div class="faq-answer">
+      <p>useSelector selects state from Redux store; useDispatch returns dispatch function to send actions.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">43. What is the role of Provider in React Redux?</button>
+    <div class="faq-answer">
+      <p><code>&lt;Provider&gt;</code> from react-redux wraps your app and makes the Redux store available to nested components.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">44. How do you handle async operations in Redux?</button>
+    <div class="faq-answer">
+      <p>Use async middleware like thunk or saga, dispatch request/success/failure actions around async calls.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">45. What are the benefits and downsides of using Redux Toolkit?</button>
+    <div class="faq-answer">
+      <p>RTK simplifies setup with createSlice, createAsyncThunk, built-in devtools. Downsides: magic abstracts Redux, learning curve.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">46. What are slices in Redux Toolkit?</button>
+    <div class="faq-answer">
+      <p>Slices group reducers, actions, and initial state for a feature using createSlice().</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">47. How does immutability work in Redux?</button>
+    <div class="faq-answer">
+      <p>State is not mutated directly. Reducers return new state. Libraries like Immer simplify immutable updates.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">48. How can you debug a Redux application?</button>
+    <div class="faq-answer">
+      <p>Use Redux DevTools, add logging middleware, inspect state and actions in console/network.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">49. How do you persist Redux state across refreshes?</button>
+    <div class="faq-answer">
+      <p>Use localStorage or sessionStorage plus libraries like redux-persist to rehydrate store on load.</p>
+    </div>
+  </div>
+
+  <div class="faq"><button class="faq-question">50. Compare Redux Toolkit with traditional Redux setup.</button>
+    <div class="faq-answer">
+      <p>RTK reduces boilerplate with createSlice, configureStore vs Redux’s manual action types, creators, combineReducers, applyMiddleware.</p>
+    </div>
+  </div>
+<div class="faq"><button class="faq-question"><a href="ess6-ess5-difference.html">51.ES5 vs ES6 Classes in JavaScript</a></button>
+<div class="faq"><button class="faq-question"><a href="pass-data-from child-parent.html">52.Pass data from child to parent</a></button> 
+ 
+  </div>
+  <script>
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
+        answer.style.display = (answer.style.display === 'block') ? 'none' : 'block';
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find Common Elements in Arrays Using Java 8 Stream API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #e8e8e8;
+      padding: 20px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Find Common Elements in Arrays Using Java 8 Stream API</h1>
+
+  <div class="section">
+    <h2>✅ Java Code:</h2>
+    <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class CommonElementsWithStreams {
+    public static void main(String[] args) {
+        int[] a = {2, 3, 4, 9};
+        int[] b = {2, 3, 7};
+        int[] c = {2, 3, 1};
+
+        // Convert arrays to Set for faster lookup
+        Set&lt;Integer&gt; setB = Arrays.stream(b).boxed().collect(Collectors.toSet());
+        Set&lt;Integer&gt; setC = Arrays.stream(c).boxed().collect(Collectors.toSet());
+
+        // Find common elements using stream
+        List&lt;Integer&gt; common = Arrays.stream(a)
+                .boxed()
+                .filter(setB::contains)
+                .filter(setC::contains)
+                .collect(Collectors.toList());
+
+        System.out.println("Common elements: " + common);
+    }
+}
+</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>✅ Output:</h2>
+    <pre><code>Common elements: [2, 3]</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>✅ Explanation:</h2>
+    <ul>
+      <li><code>Arrays.stream(a).boxed()</code> – Converts <code>int[]</code> to <code>Stream&lt;Integer&gt;</code>.</li>
+      <li><code>.filter(setB::contains)</code> – Keeps only elements present in array <code>b</code>.</li>
+      <li><code>.filter(setC::contains)</code> – Keeps only elements present in array <code>c</code>.</li>
+      <li><code>collect(Collectors.toList())</code> – Collects the result into a <code>List&lt;Integer&gt;</code>.</li>
+    </ul>
+  </div>
+</body>
+</html>

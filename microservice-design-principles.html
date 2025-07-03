@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Microservice Design Principles</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      margin: 40px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    h2 {
+      color: #2980b9;
+      margin-top: 30px;
+    }
+    p {
+      margin: 10px 0 20px 0;
+      line-height: 1.6;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    li {
+      margin: 10px 0;
+    }
+    .highlight {
+      background: #ecf0f1;
+      padding: 10px;
+      border-left: 4px solid #3498db;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>Microservice Design Principles</h1>
+
+  <h2>1. Single Responsibility Principle (SRP)</h2>
+  <p>Each microservice should have one specific business capability.</p>
+  <div class="highlight">Example: A <code>UserService</code> only handles user authentication and registration.</div>
+
+  <h2>2. Loose Coupling</h2>
+  <p>Services should have minimal dependencies on each other to allow independent updates.</p>
+
+  <h2>3. High Cohesion</h2>
+  <p>All related functionality should be grouped together in a service to improve readability and maintainability.</p>
+
+  <h2>4. Domain-Driven Design (DDD)</h2>
+  <p>Design around business domains using bounded contexts.</p>
+  <div class="highlight">Example: <code>OrderService</code>, <code>InventoryService</code>, and <code>PaymentService</code> represent different domains.</div>
+
+  <h2>5. Decentralized Data Management</h2>
+  <p>Each service owns its own database, promoting independence and better data security.</p>
+
+  <h2>6. Autonomy and Independent Deployment</h2>
+  <p>Microservices should be independently deployable and upgradable.</p>
+
+  <h2>7. Fault Tolerance and Resilience</h2>
+  <p>Use retries, timeouts, and circuit breakers to handle failures gracefully.</p>
+  <div class="highlight">Tools: <code>Resilience4j</code>, <code>Hystrix</code></div>
+
+  <h2>8. API-First Communication</h2>
+  <p>All services should communicate using well-defined APIs.</p>
+  <div class="highlight">Common protocols: <code>REST</code>, <code>gRPC</code>, <code>Kafka</code></div>
+
+  <h2>9. Observability</h2>
+  <p>Include centralized logging, monitoring, and tracing.</p>
+  <div class="highlight">Tools: <code>ELK</code>, <code>Prometheus</code>, <code>Grafana</code>, <code>Zipkin</code></div>
+
+  <h2>10. Security</h2>
+  <p>Secure APIs using authentication and encryption.</p>
+  <div class="highlight">Use <code>JWT</code>, <code>OAuth2</code>, <code>HTTPS</code>, and <code>mTLS</code></div>
+
+  <h2>11. Scalability</h2>
+  <p>Each service can be scaled independently based on its own load.</p>
+
+  <h2>12. CI/CD Friendly</h2>
+  <p>Microservices should support automated build, test, and deploy pipelines.</p>
+
+  <h2>13. Infrastructure Automation</h2>
+  <p>Use containerization and infrastructure as code for better portability and automation.</p>
+  <div class="highlight">Tools: <code>Docker</code>, <code>Kubernetes</code>, <code>Terraform</code></div>
+
+  <h2>14. Versioning</h2>
+  <p>Expose APIs with versioning to avoid breaking changes.</p>
+  <div class="highlight">Example: <code>/api/v1/orders</code></div>
+
+  <h2>15. Asynchronous Communication</h2>
+  <p>Use event-driven messaging where synchronous calls are not efficient or required.</p>
+
+  <h2>Summary</h2>
+  <ul>
+    <li>Design for modularity and scalability</li>
+    <li>Ensure each service is responsible for a single concern</li>
+    <li>Emphasize API contracts, isolation, and resilience</li>
+    <li>Automate testing, deployment, and monitoring</li>
+    <li>Design with observability and security in mind</li>
+  </ul>
+</body>
+</html>

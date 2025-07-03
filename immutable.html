@@ -16,7 +16,7 @@
 <body>
     <h1>Immutable Class with Mutable Object Field</h1>
 
-    <h2>✅ Problem: <code>Address</code> is Mutable</h2>
+    <h2>✅ Problem: <code>Address is Mutable </code></h2>
     <pre><code>public class Address {
     private String city;
     private String state;
@@ -33,7 +33,7 @@
     public void setState(String state) { this.state = state; }
 }</code></pre>
 
-    <p>Anyone with access to the <code>Address</code> object can modify it using setters. This breaks immutability of the containing class.</p>
+    <p><code>Anyone with access to the Address object can modify it using setters. This breaks immutability of the containing class.</code></p>
 
     <h2>✅ Solution: Deep Copy and Defensive Copy in <code>Employee</code></h2>
     <pre><code>public final class Employee {

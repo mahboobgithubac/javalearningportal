@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find Duplicates in an Integer Array Using Java Stream API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #005792;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-left: 4px solid #007acc;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .note {
+      background: #e2f0d9;
+      padding: 10px;
+      border-left: 4px solid #2e7d32;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Find Duplicates in an Integer Array Using Java Stream API</h1>
+
+  <p>
+    Java 8 introduced the powerful <strong>Stream API</strong>, which allows for functional-style operations on collections and arrays. One common use case is identifying duplicate elements in an array. Here's how to do it in a clean, concise way using Streams.
+  </p>
+
+  <h2>Step-by-Step Approach</h2>
+  <ol>
+    <li>Convert the array to a stream.</li>
+    <li>Track seen elements using a <code>Set</code>.</li>
+    <li>Use <code>filter()</code> to identify duplicates.</li>
+    <li>Collect duplicates using <code>Collectors.toSet()</code>.</li>
+  </ol>
+
+  <h2>Java Code Example</h2>
+  <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class DuplicateFinder {
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 3, 2, 4, 5, 1, 6, 3};
+
+        Set&lt;Integer&gt; duplicates = findDuplicates(numbers);
+        System.out.println("Duplicates: " + duplicates);
+    }
+
+    public static Set&lt;Integer&gt; findDuplicates(int[] arr) {
+        Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+
+        return Arrays.stream(arr)
+                .filter(num -&gt; !seen.add(num)) // if add returns false, it's a duplicate
+                .boxed()
+                .collect(Collectors.toSet());
+    }
+}</code></pre>
+
+  <h2>Output</h2>
+  <pre><code>Duplicates: [1, 2, 3]</code></pre>
+
+  <div class="note">
+    <strong>Note:</strong> The use of <code>boxed()</code> is necessary to convert an <code>IntStream</code> to a <code>Stream&lt;Integer&gt;</code> before collecting.
+  </div>
+
+  <h2>Why This Works</h2>
+  <p>
+    The key idea here is using the return value of <code>Set.add()</code>. If the element is already in the set, <code>add()</code> returns <code>false</code>, and that’s how we detect duplicates using <code>filter()</code>.
+  </p>
+
+  <h2>Conclusion</h2>
+  <p>
+    Using the Stream API, we can efficiently detect duplicates in a functional style without writing explicit loops. This is clean, concise, and ideal for modern Java development.
+  </p>
+
+</body>
+</html>

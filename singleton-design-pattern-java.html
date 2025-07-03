@@ -78,7 +78,20 @@
             instance = new LazySingleton();
         return instance;
     }
-}</code></pre>
+}
+		//Singleton Main Method (Java)
+
+    <pre>public static void main(String[] args) {
+    System.out.println("Getting Singleton Instance...");
+
+    LazySingleton obj1 = LazySingleton.getInstance();
+    LazySingleton obj2 = LazySingleton.getInstance();
+
+    System.out.println("Are both instances same? " + (obj1 == obj2));
+}</pre>
+
+</code></pre>
+ 
   </details>
 
   <details>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>React useEffect Subscription Explained</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    pre {
+      background-color: #eee;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>What is a Subscription in React?</h1>
+
+  <div class="section">
+    <p>
+      In React, a <strong>subscription</strong> refers to <em>setting up a continuous or ongoing connection to some data source</em> or <em>external system</em> so that your component can be notified when the data changes.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>Examples of Subscriptions</h2>
+    <ul>
+      <li>WebSocket connection – to receive live updates from a server.</li>
+      <li>Event listeners – like listening for window resize, scroll, or custom DOM events.</li>
+      <li>Observable or state store – like subscribing to a Redux store, RxJS observable, or Firebase realtime database.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Why use <code>useEffect()</code> for Subscriptions?</h2>
+    <p>Because subscriptions need two key things:</p>
+    <ul>
+      <li><strong>Set up when the component mounts ✅</strong></li>
+      <li><strong>Clean up when the component unmounts ❌</strong> (to prevent memory leaks)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Example: Window Resize Subscription</h2>
+    <pre><code>import { useEffect, useState } from 'react';
+
+function WindowSizeTracker() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup subscription on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return &lt;p&gt;Window width: {width}px&lt;/p&gt;;
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>Example: Subscription to a WebSocket</h2>
+    <pre><code>useEffect(() => {
+  const socket = new WebSocket('wss://example.com/socket');
+
+  socket.onmessage = (event) => {
+    console.log('Received:', event.data);
+  };
+
+  // Cleanup when component unmounts
+  return () => {
+    socket.close();
+  };
+}, []);</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>Summary</h2>
+    <p>
+      <strong>Subscription</strong> = a connection to an <strong>external data source</strong> that needs to be started and stopped at the right time (typically with <code>useEffect</code>).
+    </p>
+    <ul>
+      <li>You <strong>subscribe</strong> when the component mounts.</li>
+      <li>You <strong>unsubscribe</strong> (clean up) when it unmounts.</li>
+    </ul>
+  </div>
+
+</body>
+</html>
