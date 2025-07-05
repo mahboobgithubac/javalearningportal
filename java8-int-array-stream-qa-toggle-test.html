@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Array Stream API – Problem Solving Interview Cheat Sheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #222;
+    }
+
+    .qa-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .qa-item {
+      background: #fff;
+      margin-bottom: 15px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .toggle-btn, .toggle-all-btn {
+      background: #007bff;
+      color: #fff;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .toggle-btn:hover, .toggle-all-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .answer {
+      display: none;
+      background: #f0f0f0;
+      padding: 10px;
+      border-left: 4px solid #007bff;
+      font-family: Consolas, monospace;
+      white-space: pre;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .center {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  </style>
+  <script>
+    function toggleAnswer(id) {
+      const ans = document.getElementById(id);
+      ans.style.display = ans.style.display === "block" ? "none" : "block";
+    }
+
+    function toggleAllAnswers() {
+      const answers = document.querySelectorAll('.answer');
+      const btn = document.getElementById('toggleAllBtn');
+      const showAll = btn.dataset.state !== 'shown';
+
+      answers.forEach(ans => {
+        ans.style.display = showAll ? 'block' : 'none';
+      });
+
+      btn.textContent = showAll ? 'Hide All Solutions' : 'Show All Solutions';
+      btn.dataset.state = showAll ? 'shown' : 'hidden';
+    }
+  </script>
+</head>
+<body>
+
+  <h1>Java 8 Array Stream API – Problem Solving Interview Cheat Sheet</h1>
+
+  <div class="center">
+    <button class="toggle-all-btn" id="toggleAllBtn" onclick="toggleAllAnswers()" data-state="hidden">
+      Show All Solutions
+    </button>
+  </div>
+
+  <div class="qa-container">
+
+    <!-- Questions 1 to 13 (as before) -->
+    <!-- For brevity, only one shown here – repeat others similarly -->
+
+    <div class="qa-item">
+      <div class="question">1. Find the Maximum Number</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a1')">Show Solution</button>
+      <div class="answer" id="a1">int max = Arrays.stream(arr).max().orElseThrow();</div>
+    </div>
+
+    <!-- Repeat all remaining questions here, same as before -->
+    <!-- IDs: a2, a3, ... a13 -->
+	
+	  <div class="qa-item">
+      <div class="question">2. Find the Minimum Number</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a2')">Show Solution</button>
+      <div class="answer" id="a2">int min = Arrays.stream(arr).min().orElseThrow();</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">3. Calculate the Sum</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a3')">Show Solution</button>
+      <div class="answer" id="a3">int sum = Arrays.stream(arr).sum();</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">4. Calculate the Average</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a4')">Show Solution</button>
+      <div class="answer" id="a4">double average = Arrays.stream(arr).average().orElse(0.0);</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">5. Count Even Numbers</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a5')">Show Solution</button>
+      <div class="answer" id="a5">long evenCount = Arrays.stream(arr).filter(n -> n % 2 == 0).count();</div>
+    </div>
+
+	<div class="qa-item">
+      <div class="question">6. Get a List of Squares</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a6')">Show Solution</button>
+      <div class="answer" id="a6">List&lt;Integer&gt; squares = Arrays.stream(arr)
+    .map(n -&gt; n * n)
+    .boxed()
+    .collect(Collectors.toList());</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">7. Filter Numbers Greater Than 10</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a7')">Show Solution</button>
+      <div class="answer" id="a7">List&lt;Integer&gt; result = Arrays.stream(arr)
+    .filter(n -&gt; n &gt; 10)
+    .boxed()
+    .collect(Collectors.toList());</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">8. Remove Duplicates</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a8')">Show Solution</button>
+      <div class="answer" id="a8">int[] distinct = Arrays.stream(arr).distinct().toArray();</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">9. Sort in Ascending Order</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a9')">Show Solution</button>
+      <div class="answer" id="a9">int[] ascSorted = Arrays.stream(arr).sorted().toArray();</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">9. Sort in Descending Order</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a9b')">Show Solution</button>
+      <div class="answer" id="a9b">int[] descSorted = Arrays.stream(arr)
+    .boxed()
+    .sorted(Comparator.reverseOrder())
+    .mapToInt(Integer::intValue)
+    .toArray();</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">10. Find Second Largest Number</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a10')">Show Solution</button>
+      <div class="answer" id="a10">OptionalInt secondLargest = Arrays.stream(arr)
+    .distinct()
+    .boxed()
+    .sorted(Comparator.reverseOrder())
+    .skip(1)
+    .findFirst()
+    .mapToInt(Integer::intValue);</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">11. Check if Array Contains 42</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a11')">Show Solution</button>
+      <div class="answer" id="a11">boolean contains = Arrays.stream(arr).anyMatch(n -> n == 42);</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">12. Convert int[] to List&lt;Integer&gt;</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a12')">Show Solution</button>
+      <div class="answer" id="a12">List&lt;Integer&gt; list = Arrays.stream(arr).boxed().collect(Collectors.toList());</div>
+    </div>
+
+
+    <div class="qa-item">
+      <div class="question">13. Merge Two Arrays</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a13')">Show Solution</button>
+      <div class="answer" id="a13">int[] merged = IntStream.concat(Arrays.stream(arr1),
+                 Arrays.stream(arr2)).toArray();</div>
+    </div>
+
+  </div>
+
+</body>
+</html>
