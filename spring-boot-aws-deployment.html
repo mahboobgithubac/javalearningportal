@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Different Ways to Deploy Spring Boot App on AWS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #000;
+      line-height: 1.6;
+      margin: 40px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #1a73e8;
+      margin-top: 30px;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    .highlight {
+      background-color: #e6f7ff;
+      padding: 10px;
+      border-left: 5px solid #2196f3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Different Ways to Deploy Spring Boot App on AWS</h1>
+
+  <h2>1. Amazon EC2 (Elastic Compute Cloud)</h2>
+  <div class="highlight">
+    <strong>Description:</strong> Launch a virtual machine, install Java, and run the Spring Boot JAR.
+  </div>
+  <ul>
+    <li>Create an EC2 instance</li>
+    <li>SSH into the instance using <code>PuTTY</code> or terminal</li>
+    <li>Install Java: <code>sudo yum install java-17-openjdk</code></li>
+    <li>Copy your <code>.jar</code> file using <code>scp</code> or via S3</li>
+    <li>Run: <code>java -jar your-app.jar</code></li>
+  </ul>
+
+  <h2>2. AWS Elastic Beanstalk</h2>
+  <div class="highlight">
+    <strong>Description:</strong> Platform-as-a-Service (PaaS) for simplified deployment.
+  </div>
+  <ul>
+    <li>Package your app as a <code>.jar</code></li>
+    <li>Create an environment on Beanstalk (Java platform)</li>
+    <li>Upload and deploy via AWS Console or CLI</li>
+  </ul>
+
+  <h2>3. Amazon ECS (Elastic Container Service) / Fargate</h2>
+  <div class="highlight">
+    <strong>Description:</strong> Deploy app as Docker container.
+  </div>
+  <ul>
+    <li>Create Docker image from your Spring Boot app</li>
+    <li>Push image to Amazon ECR</li>
+    <li>Deploy using ECS (Fargate = serverless)</li>
+  </ul>
+
+  <h2>4. Amazon EKS (Elastic Kubernetes Service)</h2>
+  <div class="highlight">
+    <strong>Description:</strong> Kubernetes-based deployment.
+  </div>
+  <ul>
+    <li>Package app as container</li>
+    <li>Write K8s manifests</li>
+    <li>Deploy to EKS cluster</li>
+  </ul>
+
+  <h2>5. AWS Lambda (with API Gateway)</h2>
+  <div class="highlight">
+    <strong>Description:</strong> Use Spring Cloud Function to run functions serverlessly.
+  </div>
+  <ul>
+    <li>Convert logic to Lambda-compatible functions</li>
+    <li>Package and upload to AWS Lambda</li>
+    <li>Expose through API Gateway</li>
+  </ul>
+
+  <h2>6. Amazon Lightsail</h2>
+  <div class="highlight">
+    <strong>Description:</strong> Simple VM similar to EC2, beginner-friendly.
+  </div>
+  <ul>
+    <li>Create instance</li>
+    <li>SSH into instance</li>
+    <li>Deploy similar to EC2</li>
+  </ul>
+
+  <h2>7. AWS CodePipeline + CodeDeploy</h2>
+  <div class="highlight">
+    <strong>Description:</strong> Set up CI/CD pipeline to automate deployments.
+  </div>
+  <ul>
+    <li>Connect CodeCommit/GitHub</li>
+    <li>Build using CodeBuild</li>
+    <li>Deploy using CodeDeploy to EC2 or Beanstalk</li>
+  </ul>
+
+  <h2>8. S3 + CloudFront (for Static Content)</h2>
+  <div class="highlight">
+    <strong>Note:</strong> For static frontend content, host it via S3 + CloudFront.
+  </div>
+
+  <h2>Recommendation Table</h2>
+  <table>
+    <tr>
+      <th>Use Case</th>
+      <th>Recommended Option</th>
+    </tr>
+    <tr>
+      <td>Small app with manual deployment</td>
+      <td>EC2 or Lightsail</td>
+    </tr>
+    <tr>
+      <td>Auto-scaling and easy setup</td>
+      <td>Elastic Beanstalk</td>
+    </tr>
+    <tr>
+      <td>Containerized microservices</td>
+      <td>ECS Fargate</td>
+    </tr>
+    <tr>
+      <td>Enterprise-grade scalability</td>
+      <td>EKS</td>
+    </tr>
+    <tr>
+      <td>Serverless functions</td>
+      <td>AWS Lambda</td>
+    </tr>
+    <tr>
+      <td>CI/CD pipeline integration</td>
+      <td>CodePipeline + EC2/Beanstalk</td>
+    </tr>
+  </table>
+
+</body>
+</html>

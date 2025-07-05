@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SOLID Principles in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      color: #000;
+      margin: 40px;
+      line-height: 1.7;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #3498db;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <h1>SOLID Principles in Java</h1>
+  <p>The <strong>SOLID principles</strong> are five essential object-oriented programming principles that help in creating clean, scalable, and maintainable software in Java.</p>
+
+  <h2>1. Single Responsibility Principle (SRP)</h2>
+  <p>A class should have only one reason to change, meaning it should have only one responsibility.</p>
+  <h4>✅ Good Example:</h4>
+  <pre><code>class InvoicePrinter {
+    public void print(Invoice invoice) {
+        // Logic to print invoice
+    }
+}
+
+class InvoicePersistence {
+    public void saveToDatabase(Invoice invoice) {
+        // Logic to save invoice
+    }
+}</code></pre>
+  <h4>❌ Bad Example:</h4>
+  <pre><code>class Invoice {
+    public void print() { /* printing logic */ }
+    public void saveToDatabase() { /* save logic */ }
+}</code></pre>
+
+  <h2>2. Open/Closed Principle (OCP)</h2>
+  <p>Classes should be open for extension but closed for modification.</p>
+  <pre><code>interface Discount {
+    double apply(double price);
+}
+
+class ChristmasDiscount implements Discount {
+    public double apply(double price) {
+        return price * 0.9;
+    }
+}
+
+class NewYearDiscount implements Discount {
+    public double apply(double price) {
+        return price * 0.8;
+    }
+}
+
+class PriceCalculator {
+    public double calculate(double price, Discount discount) {
+        return discount.apply(price);
+    }
+}</code></pre>
+
+  <h2>3. Liskov Substitution Principle (LSP)</h2>
+  <p>Subtypes must be substitutable for their base types without altering the correctness of the program.</p>
+  <h4>✅ Good Example:</h4>
+  <pre><code>class Bird {
+    void fly() {
+        System.out.println("Flying...");
+    }
+}
+
+class Sparrow extends Bird {}
+
+Bird bird = new Sparrow();
+bird.fly();</code></pre>
+  <h4>❌ Bad Example:</h4>
+  <pre><code>class Bird {
+    void fly() {}
+}
+
+class Ostrich extends Bird {
+    void fly() {
+        throw new UnsupportedOperationException("Can't fly!");
+    }
+}</code></pre>
+
+  <h2>4. Interface Segregation Principle (ISP)</h2>
+  <p>Clients should not be forced to depend on interfaces they do not use.</p>
+  <h4>✅ Good Example:</h4>
+  <pre><code>interface Printer {
+    void print();
+}
+
+interface Scanner {
+    void scan();
+}
+
+class MultiFunctionPrinter implements Printer, Scanner {
+    public void print() {}
+    public void scan() {}
+}
+
+class SimplePrinter implements Printer {
+    public void print() {}
+}</code></pre>
+  <h4>❌ Bad Example:</h4>
+  <pre><code>interface Machine {
+    void print();
+    void scan();
+    void fax();
+}
+
+class OldPrinter implements Machine {
+    public void print() {}
+    public void scan() {
+        // Not supported
+    }
+    public void fax() {
+        // Not supported
+    }
+}</code></pre>
+
+  <h2>5. Dependency Inversion Principle (DIP)</h2>
+  <p>High-level modules should not depend on low-level modules. Both should depend on abstractions.</p>
+  <pre><code>interface Keyboard {
+    void type();
+}
+
+class WiredKeyboard implements Keyboard {
+    public void type() {
+        System.out.println("Typing with wired keyboard");
+    }
+}
+
+class Computer {
+    private Keyboard keyboard;
+
+    public Computer(Keyboard keyboard) {
+        this.keyboard = keyboard;
+    }
+
+    public void input() {
+        keyboard.type();
+    }
+}</code></pre>
+
+  <h2>Summary of SOLID Principles</h2>
+  <table>
+    <tr>
+      <th>Principle</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><strong>S</strong></td>
+      <td>Single Responsibility - One class → One responsibility</td>
+    </tr>
+    <tr>
+      <td><strong>O</strong></td>
+      <td>Open/Closed - Extend without modifying existing code</td>
+    </tr>
+    <tr>
+      <td><strong>L</strong></td>
+      <td>Liskov Substitution - Subtypes must be usable through base types</td>
+    </tr>
+    <tr>
+      <td><strong>I</strong></td>
+      <td>Interface Segregation - Split big interfaces into smaller ones</td>
+    </tr>
+    <tr>
+      <td><strong>D</strong></td>
+      <td>Dependency Inversion - Depend on abstractions, not concrete classes</td>
+    </tr>
+  </table>
+</body>
+</html>
