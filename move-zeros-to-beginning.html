@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Move Zeros to Beginning in Java - Loop and Java 8</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fefefe;
+      color: #111;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-left: 5px solid #333;
+      overflow-x: auto;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #444;
+      margin-top: 30px;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Move All Zeros to the Beginning of an Array in Java</h1>
+
+  <h2>✅ Problem Statement</h2>
+  <p>Given an integer array <code>{5, 1, 3, 0, 2, 0, 7, 0, 1}</code>, move all zeros to the beginning of the array while preserving the order of non-zero elements.</p>
+
+  <h2>🔹 Solution 1: Traditional Java (Loop-Based)</h2>
+
+  <pre><code>import java.util.Arrays;
+
+public class MoveZerosToBeginning {
+    public static void main(String[] args) {
+        int[] arr = {5, 1, 3, 0, 2, 0, 7, 0, 1};
+        moveZerosToStart(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+
+    public static void moveZerosToStart(int[] arr) {
+        int n = arr.length;
+        int index = n - 1;
+
+        // Move non-zero elements from end to start
+        for (int i = n - 1; i >= 0; i--) {
+            if (arr[i] != 0) {
+                arr[index] = arr[i];
+                index--;
+            }
+        }
+
+        // Fill remaining elements with 0
+        while (index >= 0) {
+            arr[index] = 0;
+            index--;
+        }
+    }
+}</code></pre>
+
+  <h2>🔍 Explanation</h2>
+  <ul>
+    <li>Traverse the array from the end.</li>
+    <li>Move all non-zero elements to the end (in reverse order).</li>
+    <li>Fill the remaining positions with zeros from the start.</li>
+  </ul>
+
+  <h2>📌 Output</h2>
+  <p><code>[0, 0, 0, 5, 1, 3, 2, 7, 1]</code></p>
+
+  <hr>
+
+  <h2>🔹 Solution 2: Java 8 Stream API</h2>
+
+  <pre><code>import java.util.Arrays;
+import java.util.stream.IntStream;
+
+public class MoveZerosToBeginningJava8 {
+    public static void main(String[] args) {
+        int[] arr = {5, 1, 3, 0, 2, 0, 7, 0, 1};
+
+        long zeroCount = Arrays.stream(arr)
+                               .filter(i -> i == 0)
+                               .count();
+
+        int[] nonZeros = Arrays.stream(arr)
+                               .filter(i -> i != 0)
+                               .toArray();
+
+        int[] result = new int[arr.length];
+
+        IntStream.range(0, (int) zeroCount).forEach(i -> result[i] = 0);
+
+        System.arraycopy(nonZeros, 0, result, (int) zeroCount, nonZeros.length);
+
+        System.out.println(Arrays.toString(result));
+    }
+}</code></pre>
+
+  <h2>🔍 Explanation</h2>
+  <ul>
+    <li>Use Java 8 Stream API to separate zeros and non-zeros.</li>
+    <li>Count zeros with <code>filter(i == 0)</code>.</li>
+    <li>Get non-zero array with <code>filter(i != 0)</code>.</li>
+    <li>Create a result array: fill beginning with zeros, then copy non-zeros using <code>System.arraycopy()</code>.</li>
+  </ul>
+
+  <h2>📌 Output</h2>
+  <p><code>[0, 0, 0, 5, 1, 3, 2, 7, 1]</code></p>
+
+  <h2>🧠 Summary</h2>
+  <ul>
+    <li>✅ Loop version is efficient for in-place updates.</li>
+    <li>✅ Java 8 Stream version is more declarative but uses extra arrays.</li>
+    <li>Both preserve the order of non-zero elements and shift zeros to the beginning.</li>
+  </ul>
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Program to Find Unique Words Using Stream API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 30px;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    h2 {
+      color: #444;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: Consolas, monospace;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    .output, .explanation, .question, .problem, .testcase, .live-output {
+      background-color: #eef;
+      padding: 10px 15px;
+      border-left: 4px solid #007bff;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    ul {
+      margin-top: 0;
+    }
+    input, button {
+      padding: 8px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    #liveResult {
+      font-family: monospace;
+      color: #222;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java Program to Find Unique Words Using Stream API</h1>
+
+  <div class="section">
+    <h2>🧾 Problem Statement</h2>
+    <div class="problem">
+      Write a Java program that takes a sentence as input and prints all the unique words in ascending alphabetical order.<br><br>
+      The program should:
+      <ul>
+        <li>Remove all punctuation from the sentence.</li>
+        <li>Consider words case-insensitively (e.g., "Java" and "java" are treated the same).</li>
+        <li>Extract all the words, eliminate duplicates, and sort them alphabetically.</li>
+        <li>Use <strong>Java 8 Stream API</strong> for processing.</li>
+      </ul>
+      <strong>Example:</strong><br>
+      <pre>
+Input:  "Java is fun. Java is powerful. Java is popular."
+Output:
+fun
+is
+java
+popular
+powerful
+      </pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🧪 Test Case</h2>
+    <div class="testcase">
+      <strong>Input:</strong> <code>Java is fun. Java is powerful. Java is popular.</code><br>
+      <strong>Expected Output:</strong><br>
+      <code>
+fun<br>
+is<br>
+java<br>
+popular<br>
+powerful
+      </code>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🟦 Question</h2>
+    <div class="question">
+      Write a Java program using Java 8 Stream API to find all unique words from a given sentence and display them in ascending alphabetical order.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>✅ Java Code</h2>
+    <pre>
+import java.util.*;
+import java.util.stream.*;
+
+public class UniqueWordsSorted {
+    public static void main(String[] args) {
+        String input = "Java is fun. Java is powerful. Java is popular.";
+
+        // Step 1: Normalize the string (remove punctuation, convert to lowercase)
+        String cleaned = input.replaceAll("[^a-zA-Z ]", "").toLowerCase();
+
+        // Step 2: Split into words and stream
+        List&lt;String&gt; uniqueSortedWords = Arrays.stream(cleaned.split("\\s+"))
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
+
+        // Output result
+        System.out.println("Unique words in ascending order:");
+        uniqueSortedWords.forEach(System.out::println);
+    }
+}
+    </pre>
+  </div>
+
+  <div class="section">
+    <h2>✅ Output</h2>
+    <div class="output">
+      Unique words in ascending order:<br>
+      fun<br>
+      is<br>
+      java<br>
+      popular<br>
+      powerful
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>✅ Explanation</h2>
+    <div class="explanation">
+      <ul>
+        <li><code>replaceAll("[^a-zA-Z ]", "")</code>: Removes punctuation.</li>
+        <li><code>toLowerCase()</code>: Makes the comparison case-insensitive.</li>
+        <li><code>split("\\s+")</code>: Splits the sentence into words.</li>
+        <li><code>distinct()</code>: Removes duplicates.</li>
+        <li><code>sorted()</code>: Sorts the words alphabetically.</li>
+        <li><code>collect(Collectors.toList())</code>: Collects the results into a List.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🧠 Try It Yourself (Live Output)</h2>
+    <input type="text" id="sentenceInput" placeholder="Enter a sentence..." size="70"
+           value="Java is fun. Java is powerful. Java is popular.">
+    <button onclick="processSentence()">Show Unique Words</button>
+    <div class="live-output" id="liveResult"></div>
+  </div>
+
+  <script>
+    function processSentence() {
+      const input = document.getElementById("sentenceInput").value;
+      const cleaned = input.replace(/[^a-zA-Z ]/g, "").toLowerCase();
+      const words = cleaned.split(/\s+/).filter(Boolean);
+      const unique = [...new Set(words)];
+      const sorted = unique.sort();
+      const output = sorted.join('<br>');
+      document.getElementById("liveResult").innerHTML = "<strong>Output:</strong><br>" + output;
+    }
+  </script>
+
+</body>
+</html>
