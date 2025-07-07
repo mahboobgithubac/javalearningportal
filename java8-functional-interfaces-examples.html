@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Built-in Functional Interfaces - Code Examples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      display: flex;
+    }
+    aside {
+      width: 220px;
+      background: #2c3e50;
+      padding: 20px 10px;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+    aside h2 {
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .nav-button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      background-color: #34495e;
+      color: white;
+      border: none;
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .nav-button:hover {
+      background-color: #1abc9c;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .control-buttons {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .control-buttons button {
+      background-color: #2980b9;
+      color: white;
+      padding: 10px 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .section {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid #3498db;
+      display: none;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .section h3 {
+      margin-top: 0;
+    }
+
+    pre {
+      background: #f0f0f0;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 3px solid #ccc;
+    }
+
+    .output {
+      background: #e8ffe8;
+      padding: 10px;
+      margin-top: 10px;
+      border-left: 3px solid green;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <aside>
+    <h2>Functional Interfaces</h2>
+    <button class="nav-button" onclick="toggleSection('predicate')">Predicate&lt;T&gt;</button>
+    <button class="nav-button" onclick="toggleSection('function')">Function&lt;T, R&gt;</button>
+    <button class="nav-button" onclick="toggleSection('consumer')">Consumer&lt;T&gt;</button>
+    <button class="nav-button" onclick="toggleSection('supplier')">Supplier&lt;T&gt;</button>
+    <button class="nav-button" onclick="toggleSection('unary')">UnaryOperator&lt;T&gt;</button>
+    <button class="nav-button" onclick="toggleSection('binary')">BinaryOperator&lt;T&gt;</button>
+    <button class="nav-button" onclick="toggleSection('bifunction')">BiFunction&lt;T, U, R&gt;</button>
+    <button class="nav-button" onclick="toggleSection('bipredicate')">BiPredicate&lt;T, U&gt;</button>
+    <button class="nav-button" onclick="toggleSection('biconsumer')">BiConsumer&lt;T, U&gt;</button>
+  </aside>
+
+  <main>
+    <h1>Java 8 Built-in Functional Interfaces</h1>
+    <div class="control-buttons">
+      <button onclick="toggleAll(true)">Expand All</button>
+      <button onclick="toggleAll(false)">Collapse All</button>
+    </div>
+
+    <div id="predicate" class="section">
+      <h3>Predicate&lt;T&gt;</h3>
+      <p><strong>Purpose:</strong> Tests a condition and returns a boolean result.</p>
+      <pre><code>import java.util.function.Predicate;
+
+public class PredicateExample {
+    public static void main(String[] args) {
+        Predicate&lt;String&gt; isLong = str -&gt; str.length() &gt; 5;
+        System.out.println(isLong.test("Mahboob"));
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>true</div>
+    </div>
+
+    <div id="function" class="section">
+      <h3>Function&lt;T, R&gt;</h3>
+      <p><strong>Purpose:</strong> Accepts a value and returns a transformed result.</p>
+      <pre><code>import java.util.function.Function;
+
+public class FunctionExample {
+    public static void main(String[] args) {
+        Function&lt;String, Integer&gt; length = str -&gt; str.length();
+        System.out.println(length.apply("Mahboob"));
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>7</div>
+    </div>
+
+    <div id="consumer" class="section">
+      <h3>Consumer&lt;T&gt;</h3>
+      <p><strong>Purpose:</strong> Accepts a value and performs an action without returning anything.</p>
+      <pre><code>import java.util.function.Consumer;
+
+public class ConsumerExample {
+    public static void main(String[] args) {
+        Consumer&lt;String&gt; greet = name -&gt; System.out.println("Hello " + name);
+        greet.accept("Mahboob");
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>Hello Mahboob</div>
+    </div>
+
+    <div id="supplier" class="section">
+      <h3>Supplier&lt;T&gt;</h3>
+      <p><strong>Purpose:</strong> Supplies a value without accepting input.</p>
+      <pre><code>import java.util.function.Supplier;
+
+public class SupplierExample {
+    public static void main(String[] args) {
+        Supplier&lt;String&gt; nameSupplier = () -&gt; "Mahboob";
+        System.out.println(nameSupplier.get());
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>Mahboob</div>
+    </div>
+
+    <div id="unary" class="section">
+      <h3>UnaryOperator&lt;T&gt;</h3>
+      <p><strong>Purpose:</strong> Accepts and returns a value of the same type.</p>
+      <pre><code>import java.util.function.UnaryOperator;
+
+public class UnaryOperatorExample {
+    public static void main(String[] args) {
+        UnaryOperator&lt;String&gt; toUpper = str -&gt; str.toUpperCase();
+        System.out.println(toUpper.apply("mahboob"));
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>MAHBOOB</div>
+    </div>
+
+    <div id="binary" class="section">
+      <h3>BinaryOperator&lt;T&gt;</h3>
+      <p><strong>Purpose:</strong> Combines two values of the same type and returns one of the same type.</p>
+      <pre><code>import java.util.function.BinaryOperator;
+
+public class BinaryOperatorExample {
+    public static void main(String[] args) {
+        BinaryOperator&lt;Integer&gt; add = (a, b) -&gt; a + b;
+        System.out.println(add.apply(10, 5));
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>15</div>
+    </div>
+
+    <div id="bifunction" class="section">
+      <h3>BiFunction&lt;T, U, R&gt;</h3>
+      <p><strong>Purpose:</strong> Accepts two values and returns a result.</p>
+      <pre><code>import java.util.function.BiFunction;
+
+public class BiFunctionExample {
+    public static void main(String[] args) {
+        BiFunction&lt;String, String, String&gt; concat = (a, b) -&gt; a + " " + b;
+        System.out.println(concat.apply("Hello", "World"));
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>Hello World</div>
+    </div>
+
+    <div id="bipredicate" class="section">
+      <h3>BiPredicate&lt;T, U&gt;</h3>
+      <p><strong>Purpose:</strong> Tests a condition using two inputs.</p>
+      <pre><code>import java.util.function.BiPredicate;
+
+public class BiPredicateExample {
+    public static void main(String[] args) {
+        BiPredicate&lt;String, Integer&gt; isLongerThan = (str, len) -&gt; str.length() &gt; len;
+        System.out.println(isLongerThan.test("Mahboob", 5));
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>true</div>
+    </div>
+
+    <div id="biconsumer" class="section">
+      <h3>BiConsumer&lt;T, U&gt;</h3>
+      <p><strong>Purpose:</strong> Performs an action using two inputs.</p>
+      <pre><code>import java.util.function.BiConsumer;
+
+public class BiConsumerExample {
+    public static void main(String[] args) {
+        BiConsumer&lt;String, Integer&gt; printInfo = (name, age) -&gt;
+            System.out.println(name + " is " + age + " years old");
+        printInfo.accept("Mahboob", 30);
+    }
+}</code></pre>
+      <div class="output"><strong>Output:</strong><br>Mahboob is 30 years old</div>
+    </div>
+
+  </main>
+
+  <script>
+    function toggleSection(id) {
+      const section = document.getElementById(id);
+      section.style.display = section.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function toggleAll(show) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        section.style.display = show ? 'block' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

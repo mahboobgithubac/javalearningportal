@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Collectors Examples - joining, mapping, summarizingInt</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 30px;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #34495e;
+      margin-top: 30px;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-left: 5px solid #3498db;
+      overflow-x: auto;
+    }
+    .output {
+      background: #e8ffe8;
+      padding: 10px;
+      border-left: 5px solid green;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+    ul {
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java 8 Collectors Examples</h1>
+
+  <h2>✅ 1. Collectors.joining()</h2>
+  <p><strong>Purpose:</strong> Concatenates all elements of a stream into a single <code>String</code>.</p>
+  <pre><code>import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class JoiningExample {
+    public static void main(String[] args) {
+        List&lt;String&gt; words = Arrays.asList("Java", "is", "awesome");
+        String result = words.stream()
+                             .collect(Collectors.joining(" "));
+        System.out.println(result);
+    }
+}</code></pre>
+  <div class="output"><strong>Output:</strong><br>Java is awesome</div>
+
+  <h2>✅ 2. Collectors.mapping()</h2>
+  <p><strong>Purpose:</strong> Transforms elements before collecting them. Used inside other collectors like <code>groupingBy</code>.</p>
+  <pre><code>import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class MappingExample {
+    public static void main(String[] args) {
+        List&lt;String&gt; names = Arrays.asList("Tom", "Jerry", "Spike");
+        Map&lt;Integer, List&lt;String&gt;&gt; groupedByLength = names.stream()
+            .collect(Collectors.groupingBy(
+                String::length,
+                Collectors.mapping(String::toUpperCase, Collectors.toList())
+            ));
+        System.out.println(groupedByLength);
+    }
+}</code></pre>
+  <div class="output"><strong>Output:</strong><br>{3=[TOM], 5=[JERRY, SPIKE]}</div>
+
+  <h2>✅ 3. Collectors.summarizingInt()</h2>
+  <p><strong>Purpose:</strong> Gathers statistical information like count, sum, min, max, and average from numeric values.</p>
+
+  <h3>🔢 Original Example (5 elements)</h3>
+  <pre><code>import java.util.Arrays;
+import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class SummarizingIntExample {
+    public static void main(String[] args) {
+        List&lt;Integer&gt; numbers = Arrays.asList(4, 2, 7, 5, 9);
+        IntSummaryStatistics stats = numbers.stream()
+                                            .collect(Collectors.summarizingInt(Integer::intValue));
+        System.out.println("Count: " + stats.getCount());
+        System.out.println("Sum: " + stats.getSum());
+        System.out.println("Average: " + stats.getAverage());
+        System.out.println("Min: " + stats.getMin());
+        System.out.println("Max: " + stats.getMax());
+    }
+}</code></pre>
+
+  <div class="output">
+    <strong>Output:</strong><br>
+    Count: 5<br>
+    Sum: 27<br>
+    Average: 5.4<br>
+    Min: 2<br>
+    Max: 9
+  </div>
+
+  <h3>🔁 Updated Example with 6 Elements</h3>
+  <p>New input: <code>Arrays.asList(4, 2, 7, 5, 9, 11)</code></p>
+  <ul>
+    <li><strong>Count:</strong> 6</li>
+    <li><strong>Sum:</strong> 38</li>
+    <li><strong>Average:</strong> 6.333333333333333</li>
+    <li><strong>Min:</strong> 2</li>
+    <li><strong>Max:</strong> 11</li>
+  </ul>
+  <div class="output">
+    <strong>Output:</strong><br>
+    Count: 6<br>
+    Sum: 38<br>
+    Average: 6.333333333333333<br>
+    Min: 2<br>
+    Max: 11
+  </div>
+
+</body>
+</html>

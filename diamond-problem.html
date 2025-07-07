@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diamond Problem in Java 8</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    p {
+      margin: 10px 0;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      border: 1px solid #ccc;
+    }
+    code {
+      font-family: "Courier New", Courier, monospace;
+      color: #000;
+    }
+    .note {
+      background-color: #eef5ff;
+      padding: 10px;
+      border-left: 5px solid #3498db;
+      margin: 20px 0;
+    }
+    .output {
+      background-color: #eaffea;
+      padding: 10px;
+      border-left: 5px solid #2ecc71;
+      margin: 20px 0;
+    }
+    details {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💎 Diamond Problem in Java 8</h1>
+
+  <div class="note">
+    <strong>What is the Diamond Problem?</strong><br>
+    The Diamond Problem occurs in multiple inheritance when a class inherits from two classes (or interfaces)
+    that have a common ancestor, potentially causing ambiguity in method resolution.
+  </div>
+
+  <h2>🔷 Java's Approach:</h2>
+  <ul>
+    <li>Java <strong>does not allow multiple inheritance of classes</strong> to avoid this problem.</li>
+    <li>However, <strong>interfaces with default methods</strong> (Java 8+) can lead to the diamond problem.</li>
+  </ul>
+
+  <details open>
+    <summary>✅ Diamond Problem Example in Java 8</summary>
+    <pre><code>interface A {
+    default void hello() {
+        System.out.println("Hello from A");
+    }
+}
+
+interface B extends A {
+    default void hello() {
+        System.out.println("Hello from B");
+    }
+}
+
+interface C extends A {
+    default void hello() {
+        System.out.println("Hello from C");
+    }
+}
+
+// Class D implements both B and C - causes diamond conflict
+class D implements B, C {
+    @Override
+    public void hello() {
+        // Resolve conflict explicitly
+        B.super.hello(); // or C.super.hello()
+    }
+}
+
+public class DiamondProblemDemo {
+    public static void main(String[] args) {
+        D d = new D();
+        d.hello(); // Output: Hello from B
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>❌ What If We Don't Override hello() in Class D?</summary>
+    <div class="note">
+      <strong>Compilation Error:</strong><br>
+      Class D inherits unrelated defaults for <code>hello()</code> from types B and C.<br>
+      Java forces the developer to resolve this ambiguity.
+    </div>
+  </details>
+
+  <h2>✅ Key Takeaways</h2>
+  <ul>
+    <li>Java 8 allows <strong>default methods in interfaces</strong>, enabling multiple inheritance of behavior.</li>
+    <li>Diamond problem arises if a class implements multiple interfaces with conflicting default methods.</li>
+    <li>Java resolves this by requiring the class to <strong>override the method explicitly</strong> and use <code>InterfaceName.super.method()</code> syntax.</li>
+  </ul>
+
+  <h2>📄 Output Preview (Summary)</h2>
+  <div class="output">
+    <strong>Console Output:</strong><br>
+    Hello from B
+  </div>
+
+</body>
+</html>

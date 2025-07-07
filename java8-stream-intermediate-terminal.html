@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Stream Intermediate vs Terminal Operations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    h3 {
+      color: #34495e;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-left: 5px solid #3498db;
+      overflow-x: auto;
+    }
+    .output {
+      background-color: #e8ffe8;
+      padding: 10px;
+      border-left: 5px solid green;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+    ul {
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java 8 Stream Intermediate vs Terminal Operations</h1>
+
+  <h2>📌 What Are Intermediate Operations?</h2>
+  <p>
+    Intermediate operations return a new stream. They are lazy and not executed until a terminal operation is invoked.
+  </p>
+  <ul>
+    <li><code>map()</code>: transforms each element</li>
+    <li><code>filter()</code>: filters elements by predicate</li>
+    <li><code>sorted()</code>: sorts elements</li>
+    <li><code>distinct()</code>: removes duplicates</li>
+    <li><code>limit(), skip()</code>: truncates the stream</li>
+  </ul>
+
+  <h3>✅ Example: Intermediate Operations</h3>
+  <pre><code>import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class IntermediateExample {
+    public static void main(String[] args) {
+        List&lt;String&gt; names = Arrays.asList("Tom", "Jerry", "Spike", "Tom");
+
+        names.stream()
+             .filter(name -&gt; name.length() &gt; 3)
+             .map(String::toUpperCase)
+             .distinct()
+             .sorted()
+             .forEach(System.out::println); // Terminal Operation
+    }
+}</code></pre>
+
+  <div class="output">
+    <strong>Output:</strong><br>
+    JERRY<br>
+    SPIKE
+  </div>
+
+  <h2>📌 What Are Terminal Operations?</h2>
+  <p>
+    Terminal operations produce a result or side-effect and trigger the actual processing of the stream.
+  </p>
+  <ul>
+    <li><code>forEach()</code>: performs an action for each element</li>
+    <li><code>collect()</code>: reduces elements to a collection</li>
+    <li><code>count()</code>: returns number of elements</li>
+    <li><code>reduce()</code>: combines elements into one</li>
+    <li><code>anyMatch(), allMatch(), noneMatch()</code>: test conditions</li>
+  </ul>
+
+  <h3>✅ Example: Terminal Operations</h3>
+  <pre><code>import java.util.Arrays;
+import java.util.List;
+
+public class TerminalExample {
+    public static void main(String[] args) {
+        List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        long count = numbers.stream()
+                            .filter(n -&gt; n % 2 == 0) // Intermediate
+                            .count();               // Terminal
+
+        System.out.println("Even count: " + count);
+    }
+}</code></pre>
+
+  <div class="output">
+    <strong>Output:</strong><br>
+    Even count: 2
+  </div>
+
+  <h2>🔁 Summary</h2>
+  <ul>
+    <li><strong>Intermediate Operations</strong> → Transform/prepare data</li>
+    <li><strong>Terminal Operations</strong> → Trigger execution and produce result</li>
+    <li>Stream pipeline: Intermediate → Intermediate → Terminal</li>
+  </ul>
+
+</body>
+</html>

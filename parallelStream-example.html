@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 parallelStream() Explained with Examples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 30px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-left: 4px solid #3498db;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .note {
+      background: #eafaf1;
+      padding: 10px;
+      border-left: 5px solid #27ae60;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java 8 <code>parallelStream()</code> Explained with Examples</h1>
+
+  <h2>What is <code>parallelStream()</code>?</h2>
+  <ul>
+    <li><code>parallelStream()</code> creates a parallel stream that processes elements concurrently using multiple threads.</li>
+    <li>It leverages multi-core processors to enhance performance.</li>
+    <li>Ideal for CPU-intensive operations on large data sets.</li>
+    <li>Processing order may be non-deterministic unless managed.</li>
+  </ul>
+
+  <h2>Example: Sum of Squares Using <code>parallelStream()</code></h2>
+  <pre><code>import java.util.Arrays;
+import java.util.List;
+
+public class ParallelStreamExample {
+    public static void main(String[] args) {
+        List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        // Using parallelStream() to compute sum of squares
+        int sumOfSquares = numbers.parallelStream()
+                                  .map(n -&gt; n * n)
+                                  .reduce(0, Integer::sum);
+        System.out.println("Sum of squares: " + sumOfSquares);
+    }
+}
+  </code></pre>
+  <div class="note"><strong>Expected Output:</strong> Sum of squares: 385</div>
+
+  <h3>Notes:</h3>
+  <ul>
+    <li>Map and reduce operations are executed concurrently across threads.</li>
+    <li>May not benefit simple tasks—useful for large collections or expensive operations.</li>
+    <li>Avoid side-effects and shared mutable state inside parallel streams.</li>
+  </ul>
+
+  <h2>Performance Comparison: <code>stream()</code> vs <code>parallelStream()</code></h2>
+  <pre><code>import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class StreamVsParallelStreamPerformance {
+    public static void main(String[] args) {
+        // Create a list of 1 million integers
+        List&lt;Integer&gt; numbers = IntStream.rangeClosed(1, 1_000_000)
+                                          .boxed()
+                                          .collect(Collectors.toList());
+
+        // Sequential stream
+        long startSeq = System.currentTimeMillis();
+        long sumSeq = numbers.stream().mapToLong(n -&gt; n * n).sum();
+        long endSeq = System.currentTimeMillis();
+        System.out.println("Sequential stream sum: " + sumSeq);
+        System.out.println("Sequential stream time: " + (endSeq - startSeq) + " ms");
+
+        // Parallel stream
+        long startPar = System.currentTimeMillis();
+        long sumPar = numbers.parallelStream().mapToLong(n -&gt; n * n).sum();
+        long endPar = System.currentTimeMillis();
+        System.out.println("Parallel stream sum: " + sumPar);
+        System.out.println("Parallel stream time: " + (endPar - startPar) + " ms");
+    }
+}
+  </code></pre>
+
+  <h3>Sample Output (may vary):</h3>
+  <ul>
+    <li>Sequential stream sum: 333333833333500000</li>
+    <li>Sequential stream time: 150 ms</li>
+    <li>Parallel stream sum: 333333833333500000</li>
+    <li>Parallel stream time: 50 ms</li>
+  </ul>
+
+  <h3>Explanation:</h3>
+  <ul>
+    <li>Both approaches yield the same result.</li>
+    <li>Parallel stream is faster for large data on multi-core CPUs.</li>
+    <li>Overhead can make it slower for small/simple tasks.</li>
+    <li>Uses ForkJoinPool.commonPool() by default (threads = CPU cores).</li>
+  </ul>
+
+  <h2>Internal Working of <code>parallelStream()</code></h2>
+  <ol>
+    <li><strong>Spliterator:</strong> Splits the data into smaller chunks for parallel processing.</li>
+    <li><strong>ForkJoin Framework:</strong> Uses the ForkJoinPool.commonPool() for executing tasks.</li>
+    <li><strong>Task Splitting & Joining:</strong> Divides the work and combines results.</li>
+    <li><strong>Threads:</strong> Default thread count = number of available cores.</li>
+    <li><strong>Thread Safety:</strong> Operations should be stateless and non-interfering.</li>
+  </ol>
+
+  <h2>Custom Thread Pool for <code>parallelStream()</code></h2>
+  <pre><code>import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ForkJoinPool;
+
+public class CustomParallelStream {
+    public static void main(String[] args) throws Exception {
+        List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        ForkJoinPool customThreadPool = new ForkJoinPool(4); // 4 threads
+
+        int sumOfSquares = customThreadPool.submit(() -&gt;
+            numbers.parallelStream()
+                   .map(n -&gt; n * n)
+                   .reduce(0, Integer::sum)
+        ).get();
+
+        System.out.println("Sum of squares with custom pool: " + sumOfSquares);
+        customThreadPool.shutdown();
+    }
+}
+  </code></pre>
+
+  <h3>Notes:</h3>
+  <ul>
+    <li>Custom <code>ForkJoinPool</code> allows fine-tuning parallelism.</li>
+    <li>Useful if the default pool is shared or overloaded.</li>
+  </ul>
+
+</body>
+</html>

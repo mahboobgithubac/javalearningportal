@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Date and Time API - Interview Questions & Examples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #3498db;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .question {
+      margin: 25px 0;
+    }
+    .explanation {
+      background: #e8f4ff;
+      padding: 10px;
+      border-left: 5px solid #2980b9;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Java 8 Date and Time API - Interview Questions & Code Examples</h1>
+
+  <div class="question">
+    <h2>1. Parse a string into a LocalDate or LocalDateTime</h2>
+    <pre><code>String dateStr = "2023-05-15";
+LocalDate date = LocalDate.parse(dateStr);
+
+String dateTimeStr = "2023-05-15T10:30:45";
+LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr);
+
+String customDateStr = "15-05-2023";
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+LocalDate customDate = LocalDate.parse(customDateStr, formatter);</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>2. Format a LocalDate or LocalDateTime into a custom string pattern</h2>
+    <pre><code>LocalDateTime dateTime = LocalDateTime.now();
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+String formattedDate = dateTime.format(formatter);</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>3. Find the difference between two dates (days, months, years)</h2>
+    <pre><code>LocalDate startDate = LocalDate.of(2020, 1, 1);
+LocalDate endDate = LocalDate.of(2023, 5, 15);
+Period period = Period.between(startDate, endDate);
+System.out.println("Years: " + period.getYears());
+System.out.println("Months: " + period.getMonths());
+System.out.println("Days: " + period.getDays());</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>4. Add or subtract days/weeks/months/years to/from a date</h2>
+    <pre><code>LocalDate date = LocalDate.of(2023, 5, 15);
+LocalDate newDate = date.plusDays(5).minusMonths(2);
+System.out.println(newDate);</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>5. Convert between old java.util.Date and new java.time API</h2>
+    <pre><code>Date oldDate = new Date(1684152000000L);
+Instant instant = oldDate.toInstant();
+LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+
+LocalDateTime now = LocalDateTime.of(2023, 5, 15, 14, 30);
+Date dateFromLDT = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>6. Check if a given date is before or after the current date</h2>
+    <pre><code>LocalDate date = LocalDate.of(2023, 5, 10);
+LocalDate today = LocalDate.of(2023, 5, 15);
+if (date.isBefore(today)) {
+    System.out.println("Given date is before today");
+} else if (date.isAfter(today)) {
+    System.out.println("Given date is after today");
+} else {
+    System.out.println("Given date is today");
+}</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>7. Get the current date and time in different time zones</h2>
+    <pre><code>ZonedDateTime nowInUTC = ZonedDateTime.of(2023, 5, 15, 12, 0, 0, 0, ZoneId.of("UTC"));
+ZonedDateTime nowInTokyo = ZonedDateTime.of(2023, 5, 15, 21, 0, 0, 0, ZoneId.of("Asia/Tokyo"));</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>8. Find the day of the week for a given date</h2>
+    <pre><code>LocalDate date = LocalDate.of(2023, 5, 15);
+DayOfWeek dayOfWeek = date.getDayOfWeek();</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>9. Calculate the duration between two times</h2>
+    <pre><code>LocalTime start = LocalTime.of(10, 30);
+LocalTime end = LocalTime.of(14, 45);
+Duration duration = Duration.between(start, end);</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>10. Determine if a year is a leap year</h2>
+    <pre><code>Year year = Year.of(2024);
+System.out.println(year.isLeap());</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>11. Find the first and last day of a month</h2>
+    <pre><code>YearMonth ym = YearMonth.of(2023, 5);
+LocalDate firstDay = ym.atDay(1);
+LocalDate lastDay = ym.atEndOfMonth();</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>12. Get all dates between two given dates</h2>
+    <pre><code>LocalDate start = LocalDate.of(2023, 5, 10);
+LocalDate end = LocalDate.of(2023, 5, 15);
+Stream.iterate(start, d -> d.plusDays(1))
+      .limit(end.toEpochDay() - start.toEpochDay() + 1)
+      .forEach(System.out::println);</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>13. Compare two ZonedDateTime objects in different time zones</h2>
+    <pre><code>ZonedDateTime dateTime1 = ZonedDateTime.of(2023, 5, 15, 10, 0, 0, 0, ZoneId.of("Asia/Tokyo"));
+ZonedDateTime dateTime2 = ZonedDateTime.of(2023, 5, 14, 20, 0, 0, 0, ZoneId.of("Europe/London"));</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>14. Convert Instant to local date-time with timezone</h2>
+    <pre><code>Instant instant = Instant.parse("2023-05-15T08:00:00Z");
+ZonedDateTime zdt = instant.atZone(ZoneId.of("America/New_York"));
+LocalDateTime ldt = zdt.toLocalDateTime();</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>15. Find the next Friday (or any weekday) from a given date</h2>
+    <pre><code>LocalDate date = LocalDate.of(2023, 5, 15);
+LocalDate nextFriday = date.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>16. Calculate the age in years, months, and days from birthdate</h2>
+    <pre><code>LocalDate birthDate = LocalDate.of(1990, 5, 15);
+LocalDate today = LocalDate.now();
+Period age = Period.between(birthDate, today);
+System.out.printf("Age: %d years, %d months, %d days%n",
+        age.getYears(), age.getMonths(), age.getDays());</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>Bonus: Find the second Saturday of a given month</h2>
+    <pre><code>LocalDate firstDay = LocalDate.of(2023, 5, 1);
+LocalDate firstSaturday = firstDay.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+LocalDate secondSaturday = firstSaturday.plusWeeks(1);
+System.out.println("Second Saturday of 5/2023 is: " + secondSaturday);</code></pre>
+    <div class="explanation">
+      Uses <code>TemporalAdjusters.nextOrSame()</code> to find the first Saturday, then adds 1 week to find the second.
+    </div>
+  </div>
+
+</body>
+</html>

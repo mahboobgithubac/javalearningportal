@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Best Practices for Designing REST APIs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #2c3e50;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #34495e;
+      margin-top: 30px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #2c3e50;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Best Practices for Designing REST APIs</h1>
+
+  <h2>1. Use Proper HTTP Methods</h2>
+  <ul>
+    <li><code>GET</code> – Retrieve resource</li>
+    <li><code>POST</code> – Create new resource</li>
+    <li><code>PUT</code> – Update entire resource</li>
+    <li><code>PATCH</code> – Update part of the resource</li>
+    <li><code>DELETE</code> – Remove resource</li>
+  </ul>
+
+  <h2>2. Use Meaningful Resource URIs</h2>
+  <ul>
+    <li>Use nouns, not verbs: <code>/users</code> ✅ instead of <code>/getUsers</code> ❌</li>
+    <li>Use plural forms: <code>/products</code>, <code>/orders</code></li>
+    <li>Nest logically: <code>/users/1/orders</code></li>
+  </ul>
+
+  <h2>3. Return Appropriate HTTP Status Codes</h2>
+  <ul>
+    <li><code>200 OK</code> – Success</li>
+    <li><code>201 Created</code> – Resource created</li>
+    <li><code>204 No Content</code> – Deleted successfully</li>
+    <li><code>400 Bad Request</code> – Invalid input</li>
+    <li><code>401 Unauthorized</code> – Authentication needed</li>
+    <li><code>403 Forbidden</code> – Access denied</li>
+    <li><code>404 Not Found</code> – Resource not found</li>
+    <li><code>500 Internal Server Error</code> – Server issue</li>
+  </ul>
+
+  <h2>4. Support Pagination, Filtering, and Sorting</h2>
+  <pre>
+/users?page=1&size=10
+/products?category=mobile&sort=price,desc
+  </pre>
+
+  <h2>5. Use JSON Format</h2>
+  <ul>
+    <li>Set header: <code>Content-Type: application/json</code></li>
+    <li>Easy to parse and human-readable</li>
+  </ul>
+
+  <h2>6. Keep APIs Stateless</h2>
+  <ul>
+    <li>Do not store client context on the server</li>
+    <li>Each request should be self-contained</li>
+  </ul>
+
+  <h2>7. Version Your APIs</h2>
+  <ul>
+    <li>URL-based: <code>/api/v1/users</code></li>
+    <li>Header-based: <code>Accept: application/vnd.api.v1+json</code></li>
+  </ul>
+
+  <h2>8. Provide Clear and Consistent Error Messages</h2>
+  <pre>
+{
+  "timestamp": "2025-07-07T13:00:00Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Invalid user ID",
+  "path": "/users/abc"
+}
+  </pre>
+
+  <h2>9. Secure Your APIs</h2>
+  <ul>
+    <li>Use HTTPS only</li>
+    <li>Implement JWT, OAuth2 for authentication</li>
+    <li>Apply role-based authorization</li>
+  </ul>
+
+  <h2>10. Document Your APIs</h2>
+  <ul>
+    <li>Use tools like Swagger/OpenAPI</li>
+    <li>Include request/response examples and auth details</li>
+  </ul>
+
+  <h2>11. Validate Inputs</h2>
+  <ul>
+    <li>Perform backend validation for required fields</li>
+    <li>Return descriptive validation errors</li>
+  </ul>
+
+  <h2>12. (Optional) Use HATEOAS</h2>
+  <pre>
+{
+  "id": 1,
+  "name": "John",
+  "links": [
+    { "rel": "self", "href": "/users/1" },
+    { "rel": "orders", "href": "/users/1/orders" }
+  ]
+}
+  </pre>
+
+  <h2>13. Avoid Overfetching/Underfetching</h2>
+  <ul>
+    <li>Use query like <code>?fields=id,name,email</code></li>
+    <li>Or consider GraphQL for more control</li>
+  </ul>
+
+  <h2>14. Logging and Monitoring</h2>
+  <ul>
+    <li>Log request/response and errors</li>
+    <li>Use tools like ELK stack, Prometheus, Grafana</li>
+  </ul>
+
+  <h2>15. Handle Rate Limiting</h2>
+  <ul>
+    <li>Prevent abuse using rate limits</li>
+    <li>Return headers like <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code></li>
+  </ul>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Optional.of() Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #34495e;
+    }
+    pre {
+      background-color: #eee;
+      padding: 15px;
+      border-left: 5px solid #3498db;
+      overflow-x: auto;
+    }
+    .note {
+      background-color: #fff3cd;
+      border-left: 5px solid #ffcc00;
+      padding: 10px;
+      margin: 20px 0;
+    }
+    .error {
+      background-color: #f8d7da;
+      border-left: 5px solid #dc3545;
+      padding: 10px;
+      margin: 20px 0;
+    }
+    .success {
+      background-color: #d4edda;
+      border-left: 5px solid #28a745;
+      padding: 10px;
+      margin: 20px 0;
+    }
+    code {
+      color: #c7254e;
+      background-color: #f9f2f4;
+      padding: 2px 4px;
+      font-size: 90%;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java 8 <code>Optional.of()</code> Example</h1>
+
+  <h2>✅ What is Optional.of()?</h2>
+  <p><code>Optional.of()</code> is a static factory method in Java used to create an <code>Optional</code> instance containing a non-null value.</p>
+
+  <h2>🔹 Syntax:</h2>
+  <pre><code>Optional&lt;T&gt; optional = Optional.of(value);</code></pre>
+
+  <ul>
+    <li><strong>value</strong>: A non-null object to wrap.</li>
+    <li>If the value is <code>null</code>, it throws a <code>NullPointerException</code>.</li>
+  </ul>
+
+  <div class="note">
+    <strong>Note:</strong> Use <code>Optional.of()</code> only when you are sure the value is not null. Otherwise, use <code>Optional.ofNullable()</code>.
+  </div>
+
+  <h2>✅ Working Example:</h2>
+  <pre><code>import java.util.Optional;
+
+public class OptionalOfExample {
+    public static void main(String[] args) {
+        String name = "Alice";
+        Optional&lt;String&gt; optionalName = Optional.of(name);
+        System.out.println("Optional contains: " + optionalName.get()); // Alice
+    }
+}</code></pre>
+
+  <h2>❌ Example That Throws Exception:</h2>
+  <pre><code>Optional&lt;String&gt; optionalNull = Optional.of(null); // Throws NullPointerException!</code></pre>
+
+  <div class="error">
+    <strong>Error:</strong> Do not use <code>Optional.of()</code> with null values!
+  </div>
+
+  <h2>✅ Safer Alternative:</h2>
+  <pre><code>Optional&lt;String&gt; optional = Optional.ofNullable(null); // Safe: Returns Optional.empty()</code></pre>
+
+  <div class="success">
+    <strong>Use <code>Optional.ofNullable()</code> when the value might be null</strong>
+  </div>
+
+</body>
+</html>

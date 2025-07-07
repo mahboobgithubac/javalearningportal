@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Optional Class - Methods and Examples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    details {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      color: #2980b9;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 12px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: "Courier New", Courier, monospace;
+    }
+    button {
+      margin-bottom: 20px;
+      padding: 8px 12px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    p {
+      margin: 5px 0;
+    }
+    .desc {
+      background-color: #eef5ff;
+      padding: 10px;
+      border-left: 4px solid #3498db;
+      margin-bottom: 10px;
+    }
+  </style>
+  <script>
+    function expandAll() {
+      document.querySelectorAll("details").forEach(d => d.open = true);
+    }
+    function collapseAll() {
+      document.querySelectorAll("details").forEach(d => d.open = false);
+    }
+  </script>
+</head>
+<body>
+  <h1>Java 8 Optional Class - Methods and Examples</h1>
+  <p><strong>Optional</strong> is a container object which may or may not contain a non-null value. It helps avoid <code>NullPointerException</code> in a clean and readable way.</p>
+  <button onclick="expandAll()">Expand All</button>
+  <button onclick="collapseAll()">Collapse All</button>
+
+  <details>
+    <summary>1. of()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>Optional.of(value)</code><br>
+      <strong>Use:</strong> Returns an Optional with the specified non-null value. Throws <code>NullPointerException</code> if value is null.
+    </div>
+    <pre><code>Optional&lt;String&gt; name = Optional.of("Alice");
+System.out.println(name.isPresent()); // true
+System.out.println(name.get());       // Alice</code></pre>
+  </details>
+
+  <details>
+    <summary>2. empty()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>Optional.empty()</code><br>
+      <strong>Use:</strong> Returns an empty Optional instance.
+    </div>
+    <pre><code>Optional&lt;String&gt; empty = Optional.empty();
+System.out.println(empty.isPresent()); // false</code></pre>
+  </details>
+
+  <details>
+    <summary>3. ofNullable()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>Optional.ofNullable(value)</code><br>
+      <strong>Use:</strong> Returns Optional containing value if non-null, otherwise returns empty Optional.
+    </div>
+    <pre><code>String str = null;
+Optional&lt;String&gt; optional = Optional.ofNullable(str);
+System.out.println(optional.isPresent()); // false</code></pre>
+  </details>
+
+  <details>
+    <summary>4. isPresent()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>isPresent()</code><br>
+      <strong>Use:</strong> Returns true if a value is present, otherwise false.
+    </div>
+    <pre><code>Optional&lt;String&gt; name = Optional.of("Alice");
+System.out.println(name.isPresent()); // true</code></pre>
+  </details>
+
+  <details>
+    <summary>5. ifPresent()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>ifPresent(Consumer)</code><br>
+      <strong>Use:</strong> Executes the lambda expression if a value is present.
+    </div>
+    <pre><code>Optional&lt;String&gt; name = Optional.of("Bob");
+name.ifPresent(n -&gt; System.out.println("Hello, " + n)); // Hello, Bob</code></pre>
+  </details>
+
+  <details>
+    <summary>6. orElse()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>orElse(defaultValue)</code><br>
+      <strong>Use:</strong> Returns the value if present, otherwise returns the default value.
+    </div>
+    <pre><code>String value = Optional.ofNullable(null).orElse("Default");
+System.out.println(value); // Default</code></pre>
+  </details>
+
+  <details>
+    <summary>7. orElseGet()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>orElseGet(Supplier)</code><br>
+      <strong>Use:</strong> Returns the value if present, otherwise returns value from Supplier (lambda).
+    </div>
+    <pre><code>String value = Optional.ofNullable(null).orElseGet(() -&gt; "Generated");
+System.out.println(value); // Generated</code></pre>
+  </details>
+
+  <details>
+    <summary>8. orElseThrow()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>orElseThrow()</code> or <code>orElseThrow(Supplier)</code><br>
+      <strong>Use:</strong> Throws <code>NoSuchElementException</code> or custom exception if value not present.
+    </div>
+    <pre><code>Optional&lt;String&gt; opt = Optional.ofNullable(null);
+// Throws custom exception
+String value = opt.orElseThrow(() -&gt; new IllegalArgumentException("Value missing"));</code></pre>
+  </details>
+
+  <details>
+    <summary>9. filter()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>filter(Predicate)</code><br>
+      <strong>Use:</strong> If value matches predicate, returns same Optional; else returns empty.
+    </div>
+    <pre><code>Optional&lt;String&gt; name = Optional.of("Charlie");
+name.filter(n -&gt; n.startsWith("C"))
+    .ifPresent(n -&gt; System.out.println("Filtered: " + n)); // Filtered: Charlie</code></pre>
+  </details>
+
+  <details>
+    <summary>10. map()</summary>
+    <div class="desc">
+      <strong>Definition:</strong> <code>map(Function)</code><br>
+      <strong>Use:</strong> Applies function to value if present and returns new Optional.
+    </div>
+    <pre><code>Optional&lt;String&gt; name = Optional.of("David");
+Optional&lt;Integer&gt; length = name.map(String::length);
+System.out.println(length.get()); // 5</code></pre>
+  </details>
+
+  <details>
+    <summary>11. Complete Example - All Methods</summary>
+    <div class="desc">
+      Demonstrates all common methods in one example.
+    </div>
+    <pre><code>import java.util.Optional;
+
+public class OptionalExamples {
+    public static void main(String[] args) {
+        Optional&lt;String&gt; name = Optional.of("Alice");
+        System.out.println("Optional.of() =&gt; " + name.get());
+
+        Optional&lt;String&gt; empty = Optional.empty();
+        System.out.println("Optional.empty() is present? " + empty.isPresent());
+
+        String str = null;
+        Optional&lt;String&gt; nullable = Optional.ofNullable(str);
+        System.out.println("Optional.ofNullable(null) is present? " + nullable.isPresent());
+
+        System.out.println("Is name present? " + name.isPresent());
+
+        name.ifPresent(n -&gt; System.out.println("Hello, " + n));
+
+        String defaultValue = Optional.ofNullable(null).orElse("Default");
+        System.out.println("orElse result: " + defaultValue);
+
+        String generated = Optional.ofNullable(null).orElseGet(() -&gt; "Generated");
+        System.out.println("orElseGet result: " + generated);
+
+        try {
+            Optional&lt;String&gt; missing = Optional.ofNullable(null);
+            String value = missing.orElseThrow(() -&gt; new IllegalArgumentException("No value present"));
+        } catch (Exception e) {
+            System.out.println("orElseThrow exception: " + e.getMessage());
+        }
+
+        Optional&lt;String&gt; filtered = name.filter(n -&gt; n.startsWith("A"));
+        System.out.println("Filter starts with A: " + filtered.isPresent());
+
+        Optional&lt;Integer&gt; length = name.map(String::length);
+        System.out.println("Length of name: " + length.get());
+    }
+}</code></pre>
+  </details>
+
+</body>
+</html>

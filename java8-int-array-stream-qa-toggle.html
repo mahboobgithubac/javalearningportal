@@ -258,9 +258,80 @@ public class CommonElementsWithStreams {
       </ul>
     </div>
     </div>
-    </div>
+    
+	<div class="qa-item">
+	 <div class="question">15. Find Duplicates in an Integer Array</div>
+  <button  class="toggle-btn"  onclick="toggleAnswer('ans15')">Show Solution</button>
+  <div  class="answer" id="ans15">
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+public class FindDuplicates {
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 3, 2, 4, 1, 5, 6, 5};
+        Set&lt;Integer&gt; duplicates = findDuplicateElements(numbers);
+        System.out.println("Duplicate elements: " + duplicates); // Output: [1, 2, 5]
+    }
 
+    public static Set&lt;Integer&gt; findDuplicateElements(int[] array) {
+        Set&lt;Integer&gt; seen = new HashSet&lt;&gt;();
+        return Arrays.stream(array)
+                .boxed()
+                .filter(n -&gt; !seen.add(n))
+                .collect(Collectors.toSet());
+    }
+}
+  </div>
+  </div>
+  
+<div class="qa-item">
+ <div class="question">16. Find Frequency of Each Element in an Array</div>
+  <button  class="toggle-btn" onclick="toggleAnswer('a16')">Show Solution</button>
+  <div id="a16" class="answer">
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class FrequencyCounter {
+    public static void main(String[] args) {
+        int[] numbers = {1, 2, 2, 3, 1, 4, 2};
+        Map&lt;Integer, Long&gt; frequencyMap = Arrays.stream(numbers)
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        System.out.println(frequencyMap); // Output: {1=2, 2=3, 3=1, 4=1}
+    }
+}
+  </div>
+  </div>
+
+  <div class="qa-item">
+ <div class="question">17. Find Common Elements Between Two Arrays</div>
+  <button  class="toggle-btn" onclick="toggleAnswer('a17')">Show Solution</button>
+  <div id="a17" class="answer">
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class CommonElements {
+    public static void main(String[] args) {
+        int[] array1 = {1, 2, 3, 4, 5};
+        int[] array2 = {3, 5, 6, 7, 8};
+
+        Set&lt;Integer&gt; set2 = Arrays.stream(array2).boxed().collect(Collectors.toSet());
+
+        int[] commonElements = Arrays.stream(array1)
+                .filter(set2::contains)
+                .toArray();
+
+        System.out.println(Arrays.toString(commonElements)); // Output: [3, 5]
+    }
+}
+  </div>
+ </div>
+</div>
 
   </div>
 

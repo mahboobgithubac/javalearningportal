@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Functional Interface Example in Java 8</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 30px;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #eee;
+      padding: 10px;
+      border-left: 5px solid #3498db;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Functional Interface in Java 8</h1>
+
+  <h2>✅ What is a Functional Interface?</h2>
+  <p>
+    A functional interface is an interface that contains only <strong>one abstract method</strong>.
+    It can have default and static methods but only one method to be implemented.
+  </p>
+
+  <h2>✅ Java Code Example:</h2>
+  <pre><code>@FunctionalInterface
+interface Calculator {
+    int operation(int a, int b);
+}
+
+public class FunctionalInterfaceExample {
+    public static void main(String[] args) {
+        Calculator add = (a, b) -&gt; a + b;
+        Calculator multiply = (a, b) -&gt; a * b;
+
+        System.out.println("Addition: " + add.operation(10, 5));
+        System.out.println("Multiplication: " + multiply.operation(10, 5));
+    }
+}</code></pre>
+
+  <h2>✅ Common Use Cases</h2>
+  <ul>
+    <li>Lambda expressions</li>
+    <li>Streams and collection operations</li>
+    <li>Functional programming in Java</li>
+  </ul>
+
+  <h2>✅ Examples of Built-in Functional Interfaces</h2>
+  <ul>
+    <li><code>Runnable</code> - void run()</li>
+    <li><code>Callable&lt;T&gt;</code> - T call()</li>
+    <li><code>Comparator&lt;T&gt;</code> - int compare(T o1, T o2)</li>
+    <li><code>Predicate&lt;T&gt;</code> - boolean test(T t)</li>
+    <li><code>Function&lt;T,R&gt;</code> - R apply(T t)</li>
+    <li><code>Consumer&lt;T&gt;</code> - void accept(T t)</li>
+  </ul>
+
+</body>
+</html>

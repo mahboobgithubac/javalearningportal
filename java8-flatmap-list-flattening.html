@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 flatMap Example - Flatten List of Lists</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 30px;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #34495e;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-left: 5px solid #3498db;
+      overflow-x: auto;
+    }
+    .output {
+      background: #e8ffe8;
+      padding: 10px;
+      border-left: 5px solid green;
+      font-family: monospace;
+    }
+    ul {
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java 8 <code>flatMap()</code> Example</h1>
+
+  <h2>✅ Scenario: Flatten a List of Lists</h2>
+  <p>Use <code>flatMap()</code> to convert a nested structure like <code>List&lt;List&lt;String&gt;&gt;</code> into a single flat <code>List&lt;String&gt;</code>.</p>
+
+  <h2>🧾 Java Code:</h2>
+  <pre><code>import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class FlatMapExample {
+  public static void main(String[] args) {
+    List&lt;List&lt;String&gt;&gt; namesNested = Arrays.asList(
+      Arrays.asList("John", "Jane"),
+      Arrays.asList("Tom", "Jerry"),
+      Arrays.asList("Alice", "Bob")
+    );
+
+    // Flattening the nested list using flatMap
+    List&lt;String&gt; flatList = namesNested.stream()
+      .flatMap(List::stream)
+      .collect(Collectors.toList());
+
+    System.out.println(flatList);
+  }
+}</code></pre>
+
+  <div class="output">
+    <strong>Output:</strong><br>
+    [John, Jane, Tom, Jerry, Alice, Bob]
+  </div>
+
+  <h2>🔍 How <code>flatMap()</code> Works:</h2>
+  <ul>
+    <li><code>namesNested.stream()</code> → Creates a stream of lists: <code>Stream&lt;List&lt;String&gt;&gt;</code></li>
+    <li><code>.flatMap(List::stream)</code> → Converts each sublist to a stream and flattens into one stream: <code>Stream&lt;String&gt;</code></li>
+    <li><code>.collect(Collectors.toList())</code> → Collects all elements into one flat <code>List&lt;String&gt;</code></li>
+  </ul>
+
+</body>
+</html>
