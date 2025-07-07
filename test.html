@@ -2,190 +2,267 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>React Interview Questions</title>
- <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 40px;
-    line-height: 1.6;
-    background-color: #f7f7f7;
-  }
+  <title>Java 8 Array Stream API – Problem Solving Interview Cheat Sheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 30px;
+    }
 
-  h1 {
-    color: #222;
-    font-size: 32px;
-    margin-bottom: 30px;
-  }
+    h1 {
+      text-align: center;
+      color: #222;
+    }
 
-  section {
-    background-color: #fff;
-    padding: 25px 30px;
-    margin-bottom: 25px;
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-  }
+    .qa-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-  h2 {
-    font-size: 20px;
-    color: #333;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
+    .qa-item {
+      background: #fff;
+      margin-bottom: 15px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-  h2::before {
-  /*  content: "✅";*/
-    font-size: 20px;
-  }
+    .question {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
 
-  /*section:nth-of-type(2) h2::before { content: "⚛️"; }
-  section:nth-of-type(3) h2::before { content: "🧠"; }
-  section:nth-of-type(4) h2::before { content: "🔁"; }
-  section:nth-of-type(5) h2::before { content: "🛠️"; }
-  section:nth-of-type(6) h2::before { content: "🎨"; }
-  section:nth-of-type(7) h2::before { content: "🔗"; }
-  section:nth-of-type(8) h2::before { content: "📤"; }
-  section:nth-of-type(9) h2::before { content: "🔄"; }
-  section:nth-of-type(10) h2::before { content: "🧪"; }
-  section:nth-of-type(11) h2::before { content: "💡"; }
-*/
-  ol {
-    padding-left: 50px;
-    margin: 0;
-    counter-reset: list-counter;
-  }
+    .toggle-btn, .toggle-all-btn {
+      background: #007bff;
+      color: #fff;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
 
-  li {
-    counter-increment: list-counter;
-    list-style: none;
-    position: relative;
-    margin-bottom: 12px;
-    padding-left: 25px;
-    font-weight: 500;
-    color: #222;
-  }
+    .toggle-btn:hover, .toggle-all-btn:hover {
+      background-color: #0056b3;
+    }
 
-  li::before {
-    content: counter(list-counter) ".";
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-weight: bold;
-    color: #555;
-  }
-</style>
+    .answer {
+      display: none;
+      background: #f0f0f0;
+      padding: 10px;
+      border-left: 4px solid #007bff;
+      font-family: Consolas, monospace;
+      white-space: pre;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+.right {
+  text-align: right;
+}
+    .center {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+	 .section {
+      margin-bottom: 30px;
+    }
+	 .content {
+      display: none;
+      background-color: #e8e8e8;
+      padding: 20px;
+      border-radius: 5px;
+    }
+  </style>
+  <script>
+    function toggleAnswer(id) {
+      const ans = document.getElementById(id);
+      ans.style.display = ans.style.display === "block" ? "none" : "block";
+    }
 
+    function toggleAllAnswers() {
+      const answers = document.querySelectorAll('.answer');
+      const btn = document.getElementById('toggleAllBtn');
+      const showAll = btn.dataset.state !== 'shown';
+
+      answers.forEach(ans => {
+        ans.style.display = showAll ? 'block' : 'none';
+      });
+
+      btn.textContent = showAll ? 'Hide All Solutions' : 'Show All Solutions';
+      btn.dataset.state = showAll ? 'shown' : 'hidden';
+    }
+  </script>
 </head>
 <body>
 
-  <h1>React Interview Questions</h1>
+  <h1>Java 8 Array Stream API – Problem Solving Interview Cheat Sheet</h1>
 
-  <ol>
-    <section>
-      <h2>✅ Basic React Interview Questions</h2>
-      <li>What is React?</li>
-      <li>What are the key features of React?</li>
-      <li>What is JSX?</li>
-      <li>What is the Virtual DOM and how does it work?</li>
-      <li>How is React different from Angular or Vue?</li>
-      <li>What is the difference between a functional component and a class component?</li>
-      <li>What are props in React?</li>
-      <li>What is state in React?</li>
-      <li>How do you handle events in React?</li>
-      <li>What are controlled and uncontrolled components?</li>
-    </section>
+  <div class="right">
+    <button class="toggle-all-btn" id="toggleAllBtn" onclick="toggleAllAnswers()" data-state="hidden">
+      Show All Solutions
+    </button>
+  </div>
 
-    <section>
-      <h2>⚛️ React Component Lifecycle</h2>
-      <li>What are the different phases of a component lifecycle?</li>
-      <li>Explain <code>componentDidMount()</code> and its use.</li>
-      <li>What is the use of <code>shouldComponentUpdate()</code>?</li>
-      <li>How do you use <code>useEffect()</code> hook to replace lifecycle methods?</li>
-    </section>
+  <div class="qa-container">
 
-    <section>
-      <h2>🧠 React Hooks</h2>
-      <li>What are React Hooks?</li>
-      <li>What is the difference between <code>useState()</code> and <code>useEffect()</code>?</li>
-      <li>How does <code>useContext()</code> work?</li>
-      <li>What is <code>useRef()</code> and how is it used?</li>
-      <li>What is <code>useMemo()</code> and why is it useful?</li>
-      <li>What is <code>useCallback()</code> and when should you use it?</li>
-    </section>
+    <!-- Questions 1 to 13 (as before) -->
+    <!-- For brevity, only one shown here – repeat others similarly -->
 
-    <section>
-      <h2>🔁 State Management</h2>
-      <li>How is state managed in React?</li>
-      <li>What is Redux and how does it integrate with React?</li>
-      <li>What is the difference between Context API and Redux?</li>
-      <li>Explain the flow of data in Redux (actions, reducers, store).</li>
-      <li>What is a selector in Redux?</li>
-    </section>
+    <div class="qa-item">
+      <div class="question">1. Find the Maximum Number</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a1')">Show Solution</button>
+      <div class="answer" id="a1">int max = Arrays.stream(arr).max().orElseThrow();</div>
+    </div>
 
-    <section>
-      <h2>🛠️ Performance Optimization</h2>
-      <li>How can you optimize performance in a React app?</li>
-      <li>What is React.memo()?</li>
-      <li>How does key prop help in performance?</li>
-      <li>What is lazy loading in React?</li>
-      <li>How do you prevent unnecessary re-renders?</li>
-    </section>
+    <!-- Repeat all remaining questions here, same as before -->
+    <!-- IDs: a2, a3, ... a13 -->
+	
+	  <div class="qa-item">
+      <div class="question">2. Find the Minimum Number</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a2')">Show Solution</button>
+      <div class="answer" id="a2">int min = Arrays.stream(arr).min().orElseThrow();</div>
+    </div>
 
-    <section>
-      <h2>🎨 Styling in React</h2>
-      <li>What are different ways to style React components?</li>
-      <li>What is styled-components?</li>
-      <li>How does CSS Modules differ from traditional CSS?</li>
-      <li>How to use conditional styling in React?</li>
-    </section>
+    <div class="qa-item">
+      <div class="question">3. Calculate the Sum</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a3')">Show Solution</button>
+      <div class="answer" id="a3">int sum = Arrays.stream(arr).sum();</div>
+    </div>
 
-    <section>
-      <h2>🔗 Routing</h2>
-      <li>What is React Router?</li>
-      <li>What are the differences between &lt;Link&gt; and &lt;a&gt; tag?</li>
-      <li>How do you implement nested routing in React Router?</li>
-      <li>What is the use of <code>useParams()</code> and <code>useNavigate()</code> in React Router v6?</li>
-    </section>
+    <div class="qa-item">
+      <div class="question">4. Calculate the Average</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a4')">Show Solution</button>
+      <div class="answer" id="a4">double average = Arrays.stream(arr).average().orElse(0.0);</div>
+    </div>
 
-    <section>
-      <h2>📤 Forms and Validation</h2>
-      <li>How do you handle forms in React?</li>
-      <li>How do you validate forms in React?</li>
-      <li>What is Formik?</li>
-      <li>How do you implement dynamic form fields?</li>
-    </section>
+    <div class="qa-item">
+      <div class="question">5. Count Even Numbers</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a5')">Show Solution</button>
+      <div class="answer" id="a5">long evenCount = Arrays.stream(arr).filter(n -> n % 2 == 0).count();</div>
+    </div>
 
-    <section>
-      <h2>🔄 API Integration</h2>
-      <li>How do you make API calls in React?</li>
-      <li>What is the role of <code>useEffect()</code> in data fetching?</li>
-      <li>How do you handle loading and error states in React?</li>
-      <li>What is Axios and how is it used in React?</li>
-    </section>
+	<div class="qa-item">
+      <div class="question">6. Get a List of Squares</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a6')">Show Solution</button>
+      <div class="answer" id="a6">List&lt;Integer&gt; squares = Arrays.stream(arr)
+    .map(n -&gt; n * n)
+    .boxed()
+    .collect(Collectors.toList());</div>
+    </div>
 
-    <section>
-      <h2>🧪 Testing</h2>
-      <li>What is Jest and how is it used in React?</li>
-      <li>What is React Testing Library?</li>
-      <li>What is the difference between unit test and integration test?</li>
-      <li>How do you test hooks and components?</li>
-    </section>
+    <div class="qa-item">
+      <div class="question">7. Filter Numbers Greater Than 10</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a7')">Show Solution</button>
+      <div class="answer" id="a7">List&lt;Integer&gt; result = Arrays.stream(arr)
+    .filter(n -&gt; n &gt; 10)
+    .boxed()
+    .collect(Collectors.toList());</div>
+    </div>
 
-    <section>
-      <h2>💡 Advanced Questions</h2>
-      <li>What is reconciliation in React?</li>
-      <li>What is the difference between React 17 and 18?</li>
-      <li>Explain concurrent rendering in React 18.</li>
-      <li>What are render props?</li>
-      <li>What are higher-order components (HOC)?</li>
-      <li>What is server-side rendering (SSR) and how is it done in React?</li>
-      <li>What is hydration in React?</li>
-      <li>What is the difference between static site generation (SSG) and SSR in Next.js?</li>
-      <li>What are portals in React?</li>
-      <li>What is error boundary and how do you implement it?</li>
-    </section>
-  </ol>
+    <div class="qa-item">
+      <div class="question">8. Remove Duplicates</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a8')">Show Solution</button>
+      <div class="answer" id="a8">int[] distinct = Arrays.stream(arr).distinct().toArray();</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">9. Sort in Ascending Order</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a9')">Show Solution</button>
+      <div class="answer" id="a9">int[] ascSorted = Arrays.stream(arr).sorted().toArray();</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">9. Sort in Descending Order</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a9b')">Show Solution</button>
+      <div class="answer" id="a9b">int[] descSorted = Arrays.stream(arr)
+    .boxed()
+    .sorted(Comparator.reverseOrder())
+    .mapToInt(Integer::intValue)
+    .toArray();</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">10. Find Second Largest Number</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a10')">Show Solution</button>
+      <div class="answer" id="a10">OptionalInt secondLargest = Arrays.stream(arr)
+    .distinct()
+    .boxed()
+    .sorted(Comparator.reverseOrder())
+    .skip(1)
+    .findFirst()
+    .mapToInt(Integer::intValue);</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">11. Check if Array Contains 42</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a11')">Show Solution</button>
+      <div class="answer" id="a11">boolean contains = Arrays.stream(arr).anyMatch(n -> n == 42);</div>
+    </div>
+
+    <div class="qa-item">
+      <div class="question">12. Convert int[] to List&lt;Integer&gt;</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a12')">Show Solution</button>
+      <div class="answer" id="a12">List&lt;Integer&gt; list = Arrays.stream(arr).boxed().collect(Collectors.toList());</div>
+    </div>
+
+
+    <div class="qa-item">
+      <div class="question">13. Merge Two Arrays</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a13')">Show Solution</button>
+      <div class="answer" id="a13">int[] merged = IntStream.concat(Arrays.stream(arr1),
+                 Arrays.stream(arr2)).toArray();</div>
+    </div>
+
+ <div class="qa-item">
+      <div class="question">14. Find Common Elements in Arrays Using Java 8 Stream API</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a14')">Show Solution</button>
+      <div class="answer" id="a14">
+	      <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class CommonElementsWithStreams {
+    public static void main(String[] args) {
+        int[] a = {2, 3, 4, 9};
+        int[] b = {2, 3, 7};
+        int[] c = {2, 3, 1};
+
+        // Convert arrays to Set for faster lookup
+        Set&lt;Integer&gt; setB = Arrays.stream(b).boxed().collect(Collectors.toSet());
+        Set&lt;Integer&gt; setC = Arrays.stream(c).boxed().collect(Collectors.toSet());
+
+        // Find common elements using stream
+        List&lt;Integer&gt; common = Arrays.stream(a)
+                .boxed()
+                .filter(setB::contains)
+                .filter(setC::contains)
+                .collect(Collectors.toList());
+
+        System.out.println("Common elements: " + common);
+    }
+}</code></pre>
+ 
+<div id="output" class="section">
+      <h2>✅ Output:</h2>
+      <pre><code>Common elements: [2, 3]</code></pre>
+    </div>
+	  </div>
+	  <div id="output" class="section">
+      <h2>✅ Explanation:</h2>
+      <ul>
+        <li><code>Arrays.stream(a).boxed()</code> – Converts <code>int[]</code> to <code>Stream&lt;Integer&gt;</code>.</li>
+        <li><code>.filter(setB::contains)</code> – Keeps only elements present in array <code>b</code>.</li>
+        <li><code>.filter(setC::contains)</code> – Keeps only elements present in array <code>c</code>.</li>
+        <li><code>collect(Collectors.toList())</code> – Collects the result into a <code>List&lt;Integer&gt;</code>.</li>
+      </ul>
+    </div>
+    </div>
+    </div>
+
+
+
+  </div>
 
 </body>
 </html>

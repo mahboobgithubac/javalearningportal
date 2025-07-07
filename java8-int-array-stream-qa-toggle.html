@@ -65,6 +65,15 @@
       text-align: center;
       margin-bottom: 30px;
     }
+	 .section {
+      margin-bottom: 30px;
+    }
+	 .content {
+      display: none;
+      background-color: #e8e8e8;
+      padding: 20px;
+      border-radius: 5px;
+    }
   </style>
   <script>
     function toggleAnswer(id) {
@@ -205,6 +214,53 @@
       <div class="answer" id="a13">int[] merged = IntStream.concat(Arrays.stream(arr1),
                  Arrays.stream(arr2)).toArray();</div>
     </div>
+
+ <div class="qa-item">
+      <div class="question">14. Find Common Elements in Arrays Using Java 8 Stream API</div>
+      <button class="toggle-btn" onclick="toggleAnswer('a14')">Show Solution</button>
+      <div class="answer" id="a14">
+	      <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class CommonElementsWithStreams {
+    public static void main(String[] args) {
+        int[] a = {2, 3, 4, 9};
+        int[] b = {2, 3, 7};
+        int[] c = {2, 3, 1};
+
+        // Convert arrays to Set for faster lookup
+        Set&lt;Integer&gt; setB = Arrays.stream(b).boxed().collect(Collectors.toSet());
+        Set&lt;Integer&gt; setC = Arrays.stream(c).boxed().collect(Collectors.toSet());
+
+        // Find common elements using stream
+        List&lt;Integer&gt; common = Arrays.stream(a)
+                .boxed()
+                .filter(setB::contains)
+                .filter(setC::contains)
+                .collect(Collectors.toList());
+
+        System.out.println("Common elements: " + common);
+    }
+}</code></pre>
+ 
+<div id="output" class="section">
+      <h2>✅ Output:</h2>
+      <pre><code>Common elements: [2, 3]</code></pre>
+    </div>
+	  </div>
+	  <div id="output" class="section">
+      <h2>✅ Explanation:</h2>
+      <ul>
+        <li><code>Arrays.stream(a).boxed()</code> – Converts <code>int[]</code> to <code>Stream&lt;Integer&gt;</code>.</li>
+        <li><code>.filter(setB::contains)</code> – Keeps only elements present in array <code>b</code>.</li>
+        <li><code>.filter(setC::contains)</code> – Keeps only elements present in array <code>c</code>.</li>
+        <li><code>collect(Collectors.toList())</code> – Collects the result into a <code>List&lt;Integer&gt;</code>.</li>
+      </ul>
+    </div>
+    </div>
+    </div>
+
+
 
   </div>
 
