@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CompletableFuture Java Examples - Explained</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 40px;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #eef;
+      padding: 15px;
+      border-left: 5px solid #3498db;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    ul {
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CompletableFuture Examples in Java 8</h1>
+  <p>
+    A complete and well-commented walkthrough of <code>CompletableFuture</code> features, behaviors, and best practices.
+    Ideal for hands-on learning and interview preparation.
+  </p>
+
+  <h2>📄 Java Code with Examples</h2>
+  <pre><code>import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+public class CompletableFutureExamples {
+    public static void main(String[] args) throws Exception {
+        simpleCompleteExample();
+        supplyAsyncExample();
+        thenApplyExample();
+        thenCombineExample();
+        exceptionallyExample();
+        thenApplyAsyncExample();
+        thenComposeExample();
+        applyToEitherExample();
+        cancelExample();
+        allOfExample();
+    }
+
+    // 1. Creating and completing a CompletableFuture manually
+    private static void simpleCompleteExample() throws InterruptedException, ExecutionException {
+        System.out.println("=== simpleCompleteExample ===");
+        CompletableFuture&lt;String&gt; future = new CompletableFuture&lt;&gt;();
+        new Thread(() -&gt; {
+            try {
+                Thread.sleep(1000);
+                future.complete("Hello from CompletableFuture!");
+            } catch (InterruptedException e) {
+                future.completeExceptionally(e);
+            }
+        }).start();
+        System.out.println(future.get());
+        System.out.println();
+    }
+
+    // 2. Using supplyAsync() for async computation
+    private static void supplyAsyncExample() throws Exception {
+        System.out.println("=== supplyAsyncExample ===");
+        CompletableFuture&lt;String&gt; future = CompletableFuture.supplyAsync(() -&gt; {
+            try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
+            return "Result from async task";
+        });
+        System.out.println(future.get());
+        System.out.println();
+    }
+
+    // 3. Chaining with thenApply()
+    private static void thenApplyExample() throws Exception {
+        System.out.println("=== thenApplyExample ===");
+        CompletableFuture&lt;Integer&gt; future = CompletableFuture.supplyAsync(() -&gt; 5)
+                .thenApply(n -&gt; n * 2);
+        System.out.println(future.get()); // 10
+        System.out.println();
+    }
+
+    // 4. Combining two futures with thenCombine()
+    private static void thenCombineExample() throws Exception {
+        System.out.println("=== thenCombineExample ===");
+        CompletableFuture&lt;Integer&gt; future1 = CompletableFuture.supplyAsync(() -&gt; 5);
+        CompletableFuture&lt;Integer&gt; future2 = CompletableFuture.supplyAsync(() -&gt; 10);
+        CompletableFuture&lt;Integer&gt; combined = future1.thenCombine(future2, Integer::sum);
+        System.out.println(combined.get()); // 15
+        System.out.println();
+    }
+
+    // 5. Handling exceptions with exceptionally()
+    private static void exceptionallyExample() throws Exception {
+        System.out.println("=== exceptionallyExample ===");
+        CompletableFuture&lt;Integer&gt; future = CompletableFuture.supplyAsync(() -&gt; {
+            throw new RuntimeException("Something went wrong");
+        }).exceptionally(ex -&gt; {
+            System.out.println("Exception caught: " + ex.getMessage());
+            return 0;
+        });
+        System.out.println(future.get()); // 0
+        System.out.println();
+    }
+
+    // 6. thenApplyAsync() runs in ForkJoinPool.commonPool()
+    private static void thenApplyAsyncExample() throws Exception {
+        System.out.println("=== thenApplyAsyncExample ===");
+        CompletableFuture&lt;Integer&gt; future = CompletableFuture.supplyAsync(() -&gt; 10)
+                .thenApplyAsync(n -&gt; {
+                    System.out.println("Running in thread: " + Thread.currentThread().getName());
+                    return n * 3;
+                });
+        System.out.println(future.get()); // 30
+        System.out.println();
+    }
+
+    // 7. thenCompose() flattens nested CompletableFuture
+    private static void thenComposeExample() throws Exception {
+        System.out.println("=== thenComposeExample ===");
+        CompletableFuture&lt;String&gt; cf = CompletableFuture.supplyAsync(() -&gt; "Hello");
+
+        CompletableFuture&lt;CompletableFuture&lt;String&gt;&gt; nested =
+            cf.thenApply(s -&gt; CompletableFuture.supplyAsync(() -&gt; s + " World"));
+
+        System.out.println("Nested future type: " + nested.get().get()); // Hello World
+
+        CompletableFuture&lt;String&gt; flat =
+            cf.thenCompose(s -&gt; CompletableFuture.supplyAsync(() -&gt; s + " World"));
+
+        System.out.println("Flat future result: " + flat.get()); // Hello World
+        System.out.println();
+    }
+
+    // 8. applyToEither() continues when either future completes
+    private static void applyToEitherExample() throws Exception {
+        System.out.println("=== applyToEitherExample ===");
+        CompletableFuture&lt;String&gt; cf1 = CompletableFuture.supplyAsync(() -&gt; {
+            sleep(1000);
+            return "Result1";
+        });
+        CompletableFuture&lt;String&gt; cf2 = CompletableFuture.supplyAsync(() -&gt; "Result2");
+        CompletableFuture&lt;String&gt; result = cf1.applyToEither(cf2, r -&gt; "Processed " + r);
+        System.out.println(result.get()); // Likely "Processed Result2"
+        System.out.println();
+    }
+
+    // 9. Cancel a CompletableFuture
+    private static void cancelExample() throws Exception {
+        System.out.println("=== cancelExample ===");
+        CompletableFuture&lt;String&gt; future = CompletableFuture.supplyAsync(() -&gt; {
+            sleep(2000);
+            return "Long task";
+        });
+        sleep(500);
+        boolean cancelled = future.cancel(true);
+        System.out.println("Cancelled: " + cancelled);
+        try {
+            System.out.println(future.get());
+        } catch (Exception ex) {
+            System.out.println("Exception on get(): " + ex.getMessage());
+        }
+        System.out.println();
+    }
+
+    // 10. CompletableFuture.allOf()
+    private static void allOfExample() throws Exception {
+        System.out.println("=== allOfExample ===");
+        CompletableFuture&lt;String&gt; cf1 = CompletableFuture.supplyAsync(() -&gt; "One");
+        CompletableFuture&lt;String&gt; cf2 = CompletableFuture.supplyAsync(() -&gt; "Two");
+        CompletableFuture&lt;String&gt; cf3 = CompletableFuture.supplyAsync(() -&gt; "Three");
+
+        CompletableFuture&lt;Void&gt; allFutures = CompletableFuture.allOf(cf1, cf2, cf3);
+        allFutures.get(); // Wait for all to complete
+
+        System.out.println(cf1.get());
+        System.out.println(cf2.get());
+        System.out.println(cf3.get());
+        System.out.println();
+    }
+
+    // Helper method to sleep safely
+    private static void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ignored) {}
+    }
+}</code></pre>
+
+  <h2>📌 How to Run</h2>
+  <ul>
+    <li>Save the code in a file named <code>CompletableFutureExamples.java</code></li>
+    <li>Compile using: <code>javac CompletableFutureExamples.java</code></li>
+    <li>Run using: <code>java CompletableFutureExamples</code></li>
+  </ul>
+
+  <h2>✅ What You Will Learn</h2>
+  <ul>
+    <li>Creating and completing a <code>CompletableFuture</code> manually</li>
+    <li>Asynchronous tasks with <code>supplyAsync()</code></li>
+    <li>Chaining tasks using <code>thenApply()</code> and <code>thenCompose()</code></li>
+    <li>Combining results with <code>thenCombine()</code></li>
+    <li>Exception handling with <code>exceptionally()</code></li>
+    <li>Async transformations using <code>thenApplyAsync()</code></li>
+    <li>Using <code>applyToEither()</code> to react to the faster future</li>
+    <li>Cancelling a future with <code>cancel()</code></li>
+    <li>Waiting for multiple futures with <code>allOf()</code></li>
+    <li>Thread behavior and best practices</li>
+  </ul>
+
+</body>
+</html>

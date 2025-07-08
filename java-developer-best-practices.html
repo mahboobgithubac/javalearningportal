@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Developer Best Practices</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #007acc;
+      overflow-x: auto;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    blockquote {
+      background: #eef;
+      border-left: 5px solid #88f;
+      padding: 10px 20px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Java Developer Best Practices</h1>
+
+  <h2>✅ 1. Follow Naming Conventions</h2>
+  <ul>
+    <li><strong>Classes</strong>: <code>PascalCase</code> → <code>StudentManager</code></li>
+    <li><strong>Methods/Variables</strong>: <code>camelCase</code> → <code>calculateSalary()</code>, <code>totalAmount</code></li>
+    <li><strong>Constants</strong>: <code>UPPER_SNAKE_CASE</code> → <code>MAX_SIZE</code></li>
+  </ul>
+
+  <h2>✅ 2. Write Clean and Readable Code</h2>
+  <ul>
+    <li>Use meaningful names</li>
+    <li>Keep methods short and focused</li>
+    <li>Avoid deep nesting, use early returns</li>
+  </ul>
+  <pre><code>// Bad
+public void process(User u) { ... }
+
+// Good
+public void processUser(User user) { ... }
+</code></pre>
+
+  <h2>✅ 3. Use OOP Principles</h2>
+  <ul>
+    <li>Encapsulation, Inheritance, Polymorphism</li>
+    <li>Prefer composition over inheritance</li>
+    <li>Use private fields and public getters/setters</li>
+  </ul>
+
+  <h2>✅ 4. Leverage Java 8+ Features</h2>
+  <pre><code>List&lt;String&gt; names = users.stream()
+    .map(User::getName)
+    .collect(Collectors.toList());
+</code></pre>
+
+  <h2>✅ 5. Exception Handling Best Practices</h2>
+  <ul>
+    <li>Catch specific exceptions</li>
+    <li>Don’t use empty catch blocks</li>
+    <li>Log exceptions meaningfully</li>
+  </ul>
+  <pre><code>try {
+   // risky code
+} catch (IOException ex) {
+   logger.error("Failed to read file", ex);
+}</code></pre>
+
+  <h2>✅ 6. Use Design Patterns</h2>
+  <p>Use common patterns like <strong>Singleton, Factory, Builder, Strategy, Observer</strong>.</p>
+  <blockquote>💡 Use design patterns to make your code flexible and extensible.</blockquote>
+
+  <h2>✅ 7. Write Unit Tests</h2>
+  <ul>
+    <li>Use JUnit 5 and Mockito</li>
+    <li>Follow the Arrange-Act-Assert (AAA) pattern</li>
+  </ul>
+  <pre><code>@Test
+void testAdd() {
+    Calculator calc = new Calculator();
+    assertEquals(5, calc.add(2, 3));
+}</code></pre>
+
+  <h2>✅ 8. Follow SOLID Principles</h2>
+  <ul>
+    <li>S: Single Responsibility</li>
+    <li>O: Open/Closed</li>
+    <li>L: Liskov Substitution</li>
+    <li>I: Interface Segregation</li>
+    <li>D: Dependency Inversion</li>
+  </ul>
+
+  <h2>✅ 9. Avoid Hardcoding</h2>
+  <pre><code>// Bad
+if (status == 1) { ... }
+
+// Good
+if (status == Status.ACTIVE.getCode()) { ... }</code></pre>
+
+  <h2>✅ 10. Document the Code</h2>
+  <ul>
+    <li>Use JavaDoc for public APIs</li>
+    <li>Add comments for complex logic</li>
+  </ul>
+
+  <h2>✅ 11. Use Dependency Injection</h2>
+  <p>Use <code>@Autowired</code> or constructor injection in Spring for better testability and loose coupling.</p>
+
+  <h2>✅ 12. Adopt Code Reviews and Static Analysis</h2>
+  <ul>
+    <li>Use SonarQube, Checkstyle, PMD</li>
+    <li>Ensure readability and detect bugs early</li>
+  </ul>
+
+  <h2>✅ 13. Prefer Immutability</h2>
+  <ul>
+    <li>Use <code>final</code> wherever possible</li>
+    <li>Create immutable classes for DTOs</li>
+  </ul>
+
+  <h2>✅ 14. Avoid Memory Leaks</h2>
+  <ul>
+    <li>Use try-with-resources to close streams</li>
+    <li>Be careful with static and inner class references</li>
+  </ul>
+  <pre><code>try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
+    // process
+}</code></pre>
+
+  <h2>✅ 15. Structure Your Project Well</h2>
+  <ul>
+    <li>Use packages like <code>com.company.project.module</code></li>
+    <li>Organize by feature, not only by layer</li>
+  </ul>
+
+  <h2>🔚 Conclusion</h2>
+  <p>Clean, testable, and maintainable code is the key to being a professional Java developer. Following these best practices ensures long-term productivity and quality.</p>
+</body>
+</html>

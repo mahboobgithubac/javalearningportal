@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Twisted Java 8 Interview Questions & Answers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+    h2 {
+      color: #2980b9;
+      margin-top: 40px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .question {
+      margin-bottom: 15px;
+      background: #ffffff;
+      border-left: 5px solid #3498db;
+      padding: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .question strong {
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Twisted Java 8 Interview Questions with Brief Explanations</h1>
+
+  <h2>Streams & Lambdas</h2>
+
+  <div class="question"><strong>1. What happens if you reuse a Stream after a terminal operation?</strong><br>
+  Answer: Streams can only be consumed once. Reusing a stream after a terminal operation throws <code>IllegalStateException</code>.
+  </div>
+
+  <div class="question"><strong>2. Can you modify a collection while streaming it? What issues arise?</strong><br>
+  Answer: Modifying the source collection during a stream operation may cause <code>ConcurrentModificationException</code> or unpredictable behavior.
+  </div>
+
+  <div class="question"><strong>3. What’s the difference between map() and flatMap()? Give an example where map() fails but flatMap() works.</strong><br>
+  Answer: <code>map()</code> transforms elements; <code>flatMap()</code> flattens nested streams. For example, <code>List&lt;List&lt;Integer&gt;&gt;</code> needs <code>flatMap</code> to flatten nested lists.
+  </div>
+
+  <div class="question"><strong>4. Is it possible for a Stream pipeline to be parallel but still guarantee order?</strong><br>
+  Answer: Yes, operations like <code>forEachOrdered()</code> or <code>sorted()</code> maintain order in parallel streams, but may reduce performance.
+  </div>
+
+  <div class="question"><strong>5. How does Collectors.toMap() handle duplicate keys?</strong><br>
+  Answer: By default, it throws <code>IllegalStateException</code> on duplicates unless you provide a merge function.
+  </div>
+
+  <h2>Optional</h2>
+
+  <div class="question"><strong>6. What happens if you call get() on an empty Optional? How to avoid it?</strong><br>
+  Answer: Throws <code>NoSuchElementException</code>. Use <code>orElse()</code>, <code>orElseGet()</code>, or <code>orElseThrow()</code> to avoid.
+  </div>
+
+  <div class="question"><strong>7. Can Optional hold null?</strong><br>
+  Answer: No. <code>Optional.of(null)</code> throws <code>NullPointerException</code>. Use <code>Optional.ofNullable()</code> to handle nulls safely.
+  </div>
+
+  <div class="question"><strong>8. Is Optional Serializable?</strong><br>
+  Answer: No, <code>Optional</code> does not implement <code>Serializable</code>. It is not meant to be passed over the network or persisted.
+  </div>
+
+  <h2>CompletableFuture</h2>
+
+  <div class="question"><strong>9. What’s the difference between thenApply() and thenApplyAsync()?</strong><br>
+  Answer: <code>thenApply()</code> runs on the thread that completed the previous stage. <code>thenApplyAsync()</code> runs on the <code>ForkJoinPool.commonPool</code> or a custom executor.
+  </div>
+
+  <div class="question"><strong>10. Can a CompletableFuture be completed more than once?</strong><br>
+  Answer: No. Once completed, attempts to complete again return <code>false</code>.
+  </div>
+
+  <div class="question"><strong>11. How to combine results of multiple CompletableFutures and proceed only when all complete?</strong><br>
+  Answer: Use <code>CompletableFuture.allOf()</code>. It returns <code>CompletableFuture&lt;Void&gt;</code>. You must <code>join()</code> or <code>get()</code> each individual future to retrieve results.
+  </div>
+
+  <h2>Date and Time API</h2>
+
+  <div class="question"><strong>12. How to convert LocalDateTime to ZonedDateTime? What if zone info is missing?</strong><br>
+  Answer: Use <code>atZone(ZoneId)</code>. Without zone info, the time is assumed zone-less and adjusted to the provided zone.
+  </div>
+
+  <div class="question"><strong>13. What happens if you add 1 month to January 31?</strong><br>
+  Answer: It becomes February 28 or 29 (the last day of February), not March 3.
+  </div>
+
+  <div class="question"><strong>14. How to measure elapsed time with Java 8 API?</strong><br>
+  Answer: Use <code>Duration.between(Instant start, Instant end)</code> or <code>ChronoUnit</code> methods like <code>ChronoUnit.SECONDS.between()</code>.
+  </div>
+
+  <h2>Functional Interfaces & Lambdas</h2>
+
+  <div class="question"><strong>15. What’s the scope of <code>this</code> in a lambda vs anonymous inner class?</strong><br>
+  Answer: In lambdas, <code>this</code> refers to the enclosing class instance. In anonymous classes, <code>this</code> refers to the anonymous class instance.
+  </div>
+
+  <div class="question"><strong>16. Can you overload methods that differ only by lambda parameter types?</strong><br>
+  Answer: No. This leads to ambiguous method resolution and compilation error.
+  </div>
+
+  <div class="question"><strong>17. What happens if a lambda throws a checked exception?</strong><br>
+  Answer: The lambda must either handle the checked exception or declare it. Otherwise, it won’t compile.
+  </div>
+
+  <h2>Miscellaneous</h2>
+
+  <div class="question"><strong>18. What’s the difference between findFirst() and findAny() in streams?</strong><br>
+  Answer: <code>findFirst()</code> returns the first element respecting order. <code>findAny()</code> may return any element, often faster in parallel streams.
+  </div>
+
+  <div class="question"><strong>19. How does short-circuiting work in streams? Give an example.</strong><br>
+  Answer: Short-circuiting stops processing early in operations like <code>anyMatch()</code>, <code>allMatch()</code>, and <code>findFirst()</code>. Example: <code>stream.anyMatch(x -&gt; x &gt; 10)</code>.
+  </div>
+
+  <div class="question"><strong>20. Explain the diamond problem in interfaces with default methods in Java 8. How is it resolved?</strong><br>
+  Answer: If two interfaces have the same default method, the implementing class must override and resolve the conflict explicitly.
+  </div>
+
+</body>
+</html>

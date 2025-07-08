@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Memory Management Overview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    ul, li {
+      margin-left: 20px;
+    }
+    pre {
+      background: #eef;
+      padding: 15px;
+      border-left: 5px solid #3498db;
+      white-space: pre-wrap;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #2980b9;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java Memory Management Overview</h1>
+
+  <h2>1. Heap Memory</h2>
+  <ul>
+    <li>Used for dynamic memory allocation for Java objects and JRE classes.</li>
+    <li>Divided into:
+      <ul>
+        <li><strong>Young Generation</strong> (Eden + Survivor spaces): New objects.</li>
+        <li><strong>Old Generation</strong> (Tenured): Long-lived objects.</li>
+        <li><strong>Permanent Generation (Pre-Java 8)</strong>: Stores metadata (class/method info).</li>
+        <li><strong>Metaspace (Java 8+)</strong>: Replaces PermGen and uses native memory.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>2. Stack Memory</h2>
+  <ul>
+    <li>Stores method call frames, local variables, and references.</li>
+    <li>Managed in a LIFO (Last In, First Out) manner.</li>
+  </ul>
+
+  <h2>3. Metaspace (Java 8 and Later)</h2>
+  <ul>
+    <li>Stores class metadata like class definitions and method info.</li>
+    <li>Grows dynamically using native memory (not part of heap).</li>
+    <li>Controlled using:
+      <ul>
+        <li><code>-XX:MetaspaceSize</code></li>
+        <li><code>-XX:MaxMetaspaceSize</code></li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>🔧 Java 8-Specific Memory Management Enhancements</h2>
+  <table>
+    <tr>
+      <th>Feature/Change</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>Metaspace (replaces PermGen)</td>
+      <td>No more OutOfMemoryError: PermGen errors; dynamically grows with native memory.</td>
+    </tr>
+    <tr>
+      <td>Lambda expressions</td>
+      <td>Compiled into private static methods or inner classes; efficient via <code>invokedynamic</code>.</td>
+    </tr>
+    <tr>
+      <td>Streams</td>
+      <td>Lazy evaluation reduces memory footprint; avoids intermediate object creation.</td>
+    </tr>
+    <tr>
+      <td>Optional&lt;T&gt;</td>
+      <td>Helps avoid <code>null</code>, but excessive usage can create extra objects.</td>
+    </tr>
+    <tr>
+      <td>Garbage Collector (GC)</td>
+      <td>Supports multiple GC algorithms including G1 GC for better pause-time control.</td>
+    </tr>
+  </table>
+
+  <h2>🧠 JVM Garbage Collectors in Java 8</h2>
+  <table>
+    <tr>
+      <th>Collector</th>
+      <th>Best For</th>
+      <th>Flag</th>
+    </tr>
+    <tr>
+      <td>Serial GC</td>
+      <td>Small applications</td>
+      <td><code>-XX:+UseSerialGC</code></td>
+    </tr>
+    <tr>
+      <td>Parallel GC</td>
+      <td>Throughput-oriented applications</td>
+      <td><code>-XX:+UseParallelGC</code></td>
+    </tr>
+    <tr>
+      <td>CMS GC</td>
+      <td>Low-latency applications</td>
+      <td><code>-XX:+UseConcMarkSweepGC</code></td>
+    </tr>
+    <tr>
+      <td>G1 GC</td>
+      <td>Large heaps and predictable pause times</td>
+      <td><code>-XX:+UseG1GC</code></td>
+    </tr>
+  </table>
+
+  <h2>🧪 JVM Tuning Examples</h2>
+  <pre>
+# Set initial and max heap size
+-Xms512m -Xmx2048m
+
+# Configure Metaspace
+-XX:MetaspaceSize=256m
+-XX:MaxMetaspaceSize=512m
+
+# Use G1 GC
+-XX:+UseG1GC
+  </pre>
+
+  <h2>🛠 Tools for Memory Monitoring</h2>
+  <ul>
+    <li><strong>jconsole</strong> – JMX-compliant monitoring tool</li>
+    <li><strong>jvisualvm</strong> – Visual monitoring of memory, threads, GC</li>
+    <li><strong>Java Mission Control (JMC)</strong> – Advanced profiling and diagnostics</li>
+    <li><strong>GC Logs</strong> – Enable with <code>-Xloggc:&lt;file&gt;</code></li>
+  </ul>
+
+</body>
+</html>

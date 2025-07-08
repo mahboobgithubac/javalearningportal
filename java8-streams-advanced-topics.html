@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Streams Advanced Topics in Java 8 – FlatMap, Infinite Streams, Primitive Streams, Custom Collectors</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      padding: 40px;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #eef;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Streams Advanced Topics in Java 8</h1>
+  <p>Java 8 introduced the Streams API, making it easier to perform functional-style operations on collections. Beyond basic filtering and mapping, Java Streams also support powerful advanced operations that can greatly simplify data processing.</p>
+
+  <div class="section">
+    <h2>1. flatMap()</h2>
+    <p>The <code>flatMap()</code> function is used to flatten nested structures (like List of Lists) into a single stream. It's useful when each element produces multiple values to be combined into a single stream.</p>
+    <pre><code>import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class FlatMapExample {
+    public static void main(String[] args) {
+        List&lt;List&lt;String&gt;&gt; names = Arrays.asList(
+            Arrays.asList("Alice", "Bob"),
+            Arrays.asList("Charlie", "David")
+        );
+
+        List&lt;String&gt; flatList = names.stream()
+                                     .flatMap(List::stream)
+                                     .collect(Collectors.toList());
+
+        System.out.println(flatList);
+    }
+}</code></pre>
+    <p><strong>Output:</strong> [Alice, Bob, Charlie, David]</p>
+  </div>
+
+  <div class="section">
+    <h2>2. Infinite Streams</h2>
+    <p>Streams can be infinite using <code>Stream.generate()</code> or <code>Stream.iterate()</code>. These are useful for simulations, lazy evaluation, and generating sequences.</p>
+    <pre><code>import java.util.stream.Stream;
+
+public class InfiniteStreamExample {
+    public static void main(String[] args) {
+        Stream.iterate(0, n -&gt; n + 2)
+              .limit(10)
+              .forEach(System.out::println);
+    }
+}</code></pre>
+    <p><strong>Output:</strong> First 10 even numbers starting from 0.</p>
+  </div>
+
+  <div class="section">
+    <h2>3. Primitive Streams: IntStream, LongStream, DoubleStream</h2>
+    <p>Java provides special streams for primitive data types to avoid boxing overhead: <code>IntStream</code>, <code>LongStream</code>, and <code>DoubleStream</code>.</p>
+    <pre><code>import java.util.stream.IntStream;
+
+public class PrimitiveStreamExample {
+    public static void main(String[] args) {
+        int sum = IntStream.range(1, 6).sum();
+        System.out.println("Sum: " + sum);
+    }
+}</code></pre>
+    <p><strong>Output:</strong> Sum: 15</p>
+  </div>
+
+  <div class="section">
+    <h2>4. Custom Collectors</h2>
+    <p>Java allows defining custom collectors using the <code>Collector</code> interface or via <code>Collector.of()</code>.</p>
+    <pre><code>import java.util.*;
+import java.util.stream.*;
+
+public class CustomCollectorExample {
+    public static void main(String[] args) {
+        List&lt;String&gt; words = Arrays.asList("Java", "is", "awesome");
+
+        String joined = words.stream().collect(
+            Collector.of(
+                StringBuilder::new,
+                (sb, word) -&gt; sb.append(word).append(" "),
+                StringBuilder::append,
+                StringBuilder::toString
+            )
+        );
+
+        System.out.println(joined.trim());
+    }
+}</code></pre>
+    <p><strong>Output:</strong> Java is awesome</p>
+  </div>
+
+  <div class="section">
+    <h2>Conclusion</h2>
+    <p>Java 8’s Stream API goes far beyond simple forEach or map operations. With <code>flatMap()</code>, primitive streams, infinite stream generation, and custom collectors, you can write expressive, efficient, and clean functional-style code.</p>
+    <p>These advanced techniques are especially useful in real-world enterprise applications involving data transformation, aggregation, and processing large or dynamic data sources.</p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Features - Topic List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 30px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    h2 {
+      color: #2980b9;
+      margin-top: 30px;
+    }
+    ul {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      list-style-type: square;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Java 8 Features - Topic List</h1>
+
+  <h2>1. Lambda Expressions</h2>
+  <ul>
+    <li>Syntax and usage</li>
+    <li>Functional interface with lambda</li>
+    <li>Lambda with collections and streams</li>
+    <li>Variable scope in lambda</li>
+    <li>Method references (:: operator)</li>
+  </ul>
+
+  <h2>2. Functional Interfaces</h2>
+  <ul>
+    <li>@FunctionalInterface annotation</li>
+    <li>Built-in functional interfaces: Predicate, Function, Consumer, Supplier</li>
+    <li>Other interfaces: BiFunction, BiConsumer, UnaryOperator, etc.</li>
+    <li>Custom functional interfaces</li>
+  </ul>
+
+  <h2>3. Streams API</h2>
+  <ul>
+    <li>Stream creation</li>
+    <li>Intermediate operations: filter(), map(), sorted(), distinct()</li>
+    <li>Terminal operations: collect(), forEach(), reduce(), count()</li>
+    <li>Stream pipelines</li>
+    <li>Parallel streams</li>
+    <li>Stream vs Collection</li>
+  </ul>
+
+  <h2>4. Collectors API</h2>
+  <ul>
+    <li>Collectors.toList(), toSet(), toMap()</li>
+    <li>joining(), groupingBy(), partitioningBy()</li>
+    <li>summarizingInt(), counting(), mapping()</li>
+  </ul>
+
+  <h2>5. Default and Static Methods in Interfaces</h2>
+  <ul>
+    <li>Syntax and use cases</li>
+    <li>Resolving method conflicts in multiple interfaces</li>
+    <li>Calling default methods via Interface.super.method()</li>
+  </ul>
+
+  <h2>6. Optional Class</h2>
+  <ul>
+    <li>Optional.of(), Optional.ofNullable(), Optional.empty()</li>
+    <li>isPresent(), get(), ifPresent()</li>
+    <li>orElse(), orElseGet(), orElseThrow()</li>
+    <li>Avoiding NullPointerException</li>
+  </ul>
+
+  <h2>7. New Date and Time API (java.time)</h2>
+  <ul>
+    <li>LocalDate, LocalTime, LocalDateTime</li>
+    <li>Period, Duration, ChronoUnit</li>
+    <li>Formatting and parsing (DateTimeFormatter)</li>
+    <li>Time zones (ZonedDateTime)</li>
+    <li>Comparison and manipulation</li>
+  </ul>
+
+  <h2>8. Method References</h2>
+  <ul>
+    <li>Static method reference: ClassName::staticMethod</li>
+    <li>Instance method reference: object::instanceMethod</li>
+    <li>Constructor reference: ClassName::new</li>
+  </ul>
+
+  <h2>9. Streams Advanced Topics</h2>
+  <ul>
+    <li>FlatMap</li>
+    <li>Infinite streams</li>
+    <li>Custom collectors</li>
+    <li>Primitive streams: IntStream, LongStream, DoubleStream</li>
+  </ul>
+
+  <h2>10. Nashorn JavaScript Engine</h2>
+  <ul>
+    <li>Evaluating JavaScript in Java</li>
+    <li>Integration use cases</li>
+    <li>Note: Deprecated in Java 15</li>
+  </ul>
+
+  <h2>11. New APIs and Enhancements</h2>
+  <ul>
+    <li>StringJoiner</li>
+    <li>Base64 encoding/decoding</li>
+    <li>Arrays.parallelSort()</li>
+    <li>Performance improvements in collections</li>
+  </ul>
+
+  <h2>12. Concurrency Enhancements</h2>
+  <ul>
+    <li>CompletableFuture and asynchronous programming</li>
+    <li>Lambda-friendly concurrency utilities</li>
+    <li>Parallel streams vs ForkJoinPool</li>
+  </ul>
+
+  <h2>13. Type Annotations and Repeating Annotations</h2>
+  <ul>
+    <li>@Target, @Retention, @Repeatable</li>
+    <li>Enhanced annotations for better code analysis</li>
+  </ul>
+
+  <h2>14. Miscellaneous Improvements</h2>
+  <ul>
+    <li>Type inference improvements (e.g., in generics)</li>
+    <li>New default methods in existing interfaces (e.g., Iterable, Comparator)</li>
+    <li>Removal of PermGen space</li>
+  </ul>
+</body>
+</html>

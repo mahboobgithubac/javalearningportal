@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Stream API with Examples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 40px;
+      color: #333;
+      line-height: 1.7;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #eef;
+      padding: 15px;
+      border-left: 4px solid #3498db;
+      white-space: pre-wrap;
+      border-radius: 5px;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java 8 Stream API with Examples</h1>
+
+  <p>The Java 8 Stream API is a powerful feature for processing sequences of elements in a functional style. It helps you write concise, expressive, and readable code for operations like filtering, mapping, reducing, collecting, and more.</p>
+
+  <h2>1. What is a Stream?</h2>
+  <ul>
+    <li>A Stream is not a data structure. It does not store elements.</li>
+    <li>It processes elements from a source (like a collection, array, or I/O channel).</li>
+    <li>Operations are either <strong>intermediate</strong> (return another stream) or <strong>terminal</strong> (produce a result or side-effect).</li>
+  </ul>
+
+  <h2>2. Stream Pipeline Structure</h2>
+  <p>A Stream pipeline consists of:</p>
+  <ul>
+    <li><strong>Source:</strong> A data source (e.g., List, Set).</li>
+    <li><strong>Intermediate Operations:</strong> Transformations (e.g., map, filter).</li>
+    <li><strong>Terminal Operation:</strong> Triggers execution (e.g., collect, forEach).</li>
+  </ul>
+
+  <h3>📌 Basic Example:</h3>
+  <pre>
+import java.util.Arrays;
+import java.util.List;
+
+public class StreamExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("John", "Jane", "Jack", "Jill");
+
+        names.stream()
+             .filter(name -> name.startsWith("J"))
+             .map(String::toUpperCase)
+             .forEach(System.out::println);
+    }
+}
+  </pre>
+
+  <h2>3. Common Intermediate Operations</h2>
+  <ul>
+    <li><strong>filter()</strong> – Filters elements based on a condition.</li>
+    <li><strong>map()</strong> – Transforms each element.</li>
+    <li><strong>sorted()</strong> – Sorts elements.</li>
+    <li><strong>distinct()</strong> – Removes duplicates.</li>
+    <li><strong>limit() / skip()</strong> – Limits or skips elements.</li>
+  </ul>
+
+  <h3>📌 Filtering & Mapping Example:</h3>
+  <pre>
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+
+List<Integer> result = numbers.stream()
+    .filter(n -> n % 2 == 0)
+    .map(n -> n * n)
+    .collect(Collectors.toList());
+
+System.out.println(result); // Output: [4, 16, 36]
+  </pre>
+
+  <h2>4. Common Terminal Operations</h2>
+  <ul>
+    <li><strong>collect()</strong> – Collects results into a list, set, map, etc.</li>
+    <li><strong>forEach()</strong> – Iterates through elements.</li>
+    <li><strong>count()</strong> – Returns the number of elements.</li>
+    <li><strong>reduce()</strong> – Reduces elements to a single value.</li>
+    <li><strong>anyMatch(), allMatch(), noneMatch()</strong> – Predicate-based evaluation.</li>
+  </ul>
+
+  <h3>📌 Reduce Example:</h3>
+  <pre>
+int sum = Arrays.asList(1, 2, 3, 4, 5)
+    .stream()
+    .reduce(0, Integer::sum);
+
+System.out.println(sum); // Output: 15
+  </pre>
+
+  <h2>5. Stream Collectors</h2>
+  <ul>
+    <li><code>Collectors.toList()</code> – Collects into a list.</li>
+    <li><code>Collectors.toSet()</code> – Collects into a set.</li>
+    <li><code>Collectors.joining(", ")</code> – Joins strings with delimiter.</li>
+    <li><code>Collectors.groupingBy()</code> – Groups by a field or function.</li>
+    <li><code>Collectors.partitioningBy()</code> – Partitions based on predicate.</li>
+  </ul>
+
+  <h3>📌 Joining Strings Example:</h3>
+  <pre>
+List<String> words = Arrays.asList("Java", "Stream", "API");
+
+String result = words.stream()
+    .collect(Collectors.joining(" "));
+
+System.out.println(result); // Output: Java Stream API
+  </pre>
+
+  <h2>6. Parallel Streams</h2>
+  <p>Streams can be processed in parallel for performance improvement in multi-core systems:</p>
+  <pre>
+int sum = IntStream.range(1, 1_000_000)
+    .parallel()
+    .sum();
+System.out.println(sum);
+  </pre>
+  <p>Note: Use parallel streams wisely—may not always improve performance.</p>
+
+  <h2>7. Important Points</h2>
+  <ul>
+    <li>Streams are <strong>lazy</strong>: Intermediate operations are not executed until a terminal operation is invoked.</li>
+    <li>Streams don’t modify the original data source.</li>
+    <li>You can’t reuse a stream after a terminal operation.</li>
+  </ul>
+
+  <h2>🧠 Best Practices</h2>
+  <ul>
+    <li>Use method references when possible for cleaner syntax (e.g., <code>String::toUpperCase</code>).</li>
+    <li>Avoid using <code>forEach()</code> for transformation—prefer <code>map()</code>.</li>
+    <li>Use <code>collect()</code> for result aggregation instead of building lists manually.</li>
+    <li>Benchmark before using <code>parallel()</code>.</li>
+  </ul>
+
+  <h2>🔚 Conclusion</h2>
+  <p>The Stream API in Java 8 is a game-changer for data processing. It promotes clean, readable, and functional-style code. Mastering Streams can significantly improve your Java skills and code efficiency.</p>
+
+</body>
+</html>

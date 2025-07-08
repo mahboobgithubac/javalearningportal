@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding Default and Static Methods in Java 8 Interfaces</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f9;
+      margin: 40px;
+      color: #333;
+      line-height: 1.7;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #eef;
+      padding: 15px;
+      border-left: 4px solid #3498db;
+      white-space: pre-wrap;
+      border-radius: 5px;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Understanding Default and Static Methods in Java 8 Interfaces</h1>
+
+  <p>Java 8 introduced a major enhancement to interfaces: the ability to define <strong>default</strong> and <strong>static</strong> methods. Prior to Java 8, interfaces could only declare abstract methods. This improvement enables more flexible and backward-compatible interface evolution.</p>
+
+  <h2>1. Why Default Methods?</h2>
+  <p>Default methods allow you to add new methods to interfaces without breaking the classes that already implement them. This solves the <strong>diamond problem</strong> of evolving APIs.</p>
+
+  <h3>📌 Syntax:</h3>
+  <pre>
+interface MyInterface {
+    default void sayHello() {
+        System.out.println("Hello from default method!");
+    }
+}
+  </pre>
+
+  <h3>🛠 Example:</h3>
+  <pre>
+interface Vehicle {
+    default void start() {
+        System.out.println("Vehicle is starting...");
+    }
+}
+
+class Car implements Vehicle {
+    // No need to override start(), inherits default implementation
+}
+
+public class TestDefault {
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.start();  // Output: Vehicle is starting...
+    }
+}
+  </pre>
+
+  <h2>2. What About Static Methods?</h2>
+  <p>Static methods in interfaces are like utility methods. They belong to the interface itself and can't be overridden by implementing classes.</p>
+
+  <h3>📌 Syntax:</h3>
+  <pre>
+interface MyUtils {
+    static int add(int a, int b) {
+        return a + b;
+    }
+}
+  </pre>
+
+  <h3>🛠 Example:</h3>
+  <pre>
+public class TestStatic {
+    public static void main(String[] args) {
+        int result = MyUtils.add(5, 3);
+        System.out.println("Sum: " + result);  // Output: Sum: 8
+    }
+}
+  </pre>
+
+  <h2>3. Key Differences</h2>
+  <ul>
+    <li><strong>Default methods</strong> can be inherited and overridden.</li>
+    <li><strong>Static methods</strong> cannot be inherited; must be called via interface name.</li>
+    <li>Both default and static methods can have method bodies in interfaces (unlike abstract methods).</li>
+  </ul>
+
+  <h2>4. Diamond Problem and Resolution</h2>
+  <p>If a class implements two interfaces with the same default method, Java forces the class to override the method and resolve the conflict.</p>
+
+  <pre>
+interface A {
+    default void show() { System.out.println("A"); }
+}
+interface B {
+    default void show() { System.out.println("B"); }
+}
+class C implements A, B {
+    public void show() {
+        A.super.show();  // or B.super.show()
+    }
+}
+  </pre>
+
+  <h2>5. Best Practices</h2>
+  <ul>
+    <li>Use default methods for backward compatibility.</li>
+    <li>Avoid complex logic in default methods—keep them simple.</li>
+    <li>Use static methods as utility methods (like helper functions).</li>
+    <li>Document clearly to avoid ambiguity in multi-interface implementations.</li>
+  </ul>
+
+  <h2>🔚 Conclusion</h2>
+  <p>Default and static methods have significantly enhanced Java’s interface capabilities. They provide flexibility and maintainability, especially for evolving APIs. Understanding when and how to use them effectively is essential for any Java developer.</p>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CompletableFuture in Java 8 with Examples & Interview Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    pre {
+      background-color: #eef;
+      padding: 10px;
+      border-left: 5px solid #3498db;
+      overflow-x: auto;
+    }
+    details {
+      margin-top: 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #toggle-button {
+      margin-bottom: 20px;
+      padding: 8px 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #toggle-button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CompletableFuture in Java 8</h1>
+  <p>
+    <strong>CompletableFuture</strong> is part of the <code>java.util.concurrent</code> package, providing a powerful framework for asynchronous programming. 
+    It allows you to write non-blocking, event-driven code by composing asynchronous tasks.
+  </p>
+
+  <h2>Basic Concepts</h2>
+  <ul>
+    <li>Represents a future result of an asynchronous computation.</li>
+    <li>Supports callbacks, chaining, and combining multiple futures.</li>
+    <li>Methods like <code>thenApply()</code>, <code>thenAccept()</code>, <code>thenCompose()</code>, and <code>thenCombine()</code> help build complex async flows.</li>
+  </ul>
+
+  <h2>Simple Examples</h2>
+
+  <button id="toggle-button">Expand All</button>
+
+  <details open>
+    <summary>1. Creating and Completing a CompletableFuture</summary>
+    <pre><code>import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureExample {
+    public static void main(String[] args) throws Exception {
+        CompletableFuture&lt;String&gt; future = new CompletableFuture&lt;&gt;();
+        // Simulate some async computation in a separate thread
+        new Thread(() -&gt; {
+            try {
+                Thread.sleep(1000);
+                future.complete("Hello from CompletableFuture!");
+            } catch (InterruptedException e) {
+                future.completeExceptionally(e);
+            }
+        }).start();
+        // Wait and get the result
+        System.out.println(future.get()); // Blocks until completion
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>2. Using supplyAsync() for Async Computation</summary>
+    <pre><code>import java.util.concurrent.CompletableFuture;
+
+public class SupplyAsyncExample {
+    public static void main(String[] args) throws Exception {
+        CompletableFuture&lt;String&gt; future = CompletableFuture.supplyAsync(() -&gt; {
+            try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
+            return "Result from async task";
+        });
+        System.out.println(future.get()); // Waits and prints the result
+    }
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>3. Chaining with thenApply()</summary>
+    <pre><code>CompletableFuture&lt;Integer&gt; future = CompletableFuture.supplyAsync(() -&gt; 5)
+    .thenApply(n -&gt; n * 2); // Multiply by 2
+
+System.out.println(future.get()); // Output: 10</code></pre>
+  </details>
+
+  <details>
+    <summary>4. Combining Two Futures with thenCombine()</summary>
+    <pre><code>CompletableFuture&lt;Integer&gt; future1 = CompletableFuture.supplyAsync(() -&gt; 5);
+CompletableFuture&lt;Integer&gt; future2 = CompletableFuture.supplyAsync(() -&gt; 10);
+CompletableFuture&lt;Integer&gt; combined = future1.thenCombine(future2, (a, b) -&gt; a + b);
+
+System.out.println(combined.get()); // Output: 15</code></pre>
+  </details>
+
+  <details>
+    <summary>5. Handling Exceptions with exceptionally()</summary>
+    <pre><code>CompletableFuture&lt;Integer&gt; future = CompletableFuture.supplyAsync(() -&gt; {
+    if (true) throw new RuntimeException("Something went wrong");
+    return 10;
+}).exceptionally(ex -&gt; {
+    System.out.println("Exception caught: " + ex.getMessage());
+    return 0;
+});
+
+System.out.println(future.get()); // Output: 0</code></pre>
+  </details>
+
+  <h2>Tricky Interview Questions and Answers</h2>
+
+  <details>
+    <summary><strong>Q1. What's the difference between thenApply() and thenCompose()?</strong></summary>
+    <p>
+      <strong>thenApply()</strong> is used when the callback returns a plain value.<br>
+      <strong>thenCompose()</strong> is used when the callback returns another CompletableFuture.
+    </p>
+    <pre><code>// thenApply example
+CompletableFuture&lt;CompletableFuture&lt;String&gt;&gt; nested = CompletableFuture
+    .supplyAsync(() -&gt; "Hello")
+    .thenApply(msg -&gt; CompletableFuture.supplyAsync(() -&gt; msg + " World"));
+
+// thenCompose example
+CompletableFuture&lt;String&gt; flat = CompletableFuture
+    .supplyAsync(() -&gt; "Hello")
+    .thenCompose(msg -&gt; CompletableFuture.supplyAsync(() -&gt; msg + " World"));</code></pre>
+  </details>
+
+  <details>
+    <summary><strong>Q2. How to run multiple CompletableFutures in parallel and wait for all?</strong></summary>
+    <p>Use <code>CompletableFuture.allOf(...)</code> to wait for all tasks to complete.</p>
+    <pre><code>CompletableFuture&lt;String&gt; f1 = CompletableFuture.supplyAsync(() -&gt; "Task 1");
+CompletableFuture&lt;String&gt; f2 = CompletableFuture.supplyAsync(() -&gt; "Task 2");
+
+CompletableFuture.allOf(f1, f2).join(); // Waits for both
+
+System.out.println(f1.get());
+System.out.println(f2.get());</code></pre>
+  </details>
+
+  <details>
+    <summary><strong>Q3. How is CompletableFuture different from Future?</strong></summary>
+    <ul>
+      <li><code>Future</code> is blocking, while <code>CompletableFuture</code> supports non-blocking operations.</li>
+      <li><code>CompletableFuture</code> supports chaining, combining, and handling exceptions more gracefully.</li>
+    </ul>
+  </details>
+  <h1>  <a href="completable-future-code-examples_Java_Learning.html">Java 8 completable Future code example     </a></h1>
+ <h1>  <a href="completableFuture_Tricky_Interview_Questions.html">Java 8 completable Future Tricky Interview Questions     </a></h1>
+  <script>
+    const button = document.getElementById('toggle-button');
+    let expanded = false;
+
+    button.addEventListener('click', () => {
+      const allDetails = document.querySelectorAll('details');
+      allDetails.forEach(detail => detail.open = !expanded);
+      expanded = !expanded;
+      button.textContent = expanded ? 'Collapse All' : 'Expand All';
+    });
+  </script>
+
+</body>
+</html>

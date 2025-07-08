@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tricky CompletableFuture Interview Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      margin-top: 40px;
+    }
+    .question {
+      background: #fff;
+      border-left: 5px solid #3498db;
+      padding: 10px 20px;
+      margin-bottom: 20px;
+    }
+    pre {
+      background: #eef;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Twisted / Tricky Interview Questions on CompletableFuture</h1>
+
+  <div class="question">
+    <strong>Q1. What happens if you call get() on a CompletableFuture that is never completed?</strong>
+    <p><strong>Answer:</strong> Calling <code>get()</code> will cause the thread to block indefinitely, potentially leading to a deadlock or hang, because <code>get()</code> waits for completion.</p>
+  </div>
+
+  <div class="question">
+    <strong>Q2. Can thenApply() run asynchronously? If yes, how?</strong>
+    <p><strong>Answer:</strong> By default, <code>thenApply()</code> runs in the same thread that completed the previous stage. To run it asynchronously, use <code>thenApplyAsync()</code>, which runs the function in ForkJoinPool’s common pool or a custom executor.</p>
+    <pre><code>future.thenApplyAsync(x -&gt; x * 2);</code></pre>
+  </div>
+
+  <div class="question">
+    <strong>Q3. Difference between thenCompose() and thenApply()?</strong>
+    <p><strong>Answer:</strong></p>
+    <ul>
+      <li><code>thenApply()</code> expects a function returning a value.</li>
+      <li><code>thenCompose()</code> expects a function returning a CompletableFuture.</li>
+    </ul>
+    <pre><code>CompletableFuture&lt;String&gt; cf = CompletableFuture.supplyAsync(() -&gt; "Hello");
+
+CompletableFuture&lt;CompletableFuture&lt;String&gt;&gt; nested = 
+    cf.thenApply(s -&gt; CompletableFuture.supplyAsync(() -&gt; s + " World"));
+
+CompletableFuture&lt;String&gt; flat = 
+    cf.thenCompose(s -&gt; CompletableFuture.supplyAsync(() -&gt; s + " World"));</code></pre>
+    <p><strong>Note:</strong> <code>thenCompose()</code> is preferred for chaining async tasks.</p>
+  </div>
+
+  <div class="question">
+    <strong>Q4. How can you combine two futures but proceed as soon as one completes?</strong>
+    <p><strong>Answer:</strong> Use <code>applyToEither()</code> or <code>acceptEither()</code>.</p>
+    <pre><code>CompletableFuture&lt;String&gt; cf1 = CompletableFuture.supplyAsync(() -&gt; {
+    sleep(1000); return "Result1";
+});
+CompletableFuture&lt;String&gt; cf2 = CompletableFuture.supplyAsync(() -&gt; "Result2");
+
+cf1.applyToEither(cf2, result -&gt; "Processed " + result)
+   .thenAccept(System.out::println);</code></pre>
+  </div>
+
+  <div class="question">
+    <strong>Q5. What thread executes the code inside thenApplyAsync() if no executor is provided?</strong>
+    <p><strong>Answer:</strong> It runs in the <code>ForkJoinPool.commonPool()</code>, a shared thread pool sized to the number of available CPU cores.</p>
+  </div>
+
+  <div class="question">
+    <strong>Q6. How to cancel a CompletableFuture?</strong>
+    <p><strong>Answer:</strong> Call <code>cancel(true)</code> on the future instance. It attempts to cancel the computation. However, cancellation depends on the task being responsive to interruption.</p>
+  </div>
+
+  <div class="question">
+    <strong>Bonus Q7. How does CompletableFuture.allOf() work? What does it return?</strong>
+    <p><strong>Answer:</strong></p>
+    <ul>
+      <li><code>allOf()</code> takes multiple futures and returns a new <code>CompletableFuture&lt;Void&gt;</code> that completes when all the given futures complete.</li>
+      <li>It doesn't combine results; you need to fetch individual results afterward.</li>
+    </ul>
+  </div>
+
+  <h2>Summary Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Description</th>
+        <th>Example Method</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Create async task</td>
+        <td>Run a task asynchronously</td>
+        <td><code>supplyAsync()</code></td>
+      </tr>
+      <tr>
+        <td>Chain tasks</td>
+        <td>Transform result when ready</td>
+        <td><code>thenApply()</code></td>
+      </tr>
+      <tr>
+        <td>Chain async tasks</td>
+        <td>Flatten nested futures</td>
+        <td><code>thenCompose()</code></td>
+      </tr>
+      <tr>
+        <td>Combine futures</td>
+        <td>Combine results of two futures</td>
+        <td><code>thenCombine()</code></td>
+      </tr>
+      <tr>
+        <td>Proceed on either</td>
+        <td>Continue when either future completes</td>
+        <td><code>applyToEither()</code></td>
+      </tr>
+      <tr>
+        <td>Handle exceptions</td>
+        <td>Recover or handle exceptions</td>
+        <td><code>exceptionally()</code></td>
+      </tr>
+      <tr>
+        <td>Wait for all futures</td>
+        <td>Wait for multiple futures to complete</td>
+        <td><code>allOf()</code></td>
+      </tr>
+      <tr>
+        <td>Wait for any future</td>
+        <td>Wait for any one future to complete</td>
+        <td><code>anyOf()</code></td>
+      </tr>
+      <tr>
+        <td>Cancel future</td>
+        <td>Attempt to cancel an ongoing computation</td>
+        <td><code>cancel()</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
