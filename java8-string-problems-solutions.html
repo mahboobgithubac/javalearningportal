@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 String Problem Solving Questions & Solutions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .question {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 15px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+    .toggle-btn, #toggle-all-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .answer {
+      display: none;
+      margin-top: 10px;
+      background: #ecf0f1;
+      padding: 10px;
+      border-left: 4px solid #2980b9;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Java 8 String Problem Solving Questions & Solutions</h1>
+<button id="toggle-all-btn" onclick="toggleAll()">Expand All</button>
+
+<script>
+  function toggleAnswer(button) {
+    const answerDiv = button.nextElementSibling;
+    answerDiv.style.display = answerDiv.style.display === "block" ? "none" : "block";
+  }
+
+  function toggleAll() {
+    const answers = document.querySelectorAll(".answer");
+    const btn = document.getElementById("toggle-all-btn");
+    const expand = btn.textContent === "Expand All";
+
+    answers.forEach(div => div.style.display = expand ? "block" : "none");
+    btn.textContent = expand ? "Collapse All" : "Expand All";
+  }
+</script>
+
+<!-- Questions Start -->
+<div class="question">
+  <strong>1. Count character frequency</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input1 = "banana";
+Map&lt;Character, Long&gt; freq = input1.chars()
+    .mapToObj(c -&gt; (char) c)
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+System.out.println("Char Frequency: " + freq);
+  </div>
+</div>
+
+<div class="question">
+  <strong>2. First non-repeating character</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input2 = "swiss";
+Character firstNonRepeat = input2.chars()
+    .mapToObj(c -&gt; (char) c)
+    .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
+    .entrySet().stream()
+    .filter(e -&gt; e.getValue() == 1)
+    .map(Map.Entry::getKey)
+    .findFirst().orElse(null);
+System.out.println("First non-repeating: " + firstNonRepeat);
+  </div>
+</div>
+
+<div class="question">
+  <strong>3. Reverse string</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input3 = "hello";
+String reversed = new StringBuilder(input3).reverse().toString();
+System.out.println("Reversed: " + reversed);
+  </div>
+</div>
+
+<div class="question">
+  <strong>4. Anagram check</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String a1 = "listen", a2 = "silent";
+boolean isAnagram = a1.length() == a2.length() &amp;&amp;
+    a1.chars().sorted().boxed().collect(Collectors.toList())
+    .equals(a2.chars().sorted().boxed().collect(Collectors.toList()));
+System.out.println("Anagram: " + isAnagram);
+  </div>
+</div>
+
+<div class="question">
+  <strong>5. Remove duplicate characters</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input5 = "programming";
+String noDupes = input5.chars().mapToObj(c -&gt; (char) c)
+    .distinct()
+    .map(String::valueOf)
+    .collect(Collectors.joining());
+System.out.println("Removed duplicates: " + noDupes);
+  </div>
+</div>
+
+<div class="question">
+  <strong>6. Most frequent character</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input6 = "aabbbbcc";
+Character mostFreq = input6.chars()
+    .mapToObj(c -&gt; (char) c)
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+    .entrySet().stream()
+    .max(Map.Entry.comparingByValue())
+    .get().getKey();
+System.out.println("Most frequent: " + mostFreq);
+  </div>
+</div>
+
+<div class="question">
+  <strong>7. Sort characters alphabetically</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input7 = "dcba";
+String sorted = input7.chars()
+    .sorted()
+    .mapToObj(c -&gt; String.valueOf((char) c))
+    .collect(Collectors.joining());
+System.out.println("Sorted: " + sorted);
+  </div>
+</div>
+
+<div class="question">
+  <strong>8. Count vowels in a string</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input8 = "education";
+long vowels = input8.toLowerCase().chars()
+    .filter(c -&gt; "aeiou".indexOf(c) &gt;= 0)
+    .count();
+System.out.println("Vowel count: " + vowels);
+  </div>
+</div>
+
+<div class="question">
+  <strong>9. Palindrome check</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input9 = "madam";
+boolean isPalin = input9.equals(new StringBuilder(input9).reverse().toString());
+System.out.println("Is palindrome: " + isPalin);
+  </div>
+</div>
+
+<div class="question">
+  <strong>10. Convert to Title Case</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input10 = "hello world";
+String title = Arrays.stream(input10.split(" "))
+    .map(w -&gt; w.substring(0, 1).toUpperCase() + w.substring(1))
+    .collect(Collectors.joining(" "));
+System.out.println("Title case: " + title);
+  </div>
+</div>
+
+<div class="question">
+  <strong>11. Duplicate characters in a string</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input11 = "mississippi";
+Set&lt;Character&gt; dupes = input11.chars().mapToObj(c -&gt; (char) c)
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+    .entrySet().stream()
+    .filter(e -&gt; e.getValue() &gt; 1)
+    .map(Map.Entry::getKey)
+    .collect(Collectors.toSet());
+System.out.println("Duplicates: " + dupes);
+  </div>
+</div>
+
+<div class="question">
+  <strong>12. Group characters by frequency</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input12 = "aaabbc";
+Map&lt;Long, List&lt;Character&gt;&gt; groupFreq = input12.chars().mapToObj(c -&gt; (char) c)
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+    .entrySet().stream()
+    .collect(Collectors.groupingBy(Map.Entry::getValue,
+        Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+System.out.println("Grouped by frequency: " + groupFreq);
+  </div>
+</div>
+
+<div class="question">
+  <strong>13. Count words in a string</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input13 = "Java 8 streams are powerful";
+long wordCount = Arrays.stream(input13.trim().split("\\\\s+")).count();
+System.out.println("Word count: " + wordCount);
+  </div>
+</div>
+
+<div class="question">
+  <strong>14. Extract digits from a string</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input14 = "a1b2c3";
+String digits = input14.chars()
+    .filter(Character::isDigit)
+    .mapToObj(c -&gt; String.valueOf((char) c))
+    .collect(Collectors.joining());
+System.out.println("Digits extracted: " + digits);
+  </div>
+</div>
+
+<div class="question">
+  <strong>15. Check if all characters are unique</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String input15 = "abcdef";
+boolean allUnique = input15.length() == input15.chars().distinct().count();
+System.out.println("All unique: " + allUnique);
+  </div>
+</div>
+
+<!-- Questions End -->
+
+</body>
+</html>

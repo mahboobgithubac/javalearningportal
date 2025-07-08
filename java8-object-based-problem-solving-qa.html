@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Object List Problem Solving Questions & Solutions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .question {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 15px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+    .toggle-btn, #toggle-all-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .answer {
+      display: none;
+      margin-top: 10px;
+      background: #ecf0f1;
+      padding: 10px;
+      border-left: 4px solid #2980b9;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Java 8 Object List Problem Solving Questions & Solutions</h1>
+<button id="toggle-all-btn" onclick="toggleAll()">Expand All</button>
+
+<script>
+  function toggleAnswer(button) {
+    const answerDiv = button.nextElementSibling;
+    answerDiv.style.display = answerDiv.style.display === "block" ? "none" : "block";
+  }
+
+  function toggleAll() {
+    const answers = document.querySelectorAll(".answer");
+    const btn = document.getElementById("toggle-all-btn");
+    const expand = btn.textContent === "Expand All";
+    answers.forEach(div => div.style.display = expand ? "block" : "none");
+    btn.textContent = expand ? "Collapse All" : "Expand All";
+  }
+</script>
+
+<!-- Questions Start -->
+<div class="question">
+  <strong>1. Sort employees by name</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+employees.stream()
+  .sorted(Comparator.comparing(e -> e.name))
+  .forEach(System.out::println);
+  </div>
+</div>
+
+<div class="question">
+  <strong>2. Sort by salary descending</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+employees.stream()
+  .sorted(Comparator.comparingDouble(e -> -e.salary))
+  .forEach(System.out::println);
+  </div>
+</div>
+
+<div class="question">
+  <strong>3. Filter employees with salary &gt; 50000</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+employees.stream()
+  .filter(e -> e.salary > 50000)
+  .forEach(System.out::println);
+  </div>
+</div>
+
+<div class="question">
+  <strong>4. Find max salary employee</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+Employee maxSal = employees.stream()
+  .max(Comparator.comparingDouble(e -> e.salary))
+  .orElse(null);
+System.out.println("Max salary: " + maxSal);
+  </div>
+</div>
+
+<div class="question">
+  <strong>5. Find youngest employee</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+Employee youngest = employees.stream()
+  .min(Comparator.comparingInt(e -> e.age))
+  .orElse(null);
+System.out.println("Youngest: " + youngest);
+  </div>
+</div>
+
+<!-- You can continue adding questions similarly using the same structure -->
+
+<!-- Sample structure to copy and paste for remaining questions -->
+<!-- 
+<div class="question">
+  <strong>X. Question title here</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+Code goes here...
+  </div>
+</div>
+-->
+
+<!-- Add questions 6 to 30 similarly here if you want the complete page -->
+
+<!-- Questions End -->
+
+</body>
+</html>

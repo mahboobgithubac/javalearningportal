@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 List Problem Solving Questions & Solutions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .question {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 15px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+    .toggle-btn, #toggle-all-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .answer {
+      display: none;
+      margin-top: 10px;
+      background: #ecf0f1;
+      padding: 10px;
+      border-left: 4px solid #2980b9;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Java 8 List Problem Solving Questions & Solutions</h1>
+<button id="toggle-all-btn" onclick="toggleAll()">Expand All</button>
+
+<script>
+  function toggleAnswer(button) {
+    const answerDiv = button.nextElementSibling;
+    answerDiv.style.display = answerDiv.style.display === "block" ? "none" : "block";
+  }
+
+  function toggleAll() {
+    const answers = document.querySelectorAll(".answer");
+    const btn = document.getElementById("toggle-all-btn");
+    const expand = btn.textContent === "Expand All";
+    answers.forEach(div => div.style.display = expand ? "block" : "none");
+    btn.textContent = expand ? "Collapse All" : "Expand All";
+  }
+</script>
+
+<!-- Questions Start -->
+<div class="question">
+  <strong>1. Frequency of elements</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+List&lt;Integer&gt; list = Arrays.asList(3, 5, 3, 9, 1, 5, 7, 3);
+Map&lt;Integer, Long&gt; freqMap = list.stream()
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+System.out.println("Frequency map: " + freqMap);
+  </div>
+</div>
+
+<div class="question">
+  <strong>2. Remove duplicates</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+List&lt;Integer&gt; distinctList = list.stream().distinct().collect(Collectors.toList());
+System.out.println("Distinct elements: " + distinctList);
+  </div>
+</div>
+
+<div class="question">
+  <strong>3. Find max and min</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+int max = list.stream().max(Integer::compareTo).orElse(-1);
+int min = list.stream().min(Integer::compareTo).orElse(-1);
+System.out.println("Max: " + max + ", Min: " + min);
+  </div>
+</div>
+
+<div class="question">
+  <strong>4. Sum and average</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+int sum = list.stream().mapToInt(i -&gt; i).sum();
+double avg = list.stream().mapToInt(i -&gt; i).average().orElse(0.0);
+System.out.println("Sum: " + sum + ", Average: " + avg);
+  </div>
+</div>
+
+<div class="question">
+  <strong>5. Sort ascending and descending</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+List&lt;Integer&gt; asc = list.stream().sorted().collect(Collectors.toList());
+List&lt;Integer&gt; desc = list.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+System.out.println("Asc: " + asc + ", Desc: " + desc);
+  </div>
+</div>
+
+<div class="question">
+  <strong>6. Count even numbers</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+long evenCount = list.stream().filter(i -&gt; i % 2 == 0).count();
+System.out.println("Even count: " + evenCount);
+  </div>
+</div>
+
+<div class="question">
+  <strong>7. Square each element</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+List&lt;Integer&gt; squared = list.stream().map(i -&gt; i * i).collect(Collectors.toList());
+System.out.println("Squared list: " + squared);
+  </div>
+</div>
+
+<div class="question">
+  <strong>8. Filter numbers &gt; 5</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+List&lt;Integer&gt; gtFive = list.stream().filter(i -&gt; i &gt; 5).collect(Collectors.toList());
+System.out.println("Numbers &gt; 5: " + gtFive);
+  </div>
+</div>
+
+<div class="question">
+  <strong>9. Group by value parity (even/odd)</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+Map&lt;String, List&lt;Integer&gt;&gt; parityGroup = list.stream()
+    .collect(Collectors.groupingBy(i -&gt; i % 2 == 0 ? "Even" : "Odd"));
+System.out.println("Group by parity: " + parityGroup);
+  </div>
+</div>
+
+<div class="question">
+  <strong>10. First element &gt; 5</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+Optional&lt;Integer&gt; firstGT5 = list.stream().filter(i -&gt; i &gt; 5).findFirst();
+System.out.println("First &gt; 5: " + firstGT5.orElse(null));
+  </div>
+</div>
+
+<div class="question">
+  <strong>11. Count distinct elements</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+long distinctCount = list.stream().distinct().count();
+System.out.println("Distinct count: " + distinctCount);
+  </div>
+</div>
+
+<div class="question">
+  <strong>12. Find duplicate elements</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+Set&lt;Integer&gt; duplicates = list.stream()
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+    .entrySet().stream().filter(e -&gt; e.getValue() &gt; 1)
+    .map(Map.Entry::getKey).collect(Collectors.toSet());
+System.out.println("Duplicates: " + duplicates);
+  </div>
+</div>
+
+<div class="question">
+  <strong>13. Convert to comma-separated string</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+String joined = list.stream().map(String::valueOf).collect(Collectors.joining(", "));
+System.out.println("Joined string: " + joined);
+  </div>
+</div>
+
+<div class="question">
+  <strong>14. Check if all elements are positive</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+boolean allPositive = list.stream().allMatch(i -&gt; i &gt; 0);
+System.out.println("All positive: " + allPositive);
+  </div>
+</div>
+
+<div class="question">
+  <strong>15. Partition into even and odd</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+Map&lt;Boolean, List&lt;Integer&gt;&gt; partitioned = list.stream()
+    .collect(Collectors.partitioningBy(i -&gt; i % 2 == 0));
+System.out.println("Partitioned (Even/Odd): " + partitioned);
+  </div>
+</div>
+<!-- Questions End -->
+
+</body>
+</html>
