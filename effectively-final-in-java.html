@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Effectively Final in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+     
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ What is "Effectively Final" in Java?</h1>
+
+  <p><strong>Effectively final</strong> is a term introduced in <strong>Java 8</strong> to describe a variable whose <strong>value does not change after initialization</strong>, even if it's <strong>not explicitly marked with the <code>final</code> keyword</strong>.</p>
+
+  <h2>🔍 Definition:</h2>
+  <blockquote>A <strong>local variable</strong> is <strong>effectively final</strong> if <strong>it is never modified after being assigned a value</strong>.</blockquote>
+
+  <h2>✅ Example of Effectively Final:</h2>
+  <pre><code>public class Example {
+    public static void main(String[] args) {
+        int x = 10;  // effectively final
+
+        Runnable r = () -&gt; {
+            System.out.println("x = " + x);  // ✅ allowed
+        };
+        r.run();
+    }
+}</code></pre>
+
+  <p>Here, <code>x</code> is <strong>not declared as <code>final</code></strong>, but since its value is never changed, it is <strong>effectively final</strong>. That allows the lambda expression to use it.</p>
+
+  <h2>❌ Not Effectively Final (Compile-Time Error):</h2>
+  <pre><code>public class Example {
+    public static void main(String[] args) {
+        int x = 10;
+        x = 20;  // ❌ x is no longer effectively final
+
+        Runnable r = () -&gt; {
+            System.out.println("x = " + x);  // ❌ compile error
+        };
+        r.run();
+    }
+}</code></pre>
+
+  <p>Because <code>x</code> is reassigned, it is <strong>not effectively final</strong>, and thus <strong>cannot be used in the lambda</strong>.</p>
+
+  <h2>📌 Why Is This Rule Important?</h2>
+  <p>Lambda expressions (and also inner classes) <strong>capture variables from their enclosing scope</strong>. To avoid unexpected behavior or thread-safety issues, Java restricts these captured variables to be <strong>final or effectively final</strong>.</p>
+
+  <h2>⚖ Final vs Effectively Final</h2>
+  <table>
+    <tr>
+      <th>Aspect</th>
+      <th><code>final</code> Variable</th>
+      <th>Effectively Final Variable</th>
+    </tr>
+    <tr>
+      <td>Syntax</td>
+      <td>Declared with <code>final</code></td>
+      <td>Not declared <code>final</code>, but not changed</td>
+    </tr>
+    <tr>
+      <td>Modifiability</td>
+      <td>Cannot be changed</td>
+      <td>Not changed (implicitly final)</td>
+    </tr>
+    <tr>
+      <td>Usage in Lambdas</td>
+      <td>✅ Allowed</td>
+      <td>✅ Allowed</td>
+    </tr>
+    <tr>
+      <td>Compilation</td>
+      <td>Strict</td>
+      <td>Flexible, but still must not change</td>
+    </tr>
+  </table>
+
+  <h2>🧠 Tip:</h2>
+  <p>Use effectively final variables in lambdas to avoid unnecessary <code>final</code> clutter in your code, but be aware of the reassignment rule.</p>
+
+</body>
+</html>

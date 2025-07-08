@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Variable Scope in Lambda Expressions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+      /* background-color: #e8e8e8;*/
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      /*background-color: #272822;
+      color: #f8f8f2;*/
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔍 Variable Scope in Lambda Expressions (Java)</h1>
+
+  <p>In Java, <strong>lambda expressions</strong> have specific <strong>variable scope rules</strong> that are similar to anonymous inner classes. Understanding these is crucial for writing clean, bug-free code.</p>
+
+  <h2>📌 Key Scope Rules in Lambda Expressions:</h2>
+
+  <h3>1. Accessing Local Variables (<a href="effectively-final-in-java.html">  Effectively Final Rule</a>)</h3>
+  <ul>
+    <li>Lambdas <strong>can access local variables</strong> from the enclosing scope.</li>
+    <li>But those variables <strong>must be "effectively final"</strong> (i.e., not modified after initialization).</li>
+  </ul>
+
+  <pre><code>public class LambdaScopeExample {
+    public static void main(String[] args) {
+        int factor = 10; // effectively final
+        List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4);
+        numbers.forEach(n -&gt; System.out.println(n * factor)); // ✅ allowed
+    }
+}</code></pre>
+
+  <p><strong>❌ Invalid Example:</strong></p>
+  <pre><code>int factor = 10;
+factor++; // ❌ now not effectively final
+numbers.forEach(n -&gt; System.out.println(n * factor)); // ❌ compile error</code></pre>
+
+  <h3>2. Instance and Static Variables</h3>
+  <ul>
+    <li>Lambdas can <strong>freely access</strong> instance and static variables.</li>
+    <li>No "effectively final" restriction for these.</li>
+  </ul>
+
+  <pre><code>public class ScopeTest {
+    private int multiplier = 5;
+
+    public void process() {
+        List&lt;Integer&gt; list = Arrays.asList(1, 2, 3);
+        list.forEach(n -&gt; System.out.println(n * multiplier)); // ✅ allowed
+    }
+}</code></pre>
+
+  <h3>3. Lambda vs Anonymous Class Scope</h3>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>Lambda Expression</th>
+      <th>Anonymous Inner Class</th>
+    </tr>
+    <tr>
+      <td><code>this</code> reference</td>
+      <td>Refers to <strong>enclosing class</strong></td>
+      <td>Refers to <strong>anonymous class</strong></td>
+    </tr>
+    <tr>
+      <td>Local variable access</td>
+      <td>Must be <strong>effectively final</strong></td>
+      <td>Must be <strong>final</strong> or effectively final</td>
+    </tr>
+    <tr>
+      <td>Shadowing variables</td>
+      <td><strong>Not allowed</strong></td>
+      <td><strong>Allowed</strong></td>
+    </tr>
+  </table>
+
+  <pre><code>public class LambdaVsInnerClass {
+    int x = 100;
+
+    public void demo() {
+        Runnable r1 = () -&gt; {
+            System.out.println(this.x); // Lambda: refers to LambdaVsInnerClass.x
+        };
+
+        Runnable r2 = new Runnable() {
+            int x = 200;
+            public void run() {
+                System.out.println(this.x); // Anonymous: refers to its own x
+            }
+        };
+
+        r1.run(); // Output: 100
+        r2.run(); // Output: 200
+    }
+}</code></pre>
+
+  <h2>✅ Summary</h2>
+
+  <table>
+    <tr>
+      <th>Scope Type</th>
+      <th>Accessible in Lambda?</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <td>Local variables</td>
+      <td>✅ If <strong>effectively final</strong></td>
+      <td>Can't modify after assignment</td>
+    </tr>
+    <tr>
+      <td>Instance variables</td>
+      <td>✅ Yes</td>
+      <td>No restriction</td>
+    </tr>
+    <tr>
+      <td>Static variables</td>
+      <td>✅ Yes</td>
+      <td>No restriction</td>
+    </tr>
+    <tr>
+      <td>Shadowing local vars</td>
+      <td>❌ Not allowed in lambdas</td>
+      <td>Use different variable names</td>
+    </tr>
+  </table>
+
+</body>
+</html>

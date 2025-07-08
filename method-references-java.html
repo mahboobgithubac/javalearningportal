@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Method References in Java (:: Operator)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+      
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Method References in Java (<code>::</code> Operator)</h1>
+
+  <h2>🔍 What is a Method Reference?</h2>
+  <p>A <strong>method reference</strong> in Java is a <strong>shorthand</strong> for a lambda expression that <strong>calls a method</strong>. It uses the <code>::</code> operator.</p>
+
+  <h2>📌 Syntax:</h2>
+  <pre><code>ClassName::methodName</code></pre>
+  <p>It can be used <strong>only when the lambda method body calls a method</strong> with the <strong>same arguments</strong>.</p>
+
+  <h2>✅ Types of Method References</h2>
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Syntax</th>
+      <th>Description</th>
+      <th>Example</th>
+    </tr>
+    <tr>
+      <td>Static method</td>
+      <td><code>ClassName::staticMethod</code></td>
+      <td>Refers to a static method</td>
+      <td><code>Math::abs</code></td>
+    </tr>
+    <tr>
+      <td>Instance method of a particular object</td>
+      <td><code>object::instanceMethod</code></td>
+      <td>Refers to a method of a specific object</td>
+      <td><code>System.out::println</code></td>
+    </tr>
+    <tr>
+      <td>Instance method of an arbitrary object of a type</td>
+      <td><code>ClassName::instanceMethod</code></td>
+      <td>Method of any instance of the class</td>
+      <td><code>String::toLowerCase</code></td>
+    </tr>
+    <tr>
+      <td>Constructor reference</td>
+      <td><code>ClassName::new</code></td>
+      <td>Refers to a class constructor</td>
+      <td><code>ArrayList::new</code></td>
+    </tr>
+  </table>
+
+  <h2>✅ Examples</h2>
+
+  <h3>1. Static Method Reference</h3>
+  <pre><code>public class StaticExample {
+    public static int square(int n) {
+        return n * n;
+    }
+
+    public static void main(String[] args) {
+        Function&lt;Integer, Integer&gt; func = StaticExample::square;
+        System.out.println(func.apply(5)); // Output: 25
+    }
+}</code></pre>
+
+  <h3>2. Instance Method of a Particular Object</h3>
+  <pre><code>Consumer&lt;String&gt; printer = System.out::println;
+printer.accept("Hello from method reference!");</code></pre>
+
+  <h3>3. Instance Method of an Arbitrary Object</h3>
+  <pre><code>List&lt;String&gt; list = Arrays.asList("Java", "Python", "Go");
+list.forEach(System.out::println);</code></pre>
+
+  <h3>4. Constructor Reference</h3>
+  <pre><code>Supplier&lt;ArrayList&lt;String&gt;&gt; supplier = ArrayList::new;
+ArrayList&lt;String&gt; list = supplier.get();
+list.add("Hello");
+System.out.println(list);</code></pre>
+
+  <h2>🧠 When to Use Method References?</h2>
+  <ul>
+    <li>When the lambda is just a method call</li>
+    <li>To make code cleaner and easier to read</li>
+  </ul>
+
+  <h2>✅ Summary</h2>
+  <ul>
+    <li>Method references are a shorthand for simple method-calling lambdas.</li>
+    <li>Use <code>::</code> to refer to static, instance, or constructor methods.</li>
+    <li>They improve readability and reduce verbosity.</li>
+  </ul>
+
+</body>
+</html>

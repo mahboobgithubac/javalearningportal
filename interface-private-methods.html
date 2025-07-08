@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Private Interface Methods in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+    
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Private Interface Methods in Java</h1>
+
+  <h2>🔍 What Are Private Interface Methods?</h2>
+  <p>In <strong>Java 9 and later</strong>, interfaces can include <strong>private methods</strong> that are used to share code between <code>default</code> or <code>static</code> methods inside the interface.</p>
+
+  <h2>✅ Why Were They Introduced?</h2>
+  <p>Before Java 9, shared logic between default/static methods had to be duplicated. Java 9 allows private methods inside interfaces to avoid redundancy and improve code reusability.</p>
+
+  <h2>📌 Types of Private Interface Methods</h2>
+  <table>
+    <tr>
+      <th>Modifier</th>
+      <th>Usage</th>
+      <th>Accessible From</th>
+    </tr>
+    <tr>
+      <td><code>private</code></td>
+      <td>Reusable helper for default methods</td>
+      <td>Only inside interface</td>
+    </tr>
+    <tr>
+      <td><code>private static</code></td>
+      <td>Reusable helper for static methods</td>
+      <td>Only inside interface</td>
+    </tr>
+  </table>
+
+  <h2>✅ Example: Using Private Interface Methods</h2>
+  <pre><code>public interface MyInterface {
+
+    default void displayA() {
+        log("A");
+    }
+
+    default void displayB() {
+        log("B");
+    }
+
+    private void log(String msg) {
+        System.out.println("Logging: " + msg);
+    }
+
+    static void staticDisplay() {
+        staticLog("Static method called");
+    }
+
+    private static void staticLog(String msg) {
+        System.out.println("Static Log: " + msg);
+    }
+}</code></pre>
+
+  <pre><code>public class MyClass implements MyInterface {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj.displayA(); // Logging: A
+        obj.displayB(); // Logging: B
+        MyInterface.staticDisplay(); // Static Log: Static method called
+    }
+}</code></pre>
+
+  <h2>❌ Invalid Usage Example:</h2>
+  <pre><code>public interface BadInterface {
+    private void someMethod(); // ❌ Error: abstract methods can't be private
+}</code></pre>
+
+  <h2>🧠 Key Points</h2>
+  <ul>
+    <li>Private methods are only for internal use in the interface.</li>
+    <li>They help eliminate code duplication among <code>default</code> or <code>static</code> methods.</li>
+    <li>Can't be abstract or accessed by implementing classes.</li>
+  </ul>
+
+  <h2>✅ Summary</h2>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>Available Since</th>
+      <th>Purpose</th>
+    </tr>
+    <tr>
+      <td><code>default</code> method</td>
+      <td>Java 8</td>
+      <td>Allow implementation in interfaces</td>
+    </tr>
+    <tr>
+      <td><code>static</code> method</td>
+      <td>Java 8</td>
+      <td>Utility method for interface</td>
+    </tr>
+    <tr>
+      <td><code>private</code> method</td>
+      <td>Java 9</td>
+      <td>Helper for default methods</td>
+    </tr>
+    <tr>
+      <td><code>private static</code> method</td>
+      <td>Java 9</td>
+      <td>Helper for static methods</td>
+    </tr>
+  </table>
+
+</body>
+</html>
