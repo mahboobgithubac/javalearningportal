@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Developer Interview Guide - 6 Years Experience</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #004080;
+    }
+    ul {
+      margin-top: 0;
+    }
+    table {
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px 12px;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java Developer Interview Guide (6 Years Experience)</h1>
+
+  <h2>1. ✅ Core Java (Java 8+ Mandatory)</h2>
+  <p>Deep understanding is expected.</p>
+  <strong>Topics to master:</strong>
+  <ul>
+    <li>OOP Principles</li>
+    <li>Exception handling</li>
+    <li>Collections (List, Map, Set, Queue)</li>
+    <li>Concurrency: Thread, ExecutorService, synchronized, Locks</li>
+    <li>Java 8 Features: Streams, Lambda, Optional, Functional interfaces</li>
+    <li>equals(), hashCode(), Comparable vs Comparator</li>
+    <li>Memory management, Garbage collection</li>
+  </ul>
+  <strong>Sample Questions:</strong>
+  <ul>
+    <li>How does <code>HashMap</code> work internally?</li>
+    <li>Explain <code>Stream.map()</code> vs <code>Stream.flatMap()</code>.</li>
+    <li>What are the differences between <code>synchronized</code> and <code>Lock</code>?</li>
+  </ul>
+
+  <h2>2. ✅ Spring Framework & Spring Boot</h2>
+  <p>At 6 years, you must be fluent in the Spring ecosystem.</p>
+  <strong>Topics to focus on:</strong>
+  <ul>
+    <li>Spring Core: DI, Beans, Scopes, Lifecycle</li>
+    <li>Spring Boot: Autoconfiguration, starters</li>
+    <li>Spring MVC: REST controllers</li>
+    <li>Spring Data JPA: Repository pattern, custom queries</li>
+    <li>Spring Security: Filters, JWT, authentication</li>
+    <li>Spring AOP: Cross-cutting concerns</li>
+  </ul>
+  <strong>Sample Questions:</strong>
+  <ul>
+    <li>How does Spring Boot autoconfiguration work?</li>
+    <li>How to secure a REST API using JWT?</li>
+    <li>Difference between <code>@Component</code>, <code>@Service</code>, and <code>@Repository</code>?</li>
+  </ul>
+
+  <h2>3. ✅ RESTful API Design</h2>
+  <strong>Focus areas:</strong>
+  <ul>
+    <li>HTTP methods, status codes</li>
+    <li>URI design best practices</li>
+    <li>Exception handling (<code>@ControllerAdvice</code>)</li>
+    <li>Versioning, Pagination</li>
+    <li>Postman testing</li>
+  </ul>
+  <strong>Sample Questions:</strong>
+  <ul>
+    <li>What is idempotency? How do you ensure it in APIs?</li>
+    <li>How to handle error responses in REST?</li>
+    <li>How to version your REST APIs?</li>
+  </ul>
+
+  <h2>4. ✅ Database (SQL & JPA/Hibernate)</h2>
+  <strong>Topics:</strong>
+  <ul>
+    <li>Joins, Subqueries, Indexing</li>
+    <li>Transactions, ACID properties</li>
+    <li>Hibernate caching, lazy/eager loading</li>
+    <li>Named/native queries</li>
+    <li>Criteria API</li>
+  </ul>
+  <strong>Sample Questions:</strong>
+  <ul>
+    <li>Difference between <code>INNER JOIN</code> and <code>LEFT JOIN</code>?</li>
+    <li>How does Hibernate manage relationships?</li>
+    <li>Explain N+1 problem in Hibernate.</li>
+  </ul>
+
+  <h2>5. ✅ Microservices Architecture</h2>
+  <strong>Topics:</strong>
+  <ul>
+    <li>REST vs Microservices</li>
+    <li>Service communication (REST, Feign, Kafka)</li>
+    <li>Spring Cloud: Config, Eureka, Gateway</li>
+    <li>Circuit breaker (Resilience4j/Hystrix)</li>
+    <li>Centralized logging and config</li>
+  </ul>
+  <strong>Sample Questions:</strong>
+  <ul>
+    <li>How do microservices communicate securely?</li>
+    <li>Explain API Gateway vs Service Discovery.</li>
+    <li>How do you handle service failure in microservices?</li>
+  </ul>
+
+  <h2>6. ✅ DevOps & CI/CD (Optional but Valued)</h2>
+  <strong>Topics:</strong>
+  <ul>
+    <li>Jenkins, GitHub Actions</li>
+    <li>Docker basics: image, container</li>
+    <li>Kubernetes concepts</li>
+    <li>Application monitoring (Prometheus, ELK)</li>
+  </ul>
+  <strong>Sample Questions:</strong>
+  <ul>
+    <li>How do you containerize a Spring Boot app?</li>
+    <li>What are the stages in your CI/CD pipeline?</li>
+  </ul>
+
+  <h2>7. ✅ Testing</h2>
+  <strong>Tools:</strong>
+  <ul>
+    <li>JUnit 5, Mockito</li>
+    <li>Spring Boot Test</li>
+    <li>Testcontainers (optional)</li>
+    <li>Postman/TestNG (optional)</li>
+  </ul>
+  <strong>Sample Questions:</strong>
+  <ul>
+    <li>How do you mock a service in Spring Boot?</li>
+    <li>What is the difference between unit and integration testing?</li>
+  </ul>
+
+  <h2>8. ✅ System Design (High-level)</h2>
+  <strong>Focus:</strong>
+  <ul>
+    <li>Design a scalable backend for an app (e.g., book store, login system)</li>
+    <li>Load balancing, caching (Redis), queues</li>
+    <li>Database choice: RDBMS vs NoSQL</li>
+  </ul>
+  <strong>Sample Questions:</strong>
+  <ul>
+    <li>How would you design a URL shortener?</li>
+    <li>How to scale an order processing system?</li>
+  </ul>
+
+  <h2>9. ✅ Behavioral / HR Questions</h2>
+  <strong>Examples:</strong>
+  <ul>
+    <li>Tell me about your recent project.</li>
+    <li>How do you handle production issues?</li>
+    <li>Why do you want to change jobs?</li>
+  </ul>
+
+  <h2>🎯 Interview Tips</h2>
+  <ul>
+    <li>✅ Prepare resume-based project questions</li>
+    <li>✅ Use <strong>STAR</strong> (Situation, Task, Action, Result) format in answers</li>
+    <li>✅ Practice whiteboard/codepad Java problems</li>
+    <li>✅ Keep your answers clear, concise, and structured</li>
+    <li>✅ Mock interviews help reduce anxiety and improve articulation</li>
+  </ul>
+
+  <h2>✅ Final Preparation Checklist:</h2>
+  <table>
+    <tr>
+      <th>Area</th>
+      <th>Ready?</th>
+    </tr>
+    <tr><td>Java 8+</td><td>✅/❌</td></tr>
+    <tr><td>Spring Boot</td><td>✅/❌</td></tr>
+    <tr><td>REST API</td><td>✅/❌</td></tr>
+    <tr><td>SQL + JPA</td><td>✅/❌</td></tr>
+    <tr><td>Microservices</td><td>✅/❌</td></tr>
+    <tr><td>Design patterns (GoF)</td><td>✅/❌</td></tr>
+    <tr><td>System Design</td><td>✅/❌</td></tr>
+    <tr><td>Testing (JUnit/Mockito)</td><td>✅/❌</td></tr>
+    <tr><td>DevOps basics (Docker)</td><td>✅/❌</td></tr>
+  </table>
+
+  <p>Would you like a downloadable PDF, mock questions, or coding challenge set for practice?</p>
+
+</body>
+</html>

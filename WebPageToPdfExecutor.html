@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ExecutorService Web Page to PDF Example</title>
+  <style>
+    body { font-family: monospace; background: #f4f4f4; padding: 20px; }
+    pre { background: #fff; border: 1px solid #ccc; padding: 15px; overflow: auto; }
+    h1 { color: #333; }
+  </style>
+</head>
+<body>
+
+<h1>Java ExecutorService Example - Fetch Webpages and Save to PDF</h1>
+
+<p>This program uses Java's <code>ExecutorService</code> to download the HTML content of multiple websites in parallel and save each page's source code into a PDF using <code>iText 7</code>.</p>
+
+<h2>🧩 Maven Dependency (iText 7)</h2>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.itextpdf&lt;/groupId&gt;
+    &lt;artifactId&gt;itext7-core&lt;/artifactId&gt;
+    &lt;version&gt;7.2.3&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h2>💡 Full Java Code</h2>
+<pre><code>import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.layout.element.Paragraph;
+
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.*;
+
+public class WebPageToPdfExecutor {
+
+    public static void main(String[] args) {
+        List&lt;String&gt; urls = List.of(
+            "https://www.google.com",
+            "https://www.facebook.com",
+            "https://www.twitter.com"
+        );
+
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        for (String url : urls) {
+            executor.submit(() -&gt; {
+                try {
+                    String htmlContent = fetchHtml(url);
+                    writeToPdf(htmlContent, getDomainName(url) + ".pdf");
+                    System.out.println("Saved PDF for " + url);
+                } catch (IOException e) {
+                    System.err.println("Failed for " + url + ": " + e.getMessage());
+                }
+            });
+        }
+
+        executor.shutdown();
+    }
+
+    private static String fetchHtml(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
+            StringBuilder html = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) {
+                html.append(line).append("\n");
+            }
+            return html.toString();
+        }
+    }
+
+    private static void writeToPdf(String content, String fileName) throws IOException {
+        PdfWriter writer = new PdfWriter(fileName);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+        document.add(new Paragraph(content));
+        document.close();
+    }
+
+    private static String getDomainName(String url) {
+        String domain = url.replace("https://", "").replace("http://", "");
+        if (domain.contains("www.")) {
+            domain = domain.replace("www.", "");
+        }
+        if (domain.contains("/")) {
+            domain = domain.substring(0, domain.indexOf('/'));
+        }
+        return domain;
+    }
+}
+</code></pre>
+
+<h2>📄 Output</h2>
+<ul>
+  <li>google.com.pdf</li>
+  <li>facebook.com.pdf</li>
+  <li>twitter.com.pdf</li>
+</ul>
+
+<h2>⚠️ Notes</h2>
+<ul>
+  <li>Internet is required to access the URLs.</li>
+  <li>Some sites may block automated access.</li>
+  <li>For full rendering (JavaScript-based), use a headless browser like Selenium.</li>
+</ul>
+
+</body>
+</html>

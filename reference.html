@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Types of References in Java</title>
+  <style>
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #ccc;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>Types of References in Java</h2>
+
+  <p>
+    Java provides four types of references to manage memory effectively:
+    <strong>Strong, Soft, Weak</strong>, and <strong>Phantom References</strong>. These are mainly used to control how the Garbage Collector handles objects.
+  </p>
+
+  <h3>1. Strong Reference (Default)</h3>
+  <p>
+    The most common reference type. As long as a strong reference exists, the object will not be garbage collected.
+  </p>
+  <pre><code>public class StrongRefExample {
+    public static void main(String[] args) {
+        String str = new String("Strong Reference");
+        System.out.println(str); // Output: Strong Reference
+    }
+}</code></pre>
+
+  <h3>2. Soft Reference</h3>
+  <p>
+    A <strong>SoftReference</strong> allows the object to be garbage collected only when the JVM is low on memory.
+    Useful for caching data.
+  </p>
+  <pre><code>import java.lang.ref.SoftReference;
+
+public class SoftRefExample {
+    public static void main(String[] args) {
+        SoftReference&lt;String&gt; softRef = new SoftReference&lt;&gt;(new String("Soft Reference"));
+        System.out.println("Before GC: " + softRef.get());
+
+        System.gc();
+
+        System.out.println("After GC: " + softRef.get()); // Might still exist unless memory is low
+    }
+}</code></pre>
+
+  <h3>3. Weak Reference</h3>
+  <p>
+    A <strong>WeakReference</strong> allows the object to be garbage collected as soon as it's not strongly reachable.
+    Useful for memory-sensitive caches.
+  </p>
+  <pre><code>import java.lang.ref.WeakReference;
+
+public class WeakRefExample {
+    public static void main(String[] args) {
+        WeakReference&lt;String&gt; weakRef = new WeakReference&lt;&gt;(new String("Weak Reference"));
+        System.out.println("Before GC: " + weakRef.get());
+
+        System.gc();
+
+        System.out.println("After GC: " + weakRef.get()); // Likely to be null
+    }
+}</code></pre>
+
+  <h3>4. Phantom Reference</h3>
+  <p>
+    A <strong>PhantomReference</strong> is used to perform cleanup actions after the object has been finalized but before memory is reclaimed.
+    It always returns <code>null</code> from <code>get()</code> and must be used with a <code>ReferenceQueue</code>.
+  </p>
+  <pre><code>import java.lang.ref.PhantomReference;
+import java.lang.ref.ReferenceQueue;
+
+public class PhantomRefExample {
+    public static void main(String[] args) {
+        ReferenceQueue&lt;String&gt; queue = new ReferenceQueue&lt;&gt;();
+        PhantomReference&lt;String&gt; phantomRef = new PhantomReference&lt;&gt;(new String("Phantom"), queue);
+
+        System.out.println("Phantom get(): " + phantomRef.get()); // Always null
+        System.gc();
+
+        // Simulate checking if object is enqueued for cleanup
+        if (phantomRef.isEnqueued()) {
+            System.out.println("Object is ready for final cleanup.");
+        }
+    }
+}</code></pre>
+ <h3>1. WeakReference</h3>
+  <p>
+    <strong>WeakReference</strong> allows an object to be garbage collected as soon as it is no longer strongly reachable.
+    It is useful for memory-sensitive caches or mappings where you don’t want to prevent GC.
+  </p>
+
+  <pre><code>import java.lang.ref.WeakReference;
+
+public class WeakRefExample {
+    public static void main(String[] args) {
+        WeakReference&lt;String&gt; weakRef = new WeakReference&lt;&gt;(new String("Weak Reference"));
+        System.out.println("Before GC: " + weakRef.get());
+
+        System.gc();
+
+        System.out.println("After GC: " + weakRef.get()); // Likely null
+    }
+}</code></pre>
+
+  <h3>2. PhantomReference</h3>
+  <p>
+    <strong>PhantomReference</strong> is used when you want to perform some action after an object has been finalized, 
+    but before its memory is reclaimed. It always returns <code>null</code> from <code>get()</code>.
+    Requires a <code>ReferenceQueue</code> to detect when the object is ready for cleanup.
+  </p>
+
+  <pre><code>import java.lang.ref.PhantomReference;
+import java.lang.ref.ReferenceQueue;
+
+public class PhantomRefExample {
+    public static void main(String[] args) {
+        ReferenceQueue&lt;String&gt; refQueue = new ReferenceQueue&lt;&gt;();
+        PhantomReference&lt;String&gt; phantomRef = new PhantomReference&lt;&gt;(new String("Phantom"), refQueue);
+
+        System.out.println(phantomRef.get()); // Always null
+
+        System.gc();
+
+        if (phantomRef.isEnqueued()) {
+            System.out.println("Object is ready for final cleanup.");
+        }
+    }
+}</code></pre>
+
+  <h3>3. ReferenceQueue</h3>
+  <p>
+    <strong>ReferenceQueue</strong> is used with Soft, Weak, or Phantom references to get notified when the referent object has been collected.
+    It's commonly used in conjunction with <code>PhantomReference</code> for resource cleanup.
+  </p>
+
+  <pre><code>import java.lang.ref.WeakReference;
+import java.lang.ref.ReferenceQueue;
+
+public class ReferenceQueueExample {
+    public static void main(String[] args) throws InterruptedException {
+        ReferenceQueue&lt;String&gt; queue = new ReferenceQueue&lt;&gt;();
+        WeakReference&lt;String&gt; weakRef = new WeakReference&lt;&gt;(new String("Hello"), queue);
+
+        System.out.println("Before GC: " + weakRef.get());
+
+        System.gc();
+        Thread.sleep(100);
+
+        if (queue.poll() != null) {
+            System.out.println("Object has been garbage collected and added to queue");
+        }
+    }
+}</code></pre>
+
+  <h3>Summary Table</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Collected When...</th>
+        <th><code>get()</code> Returns</th>
+        <th>Requires ReferenceQueue</th>
+        <th>Use Case</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WeakReference</strong></td>
+        <td>No strong references exist</td>
+        <td>Actual object (or null after GC)</td>
+        <td>Optional</td>
+        <td>Memory-sensitive caches</td>
+      </tr>
+      <tr>
+        <td><strong>SoftReference</strong></td>
+        <td>JVM is low on memory</td>
+        <td>Actual object</td>
+        <td>Optional</td>
+        <td>Image or object caching</td>
+      </tr>
+      <tr>
+        <td><strong>PhantomReference</strong></td>
+        <td>After finalization</td>
+        <td>Always null</td>
+        <td><strong>Required</strong></td>
+        <td>Post-GC cleanup</td>
+      </tr>
+      <tr>
+        <td><strong>ReferenceQueue</strong></td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+        <td>Track when reference is GC'd</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <p><strong>Note:</strong> Actual behavior of garbage collection may vary depending on JVM and available memory. Use <code>System.gc()</code> as a hint, not a guarantee.</p>
+
+</body>
+</html>

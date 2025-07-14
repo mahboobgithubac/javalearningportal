@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Garbage Collection in Java</title>
+  <style>
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>Garbage Collection in Java</h2>
+  <p>
+    <strong>Garbage Collection (GC)</strong> in Java is the process of automatically identifying and reclaiming memory used by objects that are no longer reachable or needed by the application.
+    This helps prevent memory leaks and optimizes resource usage without requiring manual memory management like in C or C++.
+  </p>
+  <p>
+    Java's garbage collector runs in the background and tracks object references. When an object becomes unreachable (i.e., no references point to it), it becomes eligible for garbage collection.
+    Java provides several garbage collectors like Serial GC, Parallel GC, CMS, and G1, which you can select based on your application's needs.
+  </p>
+
+  <h3>Example:</h3>
+  <pre><code>public class GarbageCollectionExample {
+
+    public static void main(String[] args) {
+        // Object created and becomes eligible for GC after losing reference
+        GarbageCollectionExample obj1 = new GarbageCollectionExample();
+        GarbageCollectionExample obj2 = new GarbageCollectionExample();
+
+        obj1 = null; // obj1 is now eligible for GC
+        obj2 = null; // obj2 is now eligible for GC
+
+        // Suggest JVM to run garbage collector
+        System.gc(); // JVM may or may not run GC immediately
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        System.out.println("Garbage collector called on object");
+    }
+}
+  </code></pre>
+
+  <p><strong>Note:</strong> The <code>finalize()</code> method is called by the GC before reclaiming memory, but it is deprecated in Java 9 and later versions.</p>
+</body>
+</html>

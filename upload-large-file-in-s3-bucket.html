@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Uploading Large Files to S3 - Multipart Upload</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; background: #f9f9f9; color: #333; }
+    h1, h2, h3 { color: #004080; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 10px; text-align: left; background: #fff; }
+    code, pre { background: #eee; padding: 5px; display: block; margin: 10px 0; white-space: pre-wrap; }
+    .highlight { background-color: #dff0d8; padding: 10px; border-left: 5px solid #3c763d; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<h1>Storing Very Large Files in Amazon S3</h1>
+
+<p>To store <strong>very large files</strong> (e.g., &gt;100 MB or GBs) in an <strong>Amazon S3 bucket</strong>, the recommended way is to use <strong>Multipart Upload</strong>.</p>
+
+<div class="highlight">
+  <strong>Why use Multipart Upload?</strong>
+  <ul>
+    <li>📦 Upload large files in parts</li>
+    <li>⚡ Faster and more reliable (parallel uploads)</li>
+    <li>🔁 Supports resuming interrupted uploads</li>
+    <li>💥 Only re-upload failed parts if needed</li>
+  </ul>
+</div>
+
+<h2>Methods to Upload Large Files to S3</h2>
+
+<h3>✅ 1. AWS CLI</h3>
+<pre><code>aws s3 cp largefile.zip s3://your-bucket-name/ --storage-class STANDARD</code></pre>
+<p>This automatically uses multipart for files larger than 8 MB.</p>
+
+<h3>✅ 2. AWS SDK (Java Example)</h3>
+<pre><code>AmazonS3 s3Client = AmazonS3ClientBuilder.standard().build();
+PutObjectRequest request = new PutObjectRequest("your-bucket", "largefile.zip", new File("/path/largefile.zip"));
+s3Client.putObject(request);
+</code></pre>
+
+<p><strong>Recommended:</strong> Use <code>TransferManager</code>:</p>
+<pre><code>TransferManager tm = TransferManagerBuilder.standard()
+    .withS3Client(s3Client)
+    .build();
+Upload upload = tm.upload("your-bucket", "largefile.zip", new File("/path/largefile.zip"));
+upload.waitForCompletion();
+</code></pre>
+
+<h3>✅ 3. Using Python (Boto3)</h3>
+<pre><code>import boto3
+
+s3 = boto3.client('s3')
+s3.upload_file(
+    Filename='largefile.zip',
+    Bucket='your-bucket-name',
+    Key='largefile.zip'
+)</code></pre>
+
+<h3>✅ 4. Manual Multipart Upload (Advanced)</h3>
+<p><strong>Steps:</strong></p>
+<ol>
+  <li>Initiate multipart upload</li>
+  <li>Upload each part</li>
+  <li>Complete the upload</li>
+</ol>
+
+<pre><code>aws s3api create-multipart-upload --bucket your-bucket --key largefile.zip
+# Use UploadId from response for each part upload
+
+aws s3api complete-multipart-upload --bucket your-bucket --key largefile.zip --upload-id &lt;UploadId&gt; --multipart-upload &lt;parts-info&gt;
+</code></pre>
+
+<h2>📌 Notes</h2>
+<table>
+  <tr><th>Feature</th><th>Limit / Behavior</th></tr>
+  <tr><td>Max object size</td><td><strong>5 TB</strong></td></tr>
+  <tr><td>Part size</td><td>Minimum <strong>5 MB</strong>, maximum <strong>5 GB</strong></td></tr>
+  <tr><td>Max parts</td><td>10,000</td></tr>
+  <tr><td>Resumable</td><td>Yes (if using multipart APIs or SDK)</td></tr>
+  <tr><td>Auto multipart</td><td>Yes (CLI and SDKs do it automatically)</td></tr>
+</table>
+
+<h2>❓ Do We Convert to Multipart or AWS Does It?</h2>
+
+<h3>✅ AWS SDKs (Java, Python, etc.)</h3>
+<p><strong>Yes</strong> – They automatically switch to multipart upload for large files.</p>
+
+<table>
+  <tr><th>SDK</th><th>Multipart Auto-enabled</th><th>When it triggers</th></tr>
+  <tr><td>Boto3 (Python)</td><td>✅ Yes</td><td>&gt; 8 MB</td></tr>
+  <tr><td>Java SDK + TransferManager</td><td>✅ Yes</td><td>&gt; ~5-10 MB</td></tr>
+  <tr><td>AWS CLI</td><td>✅ Yes</td><td>&gt; 8 MB</td></tr>
+</table>
+
+<h3>❌ Manual Upload with S3 REST API or <code>putObject</code></h3>
+<p><strong>No</strong> – You need to manually perform multipart upload if:</p>
+<ul>
+  <li>You're using <code>putObject()</code> for large files</li>
+  <li>Uploading via raw REST API</li>
+  <li>You want custom control over upload/resume logic</li>
+</ul>
+
+<h2>✅ Summary</h2>
+
+<table>
+  <tr>
+    <th>Upload Method</th>
+    <th>Multipart Used</th>
+    <th>Do You Need to Manage It?</th>
+  </tr>
+  <tr>
+    <td><code>aws s3 cp largefile.zip</code></td>
+    <td>✅ Yes</td>
+    <td>❌ No</td>
+  </tr>
+  <tr>
+    <td><code>boto3.upload_file()</code></td>
+    <td>✅ Yes</td>
+    <td>❌ No</td>
+  </tr>
+  <tr>
+    <td>Java SDK + TransferManager</td>
+    <td>✅ Yes</td>
+    <td>❌ No</td>
+  </tr>
+  <tr>
+    <td><code>putObject()</code> for large files</td>
+    <td>❌ No</td>
+    <td>✅ Yes</td>
+  </tr>
+  <tr>
+    <td>S3 REST API</td>
+    <td>❌ No</td>
+    <td>✅ Yes</td>
+  </tr>
+</table>
+
+<h2>📁 Best Practices</h2>
+<ul>
+  <li>Use <code>TransferManager</code> or Transfer Acceleration for large files</li>
+  <li>Track uploads via <strong>CloudWatch</strong></li>
+  <li>Set up <strong>lifecycle rules</strong> for storage class transitions</li>
+  <li>Use <strong>ETag/checksums</strong> to validate file integrity</li>
+</ul>
+
+</body>
+</html>

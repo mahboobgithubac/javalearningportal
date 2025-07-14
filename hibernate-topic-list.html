@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hibernate Topics for Java Developers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    h2 {
+      color: #2980b9;
+      margin-top: 30px;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    li {
+      padding: 5px 0;
+    }
+    .section {
+      background: #ffffff;
+      border-left: 5px solid #3498db;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Hibernate Topics for Java Developers</h1>
+
+  <div class="section">
+    <h2>1. Introduction to Hibernate</h2>
+    <ul>
+      <li>What is ORM (Object Relational Mapping)?</li>
+      <li>Why Hibernate?</li>
+      <li>Hibernate vs JDBC</li>
+      <li>Features of Hibernate</li>
+      <li>Architecture of Hibernate</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>2. Hibernate Configuration</h2>
+    <ul>
+      <li>Hibernate configuration file (hibernate.cfg.xml)</li>
+      <li>Annotation-based configuration</li>
+      <li>Mapping resource file (hbm.xml)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>3. Hibernate Core API</h2>
+    <ul>
+      <li>SessionFactory, Session</li>
+      <li>Transaction</li>
+      <li>Query, Criteria, EntityManager (JPA)</li>
+      <li>Lifecycle of Hibernate Session</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>4. Mapping Types</h2>
+    <ul>
+      <li>Entity Mapping (@Entity, @Table)</li>
+      <li>Property Mapping (@Column, @Id, @GeneratedValue)</li>
+      <li>Primary Key Mapping Strategies: AUTO, IDENTITY, SEQUENCE, TABLE</li>
+      <li>Data Types and @Temporal, @Enumerated</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>5. Relationships Mapping</h2>
+    <ul>
+      <li>One-to-One (@OneToOne)</li>
+      <li>One-to-Many (@OneToMany)</li>
+      <li>Many-to-One (@ManyToOne)</li>
+      <li>Many-to-Many (@ManyToMany)</li>
+      <li>Bidirectional vs Unidirectional</li>
+      <li>Cascading (CascadeType.ALL, etc.)</li>
+      <li>Fetch Types: LAZY vs EAGER</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6. Collection Mapping</h2>
+    <ul>
+      <li>List, Set, Map, Bag mapping</li>
+      <li>@ElementCollection</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>7. Inheritance Mapping</h2>
+    <ul>
+      <li>@Inheritance strategies:</li>
+      <li>Single Table (SINGLE_TABLE)</li>
+      <li>Table per Class (TABLE_PER_CLASS)</li>
+      <li>Joined (JOINED)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>8. Hibernate Query Language (HQL)</h2>
+    <ul>
+      <li>Basics of HQL</li>
+      <li>Named Queries</li>
+      <li>Pagination using HQL</li>
+      <li>Native SQL Queries</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>9. Criteria API and JPA CriteriaBuilder</h2>
+    <ul>
+      <li>Building dynamic queries</li>
+      <li>Filters and projections</li>
+      <li>Joins in Criteria</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>10. Transactions and Concurrency</h2>
+    <ul>
+      <li>ACID properties in Hibernate</li>
+      <li>Programmatic vs Declarative Transactions</li>
+      <li>Optimistic and Pessimistic Locking</li>
+      <li>Versioning using @Version</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>11. Caching in Hibernate</h2>
+    <ul>
+      <li>First-Level Cache (Session scope)</li>
+      <li>Second-Level Cache (SessionFactory scope)</li>
+      <li>EHCache, Infinispan, etc.</li>
+      <li>Query Cache</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>12. Hibernate with JPA</h2>
+    <ul>
+      <li>JPA vs Hibernate</li>
+      <li>Using persistence.xml</li>
+      <li>JPA Annotations Overview</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>13. Validation and Events</h2>
+    <ul>
+      <li>Bean Validation (@NotNull, @Size, etc.)</li>
+      <li>Event Listeners and Interceptors</li>
+      <li>Lifecycle Annotations (@PrePersist, @PostLoad, etc.)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>14. Advanced Topics</h2>
+    <ul>
+      <li>Batch Processing in Hibernate</li>
+      <li>N+1 Problem and Solutions</li>
+      <li>LazyInitializationException and how to solve</li>
+      <li>Entity Graphs</li>
+      <li>Dirty Checking</li>
+      <li>Auditing with Envers</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>15. Hibernate Tools and Utilities</h2>
+    <ul>
+      <li>Hibernate Reverse Engineering</li>
+      <li>Hibernate Logging</li>
+      <li>DB Schema Generation (hbm2ddl.auto)</li>
+      <li>Spring Boot Integration with Hibernate</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>16. Real-world Practices</h2>
+    <ul>
+      <li>DTO Projections</li>
+      <li>Performance Tuning</li>
+      <li>Pagination and Sorting</li>
+      <li>Error handling and Custom Exceptions</li>
+      <li>Best Practices (e.g., session closing, transaction management)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>17. Interview Preparation Topics</h2>
+    <ul>
+      <li>Hibernate Architecture Diagram</li>
+      <li>Differences: get() vs load(), save() vs persist()</li>
+      <li>Caching levels and use cases</li>
+      <li>FetchType LAZY vs EAGER practical scenarios</li>
+      <li>Join fetch in HQL</li>
+    </ul>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Report Generator - SOLID Principles</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .question {
+      background: #fff9c4;
+      border-left: 5px solid #fbc02d;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java Report Generator Refactored Using SOLID Principles</h1>
+
+  <div class="question">
+    <h2>Original Scenario:</h2>
+	 <pre><code>
+	 class ReportGenerator:
+	    def __init__(self, data):
+	        self.data = data
+
+	    def generate_report(self, format):
+	        if format == "PDF":
+	            print("Generating PDF report...")
+	        elif format == "HTML":
+	            print("Generating HTML report...")
+	        else:
+	            raise ValueError("Unsupported format")
+
+	    def send_email(self, recipient):
+	        print(f"Sending report to {recipient}")  convert this code using  solid design principles
+	 </code> </pre>
+	 
+	
+    <pre><code>class ReportGenerator {
+    public ReportGenerator(Object data) {
+        this.data = data;
+    }
+
+    public void generate_report(String format) {
+        if (format.equals("PDF")) {
+            System.out.println("Generating PDF report...");
+        } else if (format.equals("HTML")) {
+            System.out.println("Generating HTML report...");
+        } else {
+            throw new IllegalArgumentException("Unsupported format");
+        }
+    }
+
+    public void send_email(String recipient) {
+        System.out.println("Sending report to " + recipient);
+    }
+}</code></pre>
+  </div>
+
+  <div class="question">
+    <h2>Questions Addressed</h2>
+    <ul>
+      <li>❓ How to apply SOLID principles to Java code?</li>
+      <li>❓ How to decouple report formatting logic?</li>
+      <li>❓ How to separate responsibilities like generation and emailing?</li>
+      <li>❓ How to make code extendable (e.g., add Excel formatter)?</li>
+    </ul>
+  </div>
+
+  <h2>1. ReportData.java (SRP)</h2>
+  <pre><code>public class ReportData {
+    private String data;
+
+    public ReportData(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        return data;
+    }
+}</code></pre>
+
+  <h2>2. ReportFormatter.java (OCP + DIP)</h2>
+  <pre><code>public interface ReportFormatter {
+    void format(String data);
+}</code></pre>
+
+  <h2>3. PDFReportFormatter.java (LSP)</h2>
+  <pre><code>public class PDFReportFormatter implements ReportFormatter {
+    @Override
+    public void format(String data) {
+        System.out.println("Generating PDF report...");
+    }
+}</code></pre>
+
+  <h2>4. HTMLReportFormatter.java (LSP)</h2>
+  <pre><code>public class HTMLReportFormatter implements ReportFormatter {
+    @Override
+    public void format(String data) {
+        System.out.println("Generating HTML report...");
+    }
+}</code></pre>
+
+  <h2>5. ReportGenerator.java (SRP + DIP)</h2>
+  <pre><code>public class ReportGenerator {
+    private ReportFormatter formatter;
+
+    public ReportGenerator(ReportFormatter formatter) {
+        this.formatter = formatter;
+    }
+
+    public void generateReport(String data) {
+        formatter.format(data);
+    }
+}</code></pre>
+
+  <h2>6. EmailSender.java (SRP)</h2>
+  <pre><code>public class EmailSender {
+    public void sendEmail(String recipient, String content) {
+        System.out.println("Sending report to " + recipient);
+    }
+}</code></pre>
+
+  <h2>7. Main.java (Usage Example)</h2>
+  <pre><code>public class Main {
+    public static void main(String[] args) {
+        ReportData data = new ReportData("This is sample report data");
+
+        ReportFormatter pdfFormatter = new PDFReportFormatter();
+        ReportFormatter htmlFormatter = new HTMLReportFormatter();
+
+        ReportGenerator pdfGenerator = new ReportGenerator(pdfFormatter);
+        ReportGenerator htmlGenerator = new ReportGenerator(htmlFormatter);
+
+        pdfGenerator.generateReport(data.getData());
+        htmlGenerator.generateReport(data.getData());
+
+        EmailSender emailSender = new EmailSender();
+        emailSender.sendEmail("user@example.com", data.getData());
+    }
+}</code></pre>
+
+  <div class="question">
+    <h2>💡 SOLID Summary</h2>
+    <ul>
+      <li><strong>S - Single Responsibility:</strong> Each class has one job (e.g., formatting, sending email)</li>
+      <li><strong>O - Open/Closed:</strong> Add new formats without changing existing code</li>
+      <li><strong>L - Liskov Substitution:</strong> All formatters implement a common interface</li>
+      <li><strong>I - Interface Segregation:</strong> Focused interface with just one method (`format`)</li>
+      <li><strong>D - Dependency Inversion:</strong> Depends on abstractions (`ReportFormatter`) not concrete types</li>
+    </ul>
+  </div>
+
+</body>
+</html>

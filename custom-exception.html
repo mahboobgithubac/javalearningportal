@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Exceptions in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #ccc;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Custom Exceptions in Java</h2>
+
+  <p>
+    In Java, you can create your own <strong>custom exceptions</strong> by extending the built-in <code>Exception</code> class (for checked exceptions) 
+    or the <code>RuntimeException</code> class (for unchecked exceptions). Custom exceptions are useful for representing specific error conditions 
+    in your application logic with meaningful names and messages.
+  </p>
+
+  <h3>✅ Example: Creating and Using a Custom Checked Exception</h3>
+
+  <pre><code>// Step 1: Define a custom exception
+class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+// Step 2: Use the custom exception
+public class CustomExceptionExample {
+    public static void checkAge(int age) throws InvalidAgeException {
+        if (age &lt; 18) {
+            throw new InvalidAgeException("Age must be 18 or above.");
+        } else {
+            System.out.println("Age is valid.");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            checkAge(15);
+        } catch (InvalidAgeException e) {
+            System.out.println("Caught Exception: " + e.getMessage());
+        }
+    }
+}
+  </code></pre>
+
+  <h3>💡 Notes:</h3>
+  <ul>
+    <li>Use <code>extends Exception</code> for checked exceptions (must be declared with <code>throws</code>).</li>
+    <li>Use <code>extends RuntimeException</code> for unchecked exceptions (optional to declare).</li>
+    <li>Always provide a constructor to pass a custom message to the superclass.</li>
+  </ul>
+<h2>Custom Unchecked Exception in Java</h2>
+
+  <p>
+    An <strong>unchecked exception</strong> in Java is a type of exception that is not checked at compile time.
+    These are subclasses of <code>RuntimeException</code> and do not require a <code>throws</code> declaration or a <code>try-catch</code> block, although handling is still possible at runtime.
+  </p>
+
+  <h3>✅ Example: Custom Unchecked Exception</h3>
+
+  <pre><code>// Step 1: Define a custom unchecked exception
+class InvalidUsernameException extends RuntimeException {
+    public InvalidUsernameException(String message) {
+        super(message);
+    }
+}
+
+// Step 2: Use the custom exception in logic
+public class UncheckedExceptionExample {
+    public static void login(String username) {
+        if (username == null || username.isEmpty()) {
+            throw new InvalidUsernameException("Username cannot be empty or null.");
+        } else {
+            System.out.println("Login successful for user: " + username);
+        }
+    }
+
+    public static void main(String[] args) {
+        // No need to declare or catch the unchecked exception
+        login(""); // Will throw InvalidUsernameException
+    }
+}
+  </code></pre>
+
+  <h3>💡 Key Points:</h3>
+  <ul>
+    <li><code>RuntimeException</code> is the base class for unchecked exceptions.</li>
+    <li>They are not enforced by the compiler, making them useful for programming errors.</li>
+    <li>Can be caught using try-catch blocks, but it's optional.</li>
+  </ul>
+</body>
+</html>
