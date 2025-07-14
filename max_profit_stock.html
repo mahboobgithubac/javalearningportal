@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Best Time to Buy and Sell Stock - Java Solutions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+    h2 {
+      color: #333;
+    }
+    .solution {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+    pre {
+      background-color: #eef;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    button {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  <script>
+    function toggle(id) {
+      var e = document.getElementById(id);
+      e.style.display = (e.style.display === 'none') ? 'block' : 'none';
+    }
+  </script>
+</head>
+<body>
+
+  <h1>Best Time to Buy and Sell Stock</h1>
+  <p><strong>Problem:</strong> Given an array of stock prices, find the maximum profit you can make by buying on one day and selling on another day in the future.</p>
+
+  <div class="solution">
+    <h2>🔁 Brute Force (O(n²)) Approach</h2>
+    <button onclick="toggle('brute')">Toggle Code</button>
+    <div id="brute" style="display:none;">
+      <pre>
+int[] arr = { 7, 1, 5, 3, 6, 4 };
+int maxProfit = 0;
+
+for (int i = 0; i < arr.length - 1; i++) {
+    for (int j = i + 1; j < arr.length; j++) {
+        int profit = arr[j] - arr[i];  // Buy at i, Sell at j
+        if (profit > maxProfit)
+            maxProfit = profit;
+    }
+}
+
+System.out.println("maxProfit = " + maxProfit);</pre>
+    </div>
+  </div>
+
+  <div class="solution">
+    <h2>✅ Optimized (O(n)) Approach</h2>
+    <button onclick="toggle('optimized')">Toggle Code</button>
+    <div id="optimized" style="display:none;">
+      <pre>
+int[] prices = { 7, 1, 5, 3, 6, 4 };
+int minPrice = Integer.MAX_VALUE;
+int maxProfit = 0;
+
+for (int price : prices) {
+    if (price < minPrice) {
+        minPrice = price;  // Update min price
+    } else if (price - minPrice > maxProfit) {
+        maxProfit = price - minPrice;  // Update profit
+    }
+}
+
+System.out.println("Max Profit = " + maxProfit);</pre>
+    </div>
+  </div>
+
+  <p><strong>Note:</strong> The optimized solution is recommended for large input sizes (up to 10<sup>5</sup>) due to its linear time complexity.</p>
+
+</body>
+</html>

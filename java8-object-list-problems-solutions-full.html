@@ -40,208 +40,265 @@
 <div class="question">
   <strong>1. Sort employees by name</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
-  <div class="answer">employees.stream().sorted(Comparator.comparing(e -> e.name)).forEach(System.out::println);</div>
+  <div class="answer">employees.stream().sorted(Comparator.comparing(e -> e.name)).forEach(System.out::println);// if getter is not used<br/>
+  // Sort by Name - Ascending  
+  List&lt;Employee&gt; sortedByNameAsc = employees.stream().sorted(Comparator.comparing(Employee::getName)).collect(Collectors.toList());<br>
+  // Sort by Name - Descending  <br>  
+  List&lt;Employee&gt; sortedByNameDesc = employees.stream().sorted(Comparator.comparing(Employee::getName).reversed()).collect(Collectors.toList());
+	  </div>
 </div>
 
 
 <div class="question">
-  <strong>2. Sort by salary descending</strong><br>
+  <strong>2. Sort by salary  ascending and descending</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
-  <div class="answer">employees.stream().sorted((e1, e2) -> Double.compare(e2.salary, e1.salary)).forEach(System.out::println);</div>
+  <div class="answer">employees.stream().sorted((e1, e2) -> Double.compare(e2.salary, e1.salary)).forEach(System.out::println);// if getter is not used
+  <br>
+  
+  // Sort by Salary - Ascending  
+  List&lt;Employee&gt; sortedBySalaryAsc = employees.stream()<br>
+      .sorted(Comparator.comparingDouble(Employee::getSalary))<br>
+      .collect(Collectors.toList());
+
+  // Sort by Salary - Descending  
+  List&lt;Employee&gt; sortedBySalaryDesc = employees.stream()<br>
+      .sorted(Comparator.comparingDouble(Employee::getSalary).reversed())<br>
+      .collect(Collectors.toList());
+  
+  
+  
+  </div>
+  
 </div>
 
+<div class="question">
+  <strong>3. Sort Employees by Name and Then Salary</strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+    
+  // Sort by name then Salary - Ascending  
+  	<h3>Sort Employees by Name and Salary (Ascending Order)</h3>
+   List&lt;Employee&gt; sortedList = employees.stream()
+            .sorted(Comparator.comparing(Employee::getName)
+                              .thenComparing(Employee::getSalary))
+            .collect(Collectors.toList());
+
+        sortedList.forEach(System.out::println);<br/>
+		<h3>Sort Employees by Name and Salary (Descending Order)</h3>
+
+  <pre><code>System.out.println("\n\n\n descending order ");
+
+List&lt;Employee&gt; sortedListDesc = employees.stream().sorted(Comparator.comparing(Employee::getName, Comparator.reverseOrder())
+                      .thenComparing(Comparator.comparing(Employee::getSalary).reversed())).collect(Collectors.toList());
+
+sortedListDesc.forEach(System.out::println);</code></pre>
+
+  <h3>🧾 Output:</h3>
+  <pre><code>
+John - 60000.0
+John - 50000.0
+Bob - 60000.0
+Alice - 75000.0
+Alice - 70000.0
+  </code></pre>
+  
+  
+  
+  </div>
+  
+</div>
 
 <div class="question">
-  <strong>3. Filter salary > 50000</strong><br>
+  <strong>4. Filter salary > 50000</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">employees.stream().filter(e -> e.salary > 50000).forEach(System.out::println);</div>
 </div>
 
 
 <div class="question">
-  <strong>4. Max salary employee</strong><br>
+  <strong>5. Max salary employee</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("Max salary: " + employees.stream().max(Comparator.comparingDouble(e -> e.salary)).orElse(null));</div>
 </div>
 
 
 <div class="question">
-  <strong>5. Youngest employee</strong><br>
+  <strong>6. Youngest employee</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("Youngest: " + employees.stream().min(Comparator.comparingInt(e -> e.age)).orElse(null));</div>
 </div>
 
 
 <div class="question">
-  <strong>6. List of employee names</strong><br>
+  <strong>7. List of employee names</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("Names: " + employees.stream().map(e -> e.name).collect(Collectors.toList()));</div>
 </div>
 
 
 <div class="question">
-  <strong>7. Remove duplicates by ID</strong><br>
+  <strong>8. Remove duplicates by ID</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">List<Employee> uniqueById = employees.stream().collect(Collectors.collectingAndThen(Collectors.toMap(e -> e.id, Function.identity(), (e1, e2) -> e1), map -> new ArrayList<>(map.values())));</div>
 </div>
 
 
 <div class="question">
-  <strong>8. Group by department</strong><br>
+  <strong>9. Group by department</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Map<String, List<Employee>> byDept = employees.stream().collect(Collectors.groupingBy(e -> e.department));</div>
 </div>
 
 
 <div class="question">
-  <strong>9. Count per department</strong><br>
+  <strong>10. Count per department</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Map<String, Long> countPerDept = employees.stream().collect(Collectors.groupingBy(e -> e.department, Collectors.counting()));</div>
 </div>
 
 
 <div class="question">
-  <strong>10. Avg salary per department</strong><br>
+  <strong>11. Avg salary per department</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Map<String, Double> avgSal = employees.stream().collect(Collectors.groupingBy(e -> e.department, Collectors.averagingDouble(e -> e.salary)));</div>
 </div>
 
 
 <div class="question">
-  <strong>11. Highest-paid in each department</strong><br>
+  <strong>12. Highest-paid in each department</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Map<String, Optional<Employee>> maxPerDept = employees.stream().collect(Collectors.groupingBy(e -> e.department, Collectors.maxBy(Comparator.comparingDouble(e -> e.salary))));</div>
 </div>
 
 
 <div class="question">
-  <strong>12. Total salary</strong><br>
+  <strong>13. Total salary</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">double totalSal = employees.stream().mapToDouble(e -> e.salary).sum(); System.out.println("Total salary: Rs." + totalSal);</div>
 </div>
 
 
 <div class="question">
-  <strong>13. Group names by age</strong><br>
+  <strong>14. Group names by age</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Map<Integer, List<String>> groupByAge = employees.stream().collect(Collectors.groupingBy(e -> e.age, Collectors.mapping(e -> e.name, Collectors.toList())));</div>
 </div>
 
 
 <div class="question">
-  <strong>14. Any employee > 1Lakh</strong><br>
+  <strong>15. Any employee > 1Lakh</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("Any > 1Lakh: " + employees.stream().anyMatch(e -> e.salary > 100000));</div>
 </div>
 
 
 <div class="question">
-  <strong>15. All employees age > 18</strong><br>
+  <strong>16. All employees age > 18</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("All > 18: " + employees.stream().allMatch(e -> e.age > 18));</div>
 </div>
 
 
 <div class="question">
-  <strong>16. First name starts with A</strong><br>
+  <strong>17. First name starts with A</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("Starts with A: " + employees.stream().filter(e -> e.name.startsWith("A")).findFirst().orElse(null));</div>
 </div>
 
 
 <div class="question">
-  <strong>17. Find duplicate names</strong><br>
+  <strong>18. Find duplicate names</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Set<String> dupNames = employees.stream().collect(Collectors.groupingBy(e -> e.name, Collectors.counting())).entrySet().stream().filter(e -> e.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toSet());</div>
 </div>
 
 
 <div class="question">
-  <strong>18. Map of id to name</strong><br>
+  <strong>19. Map of id to name</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Map<Integer, String> idNameMap = employees.stream().collect(Collectors.toMap(e -> e.id, e -> e.name));</div>
 </div>
 
 
 <div class="question">
-  <strong>19. CSV of names</strong><br>
+  <strong>20. CSV of names</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">String csvNames = employees.stream().map(e -> e.name).collect(Collectors.joining(", "));</div>
 </div>
 
 
 <div class="question">
-  <strong>20. Second highest salary</strong><br>
+  <strong>21. Second highest salary</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("2nd highest salary: " + employees.stream().sorted((e1, e2) -> Double.compare(e2.salary, e1.salary)).skip(1).findFirst().orElse(null));</div>
 </div>
 
 
 <div class="question">
-  <strong>21. Top 3 highest-paid</strong><br>
+  <strong>22. Top 3 highest-paid</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">employees.stream().sorted((e1, e2) -> Double.compare(e2.salary, e1.salary)).limit(3).forEach(System.out::println);</div>
 </div>
 
 
 <div class="question">
-  <strong>22. Partition by age > 30</strong><br>
+  <strong>23. Partition by age > 30</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Map<Boolean, List<Employee>> partitioned = employees.stream().collect(Collectors.partitioningBy(e -> e.age > 30));</div>
 </div>
 
 
 <div class="question">
-  <strong>23. Employee with longest name</strong><br>
+  <strong>24. Employee with longest name</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("Longest name: " + employees.stream().max(Comparator.comparingInt(e -> e.name.length())).orElse(null));</div>
 </div>
 
 
 <div class="question">
-  <strong>24. Flatten list of lists</strong><br>
+  <strong>25. Flatten list of lists</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">List<Employee> flatList = listOfLists.stream().flatMap(Collection::stream).collect(Collectors.toList());</div>
 </div>
 
 
 <div class="question">
-  <strong>25. Pagination: 2nd to 4th</strong><br>
+  <strong>26. Pagination: 2nd to 4th</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">List<Employee> paged = employees.stream().skip(1).limit(3).collect(Collectors.toList());</div>
 </div>
 
 
 <div class="question">
-  <strong>26. Character frequency in names</strong><br>
+  <strong>27. Character frequency in names</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">Map<Character, Long> charFreq = employees.stream().flatMap(e -> e.name.chars().mapToObj(c -> (char) c)).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));</div>
 </div>
 
 
 <div class="question">
-  <strong>27. (Optional) Total experience</strong><br>
+  <strong>28. (Optional) Total experience</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">// Assume: employees.stream().mapToInt(e -> e.experience).sum();</div>
 </div>
 
 
 <div class="question">
-  <strong>28. Departments sorted by avg salary</strong><br>
+  <strong>29. Departments sorted by avg salary</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">List<Map.Entry<String, Double>> sortedAvg = avgSal.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList());</div>
 </div>
 
 
 <div class="question">
-  <strong>29. Employee count</strong><br>
+  <strong>30. Employee count</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">System.out.println("Total employees: " + employees.size());</div>
 </div>
 
 
 <div class="question">
-  <strong>30. Check if department exists</strong><br>
+  <strong>31. Check if department exists</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">boolean hasHR = employees.stream().anyMatch(e -> e.department.equals("HR"));</div>
 </div>

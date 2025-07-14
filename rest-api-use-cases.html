@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>REST API Use Cases with Custom Logic</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    details {
+      margin-bottom: 15px;
+      background: #fff;
+      padding: 15px;
+      border-left: 4px solid #2980b9;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    summary {
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #2980b9;
+    }
+    ul {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>REST API Use Cases with Custom Logic</h1>
+
+<details>
+  <summary>1. Employee Leave Management System</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Validate leave balance before approval</li>
+        <li>Reject overlapping requests</li>
+        <li>Send email notifications</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>POST /leave/apply</li>
+        <li>GET /leave/status/{employeeId}</li>
+        <li>POST /leave/approve/{requestId}</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>2. Expense Reimbursement System</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Validate receipt and submission window</li>
+        <li>Auto-classify expense types</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>POST /expenses/submit</li>
+        <li>GET /expenses/employee/{id}</li>
+        <li>POST /expenses/approve/{expenseId}</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>3. Loan Eligibility Checker</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Check eligibility based on age, salary, credit score</li>
+        <li>Calculate eligible amount using a formula</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>POST /loan/check-eligibility</li>
+        <li>GET /loan/offers/{customerId}</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>4. Dynamic Pricing API</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Price changes with demand, time, or location</li>
+        <li>Handle discounts and surge pricing</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>GET /price/product/{productId}?location=&time=</li>
+        <li>POST /price/apply-discount</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>5. Study Tracker API</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Auto-calculate completion progress</li>
+        <li>Auto-archive completed tasks</li>
+        <li>Task urgency based on due date</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>POST /study/add-task</li>
+        <li>GET /study/tasks?status=pending</li>
+        <li>GET /study/progress-summary</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>6. Custom URL Shortener</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Generate base62 encoded short links</li>
+        <li>Expire after time/click limit</li>
+        <li>Track click analytics</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>POST /shorten</li>
+        <li>GET /{shortUrl}</li>
+        <li>GET /analytics/{shortUrl}</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>7. Inventory Auto-Replenishment</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Trigger reorder when below threshold</li>
+        <li>Use demand prediction</li>
+        <li>Send restock alerts</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>GET /inventory/{itemId}</li>
+        <li>POST /inventory/update-stock</li>
+        <li>GET /inventory/restock-suggestions</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>8. Interview Question Tracker</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Assign difficulty based on tags and performance</li>
+        <li>Personalize questions for each user</li>
+        <li>Track time spent per question</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>POST /questions/add</li>
+        <li>GET /questions/personalized/{userId}</li>
+        <li>GET /questions/summary</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>9. PDF Report Generator</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Generate reports dynamically from DB</li>
+        <li>Add charts, watermark, branding</li>
+        <li>Allow download or email</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>GET /report/generate?type=monthly</li>
+        <li>GET /report/download/{reportId}</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+<details>
+  <summary>10. Authentication with OTP</summary>
+  <ul>
+    <li>Custom Logic:
+      <ul>
+        <li>Generate and validate 6-digit OTP</li>
+        <li>Limit retry attempts, expire after 5 mins</li>
+        <li>Lock account on multiple failures</li>
+      </ul>
+    </li>
+    <li>Endpoints:
+      <ul>
+        <li>POST /auth/send-otp</li>
+        <li>POST /auth/verify-otp</li>
+        <li>POST /auth/login</li>
+      </ul>
+    </li>
+  </ul>
+</details>
+
+</body>
+</html>

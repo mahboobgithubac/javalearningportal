@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Interview Q&A Summary</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; background: #f9f9f9; }
+        h2 { color: #2c3e50; }
+        pre { background: #eee; padding: 10px; border-left: 4px solid #3498db; overflow-x: auto; }
+        .qa { margin-bottom: 30px; }
+        code { background: #f1f1f1; padding: 2px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<h1>Java Questions and Answers Summary</h1>
+
+<div class="qa">
+    <h2>1. What is the output of try-catch block with 0/1?</h2>
+    <pre><code>try {
+    return 0 / 1;
+} catch (Exception ex) {
+    return 2;
+}</code></pre>
+    <p><strong>Answer:</strong> <code>0</code> — No exception is thrown.</p>
+</div>
+
+<div class="qa">
+    <h2>2. What is the output of try-catch-finally with 1/0?</h2>
+    <pre><code>try {
+    return 1 / 0;
+} catch (Exception ex) {
+    return 2;
+} finally {
+    return 3;
+}</code></pre>
+    <p><strong>Answer:</strong> <code>3</code> — Finally block overrides return in catch.</p>
+</div>
+
+<div class="qa">
+    <h2>3. Integer caching comparison using ==</h2>
+    <pre><code>Integer a = 100;
+Integer b = 100;
+Integer c = 150;
+Integer d = 150;
+
+System.out.println(a == b); // true
+System.out.println(c == d); // false</code></pre>
+    <p><strong>Answer:</strong> Values from -128 to 127 are cached, so <code>a == b</code> is <code>true</code>, but <code>c == d</code> is <code>false</code>.</p>
+</div>
+
+<div class="qa">
+    <h2>4. Stream map operation (square of list elements)</h2>
+    <pre><code>List&lt;Integer&gt; list = Arrays.asList(2, 4, 5, 8);
+List&lt;Integer&gt; result = list.stream().map(x -> x * x).collect(Collectors.toList());</code></pre>
+    <p><strong>Output:</strong> <code>[4, 16, 25, 64]</code></p>
+</div>
+
+<div class="qa">
+    <h2>5. Flatten list of lists using flatMap</h2>
+	
+    <pre><code>List&lt;String&gt; namesList1 = Arrays.asList("John", "Jane");
+        List&lt;String&gt; namesList2 = Arrays.asList("Tom", "Jerry");
+        List&lt;String&gt; namesList3 = Arrays.asList("Alice", "Bob");
+
+        List&lt;List&lt;String&gt;&gt; namesNested = Arrays.asList(namesList1, namesList2, namesList3);
+
+        // Flattening the nested list using flatMap
+        List&lt;String&gt; flatList = namesNested.stream()
+                                            .flatMap(List::stream)
+                                            .collect(Collectors.toList());
+
+        System.out.println(flatList);</code></pre>
+    <p><strong>Output:</strong> <code>[Alice, Bob, John, Johnny, Anu, Ammay]</code></p>
+</div>
+
+<div class="qa">
+    <h2>6. Functional Interface and Lambda Example</h2>
+    <pre><code>@FunctionalInterface
+interface Calculator {
+    int calculate(int x, int y);
+}
+
+Calculator add = (x, y) -> x + y;
+Calculator subtract = (x, y) -> x - y;
+
+System.out.println(add.calculate(5, 3)); // 8
+System.out.println(subtract.calculate(5, 3)); // 2</code></pre>
+</div>
+
+<div class="qa">
+    <h2>7. Convert Lambda to Method Reference</h2>
+    <pre><code>public static int addOp(int x, int y) { return x + y; }
+public static int subtractOp(int x, int y) { return x - y; }
+
+Calculator add = ClassName::addOp;
+Calculator subtract = ClassName::subtractOp;</code></pre>
+</div>
+
+<div class="qa">
+    <h2>8. Varargs Method with Dynamic Arguments</h2>
+    <pre><code>public static int doCalculation(int... args) {
+    int sum = 0;
+    for (int num : args) {
+        sum += num;
+    }
+    return sum;
+}
+
+int result = doCalculation(2, 3, 5, 10); // 20</code></pre>
+</div>
+
+<div class="qa">
+    <h2>9. What is @PropertySource in Spring?</h2>
+    <pre><code>@Configuration
+@PropertySource("classpath:application.properties")
+public class AppConfig {
+
+    @Value("${app.name}")
+    private String appName;
+
+    @Value("${app.version}")
+    private String appVersion;
+}</code></pre>
+    <p><strong>Purpose:</strong> Loads external properties into Spring environment for injection with <code>@Value</code>.</p>
+</div>
+
+</body>
+</html>

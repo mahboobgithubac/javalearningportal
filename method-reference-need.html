@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Need for Method Reference in Java</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background-color: #f9f9f9; line-height: 1.7; }
+    h1 { color: #2c3e50; }
+    h2 { color: #34495e; margin-top: 30px; }
+    pre, code { background-color: #f4f4f4; padding: 10px; border-left: 4px solid #3498db; display: block; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #fff; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #eaeaea; }
+  </style>
+</head>
+<body>
+
+<h1>What is the Need for Method Reference in Java?</h1>
+
+<p>In Java 8, <strong>method references</strong> were introduced to simplify lambda expressions that only call existing methods. They make code <strong>cleaner, more readable</strong>, and <strong>less verbose</strong>.</p>
+
+<h2>1. Avoid Rewriting Logic Already in Methods</h2>
+<pre><code>// Lambda expression
+list.forEach(item -> System.out.println(item));
+
+// Method reference
+list.forEach(System.out::println);
+</code></pre>
+<p><strong>Why?</strong> Because the logic already exists — no need to rewrite it.</p>
+
+<h2>2. Improves Readability</h2>
+<pre><code>// Using lambda
+Function&lt;String, Integer&gt; strToInt = str -&gt; Integer.parseInt(str);
+
+// Using method reference
+Function&lt;String, Integer&gt; strToInt = Integer::parseInt;
+</code></pre>
+
+<h2>3. Eliminates Boilerplate Code</h2>
+<pre><code>// Lambda
+BiFunction&lt;Integer, Integer, Integer&gt; sum = (a, b) -&gt; Math.max(a, b);
+
+// Method reference
+BiFunction&lt;Integer, Integer, Integer&gt; sum = Math::max;
+</code></pre>
+
+<h2>4. Used Heavily in Functional Interfaces</h2>
+<pre><code>List&lt;String&gt; names = Arrays.asList("Alice", "Bob", "Charlie");
+
+// Using lambda
+names.forEach(name -&gt; System.out.println(name));
+
+// Using method reference
+names.forEach(System.out::println);
+</code></pre>
+
+<h2>5. Used in Stream Pipelines</h2>
+<pre><code>List&lt;String&gt; list = Arrays.asList("1", "2", "3");
+
+// Using method reference instead of str -&gt; Integer.parseInt(str)
+List&lt;Integer&gt; intList = list.stream()
+    .map(Integer::parseInt)
+    .collect(Collectors.toList());
+</code></pre>
+
+<h2>✨ Summary: Why Use Method References?</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Benefit</th>
+      <th>Explanation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>💡 <strong>Concise</strong></td>
+      <td>Reduces lambda boilerplate</td>
+    </tr>
+    <tr>
+      <td>📖 <strong>Readable</strong></td>
+      <td>Clearer intent when calling existing methods</td>
+    </tr>
+    <tr>
+      <td>🚀 <strong>Efficient</strong></td>
+      <td>JVM may optimize better</td>
+    </tr>
+    <tr>
+      <td>♻️ <strong>Reusable</strong></td>
+      <td>Uses existing static/instance methods</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

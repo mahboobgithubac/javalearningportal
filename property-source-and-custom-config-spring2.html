@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spring Boot @PropertySource and Custom Properties Explained</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; background: #f9f9f9; }
+    h1, h2 { color: #2c3e50; }
+    code, pre { background: #eef; padding: 10px; display: block; overflow-x: auto; }
+    .section { margin-bottom: 30px; }
+  </style>
+</head>
+<body>
+
+  <h1>Spring Boot @PropertySource and Custom Properties</h1>
+
+  <div class="section">
+    <h2>1. Is <code>@PropertySource</code> needed in Spring Boot?</h2>
+    <p><strong>No, not for <code>application.properties</code>.</strong> Spring Boot auto-loads <code>application.properties</code> or <code>application.yml</code> from <code>src/main/resources</code>.</p>
+
+    <p>But <code>@PropertySource</code> is <strong>required</strong> if:</p>
+    <ul>
+      <li>You're using a <strong>custom file</strong> like <code>custom.properties</code> or <code>dbconfig.properties</code></li>
+      <li>You’re working in plain Spring (not Spring Boot)</li>
+      <li>You want to load <strong>multiple files</strong></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>2. Example: <code>@PropertySource</code> with custom.properties</h2>
+
+    <h3>File: custom.properties</h3>
+    <pre><code>app.name=MyCustomApp
+app.version=2.0.1
+feature.user.signup.enabled=true
+upload.dir=/data/uploads/
+</code></pre>
+
+    <h3>Java Config</h3>
+    <pre><code>@Configuration
+@PropertySource("classpath:custom.properties")
+public class AppConfig {
+
+    @Value("${app.name}")
+    private String appName;
+
+    @Value("${feature.user.signup.enabled}")
+    private boolean isSignupEnabled;
+
+    @Value("${upload.dir}")
+    private String uploadDir;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("App Name: " + appName);
+        System.out.println("Signup Enabled: " + isSignupEnabled);
+        System.out.println("Upload Directory: " + uploadDir);
+    }
+}
+</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>3. What can be declared in custom properties files?</h2>
+    <p>Anything configurable:</p>
+    <ul>
+      <li>App settings</li>
+      <li>Feature flags</li>
+      <li>API URLs</li>
+      <li>File paths</li>
+      <li>Developer info</li>
+    </ul>
+
+    <h3>Example: custom.properties</h3>
+    <pre><code>app.name=My Awesome App
+app.version=1.0.0
+dev.team=DevOps Team
+feature.beta.access=false
+api.base.url=https://api.example.com/v1
+log.file.path=/var/logs/app.log
+</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>4. Example: DB Config using <code>dbconfig.properties</code></h2>
+
+    <h3>File: dbconfig.properties</h3>
+    <pre><code>db.url=jdbc:mysql://localhost:3306/mydb
+db.username=root
+db.password=secret123
+db.driver=com.mysql.cj.jdbc.Driver
+db.pool.size=10
+</code></pre>
+
+    <h3>Using @Value</h3>
+    <pre><code>@Configuration
+@PropertySource("classpath:dbconfig.properties")
+public class DatabaseConfig {
+
+    @Value("${db.url}")
+    private String dbUrl;
+
+    @Value("${db.username}")
+    private String dbUsername;
+
+    @Value("${db.password}")
+    private String dbPassword;
+
+    @Value("${db.driver}")
+    private String dbDriver;
+
+    @Value("${db.pool.size}")
+    private int dbPoolSize;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("DB URL: " + dbUrl);
+        System.out.println("User: " + dbUsername);
+        System.out.println("Driver: " + dbDriver);
+        System.out.println("Pool Size: " + dbPoolSize);
+    }
+}
+</code></pre>
+
+    <h3>Using @ConfigurationProperties</h3>
+    <pre><code>@Configuration
+@PropertySource("classpath:dbconfig.properties")
+@ConfigurationProperties(prefix = "db")
+public class DatabaseProperties {
+
+    private String url;
+    private String username;
+    private String password;
+    private String driver;
+    private int poolSize;
+
+    // Getters and setters...
+}
+</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>5. Why use <code>custom.properties</code> if <code>application.properties</code> exists?</h2>
+    <ul>
+      <li><strong>Separation of concerns</strong>: DB, feature flags, and other concerns can be in different files</li>
+      <li><strong>Modular/reusable config</strong>: good for multi-module or microservice architecture</li>
+      <li><strong>Externalized or sensitive config</strong>: easy to manage secrets or environment-based overrides</li>
+      <li><strong>Team-based config responsibility</strong>: different teams can manage different configs</li>
+      <li><strong>Avoids clutter</strong>: keeps <code>application.properties</code> clean and concise</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6. Using <code>@PropertySource</code> with Spring Boot Profiles</h2>
+
+    <h3>❌ Problem:</h3>
+    <p>This does <strong>not work</strong> because <code>spring.profiles.active</code> is resolved <strong>after</strong> <code>@PropertySource</code> is processed:</p>
+    <pre><code>@PropertySource("classpath:custom-${spring.profiles.active}.properties") // ❌ won't work
+</code></pre>
+
+    <h3>✅ Solution 1: Profile-based config class</h3>
+    <pre><code>@Configuration
+@Profile("dev")
+@PropertySource("classpath:custom-dev.properties")
+public class DevConfig {
+}
+</code></pre>
+
+    <pre><code>@Configuration
+@Profile("prod")
+@PropertySource("classpath:custom-prod.properties")
+public class ProdConfig {
+}
+</code></pre>
+
+    <h3>✅ Solution 2: Load manually using Environment</h3>
+    <pre><code>@Configuration
+public class DynamicPropertyLoader {
+
+    @Autowired
+    private Environment env;
+
+    @PostConstruct
+    public void load() throws IOException {
+        String profile = env.getProperty("spring.profiles.active");
+        if (profile != null) {
+            Resource resource = new ClassPathResource("custom-" + profile + ".properties");
+            Properties props = new Properties();
+            props.load(resource.getInputStream());
+
+            System.out.println("Loaded: " + resource.getFilename());
+        }
+    }
+}
+</code></pre>
+
+    <h3>✅ Best Practice: Use <code>application-<i>profile</i>.properties</code></h3>
+    <pre><code># application.properties
+spring.profiles.active=dev
+</code></pre>
+
+    <pre><code># application-dev.properties
+my.value=DevValue
+</code></pre>
+
+    <pre><code># application-prod.properties
+my.value=ProdValue
+</code></pre>
+
+    <p>Inject like this:</p>
+    <pre><code>@Value("${my.value}")
+private String value;
+</code></pre>
+
+    <h3>✅ Summary</h3>
+    <table border="1" cellpadding="6">
+      <thead>
+        <tr>
+          <th>Approach</th>
+          <th>Profile-Aware?</th>
+          <th>Recommended?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>@PropertySource with ${spring.profiles.active}</td>
+          <td>❌ No</td>
+          <td>❌</td>
+        </tr>
+        <tr>
+          <td>@PropertySource with @Profile class</td>
+          <td>✅ Yes</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td>Load programmatically with Environment</td>
+          <td>✅ Yes</td>
+          <td>⚠️ Use if needed</td>
+        </tr>
+        <tr>
+          <td>application-<i>profile</i>.properties</td>
+          <td>✅ Yes</td>
+          <td>✅✅✅ (Best)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

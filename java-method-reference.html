@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Java Method Reference Explained</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.7; padding: 20px; background: #f9f9f9; color: #333; }
+    h1, h2 { color: #2c3e50; }
+    code, pre { background: #eef; padding: 10px; border-radius: 5px; display: block; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 10px; text-align: left; }
+  </style>
+</head>
+<body>
+
+  <h1>Java Method Reference Explained</h1>
+
+  <h2>✅ What is a Method Reference?</h2>
+  <p>
+    A method reference in Java 8 is a shorthand notation of a lambda expression that calls an existing method. It uses the <code>::</code> operator and improves code readability by eliminating boilerplate lambda syntax.
+  </p>
+
+  <h2>✅ Types of Method References</h2>
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Syntax</th>
+      <th>Example</th>
+    </tr>
+    <tr>
+      <td>Static Method</td>
+      <td><code>ClassName::staticMethod</code></td>
+      <td><code>Math::abs</code></td>
+    </tr>
+    <tr>
+      <td>Instance Method of Particular Object</td>
+      <td><code>object::instanceMethod</code></td>
+      <td><code>scanner::nextLine</code></td>
+    </tr>
+    <tr>
+      <td>Instance Method of Arbitrary Object</td>
+      <td><code>ClassName::instanceMethod</code></td>
+      <td><code>String::toLowerCase</code></td>
+    </tr>
+    <tr>
+      <td>Constructor Reference</td>
+      <td><code>ClassName::new</code></td>
+      <td><code>ArrayList::new</code></td>
+    </tr>
+  </table>
+
+  <h2>✅ Example 1: Static Method Reference</h2>
+  <pre><code>public class Utility {
+    public static void greet(String name) {
+        System.out.println("Hello, " + name);
+    }
+}
+
+Consumer&lt;String&gt; greeter = Utility::greet;
+greeter.accept("Alice"); // Output: Hello, Alice
+</code></pre>
+
+  <h2>✅ Example 2: Instance Method Reference</h2>
+  <pre><code>public class Printer {
+    public void print(String msg) {
+        System.out.println("Message: " + msg);
+    }
+}
+
+Printer printer = new Printer();
+Consumer&lt;String&gt; printRef = printer::print;
+printRef.accept("Hello world");
+</code></pre>
+
+  <h2>✅ Example 3: Method Reference with Arguments</h2>
+  <pre><code>public class MathUtil {
+    public static int add(int a, int b) {
+        return a + b;
+    }
+}
+
+// Method reference
+BiFunction&lt;Integer, Integer, Integer&gt; adder = MathUtil::add;
+
+// Pass arguments
+int result = adder.apply(10, 5);  // Output: 15
+</code></pre>
+
+  <h2>✅ Example 4: Method Reference in Streams</h2>
+  <pre><code>public class MyUtil {
+    public static String shout(String word) {
+        return word.toUpperCase() + "!";
+    }
+}
+
+List&lt;String&gt; words = Arrays.asList("hi", "java", "code");
+
+List&lt;String&gt; shouted = words.stream()
+    .map(MyUtil::shout)
+    .collect(Collectors.toList());
+</code></pre>
+
+  <h2>✅ Example 5: Lambda to Method Reference</h2>
+  <pre><code>// Lambda
+BiFunction&lt;Integer, Integer, Integer&gt; add = (a, b) -> a + b;
+
+// Equivalent Method Reference
+BiFunction&lt;Integer, Integer, Integer&gt; add = MathUtil::add;
+</code></pre>
+
+  <h2>✅ Summary Table</h2>
+  <table>
+    <tr>
+      <th>Lambda Expression</th>
+      <th>Method Reference Equivalent</th>
+    </tr>
+    <tr>
+      <td><code>(a, b) -&gt; a + b</code></td>
+      <td><code>MathUtil::add</code></td>
+    </tr>
+    <tr>
+      <td><code>s -&gt; s.toUpperCase()</code></td>
+      <td><code>String::toUpperCase</code></td>
+    </tr>
+    <tr>
+      <td><code>x -&gt; System.out.println(x)</code></td>
+      <td><code>System.out::println</code></td>
+    </tr>
+  </table>
+
+  <h2>✅ Final Interview Line</h2>
+  <p>
+    "A method reference is a cleaner alternative to a lambda when you're only calling an existing method. It's useful in stream operations, functional interfaces, and simplifies code. The method reference syntax <code>ClassName::methodName</code> directly maps to the method signature expected by the functional interface."
+  </p>
+
+</body>
+</html>
