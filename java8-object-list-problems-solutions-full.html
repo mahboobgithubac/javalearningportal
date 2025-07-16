@@ -302,6 +302,88 @@ Alice - 70000.0
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">boolean hasHR = employees.stream().anyMatch(e -> e.department.equals("HR"));</div>
 </div>
+<div class="question">
+  <strong>32. How do you find the employee with the highest salary in each department using Java 8 Stream API?</p>
+    </strong><br>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+    <p><strong>🧾 Employee Class:</strong></p>
+      <pre><code>public class Employee {
+    private int id;
+    private String name;
+    private String department;
+    private double salary;
+
+    public Employee(int id, String name, String department, double salary) {
+        this.id = id;
+        this.name = name;
+        this.department = department;
+        this.salary = salary;
+    }
+
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getDepartment() { return department; }
+    public double getSalary() { return salary; }
+
+    @Override
+    public String toString() {
+        return name + " (" + department + ", $" + salary + ")";
+    }
+}</code></pre>
+
+      <p><strong>✅ Java 8 Code to Get Max Salary Employee Per Department:</strong></p>
+      <pre><code>import java.util.*;
+import java.util.stream.Collectors;
+
+public class DepartmentWiseMaxSalary {
+    public static void main(String[] args) {
+        List&lt;Employee&gt; employees = Arrays.asList(
+            new Employee(1, "Alice", "HR", 50000),
+            new Employee(2, "Bob", "IT", 70000),
+            new Employee(3, "Charlie", "HR", 60000),
+            new Employee(4, "David", "IT", 80000),
+            new Employee(5, "Eve", "Finance", 75000),
+            new Employee(6, "Frank", "Finance", 72000)
+        );
+
+        Map&lt;String, Optional&lt;Employee&gt;&gt; maxByDept = employees.stream()
+            .collect(Collectors.groupingBy(
+                Employee::getDepartment,
+                Collectors.maxBy(Comparator.comparingDouble(Employee::getSalary))
+            ));
+
+        maxByDept.forEach((dept, empOpt) -&gt;
+            System.out.println(dept + " =&gt; " + empOpt.orElse(null))
+        );
+    }
+}</code></pre>
+
+      <p><strong>✅ Cleaner Version (Without Optional):</strong></p>
+      <pre><code>Map&lt;String, Employee&gt; maxSalaryByDept = employees.stream()
+    .collect(Collectors.groupingBy(
+        Employee::getDepartment,
+        Collectors.collectingAndThen(
+            Collectors.maxBy(Comparator.comparingDouble(Employee::getSalary)),
+            Optional::get
+        )
+    ));</code></pre>
+
+      <p><strong>🧠 Output:</strong></p>
+      <pre><code>HR => Charlie (HR, $60000.0)
+IT => David (IT, $80000.0)
+Finance => Eve (Finance, $75000.0)</code></pre>
+
+      <p><strong>✅ Explanation:</strong></p>
+      <ul>
+        <li><code>groupingBy</code> groups employees by department</li>
+        <li><code>maxBy</code> finds the employee with the max salary in each group</li>
+        <li><code>Optional::get</code> unwraps the Optional to get the actual employee</li>
+      </ul>
+  
+  
+  </div>
+</div>
 
 
 </body>

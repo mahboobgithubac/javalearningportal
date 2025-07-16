@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Why Store Data in Multipart in S3 + Max File Size in S3</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    details {
+      margin-bottom: 20px;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 18px;
+      color: #2980b9;
+    }
+    .section {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      background-color: #f9f9f9;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>💡 Why Store Data in Multiple Parts in S3?</h2>
+  <div class="section">
+    <details open>
+      <summary>✅ Benefits of Multipart Upload</summary>
+      <ul>
+        <li><strong>Efficient Upload of Large Files:</strong> Upload large files in smaller parts (chunks). Required for files over <strong>5 GB</strong>.</li>
+        <li><strong>Faster Uploads with Parallelism:</strong> Multiple parts can be uploaded in parallel using threads/processes.</li>
+        <li><strong>Resumable Uploads:</strong> If an upload fails, only the failed part is re-uploaded — not the whole file.</li>
+        <li><strong>Improved Reliability:</strong> Smaller parts are less likely to fail and can be individually checksummed.</li>
+        <li><strong>Efficient Memory Usage:</strong> Stream and upload chunks instead of loading the entire file in memory.</li>
+        <li><strong>Pause and Resume Support:</strong> Multipart uploads can be paused and resumed later.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>🔧 How Multipart Upload Works</summary>
+      <ul>
+        <li>Initiate upload to get an <code>UploadId</code>.</li>
+        <li>Upload each part (min 5 MB, max 10,000 parts).</li>
+        <li>Complete the upload — S3 assembles the parts into one object.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>📘 Example Use Case</summary>
+      <p><strong>Uploading a 10 GB video file:</strong></p>
+      <ul>
+        <li><strong>Without Multipart:</strong> Risk of timeout or failure.</li>
+        <li><strong>With Multipart:</strong> 100 parts of 100 MB → faster, safer, and resumable upload.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>🔍 Related Concepts</summary>
+      <ul>
+        <li><code>aws s3 cp</code> uses multipart automatically for large files.</li>
+        <li>AWS SDKs support multipart upload out of the box (Java, Python, etc.).</li>
+        <li>S3 merges all parts into a single object after upload — parts are not stored separately.</li>
+      </ul>
+    </details>
+  </div>
+
+  <h2>📦 What is the Maximum File Size in S3?</h2>
+  <div class="section">
+    <details open>
+      <summary>✅ S3 Object Size Limits</summary>
+      <table>
+        <tr><th>Feature</th><th>Limit</th></tr>
+        <tr><td>Single Object Size</td><td>5 TB</td></tr>
+        <tr><td>Max Part Size (Multipart Upload)</td><td>5 GB</td></tr>
+        <tr><td>Min Part Size (Multipart Upload)</td><td>5 MB (except last part)</td></tr>
+        <tr><td>Max Parts Per Upload</td><td>10,000</td></tr>
+      </table>
+    </details>
+
+    <details>
+      <summary>🔢 Multipart Upload Math</summary>
+      <p><code>5 GB × 10,000 parts = 50,000 GB</code>, but S3 limits the total object size to <strong>5 TB</strong>.</p>
+      <p>You can upload a 5 TB file by splitting it into 1,000 parts of 5 GB each, for example.</p>
+    </details>
+
+    <details>
+      <summary>📌 Notes</summary>
+      <ul>
+        <li>S3 stores <em>objects</em>, not files. Objects can be images, videos, backups, etc.</li>
+        <li>Single PUT object upload limit is <strong>5 GB</strong>.</li>
+        <li>To upload files >5 GB, use <strong>multipart upload</strong> or it will fail.</li>
+        <li>Use S3 Glacier for very large archival data.</li>
+        <li>Consider <strong>Amazon S3 Transfer Acceleration</strong> for faster uploads globally.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>🛑 Summary</summary>
+      <table>
+        <tr><th>Upload Method</th><th>Max Object Size</th></tr>
+        <tr><td>Single PUT Upload</td><td>5 GB</td></tr>
+        <tr><td>Multipart Upload</td><td>5 TB</td></tr>
+      </table>
+    </details>
+  </div>
+
+</body>
+</html>

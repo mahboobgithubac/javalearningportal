@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redis Interview Questions and Answers</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #f7f9fa; color: #333; }
+    h1 { text-align: center; color: #c92c2c; }
+    details { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #fff; }
+    summary { font-weight: bold; cursor: pointer; }
+    summary:hover { color: #c92c2c; }
+    code, pre { background: #f4f4f4; padding: 5px; display: block; margin-top: 5px; white-space: pre-wrap; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+  </style>
+</head>
+<body>
+
+<h1>Redis Interview Questions and Answers</h1>
+
+<h2>🔹 Beginner-Level Questions</h2>
+
+<details>
+  <summary>1. What is Redis?</summary>
+  <p>Redis (Remote Dictionary Server) is an open-source, in-memory key-value data store. It supports data structures like strings, hashes, lists, sets, sorted sets, bitmaps, hyperloglogs, and geospatial indexes.</p>
+</details>
+
+<details>
+  <summary>2. What are the main features of Redis?</summary>
+  <ul>
+    <li>In-memory storage</li>
+    <li>Key-value store with rich data types</li>
+    <li>High performance (sub-millisecond latency)</li>
+    <li>Persistence (RDB and AOF)</li>
+    <li>Pub/Sub messaging system</li>
+    <li>Replication and clustering</li>
+    <li>Lua scripting support</li>
+  </ul>
+</details>
+
+<details>
+  <summary>3. What data types does Redis support?</summary>
+  <p>Strings, Lists, Sets, Sorted Sets, Hashes, Bitmaps, HyperLogLogs, Streams, Geospatial Indexes</p>
+</details>
+
+<details>
+  <summary>4. How is Redis different from a traditional database?</summary>
+  <p>Redis is an in-memory database, which makes it much faster than disk-based databases. It is suitable for temporary, fast-access data.</p>
+</details>
+
+<details>
+  <summary>5. What is the use of Redis in real-world applications?</summary>
+  <ul>
+    <li>Caching frequently accessed data</li>
+    <li>Session storage in web apps</li>
+    <li>Real-time analytics</li>
+    <li>Message queues using Pub/Sub</li>
+    <li>Leaderboards and counters</li>
+    <li>Distributed locks</li>
+  </ul>
+</details>
+
+<h2>🔹 Intermediate-Level Questions</h2>
+
+<details>
+  <summary>6. How does Redis ensure persistence?</summary>
+  <p>Redis supports two persistence mechanisms: RDB (snapshot-based) and AOF (append-only log of operations).</p>
+</details>
+
+<details>
+  <summary>7. Difference between RDB and AOF?</summary>
+  <table>
+    <tr><th>Feature</th><th>RDB</th><th>AOF</th></tr>
+    <tr><td>Speed</td><td>Faster</td><td>Slower</td></tr>
+    <tr><td>Durability</td><td>Less durable</td><td>More durable</td></tr>
+    <tr><td>File Size</td><td>Compact</td><td>Larger</td></tr>
+    <tr><td>Startup Time</td><td>Fast</td><td>Slow</td></tr>
+  </table>
+</details>
+
+<details>
+  <summary>8. What are Redis Expire and TTL?</summary>
+  <p><code>EXPIRE key seconds</code> sets a timeout. <code>TTL key</code> shows remaining time-to-live.</p>
+</details>
+
+<details>
+  <summary>9. How do you implement caching with Redis?</summary>
+  <pre>
+@Cacheable(value = "users", key = "#id")
+public User getUserById(Long id) {
+   return userRepository.findById(id).orElseThrow();
+}</pre>
+</details>
+
+<details>
+  <summary>10. What is Redis Pub/Sub?</summary>
+  <p>Redis provides Publish/Subscribe messaging via <code>PUBLISH</code> and <code>SUBSCRIBE</code> commands.</p>
+</details>
+
+<details>
+  <summary>11. How does Redis replication work?</summary>
+  <p>Redis supports master-slave replication. Slaves replicate data from a master for read scaling and failover.</p>
+</details>
+
+<h2>🔹 Advanced-Level Questions</h2>
+
+<details>
+  <summary>12. What is Redis Cluster?</summary>
+  <p>Redis Cluster distributes data across multiple nodes using hash slots (0–16383), enabling scalability and fault tolerance.</p>
+</details>
+
+<details>
+  <summary>13. What is Redis Sentinel?</summary>
+  <p>Sentinel provides monitoring, automatic failover, and configuration for high availability of Redis instances.</p>
+</details>
+
+<details>
+  <summary>14. What are Redis transactions?</summary>
+  <p>Redis supports transactions using <code>MULTI</code>, <code>EXEC</code>, <code>DISCARD</code>, and <code>WATCH</code>.</p>
+  <pre>
+WATCH balance
+MULTI
+DECR balance
+EXEC
+</pre>
+</details>
+
+<details>
+  <summary>15. Redis vs Memcached?</summary>
+  <table>
+    <tr><th>Feature</th><th>Redis</th><th>Memcached</th></tr>
+    <tr><td>Data Types</td><td>Rich</td><td>Only Strings</td></tr>
+    <tr><td>Persistence</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Replication</td><td>Yes</td><td>No</td></tr>
+    <tr><td>Scripting</td><td>Yes (Lua)</td><td>No</td></tr>
+  </table>
+</details>
+
+<details>
+  <summary>16. How to handle cache invalidation in Redis?</summary>
+  <ul>
+    <li>Set TTL</li>
+    <li>Use versioning</li>
+    <li>Update/delete keys on data change</li>
+    <li>Use pub/sub to sync cache</li>
+  </ul>
+</details>
+
+<details>
+  <summary>17. How to implement distributed locking with Redis?</summary>
+  <pre>
+SET lock_key "unique_token" NX PX 10000
+</pre>
+  <p>Use the RedLock algorithm for robust distributed locks.</p>
+</details>
+
+<details>
+  <summary>18. How to monitor Redis performance?</summary>
+  <ul>
+    <li><code>MONITOR</code>: Real-time command log</li>
+    <li><code>INFO</code>: Statistics</li>
+    <li>Use RedisInsight or other dashboards</li>
+  </ul>
+</details>
+
+<details>
+  <summary>19. What is Redis eviction policy?</summary>
+  <p>When memory limit is reached, Redis evicts keys based on policies like:</p>
+  <ul>
+    <li><code>noeviction</code></li>
+    <li><code>allkeys-lru</code></li>
+    <li><code>volatile-lru</code></li>
+    <li><code>allkeys-random</code></li>
+    <li><code>volatile-ttl</code></li>
+  </ul>
+</details>
+
+<details>
+  <summary>20. What are Redis pipelines?</summary>
+  <p>Pipelines allow batching commands to reduce latency:</p>
+  <pre>
+pipe = r.pipeline()
+pipe.set('key1', 'value1')
+pipe.set('key2', 'value2')
+pipe.execute()
+</pre>
+</details>
+
+</body>
+</html>

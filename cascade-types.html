@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JPA CascadeType Explained with Examples</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.7; padding: 20px; background-color: #f7f9fc; color: #333; }
+    h1, h2, h3 { color: #2c3e50; }
+    code { background: #eee; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
+    pre { background: #f0f0f0; padding: 15px; border-left: 5px solid #3498db; overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 10px; text-align: center; }
+    .tip { background: #e8f8f5; padding: 10px; border-left: 5px solid #1abc9c; margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+  <h1>JPA <code>CascadeType</code> Explained with Examples</h1>
+
+  <p>In <strong>JPA (Java Persistence API)</strong>, <code>CascadeType</code> defines what operations should be cascaded from the parent entity to its associated child entities.</p>
+
+  <h2>📘 CascadeType Types</h2>
+  <ul>
+    <li><code>PERSIST</code> – Cascade persist operation</li>
+    <li><code>MERGE</code> – Cascade merge operation</li>
+    <li><code>REMOVE</code> – Cascade delete</li>
+    <li><code>REFRESH</code> – Cascade refresh</li>
+    <li><code>DETACH</code> – Cascade detach from persistence context</li>
+    <li><code>ALL</code> – Includes all of the above</li>
+  </ul>
+
+  <h2>✅ 1. CascadeType.PERSIST</h2>
+  <p>When you <code>persist</code> the parent, the child is automatically persisted.</p>
+  <pre><code>@OneToOne(cascade = CascadeType.PERSIST)
+@JoinColumn(name = "profile_id")
+private Profile profile;
+  </code></pre>
+  <pre><code>User user = new User();
+Profile profile = new Profile();
+profile.setBio("Developer");
+user.setProfile(profile);
+entityManager.persist(user); // Profile also persisted</code></pre>
+
+  <h2>✅ 2. CascadeType.MERGE</h2>
+  <p>When you <code>merge</code> the parent, the child is also merged.</p>
+  <pre><code>@OneToOne(cascade = CascadeType.MERGE)
+@JoinColumn(name = "profile_id")
+private Profile profile;
+  </code></pre>
+  <pre><code>User user = entityManager.find(User.class, 1L);
+user.getProfile().setBio("Updated");
+entityManager.merge(user);</code></pre>
+
+  <h2>✅ 3. CascadeType.REMOVE</h2>
+  <p>When you <code>remove</code> the parent, the child is also deleted.</p>
+  <pre><code>@OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE)
+private List&lt;Employee&gt; employees;</code></pre>
+  <pre><code>Department dept = entityManager.find(Department.class, 1L);
+entityManager.remove(dept); // All employees removed</code></pre>
+
+  <h2>✅ 4. CascadeType.REFRESH</h2>
+  <p>When the parent is <code>refreshed</code>, the child is refreshed too.</p>
+  <pre><code>@OneToOne(cascade = CascadeType.REFRESH)
+@JoinColumn(name = "profile_id")
+private Profile profile;
+  </code></pre>
+  <pre><code>User user = entityManager.find(User.class, 1L);
+entityManager.refresh(user);</code></pre>
+
+  <h2>✅ 5. CascadeType.DETACH</h2>
+  <p>When the parent is <code>detached</code>, the child is also detached from the persistence context.</p>
+  <pre><code>@OneToMany(mappedBy = "department", cascade = CascadeType.DETACH)
+private List&lt;Employee&gt; employees;
+  </code></pre>
+  <pre><code>Department dept = entityManager.find(Department.class, 1L);
+entityManager.detach(dept);</code></pre>
+
+  <h2>✅ 6. CascadeType.ALL</h2>
+  <p>Includes <code>PERSIST</code>, <code>MERGE</code>, <code>REMOVE</code>, <code>REFRESH</code>, and <code>DETACH</code>.</p>
+  <pre><code>@OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+private List&lt;Employee&gt; employees;
+  </code></pre>
+
+  <h2>🧠 Full Working Example</h2>
+  <pre><code>@Entity
+public class Department {
+    @Id @GeneratedValue
+    private Long id;
+    private String name;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    private List&lt;Employee&gt; employees;
+}
+
+@Entity
+public class Employee {
+    @Id @GeneratedValue
+    private Long id;
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+}</code></pre>
+
+  <pre><code>Department dept = new Department();
+dept.setName("IT");
+
+Employee e1 = new Employee();
+e1.setName("Alice");
+e1.setDepartment(dept);
+
+Employee e2 = new Employee();
+e2.setName("Bob");
+e2.setDepartment(dept);
+
+dept.setEmployees(Arrays.asList(e1, e2));
+
+entityManager.persist(dept); // ✅ Auto persists employees</code></pre>
+
+  <h2>🔁 CascadeType Comparison Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>CascadeType</th>
+        <th>Persist</th>
+        <th>Merge</th>
+        <th>Remove</th>
+        <th>Refresh</th>
+        <th>Detach</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>PERSIST</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td></tr>
+      <tr><td>MERGE</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+      <tr><td>REMOVE</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td></tr>
+      <tr><td>REFRESH</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td></tr>
+      <tr><td>DETACH</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
+      <tr><td>ALL</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <strong>Best Practice:</strong> Use <code>CascadeType.ALL</code> for tightly coupled objects (e.g., Order and OrderItems). Avoid cascading REMOVE if child is shared.
+  </div>
+
+</body>
+</html>

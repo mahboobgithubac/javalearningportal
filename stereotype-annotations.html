@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stereotype Annotations in Spring Boot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        code {
+            
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: #fff;
+        }
+        table, th, td {
+            border: 1px solid #bbb;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #e0e0e0;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔰 Stereotype Annotations in Spring Boot</h1>
+
+    <div class="section">
+        <p>Stereotype annotations are special annotations that mark a class as a <strong>Spring-managed component</strong>. These annotations help Spring detect and manage different layers like controller, service, and repository using component scanning.</p>
+    </div>
+
+    <div class="section">
+        <h2>1. <code>@Component</code></h2>
+        <p>Marks a class as a generic Spring-managed component. It's the base annotation for others like <code>@Service</code>, <code>@Repository</code>, and <code>@Controller</code>.</p>
+        <pre><code>@Component
+public class MyComponent {
+    public void doWork() {
+        System.out.println("Working...");
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>2. <code>@Service</code></h2>
+        <p>Used to mark <strong>business logic layer</strong> classes. Also supports AOP.</p>
+        <pre><code>@Service
+public class UserService {
+    public void processUser() {
+        System.out.println("Processing user...");
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>3. <code>@Repository</code></h2>
+        <p>Marks a class as a <strong>Data Access Layer</strong> component. Provides automatic exception translation.</p>
+        <pre><code>@Repository
+public class UserRepository {
+    public void save() {
+        System.out.println("Saving user...");
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>4. <code>@Controller</code></h2>
+        <p>Marks a class as a <strong>web controller</strong> in Spring MVC.</p>
+        <pre><code>@Controller
+public class UserController {
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello.jsp";
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>5. <code>@RestController</code></h2>
+        <p>Combination of <code>@Controller</code> and <code>@ResponseBody</code>. Used for REST APIs to return JSON/XML.</p>
+        <pre><code>@RestController
+public class ApiController {
+    @GetMapping("/api/data")
+    public String getData() {
+        return "Some data";
+    }
+}</code></pre>
+    </div>
+
+    <div class="section">
+        <h2>🧠 How Stereotype Annotations Work</h2>
+        <p>When a class is annotated, Spring:</p>
+        <ul>
+            <li>Detects it via <code>@ComponentScan</code> (enabled via <code>@SpringBootApplication</code>)</li>
+            <li>Manages it as a bean in the ApplicationContext</li>
+            <li>Allows it to be injected using <code>@Autowired</code> or constructor injection</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🔍 Component Scanning Example</h2>
+        <pre><code>@SpringBootApplication
+public class MyApp {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApp.class, args);
+    }
+}</code></pre>
+        <p>All stereotype-annotated classes in the same or sub-packages of <code>MyApp</code> will be scanned.</p>
+    </div>
+
+    <div class="section">
+        <h2>✅ Summary Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Annotation</th>
+                    <th>Purpose</th>
+                    <th>Layer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>@Component</code></td>
+                    <td>Generic Spring bean</td>
+                    <td>Any</td>
+                </tr>
+                <tr>
+                    <td><code>@Service</code></td>
+                    <td>Business logic</td>
+                    <td>Service layer</td>
+                </tr>
+                <tr>
+                    <td><code>@Repository</code></td>
+                    <td>Database interaction (DAO)</td>
+                    <td>Repository layer</td>
+                </tr>
+                <tr>
+                    <td><code>@Controller</code></td>
+                    <td>Web Controller</td>
+                    <td>Web (MVC) layer</td>
+                </tr>
+                <tr>
+                    <td><code>@RestController</code></td>
+                    <td>REST API Controller</td>
+                    <td>Web (REST) layer</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

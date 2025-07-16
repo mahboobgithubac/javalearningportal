@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JPA @OneToMany Example: Department & Employee</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f8f9fa;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    ul {
+      line-height: 1.7;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>JPA @OneToMany and @ManyToOne Mapping</h1>
+
+  <div class="section">
+    <h2>📘 Department Entity</h2>
+    <pre><code>@Entity
+public class Department {
+    @Id
+    private Long id;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    private List&lt;Employee&gt; employees;
+}</code></pre>
+
+    <p><strong>Explanation:</strong></p>
+    <ul>
+      <li><code>@Entity</code>: Specifies that the class is an entity and is mapped to a database table.</li>
+      <li><code>@Id</code>: Marks the primary key.</li>
+      <li><code>@OneToMany(mappedBy = "department", cascade = CascadeType.ALL)</code>:
+        <ul>
+          <li><code>mappedBy</code>: Indicates that the <code>department</code> field in the <code>Employee</code> entity owns the relationship.</li>
+          <li><code>cascade = CascadeType.ALL</code>: All persistence operations will cascade to the employee list.</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>👨‍💼 Employee Entity</h2>
+    <pre><code>@Entity
+public class Employee {
+    @Id
+    private Long id;
+
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+}</code></pre>
+
+    <p><strong>Explanation:</strong></p>
+    <ul>
+      <li><code>@ManyToOne</code>: Defines that many employees can be associated with one department.</li>
+      <li><code>@JoinColumn(name = "department_id")</code>: Specifies the foreign key column for the department reference.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>✅ Summary</h2>
+    <ul>
+      <li>One <strong>Department</strong> has many <strong>Employees</strong>.</li>
+      <li>Each <strong>Employee</strong> belongs to one <strong>Department</strong>.</li>
+      <li>JPA annotations like <code>@OneToMany</code> and <code>@ManyToOne</code> help define bidirectional relationships.</li>
+      <li>Always make sure to initialize collections (like <code>List&lt;Employee&gt;</code>) to avoid <code>NullPointerException</code>.</li>
+    </ul>
+  </div>
+
+</body>
+</html>

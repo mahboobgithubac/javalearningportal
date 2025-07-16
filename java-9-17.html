@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java 9 to Java 17 Features</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      color: #212529;
+    }
+    header {
+      background-color: #343a40;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+    }
+    main {
+      padding: 20px 40px;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    h2 {
+      background-color: #e9ecef;
+      padding: 10px;
+      border-left: 6px solid #007bff;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+      background-color: #dee2e6;
+      padding: 8px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+    }
+    details {
+      margin-bottom: 10px;
+      background-color: #ffffff;
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #fff;
+    }
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f1f3f5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Java Features from Java 9 to Java 17</h1>
+    <p>A comprehensive guide to new features added post Java 8</p>
+  </header>
+  <main>
+    <section>
+      <h2>Java 9 (Sep 2017)</h2>
+      <details open>
+        <summary>Highlights</summary>
+        <ul>
+          <li>Jigsaw Project (Modules System)</li>
+          <li>JShell (REPL)</li>
+          <li>Improved Javadoc with Search</li>
+          <li>Private Interface Methods</li>
+          <li>Collection Factory Methods</li>
+          <li>Stream API Enhancements: <code>takeWhile</code>, <code>dropWhile</code>, etc.</li>
+          <li>Try-With-Resources Enhancement</li>
+          <li>Compact Strings for memory optimization</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Java 10 (Mar 2018)</h2>
+      <details>
+        <summary>Highlights</summary>
+        <ul>
+          <li><code>var</code> Keyword for local variable inference</li>
+          <li>Application Class-Data Sharing (AppCDS)</li>
+          <li>Garbage Collector Interface</li>
+          <li>Parallel Full GC for G1</li>
+          <li>Default Root Certificates</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Java 11 (Sep 2018) - LTS</h2>
+      <details>
+        <summary>Highlights</summary>
+        <ul>
+          <li><code>var</code> in Lambda Parameters</li>
+          <li>New String Methods: <code>isBlank</code>, <code>lines</code>, <code>strip</code>, <code>repeat</code></li>
+          <li>New File Methods: <code>readString</code>, <code>writeString</code></li>
+          <li>Standardized <code>HttpClient</code></li>
+          <li>Launch Single-File Java Programs</li>
+          <li>Removed Java EE and CORBA modules</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Java 12 to 17 Highlights</h2>
+      <details>
+        <summary>Java 12 (Mar 2019)</summary>
+        <ul>
+          <li>Switch Expressions (Preview)</li>
+          <li>Compact Number Formatting</li>
+          <li>Shenandoah GC (Experimental)</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Java 13 (Sep 2019)</summary>
+        <ul>
+          <li>Text Blocks (Preview)</li>
+          <li>Switch Expressions (2nd Preview)</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Java 14 (Mar 2020)</summary>
+        <ul>
+          <li>Switch Expressions (Standard)</li>
+          <li>Helpful NullPointerException Messages</li>
+          <li>Records (Preview)</li>
+          <li>Pattern Matching for <code>instanceof</code> (Preview)</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Java 15 (Sep 2020)</summary>
+        <ul>
+          <li>Sealed Classes (Preview)</li>
+          <li>Text Blocks (Standard)</li>
+          <li>Hidden Classes</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Java 16 (Mar 2021)</summary>
+        <ul>
+          <li>Records (Standard)</li>
+          <li>Pattern Matching for <code>instanceof</code> (Standard)</li>
+          <li>Sealed Classes (2nd Preview)</li>
+          <li>Vector API (Incubator)</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Java 17 (Sep 2021) - LTS</summary>
+        <ul>
+          <li>Sealed Classes (Standard)</li>
+          <li>Pattern Matching for <code>switch</code> (Preview)</li>
+          <li>Enhanced Random Generators</li>
+          <li>Foreign Function & Memory API (Incubator)</li>
+          <li>Removed RMI, Applet, Security Manager</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Summary Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Java Version</th>
+            <th>Major Features</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Java 9</td><td>Modules, JShell, Stream Enhancements</td></tr>
+          <tr><td>Java 10</td><td><code>var</code> keyword</td></tr>
+          <tr><td>Java 11</td><td><code>HttpClient</code>, String/Files APIs, <code>var</code> in lambdas</td></tr>
+          <tr><td>Java 12</td><td>Switch expressions (preview)</td></tr>
+          <tr><td>Java 13</td><td>Text blocks (preview)</td></tr>
+          <tr><td>Java 14</td><td>Records (preview), NPE details</td></tr>
+          <tr><td>Java 15</td><td>Sealed classes (preview), Text blocks</td></tr>
+          <tr><td>Java 16</td><td>Records, Pattern Matching, Vector API</td></tr>
+          <tr><td>Java 17</td><td>Sealed classes, Pattern Matching, LTS</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

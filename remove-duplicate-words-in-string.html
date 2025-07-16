@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java 8 Q&A: Remove Duplicate Words</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .qa-section {
+      margin-bottom: 25px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    details {
+      margin-top: 10px;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      color: #1e88e5;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java 8: Remove Duplicate Words</h1>
+
+  <div class="qa-section">
+    <p><strong>Question 1:</strong> How do you remove duplicate words from a string using basic Java?</p>
+    <details>
+      <summary>Show Answer</summary>
+      <p><strong>Example:</strong></p>
+      <pre><code>String input = "Java is is a programming programming language";</code></pre>
+
+      <p><strong>Expected Output:</strong> <code>Java is a programming language</code></p>
+
+      <p><strong>Java Code:</strong></p>
+      <pre><code>import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class RemoveDuplicateWords {
+    public static void main(String[] args) {
+        String input = "Java is is a programming programming language";
+        String result = removeDuplicateWords(input);
+        System.out.println(result);  // Output: Java is a programming language
+    }
+
+    public static String removeDuplicateWords(String input) {
+        String[] words = input.split("\\s+"); // split by spaces
+        Set&lt;String&gt; uniqueWords = new LinkedHashSet&lt;&gt;();
+
+        for (String word : words) {
+            uniqueWords.add(word);
+        }
+
+        return String.join(" ", uniqueWords);
+    }
+}</code></pre>
+    </details>
+  </div>
+
+  <div class="qa-section">
+    <p><strong>Question 2:</strong> How do you remove duplicate words from a string using Java 8 Stream API?</p>
+    <details>
+      <summary>Show Answer</summary>
+      <p><strong>Java 8 Code:</strong></p>
+      <pre><code>import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class RemoveDuplicateWordsJava8 {
+    public static void main(String[] args) {
+        String input = "Java is is a programming programming language";
+        String result = Arrays.stream(input.split("\\s+"))
+                              .distinct()
+                              .collect(Collectors.joining(" "));
+        System.out.println(result);  // Output: Java is a programming language
+    }
+}</code></pre>
+
+      <p><strong>Explanation:</strong></p>
+      <ul>
+        <li><code>split("\\s+")</code>: Splits the string into words by spaces.</li>
+        <li><code>Arrays.stream(...)</code>: Creates a stream from the array.</li>
+        <li><code>.distinct()</code>: Removes duplicates while preserving order.</li>
+        <li><code>Collectors.joining(" ")</code>: Joins the words with a space.</li>
+      </ul>
+    </details>
+  </div>
+
+</body>
+</html>
