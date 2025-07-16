@@ -171,11 +171,54 @@ System.out.println("Distinct count: " + distinctCount);
   <strong>12. Find duplicate elements</strong><br>
   <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
   <div class="answer">
+
+<pre><code>
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class DuplicateFinder {
+
+    public static void main(String[] args) {
+        List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 1, 3, 4, 4, 5, 2);
+
+        Set&lt;Integer&gt; uniqueElements = new HashSet&lt;&gt;();
+        List&lt;Integer&gt; duplicates = numbers.stream()
+                                           .filter(n -&gt; !uniqueElements.add(n)) // If add returns false, it's a duplicate
+                                           .collect(Collectors.toList());
+
+        System.out.println("Original List: " + numbers);
+        System.out.println("Duplicate Elements: " + duplicates);
+    }
+}
+    </code></pre>
+
+    <h2>Output:</h2>
+    <pre><code>
+Original List: [1, 2, 1, 3, 4, 4, 5, 2]
+Duplicate Elements: [1, 4, 2]
+    </code></pre>
+
+
+
+
+
+2nd way 
+<br/><br/>
+<pre><code>
 Set&lt;Integer&gt; duplicates = list.stream()
     .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
     .entrySet().stream().filter(e -&gt; e.getValue() &gt; 1)
     .map(Map.Entry::getKey).collect(Collectors.toSet());
 System.out.println("Duplicates: " + duplicates);
+
+
+
+    </code></pre>
+
+
   </div>
 </div>
 
