@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Interview Questions - Object Creation, Constructor Class, Interface vs Abstract, Concrete Class</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f8fb;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #004080;
+    }
+    code {
+      background-color: #e8eef7;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: Consolas, monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #dfefff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java Interview Questions</h1>
+
+  <h2>1. What are the different ways to create an object in Java?</h2>
+  <p>There are <strong>5 main ways</strong> to create an object in Java:</p>
+  <ol>
+    <li><strong>Using <code>new</code> keyword</strong><br>
+      <code>MyClass obj = new MyClass();</code>
+    </li>
+    <li><strong>Using <code>Class.forName()</code> (Dynamic class loading)</strong><br>
+      <code>
+        Class&lt;?&gt; clazz = Class.forName("com.example.MyClass");<br>
+        Object obj = clazz.newInstance(); // Deprecated in Java 9+
+      </code>
+    </li>
+    <li><strong>Using <code>clone()</code> method</strong><br>
+      <code>
+        MyClass obj1 = new MyClass();<br>
+        MyClass obj2 = (MyClass) obj1.clone();
+      </code>
+    </li>
+    <li><strong>Using <code>ObjectInputStream</code> (Deserialization)</strong><br>
+      <code>
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream("file.ser"));<br>
+        MyClass obj = (MyClass) in.readObject();
+      </code>
+    </li>
+    <li><strong>Using Reflection with <code>Constructor</code></strong><br>
+      <code>
+        Constructor&lt;MyClass&gt; constructor = MyClass.class.getConstructor();<br>
+        MyClass obj = constructor.newInstance();
+      </code>
+    </li>
+  </ol>
+
+  <h2>2. What is the purpose of <code>Constructor</code> class in Java?</h2>
+  <p>The <code>Constructor</code> class is part of the <code>java.lang.reflect</code> package.</p>
+  <p><strong>Purpose:</strong></p>
+  <ul>
+    <li>Allows reflective access to class constructors at runtime.</li>
+    <li>Supports dynamic object creation even for private/protected constructors.</li>
+    <li>Used in frameworks like Spring and Hibernate for dependency injection.</li>
+  </ul>
+  <p><strong>Example:</strong></p>
+  <code>
+    Constructor&lt;MyClass&gt; constructor = MyClass.class.getConstructor(String.class);<br>
+    MyClass obj = constructor.newInstance("argument");
+  </code>
+
+  <h2>3. Differences Between Interface and Abstract Class After Java 8</h2>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>Interface</th>
+      <th>Abstract Class</th>
+    </tr>
+    <tr>
+      <td>Inheritance</td>
+      <td>Multiple</td>
+      <td>Single</td>
+    </tr>
+    <tr>
+      <td>Method types</td>
+      <td>abstract, default, static (Java 8+), private (Java 9+)</td>
+      <td>abstract, concrete</td>
+    </tr>
+    <tr>
+      <td>Variables</td>
+      <td>public static final only</td>
+      <td>Any type allowed</td>
+    </tr>
+    <tr>
+      <td>Constructors</td>
+      <td>Not allowed</td>
+      <td>Can have constructors</td>
+    </tr>
+    <tr>
+      <td>Access Modifiers</td>
+      <td>Only public</td>
+      <td>public, protected, private</td>
+    </tr>
+    <tr>
+      <td>Use Case</td>
+      <td>For capability (what class <em>can do</em>)</td>
+      <td>For base behavior (what class <em>is</em>)</td>
+    </tr>
+  </table>
+  <p><strong>Java 8 Enhancements to Interface:</strong></p>
+  <ul>
+    <li>Default methods</li>
+    <li>Static methods</li>
+    <li>Private methods (Java 9+)</li>
+  </ul>
+
+  <h2>4. What Is a Concrete Class?</h2>
+  <p>A <strong>Concrete class</strong> in Java is a class that:</p>
+  <ul>
+    <li>Is not abstract</li>
+    <li>Can be instantiated directly</li>
+    <li>Implements all abstract methods (if any)</li>
+  </ul>
+  <p><strong>Example:</strong></p>
+  <code>
+    public class Dog extends Animal {<br>
+      &nbsp;&nbsp;@Override<br>
+      &nbsp;&nbsp;void makeSound() {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Bark");<br>
+      &nbsp;&nbsp;}<br>
+    }
+  </code>
+
+</body>
+</html>
