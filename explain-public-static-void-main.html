@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java main Method Explanation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #4CAF50;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    th {
+      background-color: #e8e8e8;
+    }
+    ul {
+      list-style: square;
+    }
+  </style>
+</head>
+<body>
+
+  <h1><code>public static void main(String args[])</code> — Java Main Method Explained</h1>
+
+  <p>This line is the <strong>entry point</strong> of any standalone Java application. Here's a breakdown of each keyword:</p>
+
+  <h2>🔹 <code>public</code></h2>
+  <ul>
+    <li><strong>Access Modifier:</strong> This method is <em>accessible from anywhere</em>.</li>
+    <li>Required because <strong>JVM needs to access this method</strong> to start the program.</li>
+  </ul>
+
+  <h2>🔹 <code>static</code></h2>
+  <ul>
+    <li>Belongs to the <strong>class</strong> and <strong>not to any object</strong>.</li>
+    <li>Allows the JVM to call the method <strong>without creating an instance</strong> of the class.</li>
+  </ul>
+
+  <h2>🔹 <code>void</code></h2>
+  <ul>
+    <li>Return type: This method <strong>does not return any value</strong>.</li>
+  </ul>
+
+  <h2>🔹 <code>main</code></h2>
+  <ul>
+    <li>This is the <strong>name of the method</strong> that the JVM looks for as the starting point of the program.</li>
+  </ul>
+
+  <h2>🔹 <code>String args[]</code> or <code>String[] args</code></h2>
+  <ul>
+    <li>Represents <strong>command-line arguments</strong> passed during execution.</li>
+    <li><code>args</code> is an array of <code>String</code> type.</li>
+    <li>Example usage:
+      <pre><code>java MyClass Hello World</code></pre>
+      <code>args[0] = "Hello";<br>
+      args[1] = "World";</code>
+    </li>
+  </ul>
+
+  <h2>✅ Complete Example</h2>
+  <pre><code>public class HelloWorld {
+    public static void main(String args[]) {
+        System.out.println("Hello, World!");
+
+        // Print command-line arguments
+        for (String arg : args) {
+            System.out.println("Arg: " + arg);
+        }
+    }
+}</code></pre>
+
+  <h2>✅ Summary</h2>
+  <table>
+    <tr>
+      <th>Part</th>
+      <th>Purpose</th>
+    </tr>
+    <tr>
+      <td><code>public</code></td>
+      <td>Accessible by JVM from anywhere</td>
+    </tr>
+    <tr>
+      <td><code>static</code></td>
+      <td>No object needed to call <code>main</code></td>
+    </tr>
+    <tr>
+      <td><code>void</code></td>
+      <td>Doesn’t return a value</td>
+    </tr>
+    <tr>
+      <td><code>main</code></td>
+      <td>Starting point of the program</td>
+    </tr>
+    <tr>
+      <td><code>String args[]</code></td>
+      <td>Accepts command-line arguments as a String array</td>
+    </tr>
+  </table>
+
+</body>
+</html>

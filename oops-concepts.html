@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OOPs Concepts in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      padding: 20px;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    h2 {
+      margin-top: 30px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-left: 5px solid #007acc;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #007acc;
+      color: #fff;
+    }
+    .keyword {
+      background-color: #eef;
+      font-weight: bold;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 OOPs Concepts in Java</h1>
+    <p>Java is a pure object-oriented language (with few exceptions like <code>int</code>, <code>char</code>, etc.) that supports core OOP principles to design modular and reusable software.</p>
+
+    <h2>🔑 1. Class</h2>
+    <p>A blueprint for creating objects. Contains fields (variables) and methods.</p>
+    <pre><code>class Car {
+    String color;
+    void drive() {
+        System.out.println("Car is moving...");
+    }
+}</code></pre>
+
+    <h2>🔑 2. Object</h2>
+    <p>A real-world entity created from a class. Has state (fields) and behavior (methods).</p>
+    <pre><code>Car myCar = new Car();
+myCar.drive();</code></pre>
+
+    <h2>🔑 3. Encapsulation</h2>
+    <p>Wrapping data (variables) and methods in a class. Achieved using <code>private</code> fields and <code>public</code> getters/setters.</p>
+    <pre><code>class Account {
+    private int balance;
+
+    public int getBalance() { return balance; }
+    public void setBalance(int amount) { balance = amount; }
+}</code></pre>
+
+    <h2>🔑 4. Inheritance</h2>
+    <p>One class inherits the properties and behaviors of another. Promotes code reuse.</p>
+    <pre><code>class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks");
+    }
+}</code></pre>
+
+    <h2>🔑 5. Polymorphism</h2>
+    <p>One interface, many implementations.</p>
+
+    <h3>✔ Compile-time (Method Overloading)</h3>
+    <pre><code>class MathUtil {
+    int add(int a, int b) { return a + b; }
+    int add(int a, int b, int c) { return a + b + c; }
+}</code></pre>
+
+    <h3>✔ Runtime (Method Overriding)</h3>
+    <pre><code>class Animal {
+    void sound() { System.out.println("Generic sound"); }
+}
+
+class Cat extends Animal {
+    void sound() { System.out.println("Meow"); }
+}</code></pre>
+
+    <h2>🔑 6. Abstraction</h2>
+    <p>Hiding implementation details and showing only essential features. Achieved using abstract classes or interfaces.</p>
+    <pre><code>abstract class Shape {
+    abstract void draw();
+}
+
+class Circle extends Shape {
+    void draw() {
+        System.out.println("Drawing Circle");
+    }
+}</code></pre>
+
+    <h2>🔑 7. Association, Aggregation, Composition</h2>
+    <ul>
+      <li><strong>Association:</strong> General relationship (e.g., teacher and student)</li>
+      <li><strong>Aggregation:</strong> Has-a, weak ownership (e.g., department has professors)</li>
+      <li><strong>Composition:</strong> Strong ownership (e.g., house has rooms)</li>
+    </ul>
+
+    <h2>✅ Summary Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Concept</th>
+          <th>Description</th>
+          <th>Keyword/Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Class</td>
+          <td>Blueprint for objects</td>
+          <td><code>class Car {}</code></td>
+        </tr>
+        <tr>
+          <td>Object</td>
+          <td>Instance of a class</td>
+          <td><code>new Car()</code></td>
+        </tr>
+        <tr>
+          <td>Encapsulation</td>
+          <td>Bind data & methods</td>
+          <td><code>private</code>, <code>get/set</code></td>
+        </tr>
+        <tr>
+          <td>Inheritance</td>
+          <td>Reuse via parent-child classes</td>
+          <td><code>extends</code></td>
+        </tr>
+        <tr>
+          <td>Polymorphism</td>
+          <td>Many forms (overload/override)</td>
+          <td><code>@Override</code>, overloading</td>
+        </tr>
+        <tr>
+          <td>Abstraction</td>
+          <td>Hiding implementation</td>
+          <td><code>abstract</code>, <code>interface</code></td>
+        </tr>
+        <tr>
+          <td>Association</td>
+          <td>Any relationship</td>
+          <td>Has-a</td>
+        </tr>
+        <tr>
+          <td>Aggregation</td>
+          <td>Weak ownership</td>
+          <td>Part can exist outside</td>
+        </tr>
+        <tr>
+          <td>Composition</td>
+          <td>Strong ownership</td>
+          <td>Part dies with whole</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

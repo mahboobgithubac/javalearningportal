@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JVM Memory Areas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background: #333;
+      color: white;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 4px solid #007acc;
+    }
+
+    .diagram {
+      background: #222;
+      color: #0f0;
+      font-family: monospace;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧠 JVM Memory Areas (Runtime Data Areas)</h1>
+
+    <p>When a Java program runs, the JVM divides memory into several areas for efficient execution. These areas are used for class metadata, objects, method execution, and native calls.</p>
+
+    <h2>1. Method Area (Shared)</h2>
+    <ul>
+      <li>Stores class-level data: class metadata, static variables, constant pool, method info.</li>
+      <li>Shared across all threads.</li>
+    </ul>
+    <pre><code>class Test {
+    static int x = 10;
+}</code></pre>
+
+    <h2>2. Heap (Shared)</h2>
+    <ul>
+      <li>Stores objects and instance variables.</li>
+      <li>Shared among all threads.</li>
+      <li>Subject to Garbage Collection.</li>
+    </ul>
+    <pre><code>Test obj = new Test();  // Stored in Heap</code></pre>
+
+    <h2>3. Stack (Per Thread)</h2>
+    <ul>
+      <li>Each thread has its own stack.</li>
+      <li>Stores method call frames, local variables, operand stack.</li>
+    </ul>
+    <pre><code>public void method() {
+    int a = 5;  // Stored in Stack
+}</code></pre>
+
+    <h2>4. Program Counter (PC) Register (Per Thread)</h2>
+    <ul>
+      <li>Holds address of the currently executing bytecode instruction.</li>
+      <li>Each thread has its own PC register.</li>
+    </ul>
+
+    <h2>5. Native Method Stack (Per Thread)</h2>
+    <ul>
+      <li>Stores information for native (non-Java) methods called via JNI.</li>
+    </ul>
+
+    <h2>📌 Summary Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Area</th>
+          <th>Thread-Shared</th>
+          <th>Stores</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Method Area</td>
+          <td>Yes</td>
+          <td>Class metadata, static variables, constant pool</td>
+        </tr>
+        <tr>
+          <td>Heap</td>
+          <td>Yes</td>
+          <td>Objects, instance variables</td>
+        </tr>
+        <tr>
+          <td>Stack</td>
+          <td>No</td>
+          <td>Method frames, local variables</td>
+        </tr>
+        <tr>
+          <td>Program Counter Register</td>
+          <td>No</td>
+          <td>Current bytecode instruction address</td>
+        </tr>
+        <tr>
+          <td>Native Method Stack</td>
+          <td>No</td>
+          <td>Native method call data</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>📘 JVM Memory Diagram</h2>
+    <div class="diagram">
+      +--------------------+<br>
+      |    Method Area     |  &lt;- Class-level info (shared)<br>
+      +--------------------+<br>
+      |       Heap         |  &lt;- Object storage (shared)<br>
+      +--------------------+<br>
+      |     Thread 1       |<br>
+      | +--------------+   |<br>
+      | |   Stack      |   |<br>
+      | | PC Register  |   |<br>
+      | | Native Stack |   |<br>
+      +--------------------+<br>
+      |     Thread 2       |<br>
+      | +--------------+   |<br>
+      | |   Stack      |   |<br>
+      | | PC Register  |   |<br>
+      | | Native Stack |   |<br>
+      +--------------------+
+    </div>
+
+    <h2>🧹 Garbage Collection</h2>
+    <p>Garbage Collection only applies to the <strong>Heap</strong> memory. It automatically removes unused objects to free up memory.</p>
+  </div>
+</body>
+</html>

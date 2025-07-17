@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Varargs (Variable Arguments)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    h1, h2 {
+      color: #2c3e50;
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-left: 4px solid #007acc;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #007acc;
+      color: white;
+      text-align: left;
+    }
+
+    .note {
+      background-color: #fff3cd;
+      padding: 10px;
+      border-left: 4px solid #ffeeba;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+
+    .good {
+      color: green;
+    }
+
+    .bad {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✅ Varargs (Variable Arguments) in Java</h1>
+    <p><strong>Varargs</strong> (variable-length arguments) allow a method to accept <strong>zero or more arguments</strong> of a specified type. It's a cleaner alternative to using arrays or method overloading when the number of arguments is unknown.</p>
+
+    <h2>🧠 Syntax</h2>
+    <pre><code>returnType methodName(type... varName)</code></pre>
+
+    <ul>
+      <li><code>type...</code> indicates a <strong>varargs parameter</strong>.</li>
+      <li>Internally, Java treats varargs as an array.</li>
+    </ul>
+
+    <div class="note">✅ Only <strong>one varargs</strong> is allowed per method, and it must be the <strong>last parameter</strong>.</div>
+
+    <h2>📘 Example: Sum of Integers using Varargs</h2>
+    <pre><code>public class VarargsExample {
+
+    public static int sum(int... numbers) {
+        int total = 0;
+        for (int n : numbers) {
+            total += n;
+        }
+        return total;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(sum());              // Output: 0
+        System.out.println(sum(10));            // Output: 10
+        System.out.println(sum(1, 2, 3, 4, 5));  // Output: 15
+    }
+}</code></pre>
+
+    <h2>🛑 Invalid Usage</h2>
+    <pre class="bad"><code>// ❌ Invalid: Varargs must be the last parameter
+public void method(String... names, int age) { }</code></pre>
+
+    <h2>✅ Valid Example with Other Parameters</h2>
+    <pre class="good"><code>public void greet(String message, String... names) {
+    for (String name : names) {
+        System.out.println(message + ", " + name);
+    }
+}</code></pre>
+
+    <h2>✅ Summary Table</h2>
+    <table>
+      <tr>
+        <th>Rule</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>Syntax</td>
+        <td><code>type... varName</code></td>
+      </tr>
+      <tr>
+        <td>Internally</td>
+        <td>Treated as an array</td>
+      </tr>
+      <tr>
+        <td>One vararg only</td>
+        <td>Only one allowed and must be the last parameter</td>
+      </tr>
+      <tr>
+        <td>Use case</td>
+        <td>Accepting a variable number of arguments</td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
