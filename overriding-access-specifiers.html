@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Method Overriding with Different Access Specifiers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fb;
+      color: #1c1c1c;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    code {
+   
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #d9e7f5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Method Overriding with Different Access Specifiers in Java</h1>
+
+  <p>When a subclass overrides a method from the superclass, the access specifier of the overriding method <strong>cannot be more restrictive</strong> than the method in the superclass.</p>
+
+  <h2>🔒 Rules Summary</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Superclass Access</th>
+        <th>Subclass Allowed</th>
+        <th>Valid?</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>public</code></td>
+        <td><code>public</code></td>
+        <td>✅</td>
+        <td>Same access</td>
+      </tr>
+      <tr>
+        <td><code>public</code></td>
+        <td><code>protected</code> / <code>default</code> / <code>private</code></td>
+        <td>❌</td>
+        <td>More restrictive</td>
+      </tr>
+      <tr>
+        <td><code>protected</code></td>
+        <td><code>protected</code> / <code>public</code></td>
+        <td>✅</td>
+        <td>Same or broader access</td>
+      </tr>
+      <tr>
+        <td><code>protected</code></td>
+        <td><code>default</code> / <code>private</code></td>
+        <td>❌</td>
+        <td>More restrictive</td>
+      </tr>
+      <tr>
+        <td><code>default</code></td>
+        <td><code>default</code> / <code>protected</code> / <code>public</code></td>
+        <td>✅</td>
+        <td>Same or broader access</td>
+      </tr>
+      <tr>
+        <td><code>private</code></td>
+        <td>—</td>
+        <td>✅</td>
+        <td>Not inherited, so cannot be overridden</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🟢 Valid Overriding Example</h2>
+
+  <pre><code>class Parent {
+    protected void show() {
+        System.out.println("Parent show()");
+    }
+}
+
+class Child extends Parent {
+    public void show() {
+        System.out.println("Child show()");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Parent obj = new Child();
+        obj.show();  // Output: Child show()
+    }
+}</code></pre>
+
+  <h2>🔴 Invalid Overriding Example</h2>
+
+  <pre><code>class Parent {
+    public void display() {
+        System.out.println("Parent display()");
+    }
+}
+
+class Child extends Parent {
+    protected void display() {  // ❌ Compilation Error
+        System.out.println("Child display()");
+    }
+}</code></pre>
+
+  <h2>🔒 Private Method (No Overriding)</h2>
+
+  <pre><code>class Parent {
+    private void secret() {
+        System.out.println("Parent secret()");
+    }
+}
+
+class Child extends Parent {
+    private void secret() {
+        System.out.println("Child secret()");
+    }
+}
+
+// These are two separate methods, not overriding.
+</code></pre>
+
+  <h2>🔁 Overriding with Default Access</h2>
+
+  <pre><code>class Parent {
+    void message() {
+        System.out.println("Parent message()");
+    }
+}
+
+class Child extends Parent {
+    public void message() {
+        System.out.println("Child message()");
+    }
+}</code></pre>
+
+  <p>This is valid because <code>public</code> is broader than <code>default</code>.</p>
+
+</body>
+</html>

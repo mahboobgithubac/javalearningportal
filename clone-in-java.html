@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clone in Java with Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    pre {
+      background-color: #000;
+      color: #0f0;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    ul {
+      background: #fff;
+      padding: 10px 20px;
+      border-left: 5px solid #007BFF;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Clone in Java</h1>
+
+  <p>
+    In Java, the <code>clone()</code> method is used to create an exact copy of an object. To enable cloning, a class must:
+  </p>
+
+  <ul>
+    <li>Implement the <code>Cloneable</code> interface</li>
+    <li>Override the <code>clone()</code> method from the <code>Object</code> class</li>
+  </ul>
+
+  <h2>🛠 Key Points</h2>
+  <ul>
+    <li><code>clone()</code> method performs a shallow copy by default.</li>
+    <li>If a class does not implement <code>Cloneable</code> and calls <code>clone()</code>, it throws <code>CloneNotSupportedException</code>.</li>
+  </ul>
+
+  <h2>✅ Example: Shallow Copy</h2>
+
+  <pre>
+class Student implements Cloneable {
+    int id;
+    String name;
+
+    Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); // shallow copy
+    }
+}
+
+public class CloneDemo {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Student s1 = new Student(101, "John");
+        Student s2 = (Student) s1.clone();
+
+        System.out.println("Original: " + s1.id + ", " + s1.name);
+        System.out.println("Cloned:   " + s2.id + ", " + s2.name);
+    }
+}
+  </pre>
+
+  <h2>📌 Output:</h2>
+  <pre>
+Original: 101, John
+Cloned:   101, John
+  </pre>
+
+  <h2>🔁 Deep Copy Note</h2>
+  <p>
+    If your object contains references to other objects (nested objects), you should override <code>clone()</code> to manually clone those references too for a deep copy.
+  </p>
+ <h1>Shallow Copy vs Deep Copy</h1>
+
+  <div class="section">
+    <p>The <code>clone()</code> method in Java allows creating a copy of an object. There are two types of cloning:</p>
+    <ul>
+      <li><strong>Shallow Copy:</strong> Copies the object and references to nested objects (not actual nested objects).</li>
+      <li><strong>Deep Copy:</strong> Copies the object and recursively clones all referenced objects.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>✅ Shallow Copy Example</h2>
+    <pre>
+class Address {
+    String city;
+
+    Address(String city) {
+        this.city = city;
+    }
+}
+
+class Student implements Cloneable {
+    int id;
+    Address address;
+
+    Student(int id, Address address) {
+        this.id = id;
+        this.address = address;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();  // shallow copy
+    }
+}
+
+public class ShallowCopyDemo {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Address addr = new Address("Delhi");
+        Student s1 = new Student(1, addr);
+        Student s2 = (Student) s1.clone();
+
+        s2.address.city = "Mumbai";  // affects s1 as well due to shared reference
+
+        System.out.println("Student 1 city: " + s1.address.city);
+        System.out.println("Student 2 city: " + s2.address.city);
+    }
+}
+    </pre>
+
+    <h3>📌 Output:</h3>
+    <pre>
+Student 1 city: Mumbai
+Student 2 city: Mumbai
+    </pre>
+
+    <p>This demonstrates that both objects share the same <code>Address</code> reference.</p>
+  </div>
+
+  <div class="section">
+    <h2>✅ Deep Copy Example</h2>
+    <pre>
+class Address implements Cloneable {
+    String city;
+
+    Address(String city) {
+        this.city = city;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); // copy address
+    }
+}
+
+class Student implements Cloneable {
+    int id;
+    Address address;
+
+    Student(int id, Address address) {
+        this.id = id;
+        this.address = address;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        Student cloned = (Student) super.clone();
+        cloned.address = (Address) address.clone(); // deep copy of Address
+        return cloned;
+    }
+}
+
+public class DeepCopyDemo {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Address addr = new Address("Delhi");
+        Student s1 = new Student(1, addr);
+        Student s2 = (Student) s1.clone();
+
+        s2.address.city = "Mumbai";  // does NOT affect s1
+
+        System.out.println("Student 1 city: " + s1.address.city);
+        System.out.println("Student 2 city: " + s2.address.city);
+    }
+}
+    </pre>
+
+    <h3>📌 Output:</h3>
+    <pre>
+Student 1 city: Delhi
+Student 2 city: Mumbai
+    </pre>
+
+    <p>This proves that in deep copy, objects have independent references.</p>
+  </div>
+
+  <div class="section">
+    <h2>📝 Summary</h2>
+    <ul>
+      <li><strong>Shallow Copy:</strong> Object fields are copied, but references are shared.</li>
+      <li><strong>Deep Copy:</strong> Object and all referenced objects are copied independently.</li>
+      <li>To perform deep copy, you must override <code>clone()</code> in all referenced classes.</li>
+    </ul>
+	 <h1> Shallow Copy vs Deep Copy</h1>
+
+  <div class="section">
+    <p>The <code>clone()</code> method in Java allows creating a copy of an object. There are two types of cloning:</p>
+    <ul>
+      <li><strong>Shallow Copy:</strong> Copies the object and references to nested objects (not actual nested objects).</li>
+      <li><strong>Deep Copy:</strong> Copies the object and recursively clones all referenced objects.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>✅ Shallow Copy Example</h2>
+    <pre>
+class Address {
+    String city;
+
+    Address(String city) {
+        this.city = city;
+    }
+}
+
+class Student implements Cloneable {
+    int id;
+    Address address;
+
+    Student(int id, Address address) {
+        this.id = id;
+        this.address = address;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();  // shallow copy
+    }
+}
+
+public class ShallowCopyDemo {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Address addr = new Address("Delhi");
+        Student s1 = new Student(1, addr);
+        Student s2 = (Student) s1.clone();
+
+        s2.address.city = "Mumbai";  // affects s1 as well due to shared reference
+
+        System.out.println("Student 1 city: " + s1.address.city);
+        System.out.println("Student 2 city: " + s2.address.city);
+    }
+}
+    </pre>
+
+    <h3>📌 Output:</h3>
+    <pre>
+Student 1 city: Mumbai
+Student 2 city: Mumbai
+    </pre>
+
+    <p>This demonstrates that both objects share the same <code>Address</code> reference.</p>
+  </div>
+
+  <div class="section">
+    <h2>✅ Deep Copy Example</h2>
+    <pre>
+class Address implements Cloneable {
+    String city;
+
+    Address(String city) {
+        this.city = city;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone(); // copy address
+    }
+}
+
+class Student implements Cloneable {
+    int id;
+    Address address;
+
+    Student(int id, Address address) {
+        this.id = id;
+        this.address = address;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        Student cloned = (Student) super.clone();
+        cloned.address = (Address) address.clone(); // deep copy of Address
+        return cloned;
+    }
+}
+
+public class DeepCopyDemo {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Address addr = new Address("Delhi");
+        Student s1 = new Student(1, addr);
+        Student s2 = (Student) s1.clone();
+
+        s2.address.city = "Mumbai";  // does NOT affect s1
+
+        System.out.println("Student 1 city: " + s1.address.city);
+        System.out.println("Student 2 city: " + s2.address.city);
+    }
+}
+    </pre>
+
+    <h3>📌 Output:</h3>
+    <pre>
+Student 1 city: Delhi
+Student 2 city: Mumbai
+    </pre>
+
+    <p>This proves that in deep copy, objects have independent references.</p>
+  </div>
+
+  <div class="section">
+    <h2>📝 Summary</h2>
+    <ul>
+      <li><strong>Shallow Copy:</strong> Object fields are copied, but references are shared.</li>
+      <li><strong>Deep Copy:</strong> Object and all referenced objects are copied independently.</li>
+      <li>To perform deep copy, you must override <code>clone()</code> in all referenced classes.</li>
+    </ul>
+</body>
+</html>

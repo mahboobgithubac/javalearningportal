@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java Exceptions and Hierarchy with Examples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #222;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #003366;
+    }
+    .code {
+      background-color: #1e1e1e;
+      color: #f8f8f2;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+      overflow-x: auto;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    table, th, td {
+      border: 1px solid #aaa;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java Exceptions and Their Hierarchy</h1>
+
+  <h2>What is an Exception?</h2>
+  <p>
+    An exception in Java is an event that disrupts the normal flow of the program's execution. It is an object which is thrown at runtime and can be handled using try-catch blocks.
+  </p>
+
+  <h2>Types of Exceptions</h2>
+  <ul>
+    <li><strong>Checked Exceptions</strong> – Checked at compile-time. e.g., IOException, SQLException</li>
+    <li><strong>Unchecked Exceptions</strong> – Checked at runtime. e.g., NullPointerException, ArithmeticException</li>
+    <li><strong>Errors</strong> – Serious problems that are not meant to be caught. e.g., OutOfMemoryError</li>
+  </ul>
+
+  <h2>Exception Hierarchy</h2>
+  <pre class="code">
+Throwable
+├── Exception
+│   ├── IOException
+│   ├── SQLException
+│   ├── RuntimeException
+│   │   ├── NullPointerException
+│   │   ├── ArithmeticException
+│   │   └── ArrayIndexOutOfBoundsException
+│   └── ...
+└── Error
+    ├── OutOfMemoryError
+    └── StackOverflowError
+  </pre>
+
+  <h2>Common Exception Classes</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Exception</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>IOException</td>
+        <td>Checked</td>
+        <td>Signals input/output operation failure</td>
+      </tr>
+      <tr>
+        <td>SQLException</td>
+        <td>Checked</td>
+        <td>Database access error</td>
+      </tr>
+      <tr>
+        <td>ClassNotFoundException</td>
+        <td>Checked</td>
+        <td>Class not found when loading</td>
+      </tr>
+      <tr>
+        <td>NullPointerException</td>
+        <td>Unchecked</td>
+        <td>Accessing method or field on a null object</td>
+      </tr>
+      <tr>
+        <td>ArithmeticException</td>
+        <td>Unchecked</td>
+        <td>Illegal arithmetic operations (e.g., divide by zero)</td>
+      </tr>
+      <tr>
+        <td>ArrayIndexOutOfBoundsException</td>
+        <td>Unchecked</td>
+        <td>Accessing array with an invalid index</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Example of Checked Exception</h2>
+  <div class="code">
+<pre>
+import java.io.*;
+
+public class CheckedExample {
+    public static void main(String[] args) {
+        try {
+            FileReader fr = new FileReader("file.txt");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
+    }
+}
+ </pre> </div>
+
+  <h2>Example of Unchecked Exception</h2>
+  <div class="code">
+   <pre>
+public class UncheckedExample {
+    public static void main(String[] args) {
+        int num = 5 / 0; // ArithmeticException
+    }
+}
+   </pre></div>
+
+  <h2>How to Handle Exceptions</h2>
+  <p>Use try-catch-finally block:</p>
+  <div class="code"> <pre>
+try {
+    // risky code
+} catch (ExceptionType name) {
+    // exception handler
+} finally {
+    // clean-up code
+}
+  </pre> </div>
+ <h2>📂 Types of Exceptions</h2>
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Examples</th>
+    </tr>
+    <tr>
+      <td>Checked Exceptions</td>
+      <td>Checked at compile-time</td>
+      <td>IOException, SQLException, FileNotFoundException</td>
+    </tr>
+    <tr>
+      <td>Unchecked Exceptions</td>
+      <td>Checked at runtime</td>
+      <td>NullPointerException, ArithmeticException</td>
+    </tr>
+    <tr>
+      <td>Errors</td>
+      <td>Serious problems, not meant to be handled</td>
+      <td>OutOfMemoryError, StackOverflowError</td>
+    </tr>
+  </table>
+
+  <h2>✅ Example: Checked Exception</h2>
+  <pre>
+import java.io.*;
+
+public class CheckedExample {
+    public static void main(String[] args) throws IOException {
+        FileReader fr = new FileReader("file.txt"); // may throw FileNotFoundException
+        int i;
+        while ((i = fr.read()) != -1) {
+            System.out.print((char) i);
+        }
+        fr.close();
+    }
+}
+  </pre>
+
+  <h2>✅ Example: Unchecked Exception</h2>
+  <pre>
+public class UncheckedExample {
+    public static void main(String[] args) {
+        int[] arr = new int[3];
+        System.out.println(arr[5]); // ArrayIndexOutOfBoundsException
+    }
+}
+  </pre>
+
+  <h2>💡 Tricky Java Exception Interview Questions</h2>
+
+  <ol>
+    <li>
+      <strong>Q1: Can we catch an Error?</strong><br/>
+      <strong>Answer:</strong> Yes, you can catch an Error using a try-catch block, but it's not recommended. Errors indicate serious issues that are typically not recoverable.
+    </li>
+
+    <li>
+      <strong>Q2: What is the difference between throw and throws?</strong><br/>
+      <strong>Answer:</strong> 
+      <ul>
+        <li><code>throw</code> is used to explicitly throw an exception.</li>
+        <li><code>throws</code> is used to declare exceptions in the method signature.</li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Q3: Can we override a method that throws a checked exception with one that doesn't?</strong><br/>
+      <strong>Answer:</strong> Yes, a subclass can override a method and throw fewer or no checked exceptions.
+    </li>
+
+    <li>
+      <strong>Q4: What happens if finally block has return statement?</strong><br/>
+      <strong>Answer:</strong> The return from `finally` will override any return from try or catch block, which can lead to unexpected behavior.
+    </li>
+
+    <li>
+      <strong>Q5: What is multi-catch block in Java?</strong><br/>
+      <strong>Answer:</strong> Introduced in Java 7, you can catch multiple exceptions in a single catch block using the <code>|</code> operator:
+      <pre>
+try {
+   // risky code
+} catch (IOException | SQLException e) {
+   e.printStackTrace();
+}
+      </pre>
+    </li>
+  </ol>
+<h1>Exception Handling with Method Overriding </h1>
+
+  <div class="question">
+    <h3>Q1: Can an overridden method throw a broader checked exception than the method it overrides?</h3>
+    <p><span class="no">❌ No.</span> You cannot throw a broader (more general) checked exception in the overridden method than is declared in the superclass method.</p>
+    <pre><code>class Parent {
+    void show() throws IOException {
+        // some logic
+    }
+}
+
+class Child extends Parent {
+    // Compilation error: SQLException is not a subclass of IOException
+    @Override
+    void show() throws SQLException {
+        // logic
+    }
+}</code></pre>
+  </div>
+
+  <div class="question">
+    <h3>Q2: Can the overridden method throw fewer or no checked exceptions?</h3>
+    <p><span class="yes">✅ Yes.</span> The subclass method can throw <strong>fewer</strong> or <strong>no checked exceptions</strong>.</p>
+    <pre><code>class Parent {
+    void readFile() throws IOException {
+        // code
+    }
+}
+
+class Child extends Parent {
+    @Override
+    void readFile() {
+        // valid - no exception thrown
+    }
+}</code></pre>
+  </div>
+
+  <div class="question">
+    <h3>Q3: Can unchecked exceptions be freely used in overridden methods?</h3>
+    <p><span class="yes">✅ Yes.</span> There is <strong>no restriction</strong> on unchecked (runtime) exceptions in overriding.</p>
+    <pre><code>class Parent {
+    void process() {
+        // no exception
+    }
+}
+
+class Child extends Parent {
+    @Override
+    void process() throws ArithmeticException {
+        // valid
+    }
+}</code></pre>
+  </div>
+
+  <div class="question">
+    <h3>Q4: Can the overridden method throw a subclass of the checked exception declared in the parent?</h3>
+    <p><span class="yes">✅ Yes.</span> This is completely valid.</p>
+    <pre><code>class Parent {
+    void display() throws Exception {
+        // logic
+    }
+}
+
+class Child extends Parent {
+    @Override
+    void display() throws FileNotFoundException {
+        // valid - subclass of Exception
+    }
+}</code></pre>
+  </div>
+
+  <div class="question">
+    <h3>Q5: Will overriding a method with a broader checked exception compile if it’s not called?</h3>
+    <p><span class="no">❌ No.</span> Compilation will still fail. Exception rules are checked at <strong>compile time</strong>, regardless of usage.</p>
+  </div>
+
+  <div class="question">
+    <h3>Q6: Can constructors override or follow exception rules?</h3>
+    <p><span class="no">❌ No.</span> Constructors do <strong>not participate in method overriding</strong>, and the exception rules for constructors are independent.</p>
+  </div>
+
+  <div class="question">
+    <h3>Q7: What happens if an exception is not declared but thrown in an overridden method?</h3>
+    <p>If it’s a <strong>checked exception</strong>, it causes a <span class="no">compilation error</span>. Unchecked exceptions are allowed freely.</p>
+  </div>
+
+ <h1>Return Statement in try-catch-finally in Java</h1>
+
+  <p>In Java, if a <code>return</code> statement is used inside a <code>try</code> or <code>catch</code> block, and there is also a <code>finally</code> block, the <strong>finally block will always execute</strong>, even if the try or catch block has a return.</p>
+
+  <p>If there’s a return in the <code>finally</code> block, it will <strong>override</strong> any return from the try or catch blocks.</p>
+
+  <h2>🔹 Example 1: Return in try, finally present (no return)</h2>
+
+  <pre><code>public class Test {
+    public static int demo() {
+        try {
+            System.out.println("Inside try");
+            return 1;
+        } finally {
+            System.out.println("Inside finally");
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Returned: " + demo());
+    }
+}</code></pre>
+
+  <p><strong>Output:</strong></p>
+  <pre><code>Inside try
+Inside finally
+Returned: 1</code></pre>
+
+  <p>✅ The <code>finally</code> block runs, but the return value from <code>try</code> is preserved.</p>
+
+  <h2>🔹 Example 2: Return in try and finally</h2>
+
+  <pre><code>public class Test {
+    public static int demo() {
+        try {
+            return 1;
+        } finally {
+            return 2;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Returned: " + demo());
+    }
+}</code></pre>
+
+  <p><strong>Output:</strong></p>
+  <pre><code>Returned: 2</code></pre>
+
+  <p>⚠️ <code>finally</code>'s return <strong>overrides</strong> the one in <code>try</code>.</p>
+
+  <h2>🔹 Example 3: Exception in try, return in catch, finally present</h2>
+
+  <pre><code>public class Test {
+    public static int demo() {
+        try {
+            int a = 1 / 0;
+            return 1;
+        } catch (Exception e) {
+            return 2;
+        } finally {
+            System.out.println("Inside finally");
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Returned: " + demo());
+    }
+}</code></pre>
+
+  <p><strong>Output:</strong></p>
+  <pre><code>Inside finally
+Returned: 2</code></pre>
+
+  <div class="note">
+    <strong>⚠️ Best Practice:</strong><br>
+    Avoid using <code>return</code> inside <code>finally</code> because:
+    <ul>
+      <li>It <strong>suppresses exceptions</strong></li>
+      <li>It <strong>overrides earlier return values</strong>, which can lead to bugs</li>
+    </ul>
+  </div>
+ <h1>Java Exception Keywords with Examples</h1>
+
+  <p>Java provides several keywords to handle exceptions:</p>
+  <ul>
+    <li><code class="keyword">try</code></li>
+    <li><code class="keyword">catch</code></li>
+    <li><code class="keyword">finally</code></li>
+    <li><code class="keyword">throw</code></li>
+    <li><code class="keyword">throws</code></li>
+  </ul>
+
+  <h2>1. <code class="keyword">try</code> Block</h2>
+  <p>The <code>try</code> block contains the code that might throw an exception.</p>
+  <pre><code>try {
+    int a = 10 / 0; // risky code
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero!");
+}</code></pre>
+
+  <h2>2. <code class="keyword">catch</code> Block</h2>
+  <p>The <code>catch</code> block is used to handle the exception thrown from <code>try</code>.</p>
+  <pre><code>try {
+    int[] arr = new int[3];
+    arr[5] = 100;
+} catch (ArrayIndexOutOfBoundsException e) {
+    System.out.println("Index out of bounds!");
+}</code></pre>
+
+  <h2>3. <code class="keyword">finally</code> Block</h2>
+  <p>This block will always execute, whether an exception is thrown or not.</p>
+  <pre><code>try {
+    System.out.println("Try block");
+} catch (Exception e) {
+    System.out.println("Catch block");
+} finally {
+    System.out.println("Finally block always executes");
+}</code></pre>
+
+  <h2>4. <code class="keyword">throw</code> Keyword</h2>
+  <p>Used to throw an exception explicitly.</p>
+  <pre><code>public class Example {
+    public static void checkAge(int age) {
+        if (age &lt; 18) {
+            throw new ArithmeticException("Underage not allowed");
+        } else {
+            System.out.println("Access granted");
+        }
+    }
+
+    public static void main(String[] args) {
+        checkAge(15);
+    }
+}</code></pre>
+
+  <p><strong>Output:</strong> <code>Exception in thread "main" java.lang.ArithmeticException: Underage not allowed</code></p>
+
+  <h2>5. <code class="keyword">throws</code> Keyword</h2>
+  <p>Used to declare an exception in the method signature.</p>
+  <pre><code>import java.io.*;
+
+public class FileExample {
+    public static void readFile(String filename) throws IOException {
+        FileReader fr = new FileReader(filename);
+        fr.read();
+        fr.close();
+    }
+
+    public static void main(String[] args) {
+        try {
+            readFile("nonexistent.txt");
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+    }
+}</code></pre>
+
+  <div class="note">
+    <strong>Note:</strong> It's important to handle exceptions properly to avoid application crashes and ensure smooth error recovery.
+  </div>
+ <h1>Difference between <code>throw</code> and <code>throws</code> in Java</h1>
+
+  <table>
+    <tr>
+      <th>Aspect</th>
+      <th><code>throw</code></th>
+      <th><code>throws</code></th>
+    </tr>
+    <tr>
+      <td>Usage</td>
+      <td>Used to explicitly throw an exception.</td>
+      <td>Used to declare an exception in method signature.</td>
+    </tr>
+    <tr>
+      <td>Location</td>
+      <td>Inside method or block.</td>
+      <td>With method signature.</td>
+    </tr>
+    <tr>
+      <td>Number of exceptions</td>
+      <td>Can throw only one exception at a time.</td>
+      <td>Can declare multiple exceptions.</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>Followed by an instance of Throwable.</td>
+      <td>Followed by exception class name(s).</td>
+    </tr>
+    <tr>
+      <td>Checked/Unchecked</td>
+      <td>Can be used with both checked and unchecked exceptions.</td>
+      <td>Used only for checked exceptions.</td>
+    </tr>
+  </table>
+
+  <div class="example">
+    <h2>Example of <code>throw</code>:</h2>
+    <code><pre>
+public class ThrowExample {
+ public static void main(String[] args) {
+int age = 15;
+if(age &lt; 18) {
+&nbsp;&nbsp;throw new ArithmeticException("Not eligible to vote");
+}
+System.out.println("Eligible to vote");
+ }
+}
+    </pre></code>
+  </div>
+
+  <div class="example">
+    <h2>Example of <code>throws</code>:</h2>
+    <code><pre>
+import java.io.IOException;
+
+public class ThrowsExample {
+ public static void main(String[] args) throws IOException {<br>
+testMethod();
+ }
+
+ public static void testMethod() throws IOException {<br>
+throw new IOException("File not found");<br>
+ }<br>
+}
+    </pre></code>
+  </div>
+ <h1>Java Custom Exception with Example</h1>
+
+  <p>
+    In Java, we can create our own exceptions by extending the <code>Exception</code> class (for checked exceptions)
+    or the <code>RuntimeException</code> class (for unchecked exceptions).
+    This allows us to handle application-specific errors more effectively.
+  </p>
+
+  <div class="highlight">
+    <strong>✅ Syntax:</strong><br>
+    <code>public class MyException extends Exception { ... }</code>
+  </div>
+
+  <h2>Example: Creating and Using a Custom Exception</h2>
+
+  <h3>1. Custom Exception Class</h3>
+  <pre><code>
+public class AgeValidationException extends Exception {
+    public AgeValidationException(String message) {
+        super(message);
+    }
+}
+  </code></pre>
+
+  <h3>2. Using Custom Exception</h3>
+  <pre><code>
+public class CustomExceptionDemo {
+    public static void validateAge(int age) throws AgeValidationException {
+        if (age &lt; 18) {
+            throw new AgeValidationException("Age must be 18 or above.");
+        } else {
+            System.out.println("Age is valid.");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            validateAge(15);
+        } catch (AgeValidationException e) {
+            System.out.println("Caught Exception: " + e.getMessage());
+        }
+    }
+}
+  </code></pre>
+
+  <h2>Key Points</h2>
+  <ul>
+    <li>Custom exceptions make your code cleaner and more meaningful.</li>
+    <li>They help in clearly defining specific error conditions.</li>
+    <li>Should extend <code>Exception</code> for checked or <code>RuntimeException</code> for unchecked exceptions.</li>
+  </ul>
+
+  <h1>The try-with-resources Statement in Java</h1>
+
+  <p>
+    The <strong>try-with-resources</strong> statement was introduced in Java 7. It is used to automatically close
+    resources (like files, sockets, database connections) that implement the <code>AutoCloseable</code> interface.
+  </p>
+
+  <div class="note">
+    <strong>✅ Benefit:</strong> No need for finally block to close resources manually.
+  </div>
+
+  <h2>Syntax:</h2>
+  <pre><code>
+try (ResourceType resource = new ResourceType()) {
+    // Use resource
+} catch (ExceptionType e) {
+    // Handle exception
+}
+  </code></pre>
+
+  <h2>Example: Reading a File Using try-with-resources</h2>
+  <pre><code>
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class TryWithResourcesExample {
+    public static void main(String[] args) {
+        String path = "sample.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
+  </code></pre>
+
+  <h2>Key Points</h2>
+  <ul>
+    <li>The resource must implement <code>AutoCloseable</code> (or <code>Closeable</code>).</li>
+    <li>Resources are closed automatically in the reverse order of their creation.</li>
+    <li>Reduces boilerplate code and chances of resource leaks.</li>
+  </ul>
+
+  <h2>Multiple Resources Example</h2>
+  <pre><code>
+try (
+    BufferedReader reader = new BufferedReader(new FileReader("file.txt"));
+    BufferedWriter writer = new BufferedWriter(new FileWriter("copy.txt"))
+) {
+    String line;
+    while ((line = reader.readLine()) != null) {
+        writer.write(line);
+        writer.newLine();
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+  </code></pre>
+<h1>Exception Handling in Constructor, Instance Block, and Static Block</h1>
+
+<h2>1. Exception in Constructor</h2>
+<p>If an exception occurs inside a constructor and it's not caught, the object will not be created. The calling code must handle it.</p>
+
+<pre><code>class A {
+    A() {
+        System.out.println("Constructor started");
+        int a = 5 / 0; // ArithmeticException
+        System.out.println("Constructor ended");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        try {
+            A obj = new A();
+        } catch (Exception e) {
+            System.out.println("Exception caught: " + e);
+        }
+    }
+}
+</code></pre>
+
+<div class="note"><strong>Output:</strong><br>
+Constructor started<br>
+Exception caught: java.lang.ArithmeticException: / by zero
+</div>
+
+<div class="warning">⚠️ Object is <strong>not created</strong> if the constructor throws an uncaught exception.</div>
+
+<h2>2. Exception in Instance Initializer Block</h2>
+<p>Instance blocks run before constructors during object creation. If an exception is not handled, object creation fails.</p>
+
+<pre><code>class B {
+    {
+        System.out.println("Instance block");
+        int x = 1 / 0; // Exception
+    }
+
+    B() {
+        System.out.println("Constructor");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        try {
+            B obj = new B();
+        } catch (Exception e) {
+            System.out.println("Exception in instance block: " + e);
+        }
+    }
+}
+</code></pre>
+
+<div class="note"><strong>Output:</strong><br>
+Instance block<br>
+Exception in instance block: java.lang.ArithmeticException: / by zero
+</div>
+
+<div class="warning">⚠️ Object creation is <strong>aborted</strong> if instance block throws an exception.</div>
+
+<h2>3. Exception in Static Block</h2>
+<p>Static blocks execute once when the class is loaded. If an unchecked exception occurs, the class fails to load with <code>ExceptionInInitializerError</code>.</p>
+
+<pre><code>class C {
+    static {
+        System.out.println("Static block");
+        String str = null;
+        System.out.println(str.length()); // NullPointerException
+    }
+
+    public static void display() {
+        System.out.println("Class loaded successfully");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        try {
+            C.display();
+        } catch (Throwable t) {
+            System.out.println("Caught: " + t);
+        }
+    }
+}
+</code></pre>
+
+<div class="note"><strong>Output:</strong><br>
+Static block<br>
+Caught: java.lang.ExceptionInInitializerError
+</div>
+
+<div class="warning">⚠️ If a static block throws an unchecked exception, the <strong>class will not load</strong>, and a <strong>runtime error</strong> occurs.</div>
+
+<h2>Summary Table</h2>
+<table>
+  <tr>
+    <th>Location of Exception</th>
+    <th>Effect</th>
+  </tr>
+  <tr>
+    <td><strong>Constructor</strong></td>
+    <td>Object creation fails. Must handle or declare.</td>
+  </tr>
+  <tr>
+    <td><strong>Instance Block</strong></td>
+    <td>Object creation fails. Must handle or declare.</td>
+  </tr>
+  <tr>
+    <td><strong>Static Block</strong></td>
+    <td>Class loading fails with <code>ExceptionInInitializerError</code> if unchecked exception occurs.</td>
+  </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Marker Interface in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    code {
+      background-color: #000;
+      color: #fff;
+      padding: 4px 8px;
+      display: inline-block;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #000;
+      color: #fff;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Marker Interface in Java</h1>
+
+  <p>
+    A <strong>Marker Interface</strong> in Java is an interface that contains <strong>no methods or fields</strong>. It is used to convey metadata or "mark" a class to signal some special behavior to the JVM or frameworks.
+  </p>
+
+  <h2>Common Marker Interfaces in Java</h2>
+  <ul>
+    <li><code>java.io.Serializable</code></li>
+    <li><code>java.lang.Cloneable</code></li>
+    <li><code>java.util.RandomAccess</code></li>
+    <li><code>javax.ejb.Remote</code></li>
+  </ul>
+
+  <h2>Why Use Marker Interface?</h2>
+  <ul>
+    <li>To provide run-time information to the JVM.</li>
+    <li>To indicate permission for certain operations.</li>
+    <li>Used by frameworks or libraries to provide conditional behavior.</li>
+  </ul>
+
+  <h2>Example: Marker Interface</h2>
+
+  <pre>
+interface MyMarker { 
+    // no methods 
+}
+
+class MyClass implements MyMarker {
+    public void show() {
+        System.out.println("Marked class logic.");
+    }
+}
+
+public class MarkerDemo {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        if (obj instanceof MyMarker) {
+            obj.show(); // Only runs if object is "marked"
+        }
+    }
+}
+  </pre>
+
+  <h2>Alternative to Marker Interface</h2>
+  <p>
+    Java annotations (e.g., <code>@Override</code>, <code>@Deprecated</code>) are now commonly used as a more powerful alternative to marker interfaces.
+  </p>
+
+</body>
+</html>

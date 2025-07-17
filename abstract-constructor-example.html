@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Passing Data to Abstract Class Constructor in Java</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fbfd;
+      color: #1d1d1d;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    pre {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 15px;
+    }
+    code {
+    
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px 12px;
+    }
+    th {
+      background-color: #d9e7f5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Passing Data to Abstract Class Constructor in Java</h1>
+
+  <h2>📌 Overview</h2>
+  <ul>
+    <li>Abstract classes in Java <strong>can have constructors</strong>.</li>
+    <li>These constructors are used to <strong>initialize common fields</strong>.</li>
+    <li>To pass data, the subclass must use <code>super(arguments)</code> in its constructor.</li>
+  </ul>
+
+  <h2>🔸 Example Code</h2>
+
+  <pre><code>abstract class Person {
+    String name;
+
+    // Abstract class constructor
+    public Person(String name) {
+        this.name = name;
+        System.out.println("Person constructor called with: " + name);
+    }
+
+    abstract void display();
+}
+
+class Student extends Person {
+    int rollNo;
+
+    // Subclass constructor calling abstract class constructor
+    public Student(String name, int rollNo) {
+        super(name);  // Passing data to abstract class
+        this.rollNo = rollNo;
+    }
+
+    @Override
+    void display() {
+        System.out.println("Name: " + name + ", Roll No: " + rollNo);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s = new Student("Alice", 101);
+        s.display();
+    }
+}
+</code></pre>
+
+  <h2>🧾 Output</h2>
+  <pre><code>Person constructor called with: Alice
+Name: Alice, Roll No: 101
+</code></pre>
+
+  <h2>🧠 Explanation</h2>
+  <ul>
+    <li><code>Person</code> is an abstract class with a constructor that initializes the <code>name</code>.</li>
+    <li><code>Student</code> extends <code>Person</code> and uses <code>super(name)</code> to call the parent constructor.</li>
+    <li>The abstract class constructor is executed before the subclass constructor finishes.</li>
+  </ul>
+
+  <h2>✅ Summary Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Concept</th>
+        <th>Allowed in Abstract Class?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Constructor</td>
+        <td>✅ Yes</td>
+      </tr>
+      <tr>
+        <td>Calling constructor via <code>super()</code></td>
+        <td>✅ Yes (from subclass)</td>
+      </tr>
+      <tr>
+        <td>Creating instance directly</td>
+        <td>❌ No (abstract class can't be instantiated)</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

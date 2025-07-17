@@ -41,7 +41,7 @@
     }
     code {
       color: #c7254e;
-      background-color: #f9f2f4;
+   
       padding: 2px 4px;
       border-radius: 4px;
     }
@@ -185,6 +185,20 @@
   .dropdown:hover .dropdown-content {
     display: block;
   }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #888;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #0077cc;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -291,15 +305,214 @@ t.start();</code></pre>
   </table>
 
   <h3>10. What are ThreadLocal variables?</h3>
+  <p>
+    <strong>ThreadLocal</strong> is a special class in Java used to create variables that are local to each thread. 
+    Each thread accessing such a variable (via its <code>get</code> or <code>set</code> methods) has its own, independently initialized copy of the variable.
+  </p>
+
+  <div class="note">
+    ✅ <strong>Use Case:</strong> When you want to avoid shared data between threads and ensure thread-safety without using synchronization.
+  </div>
+
+  <h2>Basic Syntax:</h2>
+  <pre><code>
+ThreadLocal&lt;Type&gt; myThreadLocal = new ThreadLocal&lt;&gt;();
+myThreadLocal.set(value);   // Set value for current thread
+Type value = myThreadLocal.get();  // Get value for current thread
+  </code></pre>
+
+  <h2>Example: ThreadLocal with Simple Counter</h2>
+  <pre><code>
+public class ThreadLocalExample {
+    static ThreadLocal&lt;Integer&gt; threadLocalCounter = ThreadLocal.withInitial(() -> 0);
+
+    public static void main(String[] args) {
+        Runnable task = () -> {
+            threadLocalCounter.set(threadLocalCounter.get() + 1);
+            System.out.println(Thread.currentThread().getName() + " -> " + threadLocalCounter.get());
+        };
+
+        Thread t1 = new Thread(task, "Thread-1");
+        Thread t2 = new Thread(task, "Thread-2");
+
+        t1.start();
+        t2.start();
+    }
+}
+  </code></pre>
+
+  <h2>Advantages of ThreadLocal</h2>
+  <ul>
+    <li>Provides thread confinement of variables.</li>
+    <li>Reduces need for synchronization and locks.</li>
+    <li>Improves performance in multithreaded environments.</li>
+    <li>Useful in frameworks (like Spring, Hibernate) for storing user sessions or transaction contexts.</li>
+  </ul>
+
+  <h2>Common Methods</h2>
+  <ul>
+    <li><code>set(T value)</code> – sets the value for the current thread.</li>
+    <li><code>get()</code> – gets the value for the current thread.</li>
+    <li><code>remove()</code> – removes the value for the current thread.</li>
+    <li><code>withInitial(Supplier)</code> – Java 8 method to initialize default value.</li>
+  </ul>
+
+  <h2>Important Notes</h2>
+  <ul>
+    <li>Each thread holds an independent copy of the variable.</li>
+    <li>Can lead to memory leaks if not removed properly in thread pools (call <code>remove()</code>).</li>
+    <li>Not suitable for sharing data between threads — use `synchronized` or concurrent collections instead.</li>
+  </ul>
+
   <pre><code>ThreadLocal<Integer> local = ThreadLocal.withInitial(() -> 1);</code></pre>
 
   <h2 class="level">🔵 Advanced-Level</h2>
 
   <h3>11. What is ExecutorService?</h3>
+  
   <p>Used to manage thread pools and run async tasks.</p>
+   <p>
+    <strong>ExecutorService</strong> is an advanced framework in Java to manage and control threads efficiently. It is part of the <code>java.util.concurrent</code> package and provides a high-level API for launching and managing asynchronous tasks.
+  </p>
+
+  <div class="note">
+    ✅ <strong>Why use ExecutorService?</strong><br>
+    It decouples task submission from the details of how each task will be run, including thread use, scheduling, and more.
+  </div>
+
+  <h2>Common Methods in ExecutorService</h2>
+  <ul>
+    <li><code>submit(Runnable task)</code> – submits a task for execution and returns a Future.</li>
+    <li><code>execute(Runnable task)</code> – executes the task but doesn’t return a result.</li>
+    <li><code>shutdown()</code> – initiates an orderly shutdown where previously submitted tasks are executed but no new tasks will be accepted.</li>
+    <li><code>shutdownNow()</code> – attempts to stop all actively executing tasks.</li>
+    <li><code>awaitTermination(long timeout, TimeUnit unit)</code> – waits for all tasks to complete or time to expire.</li>
+  </ul>
+
+  <h2>Basic Example using ExecutorService</h2>
+  <pre><code>
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        Runnable task1 = () -> System.out.println("Task 1 running in " + Thread.currentThread().getName());
+        Runnable task2 = () -> System.out.println("Task 2 running in " + Thread.currentThread().getName());
+
+        executor.execute(task1);
+        executor.execute(task2);
+
+        executor.shutdown();
+    }
+}
+  </code></pre>
+
+  <h2>Types of Thread Pools</h2>
+  <ul>
+    <li><code>Executors.newFixedThreadPool(int n)</code> – a pool with fixed number of threads.</li>
+    <li><code>Executors.newCachedThreadPool()</code> – creates new threads as needed and reuses previously constructed ones.</li>
+    <li><code>Executors.newSingleThreadExecutor()</code> – single worker thread for sequential task execution.</li>
+    <li><code>Executors.newScheduledThreadPool(int n)</code> – supports scheduled and periodic task execution.</li>
+  </ul>
+
+  <h2>Example using submit() and Future</h2>
+  <pre><code>
+import java.util.concurrent.*;
+
+public class FutureExample {
+    public static void main(String[] args) throws Exception {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        Callable&lt;String&gt; task = () -> {
+            Thread.sleep(1000);
+            return "Result from Callable";
+        };
+
+        Future&lt;String&gt; future = executor.submit(task);
+
+        System.out.println("Waiting for result...");
+        String result = future.get(); // blocks until result is available
+        System.out.println("Received: " + result);
+
+        executor.shutdown();
+    }
+}
+  </code></pre>
+
+  <h2>Best Practices</h2>
+  <ul>
+    <li>Always shutdown the executor to free resources.</li>
+    <li>Prefer using <code>submit()</code> with <code>Callable</code> for result-returning tasks.</li>
+    <li>Use <code>Future.get()</code> carefully as it can block indefinitely unless timeout is provided.</li>
+    <li>Consider using <code>ScheduledExecutorService</code> for periodic tasks.</li>
+  </ul>
+
+  <div class="note">
+    ⚠️ <strong>Tip:</strong> Avoid using raw threads for complex applications. Always prefer ExecutorService for better performance, scalability, and maintainability.
+  </div>
+
   <pre><code>ExecutorService ex = Executors.newFixedThreadPool(2);
 ex.submit(() -> System.out.println("Run"));
 ex.shutdown();</code></pre>
+  <h3>11. What is the Runnable interface?</h3>
+   <div class="note">
+    <strong>Runnable</strong> is a functional interface used to define tasks with no return value. <br/>
+    <strong>ExecutorService</strong> is a higher-level replacement for managing threads, which can execute Runnable tasks asynchronously.
+  </div>
+
+  <h2>Key Methods of ExecutorService with Runnable</h2>
+  <ul>
+    <li><code>void execute(Runnable command)</code> – Executes the given command at some time in the future.</li>
+    <li><code>Future&lt;?&gt; submit(Runnable task)</code> – Submits a Runnable task for execution and returns a <code>Future</code> representing that task.</li>
+  </ul>
+
+  <h2>Example 1: Using <code>execute()</code> method</h2>
+  <pre><code>import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        Runnable task = () -> {
+            System.out.println("Task is running by: " + Thread.currentThread().getName());
+        };
+
+        executor.execute(task);
+        executor.shutdown();
+    }
+}</code></pre>
+
+  <h2>Example 2: Using <code>submit()</code> method</h2>
+  <pre><code>import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class RunnableWithSubmit {
+    public static void main(String[] args) throws Exception {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        Runnable task = () -> {
+            System.out.println("Running task using submit");
+        };
+
+        Future&lt;?&gt; future = executor.submit(task);
+
+        // You can check if the task is completed
+        System.out.println("Task done? " + future.isDone());
+
+        executor.shutdown();
+    }
+}</code></pre>
+
+  <h2>When to use Runnable with ExecutorService?</h2>
+  <ul>
+    <li>When your task doesn't need to return a result.</li>
+    <li>For better thread management compared to raw threads.</li>
+    <li>To scale your application using thread pools.</li>
+  </ul>
 
   <h3>12. What is the Callable interface?</h3>
   <p>Like Runnable but returns a result and can throw exceptions.</p>
@@ -349,6 +562,102 @@ if(lock.tryLock(1, TimeUnit.SECONDS)) {
     <li><strong>CountDownLatch:</strong> waits for tasks to complete</li>
     <li><strong>CyclicBarrier:</strong> waits for threads to reach barrier</li>
   </ul>
+    <div class="section">
+    <h2>🔐 Semaphore</h2>
+    <p><strong>Semaphore</strong> controls access to a resource by multiple threads using permits.</p>
+    <p><code>Semaphore semaphore = new Semaphore(2);</code> — Allows 2 threads at a time.</p>
+
+    <pre><code>import java.util.concurrent.Semaphore;
+
+public class SemaphoreExample {
+    public static void main(String[] args) {
+        Semaphore semaphore = new Semaphore(2); // Only 2 threads allowed at a time
+
+        Runnable task = () -> {
+            try {
+                semaphore.acquire();
+                System.out.println(Thread.currentThread().getName() + " acquired permit.");
+                Thread.sleep(1000);
+                System.out.println(Thread.currentThread().getName() + " releasing permit.");
+                semaphore.release();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        };
+
+        for (int i = 0; i < 5; i++) {
+            new Thread(task).start();
+        }
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>⏳ CountDownLatch</h2>
+    <p><strong>CountDownLatch</strong> allows one or more threads to wait until a set of tasks complete.</p>
+    <p><code>CountDownLatch latch = new CountDownLatch(3);</code> — Main thread waits until 3 tasks call <code>countDown()</code>.</p>
+
+    <pre><code>import java.util.concurrent.CountDownLatch;
+
+public class CountDownLatchExample {
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(3);
+
+        Runnable worker = () -> {
+            System.out.println(Thread.currentThread().getName() + " working...");
+            latch.countDown();
+        };
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(worker).start();
+        }
+
+        latch.await(); // Main thread waits here
+        System.out.println("All tasks completed. Main thread continues.");
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🔁 CyclicBarrier</h2>
+    <p><strong>CyclicBarrier</strong> lets a set of threads wait for each other to reach a common barrier point.</p>
+    <p><code>CyclicBarrier barrier = new CyclicBarrier(3);</code> — All 3 threads must call <code>await()</code> before proceeding.</p>
+
+    <pre><code>import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+
+public class CyclicBarrierExample {
+    public static void main(String[] args) {
+        CyclicBarrier barrier = new CyclicBarrier(3, () -> {
+            System.out.println("All parties arrived at barrier. Let's proceed!");
+        });
+
+        Runnable task = () -> {
+            try {
+                System.out.println(Thread.currentThread().getName() + " waiting at barrier");
+                barrier.await(); // Wait for others
+                System.out.println(Thread.currentThread().getName() + " passed the barrier");
+            } catch (InterruptedException | BrokenBarrierException e) {
+                e.printStackTrace();
+            }
+        };
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(task).start();
+        }
+    }
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>🔍 Summary</h2>
+    <ul>
+      <li><strong>Semaphore</strong>: Controls the number of threads accessing a resource.</li>
+      <li><strong>CountDownLatch</strong>: Waits for operations to complete before proceeding.</li>
+      <li><strong>CyclicBarrier</strong>: Synchronizes threads at a common execution point.</li>
+    </ul>
+  </div>
+
 
   <h3>18. What is CAS (Compare-And-Swap)?</h3>
   <pre><code>AtomicInteger atomic = new AtomicInteger(0);
@@ -412,6 +721,112 @@ atomic.compareAndSet(0, 1);</code></pre>
     <li><strong>ForkJoinPool</strong>: Ideal for recursive, divide-and-conquer tasks</li>
   </ul>
 
+
+  <h2>🔸 ThreadPoolExecutor</h2>
+  <p><code>java.util.concurrent.ThreadPoolExecutor</code></p>
+
+  <h3>✅ Best Suited For:</h3>
+  <ul>
+    <li>Tasks that are independent and don’t need to fork into subtasks.</li>
+    <li>Traditional server applications, web request handling, etc.</li>
+  </ul>
+
+  <h3>🔧 Key Characteristics:</h3>
+  <table>
+    <tr><th>Feature</th><th>Description</th></tr>
+    <tr><td>Task Type</td><td>Runnable (or Callable) tasks</td></tr>
+    <tr><td>Execution</td><td>Each task is submitted and executed by a thread</td></tr>
+    <tr><td>Thread Reuse</td><td>Threads are reused to avoid overhead</td></tr>
+    <tr><td>Queueing</td><td>Uses a <code>BlockingQueue</code> to hold tasks</td></tr>
+    <tr><td>Workload</td><td>Suitable for uniform, independent tasks</td></tr>
+    <tr><td>Customization</td><td>Highly configurable (core size, queue, etc.)</td></tr>
+  </table>
+
+  <h3>🔁 Example:</h3>
+  <pre><code>ExecutorService executor = Executors.newFixedThreadPool(4);
+executor.submit(() -&gt; {
+    // Some independent task
+});</code></pre>
+
+  <h2>🔸 ForkJoinPool</h2>
+  <p><code>java.util.concurrent.ForkJoinPool</code></p>
+
+  <h3>✅ Best Suited For:</h3>
+  <ul>
+    <li>Recursive, divide-and-conquer tasks</li>
+    <li>CPU-intensive operations with subtasks</li>
+  </ul>
+
+  <h3>🔧 Key Characteristics:</h3>
+  <table>
+    <tr><th>Feature</th><th>Description</th></tr>
+    <tr><td>Task Type</td><td><code>ForkJoinTask</code> (e.g. <code>RecursiveTask</code>)</td></tr>
+    <tr><td>Execution</td><td>Uses work stealing to balance load</td></tr>
+    <tr><td>Fork/Join</td><td>Tasks split (fork) and merge (join) results</td></tr>
+    <tr><td>Threading Model</td><td>Worker threads with work-stealing queues</td></tr>
+    <tr><td>Workload</td><td>Best for parallel computation or recursion</td></tr>
+  </table>
+
+  <h3>🔁 Example:</h3>
+  <pre><code>ForkJoinPool pool = new ForkJoinPool();
+pool.invoke(new RecursiveTaskExample());</code></pre>
+
+  <h2>🔍 Summary Table</h2>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>ThreadPoolExecutor</th>
+      <th>ForkJoinPool</th>
+    </tr>
+    <tr>
+      <td>Main Task Type</td>
+      <td>Runnable / Callable</td>
+      <td>RecursiveTask / RecursiveAction</td>
+    </tr>
+    <tr>
+      <td>Use Case</td>
+      <td>General-purpose thread reuse</td>
+      <td>Divide-and-conquer parallelism</td>
+    </tr>
+    <tr>
+      <td>Work Queue</td>
+      <td>BlockingQueue</td>
+      <td>Deque with Work Stealing</td>
+    </tr>
+    <tr>
+      <td>Execution Model</td>
+      <td>Submit and forget</td>
+      <td>Fork, compute, and join</td>
+    </tr>
+    <tr>
+      <td>Thread Management</td>
+      <td>Customizable thread pool</td>
+      <td>Automatically managed by pool</td>
+    </tr>
+    <tr>
+      <td>Best For</td>
+      <td>IO-heavy, independent tasks</td>
+      <td>Recursive, CPU-heavy parallel tasks</td>
+    </tr>
+  </table>
+
+  <h2>✅ When to Use Which?</h2>
+  <ul>
+    <li><strong>Use ThreadPoolExecutor when:</strong>
+      <ul>
+        <li>Tasks are independent and unrelated.</li>
+        <li>You need manual control over threads.</li>
+        <li>Used in web servers, database calls, etc.</li>
+      </ul>
+    </li>
+    <li><strong>Use ForkJoinPool when:</strong>
+      <ul>
+        <li>Tasks can be split into smaller subtasks.</li>
+        <li>Best for parallel processing like sorting, matrix multiplication.</li>
+      </ul>
+    </li>
+  </ul>
+
   <h3>28. What is the use of BlockingQueue?</h3>
   <p>Used for thread-safe producer-consumer pattern. Blocks automatically when full/empty.</p>
   <pre><code>BlockingQueue&lt;String&gt; queue = new ArrayBlockingQueue&lt;&gt;(10);
@@ -433,6 +848,320 @@ String item = queue.take();</code></pre>
     <li>Always handle exceptions in threads</li>
     <li>Test for thread-safety using stress tests</li>
   </ul>
+  
+  
+  
+   <h1>✅ Atomic Classes in Java</h1>
+
+  <p>Atomic classes are part of the <code>java.util.concurrent.atomic</code> package and provide <strong>lock-free</strong>, <strong>thread-safe</strong> operations on <strong>single variables</strong> or <strong>data structures</strong> using <strong>low-level atomic CPU instructions</strong> (like CAS - Compare-And-Swap).</p>
+
+  <h2>🔸 Why Use Atomic Classes?</h2>
+  <ul>
+    <li>Avoid use of <code>synchronized</code> blocks</li>
+    <li>Ensure <strong>non-blocking thread safety</strong></li>
+    <li>High performance in multithreaded applications</li>
+  </ul>
+
+  <h2>🔧 Commonly Used Atomic Classes</h2>
+  <table>
+    <tr>
+      <th>Class</th>
+      <th>Description</th>
+      <th>Example Use</th>
+    </tr>
+    <tr>
+      <td><code>AtomicInteger</code></td>
+      <td>For atomic operations on <code>int</code> values</td>
+      <td>Counters, indexes</td>
+    </tr>
+    <tr>
+      <td><code>AtomicLong</code></td>
+      <td>Atomic operations on <code>long</code> values</td>
+      <td>Large counters</td>
+    </tr>
+    <tr>
+      <td><code>AtomicBoolean</code></td>
+      <td>Atomic operations on <code>boolean</code></td>
+      <td>Flags, switches</td>
+    </tr>
+    <tr>
+      <td><code>AtomicReference&lt;V&gt;</code></td>
+      <td>Atomic updates to object references</td>
+      <td>Shared config/data</td>
+    </tr>
+    <tr>
+      <td><code>AtomicIntegerArray</code></td>
+      <td>Atomic array of <code>int</code> values</td>
+      <td>Concurrent numeric array</td>
+    </tr>
+    <tr>
+      <td><code>AtomicLongArray</code></td>
+      <td>Atomic array of <code>long</code> values</td>
+      <td>Concurrent numeric array</td>
+    </tr>
+    <tr>
+      <td><code>AtomicReferenceArray&lt;E&gt;</code></td>
+      <td>Atomic array of object references</td>
+      <td>Shared cache or object pool</td>
+    </tr>
+  </table>
+
+  <h2>📘 Code Examples</h2>
+
+  <h3>✅ AtomicInteger Example</h3>
+  <pre><code>import java.util.concurrent.atomic.AtomicInteger;
+
+public class AtomicCounter {
+    private AtomicInteger counter = new AtomicInteger(0);
+
+    public void increment() {
+        counter.incrementAndGet(); // atomically increases by 1
+    }
+
+    public int getValue() {
+        return counter.get();
+    }
+}</code></pre>
+
+  <h3>✅ AtomicBoolean Example</h3>
+  <pre><code>import java.util.concurrent.atomic.AtomicBoolean;
+
+public class OneTimeAction {
+    private AtomicBoolean hasRun = new AtomicBoolean(false);
+
+    public void runOnce() {
+        if (hasRun.compareAndSet(false, true)) {
+            System.out.println("Running one-time setup...");
+        }
+    }
+}</code></pre>
+
+  <h3>✅ AtomicReference Example</h3>
+  <pre><code>import java.util.concurrent.atomic.AtomicReference;
+
+class SharedData {
+    String value;
+}
+
+public class ReferenceExample {
+    private AtomicReference&lt;SharedData&gt; ref = new AtomicReference&lt;&gt;();
+
+    public void updateData(SharedData newData) {
+        ref.set(newData);
+    }
+
+    public SharedData getData() {
+        return ref.get();
+    }
+}</code></pre>
+
+  <h2>⚙️ Key Atomic Operations</h2>
+  <table>
+    <tr>
+      <th>Method</th>
+      <th>Purpose</th>
+    </tr>
+    <tr><td><code>get()</code></td><td>Get current value</td></tr>
+    <tr><td><code>set(x)</code></td><td>Set new value</td></tr>
+    <tr><td><code>lazySet(x)</code></td><td>Eventually sets the value</td></tr>
+    <tr><td><code>compareAndSet(expected, new)</code></td><td>Set if current equals expected</td></tr>
+    <tr><td><code>getAndIncrement()</code></td><td>Increment and return old value</td></tr>
+    <tr><td><code>incrementAndGet()</code></td><td>Increment and return new value</td></tr>
+    <tr><td><code>getAndUpdate(func)</code></td><td>Atomically updates using a function</td></tr>
+    <tr><td><code>accumulateAndGet(x, func)</code></td><td>Custom accumulation logic</td></tr>
+  </table>
+
+  <h2>🧠 Internals</h2>
+  <ul>
+    <li>Internally uses <strong>Unsafe</strong> operations</li>
+    <li>Performs <strong>CAS (Compare-And-Swap)</strong></li>
+    <li>No locks → better scalability and reduced contention</li>
+  </ul>
+
+  <h2>📌 Use Cases</h2>
+  <ul>
+    <li>Counters (<code>AtomicInteger</code>, <code>AtomicLong</code>)</li>
+    <li>One-time initialization (<code>AtomicBoolean</code>)</li>
+    <li>Shared reference updates (<code>AtomicReference</code>)</li>
+    <li>Lock-free data structures and state machines</li>
+  </ul>
+
+<h2>🔐 Object-level Lock</h2>
+<p>Object-level lock is used to synchronize a non-static method. It locks the current instance of the object, so only one thread can access the synchronized method per instance.</p>
+
+<h2>🔐 Class-level Lock</h2>
+<p>Class-level lock is used to synchronize a static method or block. It locks the <code>Class</code> object associated with the class, affecting all instances of the class.</p>
+
+<h2>🧪 Example</h2>
+
+<pre>
+class LockExample {
+
+    public synchronized void objectLevelLock() {
+        System.out.println(Thread.currentThread().getName() + " acquired object-level lock");
+        try { Thread.sleep(1000); } catch (InterruptedException e) {}
+    }
+
+    public static synchronized void classLevelLock() {
+        System.out.println(Thread.currentThread().getName() + " acquired class-level lock");
+        try { Thread.sleep(1000); } catch (InterruptedException e) {}
+    }
+}
+
+public class TestLock {
+    public static void main(String[] args) {
+        LockExample obj1 = new LockExample();
+        LockExample obj2 = new LockExample();
+
+        // Object-level lock (per instance)
+        new Thread(() -> obj1.objectLevelLock(), "Thread-1").start();
+        new Thread(() -> obj2.objectLevelLock(), "Thread-2").start();
+
+        // Class-level lock (shared across all instances)
+        new Thread(() -> LockExample.classLevelLock(), "Thread-3").start();
+        new Thread(() -> LockExample.classLevelLock(), "Thread-4").start();
+    }
+}
+</pre>
+
+<h2>📊 Comparison Table</h2>
+
+<table>
+  <tr>
+    <th>Feature</th>
+    <th>Object-level Lock</th>
+    <th>Class-level Lock</th>
+  </tr>
+  <tr>
+    <td>Applied on</td>
+    <td>Instance methods</td>
+    <td>Static methods or synchronized(Class.class)</td>
+  </tr>
+  <tr>
+    <td>Lock target</td>
+    <td>Specific object instance</td>
+    <td>Class object (shared by all instances)</td>
+  </tr>
+  <tr>
+    <td>Effect scope</td>
+    <td>Only one thread per object instance</td>
+    <td>Only one thread for the entire class</td>
+  </tr>
+  <tr>
+    <td>Usage</td>
+    <td><code>public synchronized void method() {}</code></td>
+    <td><code>public static synchronized void method() {}</code></td>
+  </tr>
+</table>
+
+<h2>📝 Conclusion</h2>
+<ul>
+  <li>Use <strong>object-level lock</strong> when you need synchronization per object instance.</li>
+  <li>Use <strong>class-level lock</strong> when shared data among all instances must be synchronized.</li>
+</ul>
+<h1>🧵 Difference Between <code>wait()</code> and <code>sleep()</code> in Java</h1>
+
+<h2>📌 Overview</h2>
+<p>Both <code>wait()</code> and <code>sleep()</code> cause the current thread to pause execution, but they are used in different contexts and have different effects.</p>
+
+<h2>📊 Comparison Table</h2>
+<table>
+  <tr>
+    <th>Feature</th>
+    <th><code>wait()</code></th>
+    <th><code>sleep()</code></th>
+  </tr>
+  <tr>
+    <td>Defined in</td>
+    <td><code>java.lang.Object</code></td>
+    <td><code>java.lang.Thread</code></td>
+  </tr>
+  <tr>
+    <td>Needs synchronization?</td>
+    <td>Yes, must be called from synchronized block or method</td>
+    <td>No synchronization required</td>
+  </tr>
+  <tr>
+    <td>Releases monitor?</td>
+    <td>Yes</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Wakes up by</td>
+    <td><code>notify()</code> / <code>notifyAll()</code></td>
+    <td>After time expires or interrupted</td>
+  </tr>
+  <tr>
+    <td>Interruptible?</td>
+    <td>Yes</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Use case</td>
+    <td>Thread coordination / inter-thread communication</td>
+    <td>Pause execution for specified time</td>
+  </tr>
+</table>
+
+<h2>🧪 Example of <code>sleep()</code></h2>
+<pre><code>public class SleepExample {
+    public static void main(String[] args) {
+        System.out.println("Thread sleeping for 2 seconds...");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Thread woke up");
+    }
+}</code></pre>
+
+<h2>🧪 Example of <code>wait()</code> and <code>notify()</code></h2>
+<pre><code>class Shared {
+    synchronized void waitMethod() throws InterruptedException {
+        System.out.println("Thread waiting...");
+        wait(); // releases the lock
+        System.out.println("Thread resumed");
+    }
+
+    synchronized void notifyMethod() {
+        notify();
+    }
+}
+
+public class WaitExample {
+    public static void main(String[] args) {
+        Shared shared = new Shared();
+
+        Thread t1 = new Thread(() -> {
+            try {
+                shared.waitMethod();
+            } catch (InterruptedException e) {}
+        });
+
+        Thread t2 = new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+                shared.notifyMethod();
+            } catch (InterruptedException e) {}
+        });
+
+        t1.start();
+        t2.start();
+    }
+}</code></pre>
+
+<h2>🎯 Interview Points</h2>
+<ul>
+  <li><code>sleep()</code> is used for pausing execution; <code>wait()</code> is used for thread coordination.</li>
+  <li><code>wait()</code> must be called inside a synchronized context.</li>
+  <li><code>wait()</code> releases the monitor; <code>sleep()</code> does not.</li>
+  <li>Both can throw <code>InterruptedException</code>.</li>
+</ul>
+
+<h2>✅ Summary</h2>
+<p>If you're coordinating threads to wait for a condition, use <code>wait()</code> and <code>notify()</code>. If you're simply delaying execution, use <code>sleep()</code>.</p>
+
 </div>
 </div>
 

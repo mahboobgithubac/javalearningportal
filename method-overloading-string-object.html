@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Method Overloading with String and Object in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f6fa;
+      color: #1a1a1a;
+      line-height: 1.6;
+      margin: 20px;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    code {
+      
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #d9e7f5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Method Overloading with <code>String</code> and <code>Object</code> Parameters in Java</h1>
+
+  <p>In Java, method overloading occurs when multiple methods in the same class have the <strong>same name</strong> but <strong>different parameters</strong> (type, number, or order).</p>
+
+  <h2>🔸 Example:</h2>
+
+  <pre><code>public class OverloadingDemo {
+
+    public void print(Object obj) {
+        System.out.println("Object version called with: " + obj);
+    }
+
+    public void print(String str) {
+        System.out.println("String version called with: " + str);
+    }
+
+    public static void main(String[] args) {
+        OverloadingDemo demo = new OverloadingDemo();
+
+        demo.print("Hello");        // Which method will be called?
+        demo.print(new Object());   // Object version
+        demo.print(null);           // Which one?
+    }
+}
+</code></pre>
+
+  <h2>📌 Output:</h2>
+  <pre><code>String version called with: Hello
+Object version called with: java.lang.Object@15db9742
+String version called with: null
+</code></pre>
+
+  <h2>🔍 Explanation:</h2>
+
+  <h3>1. <code>demo.print("Hello");</code></h3>
+  <ul>
+    <li><code>"Hello"</code> is a <code>String</code>, and since <code>String</code> is more <strong>specific</strong> than <code>Object</code>, the <code>print(String)</code> method is called.</li>
+  </ul>
+
+  <h3>2. <code>demo.print(new Object());</code></h3>
+  <ul>
+    <li><code>new Object()</code> matches <code>print(Object)</code>.</li>
+  </ul>
+
+  <h3>3. <code>demo.print(null);</code></h3>
+  <ul>
+    <li>No ambiguity here. It calls <code>print(String)</code> because <strong>String is more specific than Object</strong>.</li>
+  </ul>
+
+  <h2>⚠️ What if you add another overload?</h2>
+
+  <pre><code>public void print(Integer num) {
+    System.out.println("Integer version called");
+}
+</code></pre>
+
+  <p>Now, if you call:</p>
+
+  <pre><code>demo.print(null);  // ❌ Compilation error: reference is ambiguous
+</code></pre>
+
+  <p>This causes a <strong>compilation error</strong> because <code>null</code> matches <strong>multiple</strong> methods (<code>String</code>, <code>Object</code>, <code>Integer</code>) and the compiler cannot decide which one is best.</p>
+
+  <h2>✅ Summary</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Call</th>
+        <th>Method Invoked</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>print("text")</code></td>
+        <td><code>print(String)</code></td>
+        <td>Most specific match</td>
+      </tr>
+      <tr>
+        <td><code>print(new Object())</code></td>
+        <td><code>print(Object)</code></td>
+        <td>Exact type match</td>
+      </tr>
+      <tr>
+        <td><code>print(null)</code></td>
+        <td><code>print(String)</code></td>
+        <td>Most specific between String and Object</td>
+      </tr>
+      <tr>
+        <td><code>print(null)</code> with more overloads</td>
+        <td>❌ Compilation error</td>
+        <td>Ambiguous call</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

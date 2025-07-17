@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java equals() and hashCode() Implementation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f8f9fa;
+    }
+    h2 {
+      color: #333;
+    }
+    pre {
+      background-color: #000;
+      color: #fff;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #444;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>✅ Java equals() and hashCode() Implementation</h2>
+
+  <h3>🔹 equals() Method</h3>
+  <p>Used to compare the content/state of two objects. Override it to compare fields instead of memory reference.</p>
+
+  <h3>🔹 hashCode() Method</h3>
+  <p>Returns an integer that represents the hash value of the object. It's used in collections like HashMap or HashSet.</p>
+
+  <h3>✅ Example:</h3>
+  <pre><code>public class Student {
+    private int id;
+    private String name;
+
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Student student = (Student) obj;
+        return id == student.id && name.equals(student.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id + name.hashCode();
+    }
+
+    public static void main(String[] args) {
+        Student s1 = new Student(1, "Alice");
+        Student s2 = new Student(1, "Alice");
+
+        System.out.println(s1.equals(s2));        // true
+        System.out.println(s1.hashCode() == s2.hashCode()); // true
+    }
+}</code></pre>
+
+  <h3>✅ Rules to Remember:</h3>
+  <table>
+    <tr>
+      <th>Rule</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>If equals() returns true</td>
+      <td>hashCode() must return same value</td>
+    </tr>
+    <tr>
+      <td>If hashCode() is same</td>
+      <td>equals() may return true or false</td>
+    </tr>
+    <tr>
+      <td>Best practice</td>
+      <td>Override both equals() and hashCode()</td>
+    </tr>
+  </table>
+
+</body>
+</html>

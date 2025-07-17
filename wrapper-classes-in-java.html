@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wrapper Classes in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    p {
+      margin-bottom: 10px;
+    }
+    code {
+      background-color: #000;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #000;
+      color: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Wrapper Classes in Java</h1>
+
+  <p>Wrapper classes in Java are used to wrap primitive data types into objects. Java is an object-oriented programming language, and sometimes it requires data to be treated as objects. Wrapper classes provide this capability.</p>
+
+  <h2>Why Use Wrapper Classes?</h2>
+  <ul>
+    <li>To use primitive data types in collections (like <code>ArrayList</code>)</li>
+    <li>To use utility methods available in wrapper classes</li>
+    <li>To facilitate autoboxing and unboxing</li>
+  </ul>
+
+  <h2>List of Wrapper Classes</h2>
+  <table>
+    <tr>
+      <th>Primitive Type</th>
+      <th>Wrapper Class</th>
+    </tr>
+    <tr><td>byte</td><td>Byte</td></tr>
+    <tr><td>short</td><td>Short</td></tr>
+    <tr><td>int</td><td>Integer</td></tr>
+    <tr><td>long</td><td>Long</td></tr>
+    <tr><td>float</td><td>Float</td></tr>
+    <tr><td>double</td><td>Double</td></tr>
+    <tr><td>char</td><td>Character</td></tr>
+    <tr><td>boolean</td><td>Boolean</td></tr>
+  </table>
+
+  <h2>Example 1: Autoboxing and Unboxing</h2>
+  <pre><code>// Autoboxing: converting primitive to object
+int a = 10;
+Integer obj = a; // Integer.valueOf(a)
+
+// Unboxing: converting object to primitive
+int b = obj; // obj.intValue()
+
+System.out.println("Autoboxed: " + obj);
+System.out.println("Unboxed: " + b);</code></pre>
+
+  <h2>Example 2: Using Wrapper with Collections</h2>
+  <pre><code>import java.util.ArrayList;
+
+public class WrapperDemo {
+    public static void main(String[] args) {
+        ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+        list.add(100); // Autoboxing
+        list.add(200);
+        int num = list.get(0); // Unboxing
+        System.out.println("First element: " + num);
+    }
+}</code></pre>
+
+  <h2>Advantages of Wrapper Classes</h2>
+  <ul>
+    <li>Support null values</li>
+    <li>Contain utility methods like <code>parseInt</code>, <code>compareTo</code>, etc.</li>
+    <li>Enable use in generic collections</li>
+  </ul>
+
+  <h2>Common Methods</h2>
+  <ul>
+    <li><code>Integer.parseInt("123")</code> → returns 123</li>
+    <li><code>Double.parseDouble("3.14")</code> → returns 3.14</li>
+    <li><code>Boolean.valueOf("true")</code> → returns true</li>
+  </ul>
+
+</body>
+</html>

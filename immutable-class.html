@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Immutable Classes in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #2d2d2d;
+      color: #ffffff;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    .note {
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 10px;
+      margin: 15px 0;
+    }
+	table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #444;
+      color: #fff;
+    }
+    .box {
+      background: #eef;
+      padding: 15px;
+      border-left: 5px solid #0074D9;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧵 Immutable Classes in Java</h1>
+
+  <p>
+    An <strong>immutable class</strong> is a class whose objects cannot be modified once created.
+    Java's <code>String</code> class is the most widely known immutable class.
+  </p>
+
+  <h2>✅ Benefits of Immutable Classes</h2>
+  <ul>
+    <li>Thread-safe without synchronization</li>
+    <li>Reliable behavior for caching, collections, and keys</li>
+    <li>Easy to design and debug</li>
+  </ul>
+
+  <h2>🧱 Rules to Create an Immutable Class</h2>
+  <ul>
+    <li>Make the class <code>final</code> so it can't be subclassed</li>
+    <li>Make all fields <code>private</code> and <code>final</code></li>
+    <li>Don't provide setters</li>
+    <li>Initialize fields via constructor</li>
+    <li>If fields are mutable objects, return a copy (deep copy)</li>
+  </ul>
+
+  <h2>📌 Example: Immutable Person Class</h2>
+  <pre><code>final class Person {
+    private final String name;
+    private final int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+}</code></pre>
+
+  <div class="note">
+    <strong>Note:</strong> The absence of setters and use of <code>final</code> fields make the object immutable.
+  </div>
+
+  <h2>⚠ Mutable Field Pitfall (and Fix)</h2>
+  <p>If a field is mutable, return a <strong>defensive copy</strong> in the getter:</p>
+
+  <pre><code>final class Student {
+    private final String name;
+    private final Date dob;
+
+    public Student(String name, Date dob) {
+        this.name = name;
+        this.dob = new Date(dob.getTime()); // Defensive copy
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Date getDob() {
+        return new Date(dob.getTime()); // Return copy, not original
+    }
+}</code></pre>
+
+  <h2>✅ Summary</h2>
+  <ul>
+    <li>Immutable objects help write cleaner, thread-safe code</li>
+    <li>Use them wherever object state shouldn't change</li>
+    <li>Popular examples: <code>String</code>, <code>Integer</code>, <code>LocalDate</code>, etc.</li>
+  </ul>
+  <h1>✅ Built-in Immutable Classes in Java</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Package</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>String</td><td>java.lang</td><td>Most used immutable class. Once created, its value cannot be changed.</td></tr>
+      <tr><td>Integer</td><td>java.lang</td><td>Wrapper class for int. Immutable.</td></tr>
+      <tr><td>Long</td><td>java.lang</td><td>Wrapper for long type.</td></tr>
+      <tr><td>Short</td><td>java.lang</td><td>Wrapper for short.</td></tr>
+      <tr><td>Byte</td><td>java.lang</td><td>Wrapper for byte.</td></tr>
+      <tr><td>Character</td><td>java.lang</td><td>Wrapper for char.</td></tr>
+      <tr><td>Boolean</td><td>java.lang</td><td>Wrapper for boolean.</td></tr>
+      <tr><td>Double</td><td>java.lang</td><td>Wrapper for double.</td></tr>
+      <tr><td>Float</td><td>java.lang</td><td>Wrapper for float.</td></tr>
+      <tr><td>BigInteger</td><td>java.math</td><td>Arbitrary precision integer. Operations return new objects.</td></tr>
+      <tr><td>BigDecimal</td><td>java.math</td><td>Arbitrary precision decimal. Immutable.</td></tr>
+      <tr><td>LocalDate</td><td>java.time</td><td>Date-only part (ISO-8601). Immutable.</td></tr>
+      <tr><td>LocalTime</td><td>java.time</td><td>Time-only part.</td></tr>
+      <tr><td>LocalDateTime</td><td>java.time</td><td>Combination of date and time.</td></tr>
+      <tr><td>OffsetDateTime</td><td>java.time</td><td>Date-time with UTC offset.</td></tr>
+      <tr><td>ZonedDateTime</td><td>java.time</td><td>Full date-time with timezone.</td></tr>
+      <tr><td>Duration</td><td>java.time</td><td>Time duration. Immutable.</td></tr>
+      <tr><td>Period</td><td>java.time</td><td>Amount of time in years, months, days.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="box">
+    <h2>🛠 Key Characteristics of Immutable Classes:</h2>
+    <ul>
+      <li>Fields are <strong>private</strong> and <strong>final</strong>.</li>
+      <li>No setters.</li>
+      <li>Constructor sets all fields.</li>
+      <li>No method alters internal state.</li>
+      <li>If a field is a mutable object, return a <strong>defensive copy</strong> (e.g., clone) in the getter.</li>
+    </ul>
+</body>
+</html>

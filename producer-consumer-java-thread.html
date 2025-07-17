@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Producer-Consumer Problem in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      padding: 20px;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background: #f0f8ff;
+      padding: 15px;
+      border-left: 5px solid #007acc;
+      overflow-x: auto;
+    }
+    ul {
+      background: #fffbe7;
+      padding: 10px;
+      border-left: 5px solid #f39c12;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🔄 Producer-Consumer Problem</h2>
+<p>The Producer-Consumer problem is a classic synchronization problem where two threads (producer and consumer) share a common buffer. The producer generates data and puts it into the buffer, while the consumer takes data out of the buffer.</p>
+
+<h2>🧵 Java Solution using Threads, wait(), and notify()</h2>
+
+<pre><code>import java.util.LinkedList;
+
+class SharedBuffer {
+    private final LinkedList<Integer> buffer = new LinkedList<>();
+    private final int capacity = 5;
+
+    public synchronized void produce(int value) throws InterruptedException {
+        while (buffer.size() == capacity) {
+            System.out.println("Buffer full, producer waiting...");
+            wait();
+        }
+        buffer.add(value);
+        System.out.println("Produced: " + value);
+        notify(); // Notify the consumer
+    }
+
+    public synchronized void consume() throws InterruptedException {
+        while (buffer.isEmpty()) {
+            System.out.println("Buffer empty, consumer waiting...");
+            wait();
+        }
+        int value = buffer.removeFirst();
+        System.out.println("Consumed: " + value);
+        notify(); // Notify the producer
+    }
+}
+
+public class ProducerConsumer {
+    public static void main(String[] args) {
+        SharedBuffer buffer = new SharedBuffer();
+
+        Thread producerThread = new Thread(() -> {
+            int value = 0;
+            try {
+                while (true) {
+                    buffer.produce(value++);
+                    Thread.sleep(500);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread consumerThread = new Thread(() -> {
+            try {
+                while (true) {
+                    buffer.consume();
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        producerThread.start();
+        consumerThread.start();
+    }
+}
+</code></pre>
+
+<h2>📌 Key Concepts Used</h2>
+<ul>
+  <li><strong>synchronized:</strong> To lock access to shared buffer</li>
+  <li><strong>wait():</strong> Makes thread wait until it's notified</li>
+  <li><strong>notify():</strong> Wakes up one waiting thread</li>
+  <li><strong>LinkedList:</strong> Used as a simple buffer queue</li>
+</ul>
+
+<h2>📝 Output Example</h2>
+<pre>
+Produced: 0
+Consumed: 0
+Produced: 1
+Produced: 2
+Consumed: 1
+...
+</pre>
+
+<h2>✅ Conclusion</h2>
+<p>This approach demonstrates thread synchronization and coordination in Java. It helps avoid race conditions and ensures proper communication between producer and consumer threads using <code>wait()</code> and <code>notify()</code>.</p>
+
+</body>
+</html>

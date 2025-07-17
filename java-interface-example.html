@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Interface with Example</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f8fc;
+      color: #222;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #003366;
+    }
+    code {
+     
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+    }
+    th {
+      background-color: #d9e7f5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Interface in Java with Example</h1>
+
+  <h2>🔹 What is an Interface?</h2>
+  <p>
+    An <strong>interface</strong> in Java is a reference type, similar to a class, that can contain only constants, method signatures, default methods, static methods, and nested types.
+    The methods in interfaces are <strong>implicitly public and abstract</strong>.
+  </p>
+
+  <h2>🔸 Simple Interface Example</h2>
+
+  <pre><code>interface Animal {
+    void sound(); // abstract method
+}
+
+class Dog implements Animal {
+    public void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+class Cat implements Animal {
+    public void sound() {
+        System.out.println("Cat meows");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal dog = new Dog();
+        Animal cat = new Cat();
+
+        dog.sound();  // Output: Dog barks
+        cat.sound();  // Output: Cat meows
+    }
+}</code></pre>
+
+  <h2>🧠 Explanation</h2>
+  <ul>
+    <li><code>Animal</code> is an interface with an abstract method <code>sound()</code>.</li>
+    <li><code>Dog</code> and <code>Cat</code> implement the <code>Animal</code> interface.</li>
+    <li>Each class provides its own implementation of the <code>sound()</code> method.</li>
+  </ul>
+
+  <h2>🧪 Interface with Variables</h2>
+  <pre><code>interface Constants {
+    int MAX = 100; // implicitly public static final
+    String APP_NAME = "TestApp";
+}</code></pre>
+
+  <p>Interface variables are by default <strong>public static final</strong> and can be accessed without an object.</p>
+
+  <h2>🧩 Interface Inheritance</h2>
+  <pre><code>interface A {
+    void methodA();
+}
+
+interface B extends A {
+    void methodB();
+}</code></pre>
+
+  <p>An interface can extend another interface using the <code>extends</code> keyword.</p>
+
+  <h2>⚙️ Multiple Interface Implementation</h2>
+  <pre><code>interface Printable {
+    void print();
+}
+
+interface Showable {
+    void show();
+}
+
+class Demo implements Printable, Showable {
+    public void print() {
+        System.out.println("Printing...");
+    }
+
+    public void show() {
+        System.out.println("Showing...");
+    }
+}</code></pre>
+
+  <p>Java allows a class to implement multiple interfaces, achieving multiple inheritance.</p>
+
+  <h2>❗ Interface vs Abstract Class</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Interface</th>
+        <th>Abstract Class</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Methods</td>
+        <td>Abstract, default, static (Java 8+)</td>
+        <td>Abstract + Concrete</td>
+      </tr>
+      <tr>
+        <td>Variables</td>
+        <td>public static final only</td>
+        <td>Any type</td>
+      </tr>
+      <tr>
+        <td>Multiple Inheritance</td>
+        <td>Yes</td>
+        <td>No</td>
+      </tr>
+      <tr>
+        <td>Constructor</td>
+        <td>Not allowed</td>
+        <td>Allowed</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

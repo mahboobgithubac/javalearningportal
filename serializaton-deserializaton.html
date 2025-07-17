@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Serialization and Deserialization in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fbff;
+      color: #333;
+      padding: 20px;
+    }
+    h2 {
+      color: #003366;
+      margin-top: 30px;
+    }
+    pre {
+      background-color: #eef6ff;
+      padding: 12px;
+      border-left: 4px solid #007acc;
+      overflow-x: auto;
+    }
+    ul {
+      background: #fffbe6;
+      padding: 10px;
+      border-left: 4px solid #f1c40f;
+    }
+    .highlight {
+      color: #d35400;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📦 Serialization and Deserialization in Java</h1>
+
+<h2>✅ What is Serialization?</h2>
+<p>Serialization is the process of converting a Java object into a byte stream for storage or transmission.</p>
+
+<h2>🔁 What is Deserialization?</h2>
+<p>Deserialization is the process of converting a byte stream back into a Java object.</p>
+
+<h2>🧪 Basic Serialization Example</h2>
+<pre><code>class Student implements Serializable {
+    private static final long serialVersionUID = 1L;
+    int id;
+    String name;
+
+    public Student(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+}</code></pre>
+
+---
+
+<h2>📌 Scenario 1: <code>transient</code> Keyword</h2>
+<p>Fields marked <code>transient</code> are skipped during serialization.</p>
+
+<pre><code>class User implements Serializable {
+    String username;
+    transient String password;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+}</code></pre>
+<p>🔍 After deserialization, <code>password</code> will be <code>null</code>.</p>
+
+---
+
+<h2>📌 Scenario 2: <code>static</code> Fields</h2>
+<p><code>static</code> fields are not part of object state and are not serialized.</p>
+
+<pre><code>class Config implements Serializable {
+    static String appName = "MyApp";
+    int version = 1;
+}</code></pre>
+<p>📝 <code>appName</code> will not be serialized. It remains part of the class, not the object.</p>
+
+---
+
+<h2>📌 Scenario 3: Inheritance</h2>
+<p>If superclass is not serializable, its state is not saved during serialization.</p>
+
+<pre><code>class Person {
+    String address;
+    public Person(String address) {
+        this.address = address;
+    }
+}
+
+class Employee extends Person implements Serializable {
+    String name;
+    public Employee(String name, String address) {
+        super(address);
+        this.name = name;
+    }
+}</code></pre>
+<p>🔍 <code>address</code> will not be serialized unless <code>Person</code> also implements <code>Serializable</code>.</p>
+
+---
+
+<h2>📌 Scenario 4: Custom Serialization with <code>writeObject</code> / <code>readObject</code></h2>
+<p>Override default behavior for sensitive data or transformation.</p>
+
+<pre><code>class Account implements Serializable {
+    String username;
+    transient String password;
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject("ENCRYPTED_" + password); // custom logic
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        password = ((String) in.readObject()).replace("ENCRYPTED_", "");
+    }
+}</code></pre>
+
+---
+
+<h2>📌 Scenario 5: Object Graph Serialization</h2>
+<p>When an object contains references to other objects, they must also be serializable.</p>
+
+<pre><code>class Engine implements Serializable {
+    int power;
+    public Engine(int power) { this.power = power; }
+}
+
+class Car implements Serializable {
+    String model;
+    Engine engine;
+    public Car(String model, Engine engine) {
+        this.model = model;
+        this.engine = engine;
+    }
+}</code></pre>
+<p>✅ Both <code>Car</code> and <code>Engine</code> must implement <code>Serializable</code>.</p>
+
+---
+
+<h2>🎯 Common Interview Questions</h2>
+<ul>
+  <li><span class="highlight">Q:</span> What is the role of <code>serialVersionUID</code>?</li>
+  <li><span class="highlight">Q:</span> Can a static field be serialized?</li>
+  <li><span class="highlight">Q:</span> What is the difference between transient and static?</li>
+  <li><span class="highlight">Q:</span> What happens if a field’s class is not serializable?</li>
+  <li><span class="highlight">Q:</span> How do you handle custom serialization logic?</li>
+  <li><span class="highlight">Q:</span> What is the impact of not declaring serialVersionUID?</li>
+</ul>
+
+---
+
+<h2>📌 Summary</h2>
+<ul>
+  <li><code>Serializable</code> is a marker interface — no methods to override</li>
+  <li>Use <code>transient</code> to skip sensitive data</li>
+  <li>Use <code>serialVersionUID</code> for version consistency</li>
+  <li>Custom logic: override <code>writeObject()</code> and <code>readObject()</code></li>
+</ul>
+<h1>📦 Externalizable in Java</h1>
+
+<h2>✅ What is Externalizable?</h2>
+<p><code>Externalizable</code> is an interface in Java used for custom serialization. It is a subinterface of <code>Serializable</code>, but gives you complete control over what gets serialized and how.</p>
+<p>It contains two methods that must be overridden:</p>
+<ul>
+  <li><code>void writeExternal(ObjectOutput out)</code></li>
+  <li><code>void readExternal(ObjectInput in)</code></li>
+</ul>
+
+<h2>🧪 Example of Externalizable</h2>
+
+<pre><code>import java.io.*;
+
+class Employee implements Externalizable {
+    private String name;
+    private int age;
+
+    // Must have a public no-arg constructor
+    public Employee() {}
+
+    public Employee(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(name);
+        out.writeInt(age);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        name = (String) in.readObject();
+        age = in.readInt();
+    }
+
+    public void display() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
+
+public class ExternalizableDemo {
+    public static void main(String[] args) {
+        Employee emp = new Employee("John", 30);
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("emp.ser"))) {
+            oos.writeObject(emp);
+            System.out.println("✅ Object serialized using Externalizable");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("emp.ser"))) {
+            Employee e = (Employee) ois.readObject();
+            System.out.println("✅ Object deserialized:");
+            e.display();
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+</code></pre>
+
+<h2>💡 Key Points</h2>
+<ul>
+  <li>Gives full control of serialization logic.</li>
+  <li>Requires a <code>public no-arg constructor</code>.</li>
+  <li>More flexible but also more error-prone than <code>Serializable</code>.</li>
+  <li>You decide what fields to write and how to read them back.</li>
+</ul>
+
+<h2>🧠 Difference: Serializable vs Externalizable</h2>
+<table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>Feature</th>
+    <th>Serializable</th>
+    <th>Externalizable</th>
+  </tr>
+  <tr>
+    <td>Serialization control</td>
+    <td>Automatic (default behavior)</td>
+    <td>Manual (full control)</td>
+  </tr>
+  <tr>
+    <td>Performance</td>
+    <td>Less efficient (writes all fields)</td>
+    <td>More efficient (write only selected fields)</td>
+  </tr>
+  <tr>
+    <td>Custom logic</td>
+    <td>Override <code>writeObject()</code></td>
+    <td>Implement <code>writeExternal()</code> / <code>readExternal()</code></td>
+  </tr>
+  <tr>
+    <td>Constructor requirement</td>
+    <td>Not required</td>
+    <td>Must have public no-arg constructor</td>
+  </tr>
+</table>
+
+<h2>🎯 Common Interview Questions</h2>
+<ul>
+  <li><span class="highlight">Q:</span> What is the purpose of Externalizable interface?</li>
+  <li><span class="highlight">Q:</span> How is Externalizable different from Serializable?</li>
+  <li><span class="highlight">Q:</span> What happens if you forget to implement <code>readExternal()</code>?</li>
+  <li><span class="highlight">Q:</span> Why is a public no-argument constructor required?</li>
+  <li><span class="highlight">Q:</span> When would you use Externalizable over Serializable?</li>
+</ul>
+
+<h2>✅ Summary</h2>
+<ul>
+  <li>Use <code>Serializable</code> for simple use cases.</li>
+  <li>Use <code>Externalizable</code> when you need custom serialization logic.</li>
+  <li>Always include a public no-arg constructor when using Externalizable.</li>
+</ul>
+</body>
+</html>

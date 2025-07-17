@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ClassNotFoundException vs NoClassDefFoundError in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fdfdfd;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    h1 {
+      color: #003366;
+    }
+    h2 {
+      color: #004080;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+    code, pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 10px;
+      display: block;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #e6f2ff;
+      color: #003366;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    .note {
+      background-color: #fffae6;
+      border-left: 5px solid #ffc107;
+      padding: 10px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>ClassNotFoundException vs NoClassDefFoundError in Java</h1>
+
+  <p>Both <strong>ClassNotFoundException</strong> and <strong>NoClassDefFoundError</strong> are related to class loading issues in Java, but they occur in <strong>different scenarios</strong>.</p>
+
+  <h2>🔍 ClassNotFoundException</h2>
+  <ul>
+    <li><strong>Type:</strong> Checked Exception</li>
+    <li><strong>Occurs When:</strong> Java code explicitly tries to load a class at runtime using methods like <code>Class.forName()</code>, but the class is <strong>not found in the classpath</strong>.</li>
+  </ul>
+
+  <h3>✅ Example:</h3>
+  <pre><code>public class ClassNotFoundDemo {
+    public static void main(String[] args) {
+        try {
+            // Trying to load a class dynamically
+            Class&lt;?&gt; cls = Class.forName("com.example.MyClass");
+        } catch (ClassNotFoundException e) {
+            System.out.println("ClassNotFoundException caught: " + e.getMessage());
+        }
+    }
+}</code></pre>
+
+  <p><strong>Output if class is missing:</strong></p>
+  <pre><code>ClassNotFoundException caught: com.example.MyClass</code></pre>
+
+  <h2>🔍 NoClassDefFoundError</h2>
+  <ul>
+    <li><strong>Type:</strong> Unchecked Error (subclass of <code>Error</code>)</li>
+    <li><strong>Occurs When:</strong> A class was available at compile-time but is missing at runtime (e.g., deleted or failed static initialization).</li>
+  </ul>
+
+  <h3>✅ Example:</h3>
+  <pre><code>// Main class
+public class NoClassDefFoundDemo {
+    public static void main(String[] args) {
+        MyHelper helper = new MyHelper();
+        helper.sayHello();
+    }
+}</code></pre>
+
+  <pre><code>// MyHelper.java
+public class MyHelper {
+    public void sayHello() {
+        System.out.println("Hello from MyHelper");
+    }
+}</code></pre>
+
+  <p><strong>Output if MyHelper.class is missing:</strong></p>
+  <pre><code>Exception in thread "main" java.lang.NoClassDefFoundError: MyHelper</code></pre>
+
+  <h2>🆚 Key Differences Summary Table</h2>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>ClassNotFoundException</th>
+      <th>NoClassDefFoundError</th>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>Checked Exception</td>
+      <td>Runtime Error (<code>Error</code>)</td>
+    </tr>
+    <tr>
+      <td>When it occurs</td>
+      <td>Class is dynamically loaded but not found</td>
+      <td>Class was present at compile-time but missing at runtime</td>
+    </tr>
+    <tr>
+      <td>Common cause</td>
+      <td>Misconfigured classpath in dynamic loading</td>
+      <td>Missing .class file or static block failure</td>
+    </tr>
+    <tr>
+      <td>How to fix</td>
+      <td>Ensure class is available in classpath when loading</td>
+      <td>Ensure required class is present at runtime</td>
+    </tr>
+  </table>
+
+  <div class="note">
+    <strong>Tip:</strong> Use logging and proper error handling to identify these issues early in development or deployment environments.
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Java Object Class Methods</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #000;
+      color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .output {
+      background-color: #f1f8e9;
+      border-left: 5px solid #4caf50;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .desc {
+      background-color: #e3f2fd;
+      border-left: 5px solid #2196f3;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>✅ Java Object Class Methods</h2>
+  <p>
+    The <strong>Object</strong> class is the root class for all Java classes. It defines several useful methods available to all objects.
+  </p>
+
+  <h3>1. <code>toString()</code></h3>
+  <div class="desc">
+    Returns a string representation of the object. Usually overridden to display custom info.
+  </div>
+  <pre>
+class Student {
+    String name = "Alice";
+    int age = 22;
+
+    public String toString() {
+        return "Student{name='" + name + "', age=" + age + "}";
+    }
+
+    public static void main(String[] args) {
+        Student s = new Student();
+        System.out.println(s.toString());
+    }
+}
+  </pre>
+  <div class="output">Output: Student{name='Alice', age=22}</div>
+
+  <h3>2. <code>equals(Object obj)</code></h3>
+  <div class="desc">
+    Compares two objects for equality. Can be overridden to define logical equality.
+  </div>
+  <pre>
+class Person {
+    String name;
+
+    Person(String name) {
+        this.name = name;
+    }
+
+    public boolean equals(Object obj) {
+        Person p = (Person) obj;
+        return this.name.equals(p.name);
+    }
+
+    public static void main(String[] args) {
+        Person p1 = new Person("John");
+        Person p2 = new Person("John");
+        System.out.println(p1.equals(p2));
+    }
+}
+  </pre>
+  <div class="output">Output: true</div>
+
+  <h3>3. <code>hashCode()</code></h3>
+  <div class="desc">
+    Returns an integer hash code value. Must be consistent with <code>equals()</code> if overridden.
+  </div>
+  <pre>
+class Demo {
+    int id;
+
+    Demo(int id) {
+        this.id = id;
+    }
+
+    public int hashCode() {
+        return id * 31;
+    }
+
+    public static void main(String[] args) {
+        Demo d = new Demo(7);
+        System.out.println(d.hashCode());
+    }
+}
+  </pre>
+  <div class="output">Output: 217</div>
+
+  <h3>4. <code>getClass()</code></h3>
+  <div class="desc">
+    Returns the runtime class of the object.
+  </div>
+  <pre>
+public class Main {
+    public static void main(String[] args) {
+        String s = "Hello";
+        System.out.println(s.getClass());
+    }
+}
+  </pre>
+  <div class="output">Output: class java.lang.String</div>
+
+  <h3>5. <code>clone()</code></h3>
+  <div class="desc">
+    Creates and returns a copy (clone) of the object. The class must implement <code>Cloneable</code>.
+  </div>
+  <pre>
+class Employee implements Cloneable {
+    String name = "Tom";
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Employee e1 = new Employee();
+        Employee e2 = (Employee) e1.clone();
+        System.out.println(e2.name);
+    }
+}
+  </pre>
+  <div class="output">Output: Tom</div>
+
+  <h3>6. <code>finalize()</code> <span style="color:red;">(Deprecated)</span></h3>
+  <div class="desc">
+    Called by the garbage collector before object is destroyed. Deprecated since Java 9.
+  </div>
+  <pre>
+class FinalizeDemo {
+    protected void finalize() {
+        System.out.println("Object is destroyed");
+    }
+
+    public static void main(String[] args) {
+        FinalizeDemo obj = new FinalizeDemo();
+        obj = null;
+        System.gc();  // Suggests GC
+    }
+}
+  </pre>
+  <div class="output">Output (may vary): Object is destroyed</div>
+
+  <h3>7. <code>wait()</code>, <code>notify()</code>, <code>notifyAll()</code></h3>
+  <div class="desc">
+    These are used for thread synchronization and must be called from synchronized context.
+  </div>
+  <p><em>Omitted runnable code example due to complexity, but available on request.</em></p>
+
+</body>
+</html>

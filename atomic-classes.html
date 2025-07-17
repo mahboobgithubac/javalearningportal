@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Atomic Classes in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #004080;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #004080;
+      color: white;
+    }
+    code {
+      background-color: #eef;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+    pre {
+      background-color: #eef;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    ul {
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ Atomic Classes in Java</h1>
+
+  <p>Atomic classes are part of the <code>java.util.concurrent.atomic</code> package and provide <strong>lock-free</strong>, <strong>thread-safe</strong> operations on <strong>single variables</strong> or <strong>data structures</strong> using <strong>low-level atomic CPU instructions</strong> (like CAS - Compare-And-Swap).</p>
+
+  <h2>🔸 Why Use Atomic Classes?</h2>
+  <ul>
+    <li>Avoid use of <code>synchronized</code> blocks</li>
+    <li>Ensure <strong>non-blocking thread safety</strong></li>
+    <li>High performance in multithreaded applications</li>
+  </ul>
+
+  <h2>🔧 Commonly Used Atomic Classes</h2>
+  <table>
+    <tr>
+      <th>Class</th>
+      <th>Description</th>
+      <th>Example Use</th>
+    </tr>
+    <tr>
+      <td><code>AtomicInteger</code></td>
+      <td>For atomic operations on <code>int</code> values</td>
+      <td>Counters, indexes</td>
+    </tr>
+    <tr>
+      <td><code>AtomicLong</code></td>
+      <td>Atomic operations on <code>long</code> values</td>
+      <td>Large counters</td>
+    </tr>
+    <tr>
+      <td><code>AtomicBoolean</code></td>
+      <td>Atomic operations on <code>boolean</code></td>
+      <td>Flags, switches</td>
+    </tr>
+    <tr>
+      <td><code>AtomicReference&lt;V&gt;</code></td>
+      <td>Atomic updates to object references</td>
+      <td>Shared config/data</td>
+    </tr>
+    <tr>
+      <td><code>AtomicIntegerArray</code></td>
+      <td>Atomic array of <code>int</code> values</td>
+      <td>Concurrent numeric array</td>
+    </tr>
+    <tr>
+      <td><code>AtomicLongArray</code></td>
+      <td>Atomic array of <code>long</code> values</td>
+      <td>Concurrent numeric array</td>
+    </tr>
+    <tr>
+      <td><code>AtomicReferenceArray&lt;E&gt;</code></td>
+      <td>Atomic array of object references</td>
+      <td>Shared cache or object pool</td>
+    </tr>
+  </table>
+
+  <h2>📘 Code Examples</h2>
+
+  <h3>✅ AtomicInteger Example</h3>
+  <pre><code>import java.util.concurrent.atomic.AtomicInteger;
+
+public class AtomicCounter {
+    private AtomicInteger counter = new AtomicInteger(0);
+
+    public void increment() {
+        counter.incrementAndGet(); // atomically increases by 1
+    }
+
+    public int getValue() {
+        return counter.get();
+    }
+}</code></pre>
+
+  <h3>✅ AtomicBoolean Example</h3>
+  <pre><code>import java.util.concurrent.atomic.AtomicBoolean;
+
+public class OneTimeAction {
+    private AtomicBoolean hasRun = new AtomicBoolean(false);
+
+    public void runOnce() {
+        if (hasRun.compareAndSet(false, true)) {
+            System.out.println("Running one-time setup...");
+        }
+    }
+}</code></pre>
+
+  <h3>✅ AtomicReference Example</h3>
+  <pre><code>import java.util.concurrent.atomic.AtomicReference;
+
+class SharedData {
+    String value;
+}
+
+public class ReferenceExample {
+    private AtomicReference&lt;SharedData&gt; ref = new AtomicReference&lt;&gt;();
+
+    public void updateData(SharedData newData) {
+        ref.set(newData);
+    }
+
+    public SharedData getData() {
+        return ref.get();
+    }
+}</code></pre>
+
+  <h2>⚙️ Key Atomic Operations</h2>
+  <table>
+    <tr>
+      <th>Method</th>
+      <th>Purpose</th>
+    </tr>
+    <tr><td><code>get()</code></td><td>Get current value</td></tr>
+    <tr><td><code>set(x)</code></td><td>Set new value</td></tr>
+    <tr><td><code>lazySet(x)</code></td><td>Eventually sets the value</td></tr>
+    <tr><td><code>compareAndSet(expected, new)</code></td><td>Set if current equals expected</td></tr>
+    <tr><td><code>getAndIncrement()</code></td><td>Increment and return old value</td></tr>
+    <tr><td><code>incrementAndGet()</code></td><td>Increment and return new value</td></tr>
+    <tr><td><code>getAndUpdate(func)</code></td><td>Atomically updates using a function</td></tr>
+    <tr><td><code>accumulateAndGet(x, func)</code></td><td>Custom accumulation logic</td></tr>
+  </table>
+
+  <h2>🧠 Internals</h2>
+  <ul>
+    <li>Internally uses <strong>Unsafe</strong> operations</li>
+    <li>Performs <strong>CAS (Compare-And-Swap)</strong></li>
+    <li>No locks → better scalability and reduced contention</li>
+  </ul>
+
+  <h2>📌 Use Cases</h2>
+  <ul>
+    <li>Counters (<code>AtomicInteger</code>, <code>AtomicLong</code>)</li>
+    <li>One-time initialization (<code>AtomicBoolean</code>)</li>
+    <li>Shared reference updates (<code>AtomicReference</code>)</li>
+    <li>Lock-free data structures and state machines</li>
+  </ul>
+
+</body>
+</html>

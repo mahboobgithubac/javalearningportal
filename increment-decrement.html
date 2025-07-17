@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java Operators Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    h1, h2 {
+      color: #1a73e8;
+    }
+    pre {
+      background-color: #000;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .question {
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-left: 5px solid #1a73e8;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Java Operators: Increment, Decrement, Left Shift, Right Shift</h1>
+
+  <h2>🔼 Increment and 🔽 Decrement Operators</h2>
+  <p>These operators are used to increase or decrease a value by 1.</p>
+
+  <pre><code>// Example:
+public class IncDecExample {
+    public static void main(String[] args) {
+        int a = 5;
+
+        System.out.println("a++ = " + (a++)); // prints 5, then a becomes 6
+        System.out.println("++a = " + (++a)); // a is 7 now
+        System.out.println("a-- = " + (a--)); // prints 7, then a becomes 6
+        System.out.println("--a = " + (--a)); // a is 5 now
+    }
+}</code></pre>
+
+  <h2>➡️ Left Shift Operator (<<)</h2>
+  <p>Shifts bits to the left. Equivalent to multiplying by 2ⁿ.</p>
+
+  <pre><code>// Example:
+public class LeftShiftExample {
+    public static void main(String[] args) {
+        int x = 3; // 0011
+        int result = x << 2; // 1100 = 12
+        System.out.println("3 << 2 = " + result);
+    }
+}</code></pre>
+
+  <h2>⬅️ Right Shift Operator (>>)</h2>
+  <p>Shifts bits to the right. Equivalent to dividing by 2ⁿ.</p>
+
+  <pre><code>// Example:
+public class RightShiftExample {
+    public static void main(String[] args) {
+        int x = 12; // 1100
+        int result = x >> 2; // 0011 = 3
+        System.out.println("12 >> 2 = " + result);
+    }
+}</code></pre>
+
+  <h2>📝 Practice Questions with Answers</h2>
+
+  <div class="question">
+    <strong>Q1:</strong> What will be the output?<br/>
+    <pre><code>int x = 5;
+System.out.println(++x + x++);</code></pre>
+    <strong>Answer:</strong> <code>12</code><br/>
+    <em>Explanation:</em> <code>++x</code> is 6, <code>x++</code> is 6 (then x becomes 7). So 6 + 6 = 12.
+  </div>
+
+  <div class="question">
+    <strong>Q2:</strong> What is the result of this code?<br/>
+    <pre><code>int y = 8;
+int result = y >> 1;
+System.out.println(result);</code></pre>
+    <strong>Answer:</strong> <code>4</code>
+  </div>
+
+  <div class="question">
+    <strong>Q3:</strong> Predict the output:<br/>
+    <pre><code>int a = 2;
+int b = a++ + ++a;
+System.out.println(b);</code></pre>
+    <strong>Answer:</strong> <code>6</code><br/>
+    <em>Explanation:</em> a++ is 2, ++a is 4 (after a became 3), so 2+4 = 6.
+  </div>
+
+</body>
+</html>
