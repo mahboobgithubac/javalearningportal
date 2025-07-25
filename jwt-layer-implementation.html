@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JWT Implementation Layers in Spring Boot</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; line-height: 1.6; }
+    h1, h2, h3 { color: #2c3e50; }
+    code { background-color: #eee; padding: 2px 4px; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #f0f0f0; }
+    .section { background-color: #ffffff; padding: 15px; margin-bottom: 20px; border-left: 5px solid #2c3e50; }
+  </style>
+</head>
+<body>
+
+  <h1>JWT Implementation in Spring Boot App</h1>
+
+  <div class="section">
+    <h2>🔐 Security Layer (Primary Layer for JWT Implementation)</h2>
+    <p>This is where most of the JWT logic resides.</p>
+
+    <h3>1. JWT Filter (Middleware)</h3>
+    <ul>
+      <li>Intercepts incoming HTTP requests</li>
+      <li>Extracts JWT from the <code>Authorization</code> header</li>
+      <li>Validates the token</li>
+      <li>Sets authentication in the SecurityContext</li>
+    </ul>
+    <p><strong>Example:</strong> <code>JwtAuthenticationFilter.java</code></p>
+
+    <h3>2. JWT Utility Class</h3>
+    <ul>
+      <li>Generates JWT</li>
+      <li>Validates JWT</li>
+      <li>Extracts claims like username/roles</li>
+    </ul>
+    <p><strong>Example:</strong> <code>JwtUtil.java</code></p>
+
+    <h3>3. Security Configuration</h3>
+    <ul>
+      <li>Allows <code>/auth/login</code> and <code>/auth/register</code> without authentication</li>
+      <li>Requires authentication for other endpoints</li>
+      <li>Adds the JWT filter to the filter chain</li>
+    </ul>
+    <p><strong>Example:</strong> <code>SecurityConfig.java</code></p>
+  </div>
+
+  <div class="section">
+    <h2>👨‍💼 Service Layer</h2>
+    <p>Handles the actual authentication process:</p>
+    <ul>
+      <li>Validates username/password</li>
+      <li>Returns JWT if credentials are valid</li>
+    </ul>
+    <p><strong>Example:</strong> <code>AuthService.java</code></p>
+  </div>
+
+  <div class="section">
+    <h2>🎮 Controller Layer</h2>
+    <p>Exposes REST endpoints to clients.</p>
+    <ul>
+      <li><code>/login</code> — accepts credentials and returns JWT</li>
+      <li><code>/register</code> — user registration</li>
+      <li>Protected routes (e.g., <code>/api/user</code>) — require valid JWT</li>
+    </ul>
+    <p><strong>Example:</strong> <code>AuthController.java</code></p>
+  </div>
+
+  <div class="section">
+    <h2>📦 Layer Mapping Summary</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Responsibility</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Controller</strong></td>
+          <td>Accept login requests, return JWT</td>
+        </tr>
+        <tr>
+          <td><strong>Service</strong></td>
+          <td>Authenticate user, call <code>JwtUtil</code> to generate token</td>
+        </tr>
+        <tr>
+          <td><strong>Security Layer</strong></td>
+          <td>Intercept/verify JWT, configure access</td>
+        </tr>
+        <tr>
+          <td><strong>Utility (helper)</strong></td>
+          <td>Generate, validate, parse JWT</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>🧱 Recommended Package Structure</h2>
+    <pre>
+com.example.app
+│
+├── controller
+│   └── AuthController.java
+├── service
+│   └── AuthService.java
+├── security
+│   ├── JwtAuthenticationFilter.java
+│   ├── JwtUtil.java
+│   └── SecurityConfig.java
+├── model
+│   └── User.java
+└── repository
+    └── UserRepository.java
+    </pre>
+  </div>
+
+</body>
+</html>

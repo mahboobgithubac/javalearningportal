@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JWT & Session Management Explained</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f9;
+      margin: 20px;
+      padding: 20px;
+      color: #222;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    .question {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-left: 4px solid #3498db;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .question h3 {
+      margin-top: 0;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 10px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>JWT & Session Management Questions</h2>
+
+  <div class="question">
+    <h3>1. What are Claims in JWT?</h3>
+    <p>
+      <strong>Claims</strong> are pieces of information stored inside a JWT (JSON Web Token). 
+      They describe the token and the user. There are three types:
+    </p>
+    <ul>
+      <li><strong>Registered claims</strong> – like <code>iss</code>, <code>sub</code>, <code>exp</code></li>
+      <li><strong>Public claims</strong> – custom claims agreed upon by multiple systems</li>
+      <li><strong>Private claims</strong> – custom key-value pairs for internal use</li>
+    </ul>
+    <pre>
+{
+  "sub": "mahboob",
+  "role": "admin",
+  "iat": 1621234567,
+  "exp": 1621244567
+}
+    </pre>
+    <p>These claims are used to verify identity and control access.</p>
+  </div>
+
+  <div class="question">
+    <h3>2. How is Session Management done?</h3>
+    <p>
+      Session Management keeps track of a user's state between HTTP requests.
+      Common strategies:
+    </p>
+    <ul>
+      <li><strong>HTTP session:</strong> Server stores a session ID in memory or DB. Client gets a cookie with that ID.</li>
+      <li><strong>Token-based (JWT):</strong> No server-side session. Client stores token (usually in localStorage) and sends it on each request.</li>
+      <li><strong>Session store:</strong> Like Redis or DB for clustered apps.</li>
+    </ul>
+    <p>Each method varies in scalability and statelessness.</p>
+  </div>
+
+  <div class="question">
+    <h3>3. How is Session Management done in Spring Boot with JWT?</h3>
+    <p>
+      Spring Boot + JWT uses a <strong>stateless session</strong> approach:
+    </p>
+    <ol>
+      <li>User logs in → JWT generated and sent back</li>
+      <li>Client stores token in localStorage/cookie</li>
+      <li>Each request includes token in <code>Authorization: Bearer &lt;token&gt;</code></li>
+      <li>Spring decodes token, verifies it, and sets authentication context</li>
+    </ol>
+    <p>No server memory is used for sessions — making it scalable.</p>
+  </div>
+
+  <div class="question">
+    <h3>4. What is Principal in JWT?</h3>
+    <p>
+      The <code>Principal</code> in Spring Security represents the currently authenticated user.
+      In a JWT setup, it typically maps to the <code>sub</code> (subject) claim in the token.
+    </p>
+    <p>Example:</p>
+    <pre>
+@GetMapping("/profile")
+public ResponseEntity&lt;?&gt; getProfile(Principal principal) {
+    return ResponseEntity.ok("Hello " + principal.getName());
+}
+    </pre>
+    <p>
+      Or using <code>Authentication</code>:
+    </p>
+    <pre>
+@GetMapping("/profile")
+public ResponseEntity&lt;?&gt; getProfile(Authentication authentication) {
+    return ResponseEntity.ok(authentication.getName());
+}
+    </pre>
+    <p>
+      Spring sets the Principal automatically by decoding the JWT and extracting user identity.
+    </p>
+  </div>
+
+</body>
+</html>

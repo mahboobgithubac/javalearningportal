@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="A beginner-friendly blog page covering JavaServer Pages (JSP) concepts and interview questions."/>
+  <title>JSP Blog – JavaServer Pages Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background-color: #004080;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+      background: #fff;
+    }
+
+    h1, h2 {
+      color: #004080;
+    }
+
+    p {
+      line-height: 1.6;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .qa {
+      background-color: #f1f8ff;
+      border-left: 4px solid #007acc;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .qa h3 {
+      margin-top: 0;
+    }
+
+    footer {
+      background-color: #004080;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>JavaServer Pages (JSP) Blog</h1>
+  <p>Learn JSP Concepts, Usage, and Interview Tips</p>
+</header>
+
+<main>
+  <section class="section">
+    <h2>Introduction to JSP</h2>
+    <p>JavaServer Pages (JSP) is a Java-based server-side technology used to create dynamic web pages. It allows embedding Java code directly into HTML using special tags like <code>&lt;% %&gt;</code>.</p>
+  </section>
+
+  <section class="section">
+    <h2>Benefits of Using JSP</h2>
+    <ul>
+      <li>Enables separation of UI and business logic</li>
+      <li>Reduces the amount of Java code in HTML</li>
+      <li>Supports tag libraries and custom tags (JSTL)</li>
+      <li>Built-in session and request handling</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>How JSP Works</h2>
+    <p>When a client requests a JSP file:</p>
+    <ol>
+      <li>The JSP engine translates it into a servlet</li>
+      <li>The servlet is compiled into a class</li>
+      <li>It executes and returns dynamic content</li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <h2>Real-World Use Cases</h2>
+    <p>JSP is commonly used in:</p>
+    <ul>
+      <li>Admin panels</li>
+      <li>Form-based input and processing</li>
+      <li>Dynamic dashboards</li>
+      <li>Legacy Java EE web applications</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2>Interview Questions and Answers</h2>
+
+    <div class="qa">
+      <h3>1. What is a JSP?</h3>
+      <p><strong>Answer:</strong> JSP (JavaServer Pages) is a technology that allows Java code to be embedded in HTML pages and executed on the server to generate dynamic content.</p>
+    </div>
+
+    <div class="qa">
+      <h3>2. What are JSP implicit objects?</h3>
+      <p><strong>Answer:</strong> JSP provides built-in objects such as <code>request</code>, <code>response</code>, <code>session</code>, <code>application</code>, <code>out</code>, etc., that simplify web development.</p>
+    </div>
+
+    <div class="qa">
+      <h3>3. How does JSP differ from Servlets?</h3>
+      <p><strong>Answer:</strong> JSP is a view technology focused on the UI layer, whereas servlets are Java classes designed to handle requests and business logic. JSPs are translated into servlets internally.</p>
+    </div>
+
+    <div class="qa">
+      <h3>4. What are the different types of JSP tags?</h3>
+      <p><strong>Answer:</strong></p>
+      <ul>
+        <li><code>&lt;% %&gt;</code> – Scriptlet</li>
+        <li><code>&lt;%= %&gt;</code> – Expression</li>
+        <li><code>&lt;%! %&gt;</code> – Declaration</li>
+        <li><code>&lt;%@ %&gt;</code> – Directive</li>
+        <li><code>&lt;jsp:include&gt;</code> – Action Tag</li>
+      </ul>
+    </div>
+
+    <div class="qa">
+      <h3>5. How to include other files in JSP?</h3>
+      <p><strong>Answer:</strong></p>
+      <ul>
+        <li>Static include: <code>&lt;%@ include file="header.jsp" %&gt;</code></li>
+        <li>Dynamic include: <code>&lt;jsp:include page="header.jsp" /&gt;</code></li>
+      </ul>
+    </div>
+
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 JSP Blog | All Rights Reserved
+</footer>
+
+</body>
+</html>

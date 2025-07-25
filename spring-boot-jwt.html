@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spring Boot 3 JWT Employee App</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    pre { background: #272822; color: #f8f8f2; padding: 15px; overflow-x: auto; border-radius: 8px; }
+    h2 { background: #333; color: #fff; padding: 10px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Spring Boot 3 JWT-Based Employee Management App</h1>
+
+  <h2>1. SecurityConfig.java</h2>
+  <pre>
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfig {
+    private final JwtAuthFilter jwtAuthFilter;
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsService userDetailsService) {
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+  </pre>
+
+  <h2>2. JwtAuthFilter.java</h2>
+  <pre>
+@Component
+public class JwtAuthFilter extends OncePerRequestFilter {
+    @Autowired private JwtService jwtService;
+    @Autowired private UserDetailsService userDetailsService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String username;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        jwt = authHeader.substring(7);
+        username = jwtService.extractUsername(jwt);
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
+}
+  </pre>
+
+  <h2>3. JwtService.java</h2>
+  <pre>
+@Service
+public class JwtService {
+    private final String SECRET_KEY = "secret";
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public &lt;T&gt; T extractClaim(String token, Function&lt;Claims, T&gt; claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY.getBytes())
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String generateToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes())
+                .compact();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+}
+  </pre>
+
+  <h2>4. AuthController.java</h2>
+  <pre>
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    @Autowired private AuthenticationManager authManager;
+    @Autowired private JwtService jwtService;
+    @Autowired private UserDetailsService userDetailsService;
+
+    @PostMapping("/login")
+    public ResponseEntity&lt;Map&lt;String, String&gt;&gt; login(@RequestBody AuthRequest request) {
+        Authentication auth = authManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+
+        UserDetails user = userDetailsService.loadUserByUsername(request.getUsername());
+        String token = jwtService.generateToken(user);
+
+        return ResponseEntity.ok(Collections.singletonMap("token", token));
+    }
+}
+  </pre>
+
+  <h2>5. EmployeeController.java</h2>
+  <pre>
+@RestController
+@RequestMapping("/api/employees")
+public class EmployeeController {
+
+    @Autowired private EmployeeService employeeService;
+
+    @GetMapping
+    public List&lt;Employee&gt; getAll() {
+        return employeeService.getAll();
+    }
+
+    @PostMapping
+    public Employee save(@RequestBody Employee employee) {
+        return employeeService.save(employee);
+    }
+}
+  </pre>
+
+  <h2>6. EmployeeService.java</h2>
+  <pre>
+@Service
+public class EmployeeService {
+    @Autowired private EmployeeRepository repository;
+
+    public List&lt;Employee&gt; getAll() {
+        return repository.findAll();
+    }
+
+    public Employee save(Employee emp) {
+        return repository.save(emp);
+    }
+}
+  </pre>
+
+  <h2>7. Employee.java</h2>
+  <pre>
+@Entity
+public class Employee {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String role;
+    // Getters and setters
+}
+  </pre>
+
+  <h2>8. application.properties</h2>
+  <pre>
+spring.datasource.url=jdbc:mysql://localhost:3306/employeedb
+spring.datasource.username=root
+spring.datasource.password=admin
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+  </pre>
+
+</body>
+</html>

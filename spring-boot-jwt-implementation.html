@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spring Boot JWT Implementation Guide</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; background: #f9f9f9; }
+    h1, h2, h3 { color: #2c3e50; }
+    pre { background: #eee; padding: 10px; overflow-x: auto; }
+    code { font-family: monospace; color: #2c3e50; }
+    section { margin-bottom: 40px; }
+  </style>
+</head>
+<body>
+  <h1>Spring Boot JWT Implementation - Complete Guide</h1>
+
+  <section>
+    <h2>🔐 What is JWT?</h2>
+    <p>JWT (JSON Web Token) is a compact, URL-safe means of representing claims to be transferred between two parties. It is often used for authentication and information exchange.</p>
+  </section>
+
+  <section>
+    <h2>🧱 Parts of a JWT</h2>
+    <ul>
+      <li><strong>Header</strong> - Algorithm & token type</li>
+      <li><strong>Payload</strong> - Data (claims)</li>
+      <li><strong>Signature</strong> - Header + Payload signed with secret</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>💡 Common JWT Questions in Spring Boot</h2>
+
+    <h3>1. In which layer is JWT implemented?</h3>
+    <p>JWT is implemented in the <strong>security layer</strong> (Spring Security). Filters like <code>OncePerRequestFilter</code> check for and validate JWT tokens before the request reaches the controller.</p>
+
+    <h3>2. How is JWT called in a Spring Boot app?</h3>
+    <p>JWT is checked in the filter (<code>JwtAuthenticationFilter</code>) before the controller is reached. If the token is valid, authentication is set in the SecurityContext.</p>
+
+    <h3>3. What does the endpoint <code>GET /api/user</code> return?</h3>
+    <p>It returns user-specific details if the user is authenticated and has the proper role/authority.</p>
+
+    <h3>4. I want to protect <code>/getStudentdetails</code> using JWT. How?</h3>
+    <pre><code>.antMatchers("/getStudentdetails").authenticated()</code></pre>
+
+    <h3>5. How to protect all endpoints except login and register?</h3>
+    <pre><code>
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+    http.csrf().disable()
+        .authorizeRequests()
+        .antMatchers("/auth/login", "/auth/register").permitAll()
+        .anyRequest().authenticated()
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+    http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+}
+    </code></pre>
+
+    <h3>6. Do I need Spring Security if using JWT?</h3>
+    <p>Yes, Spring Security is required to set up filters and handle authentication context.</p>
+
+    <h3>7. What does it mean to apply filters?</h3>
+    <p>Filters intercept requests before reaching the controller. They validate JWTs, extract claims, and set authentication.</p>
+
+    <h3>8. Is JWT validated before or after controller?</h3>
+    <p>Before the controller — in filters like <code>OncePerRequestFilter</code>.</p>
+
+    <h3>9. Where are user credentials stored?</h3>
+    <p>In a database table (e.g., users) with passwords hashed using bcrypt.</p>
+
+    <h3>10. What happens when a user registers?</h3>
+    <p>Their username, encoded password (bcrypt), and role are saved in the database.</p>
+
+    <h3>11. How is a forgotten password handled with bcrypt?</h3>
+    <p>You can't decrypt bcrypt passwords. Use a password reset mechanism to set a new one.</p>
+
+    <h3>12. What happens on login and accessing APIs?</h3>
+    <ul>
+      <li>User sends login request with username/password</li>
+      <li>If valid, server generates JWT and returns it</li>
+      <li>User sends JWT in Authorization header for protected APIs</li>
+      <li>Filter validates token, sets context, allows access</li>
+    </ul>
+
+    <h3>13. What is <code>OncePerRequestFilter</code>?</h3>
+    <p>A Spring filter executed once per request to intercept and process things like JWTs.</p>
+  </section>
+
+  <section>
+    <h2>🔧 Example JWT Filter</h2>
+    <pre><code>
+@Component
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        // 1. Get token from Authorization header
+        // 2. Validate the token
+        // 3. Set authentication in context
+        filterChain.doFilter(request, response);
+    }
+}
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>🔒 Authentication Manager and UserDetails</h2>
+    <pre><code>
+@Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+}
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>📄 Summary</h2>
+    <ul>
+      <li>JWT is a stateless token for authentication</li>
+      <li>Spring Security + Filters handle JWT validation</li>
+      <li>Protect endpoints with <code>authenticated()</code></li>
+      <li>Always hash passwords with bcrypt</li>
+      <li>Use filters like <code>OncePerRequestFilter</code> to validate tokens</li>
+    </ul>
+	
+	 <details open>
+    <summary><strong>🔐 What Are Claims?</strong></summary>
+    <p><strong>Claims</strong> are pieces of information inside a JWT (JSON Web Token). They are key-value pairs that describe the user or the token itself.</p>
+  </details>
+
+  <details>
+    <summary><strong>✅ Types of Claims in JWT</strong></summary>
+    <table>
+      <tr>
+        <th>Type</th>
+        <th>Purpose</th>
+      </tr>
+      <tr>
+        <td><strong>Registered Claims</strong></td>
+        <td>Predefined standard keys like <code>iss</code>, <code>exp</code>, <code>sub</code>, <code>aud</code></td>
+      </tr>
+      <tr>
+        <td><strong>Public Claims</strong></td>
+        <td>Custom claims with public meaning (must avoid collisions)</td>
+      </tr>
+      <tr>
+        <td><strong>Private Claims</strong></td>
+        <td>Custom claims defined between parties (e.g., <code>role</code>, <code>userId</code>)</td>
+      </tr>
+    </table>
+  </details>
+
+  <details>
+    <summary><strong>🧾 Common JWT Claims</strong></summary>
+    <table>
+      <tr>
+        <th>Claim</th>
+        <th>Meaning</th>
+      </tr>
+      <tr>
+        <td><code>iss</code></td>
+        <td>Issuer – Who issued the token</td>
+      </tr>
+      <tr>
+        <td><code>sub</code></td>
+        <td>Subject – Whom the token is about</td>
+      </tr>
+      <tr>
+        <td><code>aud</code></td>
+        <td>Audience – Intended recipient</td>
+      </tr>
+      <tr>
+        <td><code>exp</code></td>
+        <td>Expiration Time (Unix timestamp)</td>
+      </tr>
+      <tr>
+        <td><code>iat</code></td>
+        <td>Issued At – When the token was created</td>
+      </tr>
+      <tr>
+        <td><code>nbf</code></td>
+        <td>Not Before – When it becomes valid</td>
+      </tr>
+      <tr>
+        <td><code>role</code>, <code>email</code>, <code>userId</code></td>
+        <td>Custom/private claims</td>
+      </tr>
+    </table>
+  </details>
+
+  <details>
+    <summary><strong>🧠 Example JWT Payload (Claims)</strong></summary>
+    <code>
+{
+  "sub": "user123",
+  "name": "Mahboob",
+  "role": "admin",
+  "iat": 1689580800,
+  "exp": 1689584400
+}
+    </code>
+    <p>This token is for user <code>user123</code>, name is Mahboob, role is admin, with a specific issue and expiry time.</p>
+  </details>
+
+  <details>
+    <summary><strong>🔐 How Are Claims Used?</strong></summary>
+    <ul>
+      <li><strong>Authentication</strong> → To verify the identity of the user</li>
+      <li><strong>Authorization</strong> → To check user roles and permissions</li>
+      <li><strong>Session Management</strong> → Know when to expire or refresh tokens</li>
+    </ul>
+  </details>
+  </section>
+</body>
+</html>

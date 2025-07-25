@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Servlet Interview Questions and Answers for Java Developers">
+  <title>Servlet Interview Questions and Answers</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      background: white;
+    }
+    h1 {
+      color: #004080;
+      font-size: 2rem;
+    }
+    h2 {
+      color: #0066cc;
+      margin-top: 30px;
+    }
+    .qa {
+      background: #f0f8ff;
+      padding: 15px;
+      border-left: 4px solid #004080;
+      margin-bottom: 20px;
+    }
+    .qa p {
+      margin: 5px 0;
+    }
+    footer {
+      background: #004080;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Servlet Interview Questions and Answers</h1>
+    <p>Essential Servlet questions for Java backend developers</p>
+  </header>
+  <main>
+
+    <div class="qa">
+      <h2>1. What is a Servlet?</h2>
+      <p><strong>Answer:</strong> A Servlet is a Java class used to handle requests and responses in a web application. It runs on a servlet container like Apache Tomcat and follows the `javax.servlet` API to handle HTTP requests (GET, POST, etc.).</p>
+    </div>
+
+    <div class="qa">
+      <h2>2. Lifecycle methods of a Servlet?</h2>
+      <p><strong>Answer:</strong> A servlet has the following lifecycle methods:</p>
+      <ul>
+        <li><code>init()</code> - Called once when the servlet is initialized.</li>
+        <li><code>service()</code> - Called for every request.</li>
+        <li><code>destroy()</code> - Called before the servlet is unloaded.</li>
+      </ul>
+    </div>
+
+    <div class="qa">
+      <h2>3. Difference between `doGet()` and `doPost()`?</h2>
+      <p><strong>Answer:</strong></p>
+      <ul>
+        <li><strong>doGet:</strong> Used to request data; data is sent in the URL (visible).</li>
+        <li><strong>doPost:</strong> Used to send data; data is sent in the request body (hidden).</li>
+      </ul>
+    </div>
+
+    <div class="qa">
+      <h2>4. What is the role of the web.xml file?</h2>
+      <p><strong>Answer:</strong> `web.xml` is the deployment descriptor used to configure servlets, servlet-mappings, welcome files, error pages, filters, and more. It’s located in the WEB-INF directory of a web application.</p>
+    </div>
+
+    <div class="qa">
+      <h2>5. What are ServletConfig and ServletContext?</h2>
+      <p><strong>ServletConfig:</strong> Object used to pass initialization parameters to a single servlet.</p>
+      <p><strong>ServletContext:</strong> Object used to share data across the entire application (all servlets).</p>
+    </div>
+
+    <div class="qa">
+      <h2>6. How to handle session management in Servlets?</h2>
+      <p><strong>Answer:</strong> Sessions in servlets can be managed using:</p>
+      <ul>
+        <li>Cookies</li>
+        <li>URL Rewriting</li>
+        <li>Hidden Form Fields</li>
+        <li>HttpSession API (most common)</li>
+      </ul>
+    </div>
+
+    <div class="qa">
+      <h2>7. How do you redirect a request in Servlet?</h2>
+      <p><strong>Answer:</strong> Using <code>response.sendRedirect("newPage.jsp")</code>. This tells the client browser to make a new request to the provided URL.</p>
+    </div>
+
+    <div class="qa">
+      <h2>8. How do you forward a request to another resource?</h2>
+      <p><strong>Answer:</strong> Use <code>RequestDispatcher</code>:</p>
+      <pre><code>RequestDispatcher rd = request.getRequestDispatcher("another.jsp");
+rd.forward(request, response);</code></pre>
+    </div>
+
+    <div class="qa">
+      <h2>9. Can a servlet have multiple mappings?</h2>
+      <p><strong>Answer:</strong> Yes. A single servlet class can be mapped to multiple URL patterns in `web.xml` or using `@WebServlet(urlPatterns = {"/a", "/b"})` annotation.</p>
+    </div>
+
+    <div class="qa">
+      <h2>10. How to upload a file using Servlet?</h2>
+      <p><strong>Answer:</strong> You can use Apache Commons FileUpload or Servlet 3.0's built-in multipart support:</p>
+      <pre><code>@MultipartConfig
+public class UploadServlet extends HttpServlet {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    Part filePart = request.getPart("file");
+    String fileName = filePart.getSubmittedFileName();
+    filePart.write("uploads/" + fileName);
+  }
+}</code></pre>
+    </div>
+
+  </main>
+  <footer>
+    &copy; 2025 Java Interview Prep | All rights reserved
+  </footer>
+</body>
+</html>

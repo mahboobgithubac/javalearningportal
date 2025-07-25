@@ -249,6 +249,86 @@ Map&lt;Boolean, List&lt;Integer&gt;&gt; partitioned = list.stream()
 System.out.println("Partitioned (Even/Odd): " + partitioned);
   </div>
 </div>
+<div class="question">
+<pre>  <strong>16.  Question:Sum of Even Numbers in Nested List<br>
+Given the following nested list of strings:
+  <pre>
+List&lt;List&lt;String&gt;&gt; myList = Arrays.asList(
+    Arrays.asList("12", "32", null, "31", "45"),
+    Arrays.asList("2", "10", null, "31", "45", "#", "111111111111111111111111111111111111111111111111111111")
+);
+find the sum of even numbers.
+  </pre>
+  
+  <button class="toggle-btn" onclick="toggleAnswer(this)">Show Solution</button>
+  <div class="answer">
+<pre>
+<pre>
+<span class="keyword">import</span> java.util.*;
+
+<span class="keyword">public class</span> <span class="class-name">Main</span> {
+    <span class="keyword">public static void</span> main(String[] args) {
+        List&lt;List&lt;String&gt;&gt; myList = Arrays.asList(
+            Arrays.asList(<span class="string">"12"</span>, <span class="string">"32"</span>, <span class="keyword">null</span>, <span class="string">"31"</span>, <span class="string">"45"</span>),
+            Arrays.asList(<span class="string">"2"</span>, <span class="string">"10"</span>, <span class="keyword">null</span>, <span class="string">"31"</span>, <span class="string">"45"</span>, <span class="string">"#"</span>, <span class="string">"111111111111111111111111111111111111111111111111111111"</span>)
+        );
+
+        <span class="keyword">int</span> sum = myList.stream()
+            .flatMap(List::stream)
+            .filter(Objects::nonNull)
+            .filter(s -> s.matches(<span class="string">"\\d+"</span>)) <span class="comment">// only digits</span>
+            .mapToInt(Integer::parseInt)
+            .filter(n -> n % 2 == 0) <span class="comment">// even numbers</span>
+            .sum();
+
+        System.out.println(<span class="string">"Sum of even numbers: "</span> + sum);
+    }
+}
+step by step break
+ <h2>Java Program: Flatten Nested List and Sum Even Numbers</h2>
+  <pre>
+List&lt;List&lt;String&gt;&gt; myList = Arrays.asList(
+    Arrays.asList("12", "32", null, "31", "45"),
+    Arrays.asList("2", "10", null, "31", "45", "#", "111111111111111111111111111111111111111111111111111111")
+);
+
+List&lt;String&gt; flatenList = myList.stream()
+    .flatMap(list -&gt; list.stream())
+    .collect(Collectors.toList());
+
+System.out.println(flatenList);
+
+List&lt;String&gt; nonNull = flatenList.stream()
+    .filter(Objects::nonNull)
+    .collect(Collectors.toList());
+
+System.out.println(nonNull);
+
+List&lt;String&gt; onlyDigit = nonNull.stream()
+    .filter(s -&gt; s.matches("\\\\d+"))
+    .filter(s -&gt; s.length() &lt;= 18)
+    .collect(Collectors.toList());
+
+System.out.println(onlyDigit);
+
+List&lt;Long&gt; evenList = onlyDigit.stream()
+    .map(Long::parseLong)
+    .filter(n -&gt; n % 2 == 0)
+    .collect(Collectors.toList());
+
+System.out.println("evenList -&gt; " + evenList);
+
+long sum = evenList.stream()
+    .mapToLong(n -&gt; n)
+    .sum();
+
+System.out.println("sum -&gt; " + sum);
+  </pre>
+  </pre>
+
+</pre>
+  </div>
+</div>
 <!-- Questions End -->
 
 </body>
