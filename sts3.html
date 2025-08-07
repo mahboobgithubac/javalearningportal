@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Tool Suite (STS) Blog</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .sidebar {
+      width: 260px;
+      background-color: #2c3e50;
+      color: white;
+      height: 100vh;
+      padding-top: 20px;
+      position: fixed;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      padding: 15px 20px;
+      cursor: pointer;
+      border-bottom: 1px solid #34495e;
+    }
+
+    .sidebar ul li:hover {
+      background-color: #34495e;
+    }
+
+    .content {
+      margin-left: 260px;
+      padding: 30px;
+      flex: 1;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #2c3e50;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>STS Blog</h2>
+    <ul>
+     <li onclick="showSection('git')">📁 Git Integration (Push to GitHub)</li>
+    <li onclick="showSection('lombok')">🔧 Add Lombok to STS</li>
+   <li onclick="showSection('shortcuts')">⌨ STS Shortcuts</li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <div id="git" class="section active">
+      <h1>🚀 How to Push Code to GitHub from STS</h1>
+      <ol>
+        <li>Right-click your project > <strong>Team</strong> > <strong>Share Project</strong></li>
+        <li>Select <strong>Git</strong> and click <strong>Next</strong></li>
+        <li>Create or select a repository</li>
+        <li>Go to <strong>Git Staging</strong> view (Window > Show View > Other > Git > Git Staging)</li>
+        <li>Add files to staging area, write commit message and <strong>Commit</strong></li>
+        <li>Click on the repo > <strong>Push Branch</strong></li>
+        <li>Add your GitHub remote URL and credentials</li>
+        <li>Push to GitHub!</li>
+      </ol>
+    </div>
+
+    <div id="lombok" class="section">
+      <h1>✅ How to Add Lombok to STS</h1>
+      <ol>
+        <li>Add Lombok to <code>pom.xml</code>:
+          <pre>
+&lt;dependency&gt;
+  &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+  &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+  &lt;version&gt;1.18.32&lt;/version&gt;
+  &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+          </pre>
+        </li>
+        <li>Download Lombok jar from <a href="https://projectlombok.org/download" target="_blank">official site</a></li>
+        <li>Run with <code>java -jar lombok.jar</code></li>
+        <li>Choose STS IDE path (e.g., <code>SpringToolSuite4.ini</code>)</li>
+        <li>Restart STS</li>
+        <li>Use Lombok annotations like <code>@Getter</code>, <code>@Setter</code>, etc.</li>
+      </ol>
+    </div>
+
+    <div id="shortcuts" class="section">
+      <h1>✅ Useful Shortcuts in STS</h1>
+      <ul>
+        <li><code>Ctrl + Shift + R</code> → Open Resource</li>
+        <li><code>Ctrl + Shift + T</code> → Open Type (class/interface)</li>
+        <li><code>Alt + Shift + R</code> → Rename</li>
+        <li><code>Ctrl + O</code> → Show Outline of current class</li>
+        <li><code>Ctrl + Shift + F</code> → Format Code</li>
+        <li><code>F3</code> → Go to declaration</li>
+        <li><code>Ctrl + 1</code> → Quick Fix</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

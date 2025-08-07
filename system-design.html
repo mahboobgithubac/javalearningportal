@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>System Design Examples</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #2c3e50;
+      color: white;
+      padding-top: 20px;
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    .sidebar a {
+      display: block;
+      padding: 12px 20px;
+      text-decoration: none;
+      color: white;
+      border-bottom: 1px solid #34495e;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover {
+      background-color: #34495e;
+    }
+    .main {
+      margin-left: 250px;
+      padding: 20px;
+      flex-grow: 1;
+      background-color: #f5f7fa;
+      overflow-y: auto;
+    }
+    .content-section {
+      display: none;
+    }
+    .content-section.active {
+      display: block;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    footer {
+      margin-top: 50px;
+      padding: 10px;
+      text-align: center;
+      background: #2c3e50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>System Designs</h2>
+  <a href="ecommerce-system-design.html" onclick="showContent('ecommerce')">E-Commerce System</a>
+  <a href="#" onclick="showContent('chat')">Chat Service</a>
+  <a href="#" onclick="showContent('urlshort')">URL Shortener</a>
+  <a href="#" onclick="showContent('notif')">Notification System</a>
+  <a href="#" onclick="showContent('video')">Video Streaming</a>
+  <a href="#" onclick="showContent('loadbalancer')">Load Balancer</a>
+  <a href="#" onclick="showContent('cdn')">CDN</a>
+  <a href="#" onclick="showContent('ratelimit')">Rate Limiting</a>
+</div>
+
+<div class="main">
+  <div id="ecommerce" class="content-section active">
+    <h1>E-Commerce System Design</h1>
+    <p>Design involves product catalog, cart, order management, inventory, payment, search, and scalability.</p>
+    <ul>
+      <li>Services: User, Product, Order, Payment</li>
+      <li>Database: SQL + Redis cache</li>
+      <li>API Gateway + Load Balancer</li>
+      <li>Search: Elasticsearch</li>
+      <li>Queue: RabbitMQ for order/payment events</li>
+    </ul>
+  </div>
+
+  <div id="chat" class="content-section">
+    <h1>Chat Service Design</h1>
+    <p>Real-time communication using WebSockets, message queues, and persistent storage.</p>
+    <ul>
+      <li>Protocol: WebSocket (or HTTP long-polling)</li>
+      <li>Queue: Kafka for storing messages</li>
+      <li>Database: MongoDB or Cassandra</li>
+      <li>Delivery: Push notifications for offline users</li>
+    </ul>
+  </div>
+
+  <div id="urlshort" class="content-section">
+    <h1>URL Shortener Design</h1>
+    <p>Maps long URLs to short keys with expiration and redirection logic.</p>
+    <ul>
+      <li>Hashing or Base62 encoding</li>
+      <li>Cache layer for fast redirection</li>
+      <li>DB: Key-Value Store (Redis, DynamoDB)</li>
+      <li>Analytics and logging</li>
+    </ul>
+  </div>
+
+  <div id="notif" class="content-section">
+    <h1>Notification System Design</h1>
+    <p>Send push/email/SMS notifications with retries and logging.</p>
+    <ul>
+      <li>Producer: Microservices publish events</li>
+      <li>Queue: Kafka/SQS</li>
+      <li>Consumers: Email/SMS/Push services</li>
+      <li>Logging and retry mechanism</li>
+    </ul>
+  </div>
+
+  <div id="video" class="content-section">
+    <h1>Video Streaming Platform</h1>
+    <p>Stores, encodes, and streams video content efficiently.</p>
+    <ul>
+      <li>Upload and transcoding service</li>
+      <li>Storage: S3/GCS</li>
+      <li>CDN for video delivery</li>
+      <li>Database for metadata</li>
+    </ul>
+  </div>
+
+  <div id="loadbalancer" class="content-section">
+    <h1>Load Balancer</h1>
+    <p>Distributes incoming traffic across multiple backend servers.</p>
+    <ul>
+      <li>Algorithms: Round Robin, Least Connections</li>
+      <li>Health Checks</li>
+      <li>Failover and redundancy</li>
+    </ul>
+  </div>
+
+  <div id="cdn" class="content-section">
+    <h1>Content Delivery Network (CDN)</h1>
+    <p>Delivers static content like images, CSS, JS from edge servers close to users.</p>
+    <ul>
+      <li>Reduce latency</li>
+      <li>Cache invalidation rules</li>
+      <li>Examples: Cloudflare, Akamai</li>
+    </ul>
+  </div>
+
+  <div id="ratelimit" class="content-section">
+    <h1>Rate Limiting</h1>
+    <p>Controls the number of requests per user/system to avoid abuse.</p>
+    <ul>
+      <li>Algorithms: Token Bucket, Leaky Bucket</li>
+      <li>Implementation: Redis + counters</li>
+      <li>Client identification via IP or token</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 System Design | Mahboob Anwar</p>
+  </footer>
+</div>
+
+<script>
+  function showContent(id) {
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => {
+      section.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+  }
+</script>
+
+</body>
+</html>

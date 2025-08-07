@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Architect Roles, Resume, and Interview Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #004080;
+        }
+        code, pre {
+            background-color: #eee;
+            padding: 10px;
+            display: block;
+            white-space: pre-wrap;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #004080;
+            color: white;
+        }
+        .section {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Java Architect Roles, Responsibilities, Resume & Interview Guide</h1>
+
+    <div class="section">
+        <h2>1. Roles of a Java Architect</h2>
+        <ul>
+            <li><strong>Solution Designer:</strong> Designs the overall application architecture, selects frameworks, and ensures alignment with business goals.</li>
+            <li><strong>Technology Evaluator:</strong> Evaluates and recommends new Java technologies, frameworks, and tools.</li>
+            <li><strong>Team Mentor:</strong> Guides developers, enforces best practices, and conducts code reviews.</li>
+            <li><strong>Project Advisor:</strong> Collaborates with stakeholders on technical requirements and estimates.</li>
+            <li><strong>Quality Gatekeeper:</strong> Ensures code quality, scalability, and maintainability.</li>
+            <li><strong>Problem Solver:</strong> Troubleshoots complex architectural issues and performance problems.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Key Responsibilities</h2>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Responsibilities</th>
+            </tr>
+            <tr>
+                <td>Architecture Design</td>
+                <td>Design layered architecture (MVC, microservices), define data flow, and system interactions.</td>
+            </tr>
+            <tr>
+                <td>Technology Stack</td>
+                <td>Choose frameworks (Spring Boot, Hibernate), databases, caching, and messaging systems.</td>
+            </tr>
+            <tr>
+                <td>Integration</td>
+                <td>Define REST APIs, secure inter-service communication, and handle third-party integrations.</td>
+            </tr>
+            <tr>
+                <td>Performance</td>
+                <td>JVM tuning, caching, async processing, load balancing.</td>
+            </tr>
+            <tr>
+                <td>Security</td>
+                <td>Implement OAuth2/JWT, encryption, secure coding practices.</td>
+            </tr>
+            <tr>
+                <td>DevOps</td>
+                <td>Work with CI/CD pipelines, containerization (Docker/Kubernetes).</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>3. Resume Template</h2>
+        <pre>
+📌 Name: [Your Name]
+📧 Email | 📱 Phone | 🌐 LinkedIn/GitHub | 📍 Location
+
+🎯 Professional Summary
+Senior Java Architect with X years of experience designing scalable enterprise Java apps using microservices, Spring Boot, and cloud technologies.
+
+🛠 Technical Skills
+Languages: Java, SQL, Kotlin
+Frameworks: Spring Boot, Hibernate, JPA
+Cloud: AWS, Kubernetes
+Databases: MySQL, PostgreSQL, Redis
+Security: OAuth2, JWT, Spring Security
+
+🏗 Professional Experience
+Java Architect – TechVision Pvt Ltd (2020–Present)
+- Architected microservices-based applications using Spring Boot.
+- Guided team on modularization and security implementation.
+
+🎓 Education
+B.E. in Computer Science – [University]
+
+🏅 Certifications
+- Oracle Certified Professional (Java SE)
+- AWS Certified Solutions Architect
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>4. Interview Questions & Answers</h2>
+        <h3>Architecture & Design</h3>
+        <p><strong>Q:</strong> How do you design a scalable microservices system?<br>
+        <strong>A:</strong> Use Spring Boot for services, Eureka for discovery, API Gateway, centralized config, and Kafka for async communication.</p>
+
+        <h3>Spring Boot</h3>
+        <p><strong>Q:</strong> What is the difference between Spring MVC and Spring WebFlux?<br>
+        <strong>A:</strong> Spring MVC is blocking, while WebFlux is non-blocking and reactive.</p>
+
+        <h3>Security</h3>
+        <p><strong>Q:</strong> How do you secure inter-service communication?<br>
+        <strong>A:</strong> Use OAuth2, JWT, HTTPS, and Spring Security.</p>
+    </div>
+
+    <div class="section">
+        <h2>5. Sample Project Architecture Diagram</h2>
+        <pre>
++----------------+     REST     +-------------------+     DB     +---------------+
+|  API Gateway   |  <------->   |  Microservice A   | <------->  |   MySQL DB    |
++----------------+              +-------------------+            +---------------+
+        |                       +-------------------+
+        | REST                  |  Microservice B   | <---------> |   Redis     |
+        +---------------------> +-------------------+             +-------------+
+                                        |
+                                        | Async (Kafka)
+                                +-------------------+
+                                |  Microservice C   |
+                                +-------------------+
+        </pre>
+    </div>
+
+</body>
+</html>

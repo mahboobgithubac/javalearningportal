@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>How to Add Lombok to STS</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 30px;
+    }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    details {
+      background-color: #fff;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      padding: 15px 20px;
+    }
+    summary {
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      color: #2c3e50;
+      outline: none;
+    }
+    summary:hover {
+      color: #2980b9;
+    }
+    pre, code {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+      display: block;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    ul, ol {
+      margin-left: 20px;
+    }
+    a {
+      color: #2980b9;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .tip {
+      margin-top: 20px;
+      background: #f1faff;
+      padding: 10px 15px;
+      border-left: 4px solid #3498db;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✅ How to Add Lombok to Spring Tool Suite (STS)</h1>
+
+  <details open>
+    <summary>🧩 1. Add Lombok Dependency</summary>
+    <p><strong>For Maven:</strong></p>
+    <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+  &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+  &lt;version&gt;1.18.32&lt;/version&gt;
+  &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+
+    <p><strong>For Gradle:</strong></p>
+    <pre><code>dependencies {
+  compileOnly 'org.projectlombok:lombok:1.18.32'
+  annotationProcessor 'org.projectlombok:lombok:1.18.32'
+}</code></pre>
+  </details>
+
+  <details>
+    <summary>⚙️ 2. Enable Annotation Processing</summary>
+    <ul>
+      <li>Go to: <code>Window → Preferences → Java → Compiler → Annotation Processing</code></li>
+      <li>Check ✅ <strong>"Enable annotation processing"</strong></li>
+      <li>Click <strong>Apply and Close</strong></li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>🔄 3. Build the Project</summary>
+    <ul>
+      <li>Right-click the project → <strong>Maven → Update Project</strong></li>
+      <li>Or: <strong>Gradle → Refresh Gradle Project</strong></li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>🧪 4. Test Lombok Setup</summary>
+    <p>Create a simple class to test Lombok:</p>
+    <pre><code>import lombok.Data;
+
+@Data
+public class Student {
+    private int id;
+    private String name;
+}</code></pre>
+    <p>You should see getters/setters/toString generated automatically.</p>
+  </details>
+
+  <details>
+    <summary>💡 5. Optional: Install Lombok Plugin for STS</summary>
+    <ol>
+      <li>Download Lombok from: <a href="https://projectlombok.org/download" target="_blank">https://projectlombok.org/download</a></li>
+      <li>Run the downloaded JAR: <code>java -jar lombok-1.18.32.jar</code></li>
+      <li>Select your <code>STS.exe</code> or <code>eclipse.exe</code></li>
+      <li>Click <strong>Install/Update</strong></li>
+      <li>Restart STS</li>
+    </ol>
+  </details>
+
+  <details>
+    <summary>🧠 Shortcut to Open a Class</summary>
+    <h4>Windows/Linux:</h4>
+    <p><code>Ctrl + Shift + T</code></p>
+
+    <h4>macOS:</h4>
+    <p><code>Command (⌘) + Shift + T</code></p>
+
+    <h4>✅ What It Does:</h4>
+    <ul>
+      <li>Opens the <strong>"Open Type"</strong> dialog.</li>
+      <li>Supports camel case like <code>CuCo</code> for <code>CustomerController</code>.</li>
+      <li>Works for <strong>all classes</strong> in the workspace.</li>
+    </ul>
+
+    <div class="tip">
+      <h4>🔍 Bonus Tip:</h4>
+      <p>To open any file/resource quickly:</p>
+      <ul>
+        <li><code>Ctrl + Shift + R</code> (Windows/Linux)</li>
+        <li><code>⌘ + Shift + R</code> (macOS)</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>🎉 Final Note</summary>
+    <p>✅ You have successfully integrated Lombok into your STS environment!</p>
+  </details>
+
+</body>
+</html>

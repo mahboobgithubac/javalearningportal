@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Project Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1e88e5;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #1e88e5;
+    }
+
+    .card p {
+      font-size: 0.95em;
+      margin-bottom: 15px;
+    }
+
+    .card a {
+      text-decoration: none;
+      color: #fff;
+      background-color: #1e88e5;
+      padding: 10px 15px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+
+    .card a:hover {
+      background-color: #1565c0;
+    }
+
+    @media(max-width: 600px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📁 My Project Dashboard</h1>
+    <p>Access all your JavaScript-based productivity and tracking tools</p>
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <h3>Project Tracker</h3>
+      <p>Track progress updates on different projects day-wise.</p>
+      <a href="project-tracker.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Notes Tracker</h3>
+      <p>Save and manage your study or work notes in one place.</p>
+      <a href="notes-tracker-main.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>URL Manager</h3>
+      <p>Store and organize frequently used URLs with purpose tags.</p>
+      <a href="url manager/url-manager.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>File Tracker System</h3>
+      <p>Track and manage files with type, date, and remarks.</p>
+      <a href="file-tracker-system-main.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Interview Details</h3>
+      <p>Store and review interview history including role, result, and questions.</p>
+      <a href="interview-details-main.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Dashboard</h3>
+      <p>Main landing page to summarize all major app data.</p>
+      <a href="dashboard.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Todo App</h3>
+      <p>Plan daily tasks with completion status and priority tagging.</p>
+      <a href="todo-app.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Day-to-Day Activity</h3>
+      <p>Log and track your everyday activities and progress.</p>
+      <a href="Day-to-Day-activity.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Interview Q&A Manager</h3>
+      <p>Practice and revise technical and HR questions before interviews.</p>
+      <a href="interview-qa-manager.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Daily Tasks</h3>
+      <p>Manage and update your daily work or personal to-dos.</p>
+      <a href="daily-tasks.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Last Work Summary</h3>
+      <p>View and record your last completed work sessions or tasks.</p>
+      <a href="last-work.html">Open Project</a>
+    </div>
+
+    <div class="card">
+      <h3>Issue Tracker</h3>
+      <p>Track project bugs, enhancements, and resolution status.</p>
+      <a href="issue-tracker.html">Open Project</a>
+    </div>
+
+  </div>
+
+</body>
+</html>

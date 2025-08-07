@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Lambda Expressions in Java</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,6 +21,41 @@
       margin: 10px 0;
       border-left: 5px solid #3498db;
     }
+	
+	 a {
+  display: block;
+  padding: 10px 16px;
+  color: #000; /* dark text */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Hover effect */
+ a:hover {
+  background-color: #e8f0fe;
+  color: #000;
+}
+
+/* Active/currently selected link */
+a.active {
+  background-color: #1e7e34; /* green like in image */
+  color: #fff;
+}
+
+/* Prevent visited link color change */
+a:visited {
+  color: #000;
+}
+	
+	/* For headings, keep links inline */
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  display: inline;  /* fix the line-break issue */
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+}
+	
+	
   </style>
 </head>
 <body>

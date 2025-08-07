@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Push Code to GitHub from STS (Spring Tool Suite)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    h2 {
+      color: #0066cc;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .step {
+      background: #fff;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-left: 5px solid #007acc;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .note {
+      background: #ffffcc;
+      padding: 0.8rem;
+      border-left: 4px solid #ffcc00;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 How to Push Code to GitHub from STS (Spring Tool Suite)</h1>
+
+  <div class="step">
+    <h2>1. Initialize Git in Your Project</h2>
+    <p>Right-click your project → <strong>Team</strong> → <strong>Share Project</strong> → Select <code>Git</code> and click <strong>Finish</strong>.</p>
+  </div>
+
+  <div class="step">
+    <h2>2. Commit Your Code</h2>
+    <p>Right-click your project → <strong>Team</strong> → <strong>Commit</strong>.</p>
+    <ul>
+      <li>Select files to commit</li>
+      <li>Add a commit message</li>
+      <li>Click <strong>Commit</strong> or <strong>Commit and Push</strong></li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h2>3. Create a GitHub Repository</h2>
+    <p>Go to <a href="https://github.com" target="_blank">GitHub</a> → Click <strong>New Repository</strong> → Fill in details → Click <strong>Create Repository</strong>.</p>
+  </div>
+
+  <div class="step">
+    <h2>4. Connect to Remote Repository</h2>
+    <p>Right-click project → <strong>Team</strong> → <strong>Remote</strong> → <strong>Push</strong> → Add a new remote:</p>
+    <ul>
+      <li>Remote name: <code>origin</code></li>
+      <li>Remote URI: <code>https://github.com/your-username/your-repo.git</code></li>
+      <li>Provide GitHub credentials if prompted</li>
+      <li>Click <strong>Next</strong> → Select branch (e.g., <code>master</code> or <code>main</code>) → <strong>Finish</strong></li>
+    </ul>
+  </div>
+
+  <div class="note">
+    🔒 <strong>Push Disabled?</strong><br/>
+    You must <strong>first commit</strong> at least one change before push becomes available.
+  </div>
+
+  <div class="step">
+    <h2>5. Push Changes</h2>
+    <p>After committing, right-click project → <strong>Team</strong> → <strong>Push to Upstream</strong>.</p>
+    <p>You can now see your project on GitHub!</p>
+  </div>
+
+  <div class="step">
+    <h2>🔁 How to Push Future Updates</h2>
+    <ol>
+      <li>Make your code changes</li>
+      <li>Right-click project → <strong>Team</strong> → <strong>Commit</strong></li>
+      <li>Add a commit message → Click <strong>Commit and Push</strong></li>
+    </ol>
+    <p>This will update the remote GitHub repository with your latest changes.</p>
+  </div>
+
+  <div class="step">
+    <h2>📦 Tip: Check Status</h2>
+    <p>You can always use the <strong>Git Staging View</strong> in STS to see which files are staged, modified, or untracked.</p>
+  </div>
+
+  <div class="note">
+    💡 <strong>Pro Tip:</strong><br/>
+    Make sure your GitHub repository is private or public as per your preference. Don't forget to push regularly!
+  </div>
+</body>
+</html>

@@ -113,14 +113,32 @@ aside.sidebar a:hover {
 h1, h2 {
   color: #003366;
 }
-
 ul {
   list-style-type: none;
-  padding: 0;
+  padding-left: 0;
+  margin: 0;
 }
 
-li {
-  margin: 12px 0;
+ul li {
+  margin: 12px 0;              /* Your original spacing */
+  line-height: 1.4;
+    margin-bottom: 5px;
+}
+
+ul li a {
+  display: block;
+  color: #0056b3;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+ul li a:visited {
+  color: #0056b3;             /* Keep same color even after click */
+}
+
+ul li a:hover {
+  text-decoration: underline; /* Optional: hover effect */
 }
 
 a {
@@ -183,3 +201,68 @@ table {
     th { 
 	background-color: #eee;
 	}
+	
+	 a {
+  display: block;
+  padding: 10px 16px;
+  color: #000; /* dark text */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Hover effect */
+ a:hover {
+  background-color: #e8f0fe;
+  color: #000;
+}
+
+/* Active/currently selected link */
+a.active {
+  background-color: #1e7e34; /* green like in image */
+  color: #fff;
+}
+
+/* Prevent visited link color change */
+a:visited {
+  color: #000;
+}
+	
+	/* For headings, keep links inline */
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  display: inline;  /* fix the line-break issue */
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+}
+h1, h2, h3, h4, h5, h6, p {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.sidebar-links {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.sidebar-links li {
+  margin: 4px 0;
+}
+
+.sidebar-links a {
+  display: block;
+  color: #0056b3;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.sidebar-links a:visited {
+  color: #0056b3;
+}
+
+.sidebar-links a:hover {
+  text-decoration: underline;
+}

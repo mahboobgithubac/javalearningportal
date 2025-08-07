@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hibernate/JPA Performance Tuning</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    summary {
+      font-size: 1.1em;
+      font-weight: bold;
+      background-color: #e3e3e3;
+      padding: 10px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #bbb;
+      text-align: left;
+    }
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-size: 90%;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 4px solid #3498db;
+    }
+    ul {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Performance Tuning in Hibernate / JPA</h1>
+
+  <details open>
+    <summary>1. Fetch Strategy</summary>
+    <table>
+      <tr><th>Type</th><th>Use Case</th><th>Example</th></tr>
+      <tr>
+        <td>LAZY</td>
+        <td>Best for performance, loads on access</td>
+        <td><code>@OneToMany(fetch = FetchType.LAZY)</code></td>
+      </tr>
+      <tr>
+        <td>EAGER</td>
+        <td>Use only if you always need the data</td>
+        <td><code>@ManyToOne(fetch = FetchType.EAGER)</code></td>
+      </tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>2. Avoid N+1 Problem</summary>
+    <p><strong>Problem:</strong></p>
+    <pre><code>List&lt;Department&gt; departments = repo.findAll();
+for (Department dept : departments) {
+    System.out.println(dept.getEmployees().size());
+}</code></pre>
+    <p><strong>Solution:</strong></p>
+    <ul>
+      <li><strong>Using JOIN FETCH:</strong></li>
+      <pre><code>@Query("SELECT d FROM Department d JOIN FETCH d.employees")
+List&lt;Department&gt; findAllWithEmployees();</code></pre>
+
+      <li><strong>Using @EntityGraph:</strong></li>
+      <pre><code>@EntityGraph(attributePaths = "employees")
+List&lt;Department&gt; findAll();</code></pre>
+    </ul>
+  </details>
+
+  <details>
+    <summary>3. Batching for Inserts and Updates</summary>
+    <pre><code># application.properties
+spring.jpa.properties.hibernate.jdbc.batch_size=30
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.order_updates=true</code></pre>
+    <p>⚠️ Works only in same session/transaction.</p>
+  </details>
+
+  <details>
+    <summary>4. Enable Second-Level Cache (L2)</summary>
+    <ol>
+      <li>Add EhCache or Caffeine to <code>pom.xml</code>:</li>
+      <pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.ehcache&lt;/groupId&gt;
+  &lt;artifactId&gt;ehcache&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+
+      <li>Enable in entity:</li>
+      <pre><code>@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)</code></pre>
+
+      <li>Enable config:</li>
+      <pre><code>spring.jpa.properties.hibernate.cache.use_second_level_cache=true
+spring.jpa.properties.hibernate.cache.region.factory_class=org.hibernate.cache.jcache.JCacheRegionFactory</code></pre>
+    </ol>
+  </details>
+
+  <details>
+    <summary>5. Pagination Instead of Fetching All</summary>
+    <pre><code>Page&lt;Product&gt; products = productRepo.findAll(PageRequest.of(0, 10));</code></pre>
+  </details>
+
+  <details>
+    <summary>6. Use Indexing on Columns</summary>
+    <p>Index columns used in WHERE, JOIN, ORDER BY:</p>
+    <pre><code>CREATE INDEX idx_product_category ON product(category_id);</code></pre>
+  </details>
+
+  <details>
+    <summary>7. DTO Projections</summary>
+    <pre><code>public interface ProductDTO {
+  String getTitle();
+  Double getPrice();
+}</code></pre>
+    <pre><code>List&lt;ProductDTO&gt; findByCategoryId(Long categoryId);</code></pre>
+  </details>
+
+  <details>
+    <summary>8. Use @Modifying for Bulk Updates</summary>
+    <pre><code>@Modifying
+@Query("UPDATE Product p SET p.price = :price WHERE p.id = :id")
+void updatePriceById(@Param("price") double price, @Param("id") Long id);</code></pre>
+  </details>
+
+  <details>
+    <summary>9. Avoid CascadeType.ALL on Large Collections</summary>
+    <p>Prefer specific cascades like <code>CascadeType.PERSIST</code> or <code>MERGE</code>.</p>
+  </details>
+
+  <details>
+    <summary>10. Use Read-Only Queries</summary>
+    <pre><code>@QueryHints(@QueryHint(name = "org.hibernate.readOnly", value = "true"))
+@Query("SELECT p FROM Product p WHERE p.id = :id")
+Product findReadOnly(@Param("id") Long id);</code></pre>
+  </details>
+
+  <details>
+    <summary>11. Use StatelessSession for Bulk Processing</summary>
+    <pre><code>SessionFactory sf = entityManagerFactory.unwrap(SessionFactory.class);
+StatelessSession session = sf.openStatelessSession();</code></pre>
+  </details>
+
+  <details>
+    <summary>12. Tune Connection Pool (HikariCP)</summary>
+    <pre><code>spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.idle-timeout=30000
+spring.datasource.hikari.connection-timeout=20000</code></pre>
+  </details>
+
+  <details>
+    <summary>13. Enable Hibernate Statistics (for Debugging)</summary>
+    <pre><code>spring.jpa.properties.hibernate.generate_statistics=true</code></pre>
+  </details>
+
+  <details open>
+    <summary>✔️ Summary Checklist</summary>
+    <table>
+      <tr><th>Action</th><th>Description</th></tr>
+      <tr><td>Use LAZY loading</td><td>Avoids unnecessary queries</td></tr>
+      <tr><td>Fix N+1 problems</td><td>Use JOIN FETCH or @EntityGraph</td></tr>
+      <tr><td>Enable batching</td><td>Efficient inserts/updates</td></tr>
+      <tr><td>Use 2nd level cache</td><td>Speeds up repeated reads</td></tr>
+      <tr><td>Paginate results</td><td>Prevents memory issues</td></tr>
+      <tr><td>Add DB indexes</td><td>Speeds up queries</td></tr>
+      <tr><td>Use DTO projections</td><td>Reduce entity overhead</td></tr>
+      <tr><td>Use bulk update queries</td><td>Faster than entity updates</td></tr>
+      <tr><td>Tune connection pool</td><td>Better concurrency performance</td></tr>
+    </table>
+  </details>
+</body>
+</html>

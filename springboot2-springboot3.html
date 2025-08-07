@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spring Boot 2 vs 3 Comparison</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    summary {
+      font-size: 1.1em;
+      font-weight: bold;
+      background-color: #e3e3e3;
+      padding: 10px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #bbb;
+      text-align: left;
+    }
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+    td {
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Spring Boot 2 vs Spring Boot 3</h1>
+
+  <details open>
+    <summary>1. Java Version Compatibility</summary>
+    <table>
+      <tr><th>Feature</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>Minimum Java version</td><td>Java 8+</td><td><strong>Java 17+</strong></td></tr>
+      <tr><td>Recommended Java</td><td>Java 11</td><td><strong>Java 17 or 21 (LTS)</strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>2. Spring Framework Version</summary>
+    <table>
+      <tr><th>Feature</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>Underlying Spring version</td><td>Spring Framework 5.x</td><td><strong>Spring Framework 6.x</strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>3. Jakarta EE Migration</summary>
+    <table>
+      <tr><th>Feature</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>EE Namespace</td><td><code>javax.*</code></td><td><strong><code>jakarta.*</code></strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>4. Native Compilation Support</summary>
+    <table>
+      <tr><th>Feature</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>Native image support</td><td>Partial (Spring Native)</td><td><strong>Official via GraalVM</strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>5. Observability</summary>
+    <table>
+      <tr><th>Feature</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>Micrometer</td><td>Micrometer 1.x</td><td><strong>Micrometer 2.x</strong></td></tr>
+      <tr><td>Tracing</td><td>Manual setup</td><td><strong>Built-in support</strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>6. Dependency Upgrades</summary>
+    <table>
+      <tr><th>Library</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>Hibernate</td><td>5.x</td><td><strong>6.x</strong></td></tr>
+      <tr><td>Tomcat</td><td>9.x</td><td><strong>10.x</strong></td></tr>
+      <tr><td>Flyway</td><td>7.x</td><td><strong>9.x</strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>7. Security Enhancements</summary>
+    <table>
+      <tr><th>Feature</th><th>Spring Boot 2 (Security 5)</th><th>Spring Boot 3 (Security 6)</th></tr>
+      <tr><td>Authorization config</td><td>authorizeRequests()</td><td><strong>authorizeHttpRequests()</strong></td></tr>
+      <tr><td>Lambda DSL</td><td>Supported</td><td><strong>Improved</strong></td></tr>
+      <tr><td>Deprecated APIs</td><td>Still available</td><td><strong>Removed</strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>8. Removed Features / Deprecated APIs</summary>
+    <p>Deprecated APIs, Thymeleaf 2, Spring HATEOAS v1, and old Actuator endpoints are removed or replaced.</p>
+  </details>
+
+  <details>
+    <summary>9. Spring Boot Starter Changes</summary>
+    <table>
+      <tr><th>Feature</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>Validation starter</td><td><code>spring-boot-starter-validation</code></td><td><strong>Not required separately</strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>10. Other Notable Differences</summary>
+    <table>
+      <tr><th>Feature</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>Kotlin Version</td><td>1.3 / 1.4</td><td><strong>1.7+</strong></td></tr>
+      <tr><td>Spring Data</td><td>2021.x</td><td><strong>2023.x</strong></td></tr>
+      <tr><td>Docker support</td><td>Manual</td><td><strong>Improved with layered JARs</strong></td></tr>
+    </table>
+  </details>
+
+  <details>
+    <summary>Migration Tips (2.x → 3.x)</summary>
+    <ul>
+      <li>Migrate <code>javax.*</code> to <code>jakarta.*</code></li>
+      <li>Update Java to 17+</li>
+      <li>Update third-party dependencies</li>
+      <li>Refactor deprecated security/web APIs</li>
+    </ul>
+  </details>
+
+  <details open>
+    <summary>Summary Table</summary>
+    <table>
+      <tr><th>Area</th><th>Spring Boot 2</th><th>Spring Boot 3</th></tr>
+      <tr><td>Java Version</td><td>8+</td><td><strong>17+</strong></td></tr>
+      <tr><td>Spring Version</td><td>5.x</td><td><strong>6.x</strong></td></tr>
+      <tr><td>Jakarta EE</td><td>javax.*</td><td><strong>jakarta.*</strong></td></tr>
+      <tr><td>Native Image</td><td>Experimental</td><td><strong>Official</strong></td></tr>
+      <tr><td>Observability</td><td>Manual</td><td><strong>Built-in</strong></td></tr>
+      <tr><td>Security</td><td>Security 5</td><td><strong>Security 6</strong></td></tr>
+      <tr><td>Dependency Versions</td><td>Older</td><td><strong>Upgraded</strong></td></tr>
+    </table>
+  </details>
+</body>
+</html>

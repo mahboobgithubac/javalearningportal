@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deadlock Detection in Large Projects</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #007BFF;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 4px solid #007BFF;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 Deadlock Detection in Large Projects</h1>
+
+  <div class="section" id="what-is-deadlock">
+    <h2>🔍 1. What is a Deadlock?</h2>
+    <p>A <strong>deadlock</strong> occurs when two or more threads/processes hold resources and wait for each other to release them, creating a circular wait.</p>
+    <p><strong>Example:</strong></p>
+    <ul>
+      <li>Thread A holds Lock 1 and waits for Lock 2</li>
+      <li>Thread B holds Lock 2 and waits for Lock 1</li>
+    </ul>
+  </div>
+
+  <div class="section" id="symptoms">
+    <h2>🧠 2. Analyze Symptoms</h2>
+    <ul>
+      <li>Application hangs or freezes without CPU usage</li>
+      <li>Operations never complete</li>
+      <li>Thread dumps show blocked/waiting threads</li>
+    </ul>
+  </div>
+
+  <div class="section" id="thread-dump">
+    <h2>🛠️ 3. Use Thread Dump Analysis (Java/Spring)</h2>
+    <p><strong>In a Java/Spring Boot project:</strong></p>
+    <ul>
+      <li><code>jstack &lt;PID&gt;</code></li>
+      <li><code>kill -3 &lt;PID&gt;</code> (prints dump to console)</li>
+      <li>VisualVM, JConsole for GUI analysis</li>
+    </ul>
+    <p><strong>Look for:</strong></p>
+    <ul>
+      <li><code>"Found one Java-level deadlock:"</code></li>
+      <li>Threads in <code>BLOCKED</code> or <code>WAITING</code> state</li>
+      <li><code>waiting to lock</code> / <code>locked</code> lines</li>
+    </ul>
+  </div>
+
+  <div class="section" id="tools">
+    <h2>🧪 4. Use Tools</h2>
+    <table border="1" cellpadding="8" cellspacing="0">
+      <tr><th>Tool</th><th>Description</th></tr>
+      <tr><td>VisualVM</td><td>Thread and heap analysis with deadlock detection</td></tr>
+      <tr><td>JConsole</td><td>Basic monitoring with deadlock check</td></tr>
+      <tr><td>Java Mission Control</td><td>Advanced JVM performance analysis</td></tr>
+      <tr><td>YourKit / JProfiler</td><td>Commercial tools for deep thread inspection</td></tr>
+    </table>
+  </div>
+
+  <div class="section" id="logging">
+    <h2>🧬 5. Logging and Monitoring</h2>
+    <p>Add logs before and after acquiring locks:</p>
+    <pre><code>synchronized (lock1) {
+    log.info("Thread A acquired lock1");
+    synchronized (lock2) {
+        log.info("Thread A acquired lock2");
+    }
+}</code></pre>
+  </div>
+
+  <div class="section" id="database">
+    <h2>📈 6. Database Deadlocks</h2>
+    <p>If the deadlock is at the database level (e.g., Spring JPA):</p>
+    <ul>
+      <li>Use <code>SHOW ENGINE INNODB STATUS</code> (MySQL)</li>
+      <li>Enable JPA statistics:</li>
+    </ul>
+    <pre><code>spring.jpa.properties.hibernate.generate_statistics=true</code></pre>
+  </div>
+
+  <div class="section" id="best-practices">
+    <h2>✅ 7. Code-Level Practices to Avoid Deadlocks</h2>
+    <ul>
+      <li>Acquire locks in a consistent global order</li>
+      <li>Use <code>tryLock</code> with timeout:</li>
+    </ul>
+    <pre><code>if (lock.tryLock(5, TimeUnit.SECONDS)) {
+    try {
+        // critical section
+    } finally {
+        lock.unlock();
+    }
+}</code></pre>
+      <ul>
+        <li>Avoid nested locking unless necessary</li>
+        <li>Keep lock scope minimal</li>
+      </ul>
+  </div>
+
+  <div class="section" id="static-analysis">
+    <h2>🧪 8. Static Analysis Tools</h2>
+    <ul>
+      <li>SpotBugs (with concurrency plugin)</li>
+      <li>SonarQube for rule-based deadlock detection</li>
+      <li>IntelliJ IDEA inspections</li>
+    </ul>
+  </div>
+
+  <div class="section" id="testing">
+    <h2>🧠 9. Simulation & Testing</h2>
+    <ul>
+      <li>Use JMeter or multithreaded unit tests to simulate concurrent access</li>
+      <li>Add artificial delays to increase the chance of catching deadlocks</li>
+    </ul>
+  </div>
+
+  <div class="section" id="summary">
+    <h2>📋 Summary Table</h2>
+    <table border="1" cellpadding="8" cellspacing="0">
+      <tr><th>Technique</th><th>Type</th><th>When to Use</th></tr>
+      <tr><td>Thread dumps (jstack)</td><td>Runtime</td><td>When app hangs</td></tr>
+      <tr><td>VisualVM, JConsole</td><td>Monitoring</td><td>Dev/prod diagnosis</td></tr>
+      <tr><td>Logging around locks</td><td>Code-level</td><td>Debugging</td></tr>
+      <tr><td>tryLock with timeout</td><td>Code-level</td><td>Safe locking</td></tr>
+      <tr><td>DB logs + JPA stats</td><td>DB-level</td><td>Transaction deadlocks</td></tr>
+      <tr><td>Static analysis tools</td><td>Compile-time</td><td>Preventative</td></tr>
+    </table>
+  </div>
+
+</body>
+</html>

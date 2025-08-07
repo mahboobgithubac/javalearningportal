@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eCommerce System Design Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    details {
+      margin-bottom: 1rem;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    summary {
+      font-weight: bold;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>How to Design an eCommerce System</h1>
+
+  <details open>
+    <summary>1. Requirements</summary>
+    <ul>
+      <li>Users can register/login</li>
+      <li>Users can browse/search products</li>
+      <li>Users can add products to cart</li>
+      <li>Users can place orders</li>
+      <li>Admin can manage products and inventory</li>
+      <li>Support for payments, order history, and notifications</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>2. High-Level Architecture</summary>
+    <ul>
+      <li><strong>Frontend:</strong> React, Angular, or Vue</li>
+      <li><strong>Backend:</strong> Spring Boot or Node.js (REST API)</li>
+      <li><strong>Database:</strong> MySQL/PostgreSQL (Relational), Redis (Cache)</li>
+      <li><strong>Storage:</strong> Amazon S3 / File system for images</li>
+      <li><strong>Authentication:</strong> JWT or OAuth2</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>3. Key Modules</summary>
+    <ul>
+      <li><strong>User Service:</strong> Registration, login, profile management</li>
+      <li><strong>Product Service:</strong> CRUD, search, categories, inventory</li>
+      <li><strong>Cart Service:</strong> User’s shopping cart</li>
+      <li><strong>Order Service:</strong> Order creation, tracking</li>
+      <li><strong>Payment Service:</strong> Payment gateway integration</li>
+      <li><strong>Notification Service:</strong> Email/SMS alerts</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>4. Database Design (Simplified)</summary>
+    <ul>
+      <li><strong>Users:</strong> id, name, email, password, role</li>
+      <li><strong>Products:</strong> id, title, description, price, stock, image_url</li>
+      <li><strong>Cart:</strong> id, user_id, product_id, quantity</li>
+      <li><strong>Orders:</strong> id, user_id, total_amount, status, date</li>
+      <li><strong>Order_Items:</strong> order_id, product_id, quantity, price</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>5. API Design</summary>
+    <ul>
+      <li><code>POST /api/register</code></li>
+      <li><code>POST /api/login</code></li>
+      <li><code>GET /api/products</code></li>
+      <li><code>POST /api/cart/add</code></li>
+      <li><code>POST /api/orders</code></li>
+      <li><code>POST /api/payment</code></li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>6. Scaling Considerations</summary>
+    <ul>
+      <li>Use CDN for static content</li>
+      <li>Use Redis for session & cache</li>
+      <li>Use message queue for async tasks (e.g., Kafka/RabbitMQ)</li>
+      <li>Use Load balancer for horizontal scaling</li>
+      <li>Use rate limiting & logging</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>7. Security Practices</summary>
+    <ul>
+      <li>Encrypt passwords with BCrypt</li>
+      <li>Use HTTPS</li>
+      <li>Use JWT for token-based authentication</li>
+      <li>Validate all inputs</li>
+      <li>Protect against SQL injection, XSS, CSRF</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>8. Bonus Features</summary>
+    <ul>
+      <li>Product reviews and ratings</li>
+      <li>Wishlist</li>
+      <li>Coupons & discounts</li>
+      <li>Inventory alerts</li>
+      <li>Admin dashboard with analytics</li>
+    </ul>
+  </details>
+
+</body>
+</html>

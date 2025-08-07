@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Push Spring Boot Code to GitHub from STS</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    header, footer {
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 15px 10px;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #1d3557;
+      margin-top: 40px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .step {
+      background: #fff;
+      border-left: 5px solid #007BFF;
+      padding: 15px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    code {
+      background-color: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    pre {
+      background-color: #f1f1f1;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 4px solid #007BFF;
+    }
+    .tip {
+      background-color: #d1ecf1;
+      border-left: 4px solid #0c5460;
+      padding: 10px;
+      margin: 20px 0;
+      color: #0c5460;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Push Spring Boot Project to GitHub using STS</h1>
+  </header>
+
+  <section class="step">
+    <h2>✅ Step-by-Step: Push Spring Boot Project from STS to GitHub</h2>
+
+    <h3>🧩 1. Create a GitHub Repository</h3>
+    <ul>
+      <li>Go to <a href="https://github.com" target="_blank">https://github.com</a></li>
+      <li>Click <strong>New repository</strong></li>
+      <li>Enter a name (e.g., <code>springboot-app</code>)</li>
+      <li>Don’t initialize with README (STS will do it)</li>
+      <li>Click <strong>Create Repository</strong></li>
+      <li>Copy the repository URL, e.g., <code>https://github.com/yourname/springboot-app.git</code></li>
+    </ul>
+
+    <h3>🛠️ 2. In STS: Share Project to Git</h3>
+    <ul>
+      <li>Right-click your project in <strong>Project Explorer</strong></li>
+      <li>Select: <strong>Team → Share Project...</strong></li>
+      <li>Choose <strong>Git</strong>, then click <strong>Next</strong></li>
+      <li>Click <strong>Create...</strong> to create a new Git repository</li>
+      <li>Confirm the default location (project root)</li>
+      <li>Click <strong>Finish</strong></li>
+    </ul>
+
+    <h3>🔍 3. Commit Your Code</h3>
+    <ul>
+      <li>Right-click project → <strong>Team → Commit...</strong></li>
+      <li>Stage your files by dragging from <em>Unstaged Changes</em> to <em>Staged Changes</em></li>
+      <li>Enter commit message (e.g., <code>Initial commit</code>)</li>
+      <li>Click <strong>Commit and Push</strong></li>
+    </ul>
+
+    <h3>🔗 4. Connect Remote Repository (if Push is Disabled)</h3>
+    <ul>
+      <li>Go to: <strong>Window → Show View → Other → Git → Git Repositories</strong></li>
+      <li>Expand your repo → Right-click <strong>Remotes → Create Remote</strong></li>
+      <li>Name it <code>origin</code> → Click OK</li>
+      <li>Check <strong>Configure Push</strong></li>
+      <li>Click <strong>Add URI</strong> and paste your GitHub repo URL</li>
+      <li>Enter GitHub username and token (as password)</li>
+      <li>Click <strong>Finish</strong></li>
+      <li>Now Commit and Push again</li>
+    </ul>
+  </section>
+
+  <section class="step">
+    <h2>📦 Verify</h2>
+    <p>Go to your GitHub repo URL — you should see your project files uploaded.</p>
+  </section>
+
+  <section class="step">
+    <h2>✅ Push Updates to GitHub Later</h2>
+
+    <h3>Option 1: Using STS</h3>
+    <ul>
+      <li>Save all modified files</li>
+      <li>Open <strong>Git Staging View</strong> (<em>Window → Show View → Other → Git → Git Staging</em>)</li>
+      <li>Stage changes → Enter commit message</li>
+      <li>Click <strong>Commit and Push</strong></li>
+    </ul>
+
+    <h3>Option 2: Using Command Line</h3>
+    <pre><code>git status
+git add .
+git commit -m "Updated feature or bug fix"
+git push origin master</code></pre>
+
+    <h3>💡 Pull Before Pushing</h3>
+    <pre><code>git pull origin master</code></pre>
+    <p>Resolve any merge conflicts and push again.</p>
+  </section>
+
+  <div class="tip">
+    <strong>🧠 Tips:</strong>
+    <ul>
+      <li>Use <strong>Team → Pull/Push</strong> for regular updates</li>
+      <li>Use GitHub Personal Access Token (PAT) instead of password for authentication</li>
+      <li>Use CLI once if GUI push fails, then restart STS</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Spring Boot GitHub Integration Guide</p>
+  </footer>
+</body>
+</html>

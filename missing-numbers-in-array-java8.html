@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find Missing Numbers in an Array using Java and Java 8 Streams</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+      padding: 20px;
+      color: #333;
+    }
+    h2 {
+      color: #007acc;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Find Missing Numbers in an Array using Java and Java 8 Streams</h1>
+
+  <div class="section">
+    <h2>1. Original Java Program using Loop and Sorting</h2>
+    <p>This version sorts the array and checks for gaps between consecutive elements to find missing numbers.</p>
+    <pre>
+package com.org.testcode;
+
+import java.util.Arrays;
+
+public class MissingNumberInArray {
+  public static void main(String[] args) {
+    int[] arr = { 1, 3, 5, 7, 2, 8, 9 };
+    int[] arr2 = Arrays.stream(arr).sorted().toArray();
+
+    Arrays.stream(arr).forEach(System.out::println);
+    System.out.println("\n\n");
+    Arrays.stream(arr2).forEach(System.out::println);
+
+    for (int i = 0; i &lt; arr2.length - 1; i++) {
+      if (arr2[i + 1] - arr2[i] != 1) {
+        System.out.println("Missing numbers are ->" + (arr2[i] + 1));
+      }
+    }
+  }
+}
+    </pre>
+  </div>
+
+  <div class="section">
+    <h2>2. Enhanced Java 8 Stream Version</h2>
+    <p>This version uses <code>Set</code> and <code>IntStream.rangeClosed()</code> to find missing numbers in a clean functional way.</p>
+    <pre>
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class MissingNumberInArray {
+  public static void main(String[] args) {
+    int[] arr = { 1, 3, 5, 7, 2, 8, 9 };
+
+    int[] sorted = Arrays.stream(arr).sorted().toArray();
+    int min = sorted[0];
+    int max = sorted[sorted.length - 1];
+
+    Set&lt;Integer&gt; set = Arrays.stream(arr).boxed().collect(Collectors.toSet());
+
+    System.out.println("Missing numbers are:");
+    IntStream.rangeClosed(min, max)
+      .filter(i -&gt; !set.contains(i))
+      .forEach(System.out::println);
+  }
+}
+    </pre>
+  </div>
+
+  <div class="section">
+    <h2>3. Java 8 Sum Formula Based Version (Single Missing Number)</h2>
+    <p>This method assumes the array has numbers from <code>1</code> to <code>n</code> with exactly <strong>one number missing</strong>. It calculates the expected sum of numbers from 1 to n and subtracts the actual sum.</p>
+    <pre>
+import java.util.stream.IntStream;
+
+public class Main {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 4, 5};  // missing = 3
+        int n = arr.length + 1;
+
+        int expectedSum = IntStream.rangeClosed(1, n).sum();
+        int actualSum = IntStream.of(arr).sum();
+
+        int missing = expectedSum - actualSum;
+        System.out.println("Missing number is: " + missing);
+    }
+}
+    </pre>
+    <h3>💡 Explanation:</h3>
+    <ul>
+      <li><code>IntStream.rangeClosed(1, n).sum()</code> → gives sum from 1 to n</li>
+      <li><code>IntStream.of(arr).sum()</code> → actual sum of the array</li>
+      <li><strong>Difference = missing number</strong></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>4. Sample Output for Input {1, 3, 5, 7, 2, 8, 9}</h2>
+    <ul>
+      <li>Sorted Array: <code>1, 2, 3, 5, 7, 8, 9</code></li>
+      <li>Missing Numbers: <code>4, 6</code></li>
+    </ul>
+  </div>
+
+</body>
+</html>

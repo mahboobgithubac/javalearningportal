@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real-Time Use Cases of ForkJoinPool in Java</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #333;
+    }
+    code, pre {
+      background-color: #eee;
+      padding: 10px;
+      display: block;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    .note {
+      background-color: #d4edda;
+      border-left: 4px solid #28a745;
+      padding: 10px;
+      margin: 20px 0;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Real-Time Use Cases of ForkJoinPool in Java</h1>
+
+<h2>1. Parallel File Size Calculator</h2>
+<p><strong>Use Case:</strong> Calculate total size of files in a directory tree using parallel recursion.</p>
+<pre><code>public class DirectorySizeCalculator extends RecursiveTask&lt;Long&gt; {
+    private final File directory;
+
+    public DirectorySizeCalculator(File directory) {
+        this.directory = directory;
+    }
+
+    @Override
+    protected Long compute() {
+        long size = 0;
+        File[] files = directory.listFiles();
+        if (files == null) return 0;
+
+        DirectorySizeCalculator[] subtasks = new DirectorySizeCalculator[files.length];
+        int index = 0;
+
+        for (File file : files) {
+            if (file.isFile()) {
+                size += file.length();
+            } else {
+                DirectorySizeCalculator task = new DirectorySizeCalculator(file);
+                task.fork();
+                subtasks[index++] = task;
+            }
+        }
+
+        for (int i = 0; i &lt; index; i++) {
+            size += subtasks[i].join();
+        }
+
+        return size;
+    }
+}
+</code></pre>
+
+<h2>2. Parallel Merge Sort</h2>
+<p><strong>Use Case:</strong> Sort large arrays in parallel using Fork/Join.</p>
+<pre><code>class MergeSortTask extends RecursiveAction {
+    private int[] array;
+    private int start, end;
+
+    public MergeSortTask(int[] array, int start, int end) {
+        this.array = array; this.start = start; this.end = end;
+    }
+
+    @Override
+    protected void compute() {
+        if (end - start &lt;= 10) {
+            Arrays.sort(array, start, end);
+            return;
+        }
+
+        int mid = (start + end) / 2;
+        MergeSortTask left = new MergeSortTask(array, start, mid);
+        MergeSortTask right = new MergeSortTask(array, mid, end);
+
+        invokeAll(left, right);
+        merge(array, start, mid, end);
+    }
+
+    private void merge(int[] array, int start, int mid, int end) {
+        int[] result = new int[end - start];
+        int i = start, j = mid, k = 0;
+
+        while (i &lt; mid && j &lt; end) {
+            result[k++] = (array[i] &lt;= array[j]) ? array[i++] : array[j++];
+        }
+
+        while (i &lt; mid) result[k++] = array[i++];
+        while (j &lt; end) result[k++] = array[j++];
+
+        System.arraycopy(result, 0, array, start, result.length);
+    }
+}
+</code></pre>
+
+<h2>3. Image Processing</h2>
+<p><strong>Use Case:</strong> Apply grayscale filter row-wise in parallel.</p>
+<pre><code>class ImageTask extends RecursiveAction {
+    private BufferedImage image;
+    private int startRow, endRow;
+
+    public ImageTask(BufferedImage image, int startRow, int endRow) {
+        this.image = image;
+        this.startRow = startRow;
+        this.endRow = endRow;
+    }
+
+    @Override
+    protected void compute() {
+        if (endRow - startRow &lt;= 50) {
+            for (int y = startRow; y &lt; endRow; y++) {
+                for (int x = 0; x &lt; image.getWidth(); x++) {
+                    int rgb = image.getRGB(x, y);
+                    int r = (rgb &gt;&gt; 16) &amp; 0xff;
+                    int g = (rgb &gt;&gt; 8) &amp; 0xff;
+                    int b = rgb &amp; 0xff;
+                    int gray = (r + g + b) / 3;
+                    int newPixel = (gray &lt;&lt; 16) | (gray &lt;&lt; 8) | gray;
+                    image.setRGB(x, y, newPixel);
+                }
+            }
+        } else {
+            int mid = (startRow + endRow) / 2;
+            invokeAll(new ImageTask(image, startRow, mid), new ImageTask(image, mid, endRow));
+        }
+    }
+}
+</code></pre>
+
+<h2>4. Log File Analysis</h2>
+<p><strong>Use Case:</strong> Parse and count "ERROR" entries in massive log files.</p>
+<pre><code>class LogAnalyzerTask extends RecursiveTask&lt;Integer&gt; {
+    private List&lt;String&gt; lines;
+
+    public LogAnalyzerTask(List&lt;String&gt; lines) {
+        this.lines = lines;
+    }
+
+    @Override
+    protected Integer compute() {
+        if (lines.size() &lt;= 100) {
+            int count = 0;
+            for (String line : lines) {
+                if (line.contains("ERROR")) count++;
+            }
+            return count;
+        } else {
+            int mid = lines.size() / 2;
+            LogAnalyzerTask left = new LogAnalyzerTask(lines.subList(0, mid));
+            LogAnalyzerTask right = new LogAnalyzerTask(lines.subList(mid, lines.size()));
+            left.fork();
+            return right.compute() + left.join();
+        }
+    }
+}
+</code></pre>
+
+<h2>5. Web Crawler</h2>
+<p><strong>Use Case:</strong> Recursively follow and analyze links in a web page.</p>
+<pre><code>class WebCrawlerTask extends RecursiveAction {
+    private String url;
+
+    public WebCrawlerTask(String url) {
+        this.url = url;
+    }
+
+    @Override
+    protected void compute() {
+        List&lt;String&gt; links = fetchLinks(url);
+        List&lt;WebCrawlerTask&gt; subtasks = new ArrayList&lt;&gt;();
+        for (String link : links) {
+            WebCrawlerTask task = new WebCrawlerTask(link);
+            task.fork();
+            subtasks.add(task);
+        }
+        for (WebCrawlerTask task : subtasks) task.join();
+    }
+
+    private List&lt;String&gt; fetchLinks(String url) {
+        // Simulate fetching links
+        return List.of();
+    }
+}
+</code></pre>
+
+<h2>Summary Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Use Case</th>
+      <th>Description</th>
+      <th>ForkJoin Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>File Size Calculator</td>
+      <td>Recursively sum file sizes in directories</td>
+      <td>RecursiveTask</td>
+    </tr>
+    <tr>
+      <td>Parallel Merge Sort</td>
+      <td>Divide array and sort concurrently</td>
+      <td>RecursiveAction</td>
+    </tr>
+    <tr>
+      <td>Image Filter</td>
+      <td>Apply filters row-wise on large images</td>
+      <td>RecursiveAction</td>
+    </tr>
+    <tr>
+      <td>Log Analysis</td>
+      <td>Count "ERROR" across huge logs</td>
+      <td>RecursiveTask</td>
+    </tr>
+    <tr>
+      <td>Stock Data Processor</td>
+      <td>Analyze trends in parallel</td>
+      <td>RecursiveTask</td>
+    </tr>
+    <tr>
+      <td>Web Crawler</td>
+      <td>Follow and parse links recursively</td>
+      <td>RecursiveAction</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <strong>Tip:</strong> You can link to this page from others using:
+  <br>
+  <code>&lt;a href="forkjoinpool-usecases.html"&gt;ForkJoinPool Real-Time Use Cases&lt;/a&gt;</code>
+</div>
+
+</body>
+</html>

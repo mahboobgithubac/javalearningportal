@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Tool Suite (STS) Blog</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px 30px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    footer {
+      background-color: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      margin-top: 0;
+    }
+
+    .sidebar {
+      width: 260px;
+      background-color: #34495e;
+      color: white;
+      padding-top: 20px;
+      height: calc(100vh - 100px); /* header + footer height */
+      position: sticky;
+      top: 60px;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      padding: 15px 20px;
+      cursor: pointer;
+      border-bottom: 1px solid #2c3e50;
+    }
+
+    .sidebar ul li:hover {
+      background-color: #3d566e;
+    }
+
+    .content {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      height: calc(100vh - 100px); /* header + footer */
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-left: 4px solid #2c3e50;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    Spring Tool Suite (STS) Blog
+  </header>
+
+  <div class="container">
+    <div class="sidebar">
+      <ul>
+        <li onclick="showSection('git')">Git Integration (Push to GitHub)</li>
+        <li onclick="showSection('lombok')">How to Add Lombok to STS</li>
+        <li onclick="showSection('shortcuts')">Keyboard Shortcuts in STS</li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <div id="git" class="section active">
+        <h1>Git Integration (Push to GitHub from STS)</h1>
+        <ol>
+          <li>Right-click your project → <strong>Team</strong> → <strong>Share Project</strong></li>
+          <li>Select <strong>Git</strong> and click <strong>Next</strong></li>
+          <li>Create/select a Git repository location</li>
+          <li>Go to <strong>Git Staging</strong> view (Window → Show View → Other → Git → Git Staging)</li>
+          <li>Add files to the staging area, write a commit message, and click <strong>Commit</strong></li>
+          <li>Right-click the project → <strong>Team</strong> → <strong>Push Branch</strong></li>
+          <li>Enter your GitHub repository URL and credentials</li>
+          <li>Click <strong>Next</strong> and then <strong>Finish</strong> to push your code</li>
+        </ol>
+      </div>
+
+      <div id="lombok" class="section">
+        <h1>How to Add Lombok to Spring Tool Suite (STS)</h1>
+        <ol>
+          <li>Add the Lombok dependency to your <code>pom.xml</code>:
+            <pre>
+&lt;dependency&gt;
+  &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+  &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+  &lt;version&gt;1.18.32&lt;/version&gt;
+  &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+            </pre>
+          </li>
+          <li>Download the Lombok jar from <a href="https://projectlombok.org/download" target="_blank">projectlombok.org</a></li>
+          <li>Run it using: <code>java -jar lombok.jar</code></li>
+          <li>Select your STS installation directory</li>
+          <li>Click <strong>Install/Update</strong> and restart STS</li>
+          <li>Now you can use annotations like <code>@Getter</code>, <code>@Setter</code>, <code>@Builder</code>, etc.</li>
+        </ol>
+      </div>
+
+      <div id="shortcuts" class="section">
+        <h1>Keyboard Shortcuts in Spring Tool Suite (STS)</h1>
+        <ul>
+          <li><code>Ctrl + Shift + R</code> – Open Resource</li>
+          <li><code>Ctrl + Shift + T</code> – Open Type (Class/Interface)</li>
+          <li><code>Alt + Shift + R</code> – Rename</li>
+          <li><code>Ctrl + O</code> – Show Outline of Current Class</li>
+          <li><code>Ctrl + Shift + F</code> – Format Source Code</li>
+          <li><code>F3</code> – Go to Declaration</li>
+          <li><code>Ctrl + 1</code> – Quick Fix / Suggestion</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 STS Blog | Designed by You
+  </footer>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

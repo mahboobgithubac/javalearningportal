@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Email Alert Cost Overview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      color: #007BFF;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: #fff;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+    .note {
+      background-color: #fffbcc;
+      padding: 10px;
+      border-left: 5px solid #ffeb3b;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📧 Email Alerts – Free or Chargeable?</h1>
+
+  <p><strong>Yes, email alerts can be free</strong>, depending on how many emails you send and the provider you use.</p>
+
+  <h2>💰 Email Service Provider Comparison</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Provider</th>
+        <th>Free Tier</th>
+        <th>Daily Limit</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Gmail (personal)</td>
+        <td>✅ Free</td>
+        <td>~100–150/day</td>
+        <td>Best for personal/testing; not scalable</td>
+      </tr>
+      <tr>
+        <td>SendGrid</td>
+        <td>✅ 100/day</td>
+        <td>~3,000/month</td>
+        <td>Requires API key & domain setup</td>
+      </tr>
+      <tr>
+        <td>Mailgun</td>
+        <td>✅ 5,000 first month</td>
+        <td>Then paid</td>
+        <td>Developer-friendly with APIs</td>
+      </tr>
+      <tr>
+        <td>Amazon SES</td>
+        <td>✅ 62,000/month (from EC2)</td>
+        <td>Scalable</td>
+        <td>Best for production-scale alerts</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>📦 Firebase + Gmail SMTP Example</h2>
+  <p>You can use Gmail SMTP in Firebase Cloud Functions like this:</p>
+
+  <pre><code>const nodemailer = require("nodemailer");
+
+exports.sendEmailAlert = functions.firestore
+  .document("orders/{orderId}")
+  .onCreate(async (snap, context) => {
+    const order = snap.data();
+
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'your_email@gmail.com',
+        pass: 'your_app_password' // Use App Password
+      }
+    });
+
+    let info = await transporter.sendMail({
+      from: '"Order Alerts" &lt;your_email@gmail.com&gt;',
+      to: 'destination_email@gmail.com',
+      subject: "🛒 New Order Received",
+      text: `Order: ${order.product} x ${order.quantity}`
+    });
+
+    console.log("Email sent: ", info.messageId);
+  });</code></pre>
+
+  <div class="note">
+    🔐 <strong>Security Tip:</strong> Use <a href="https://myaccount.google.com/apppasswords" target="_blank">App Passwords</a> if 2FA is enabled on Gmail.
+  </div>
+
+  <h2>✅ Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Free?</th>
+        <th>Scalable?</th>
+        <th>Best For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Gmail SMTP</td>
+        <td>✅ Yes</td>
+        <td>❌ No</td>
+        <td>Personal/test projects</td>
+      </tr>
+      <tr>
+        <td>SendGrid API</td>
+        <td>✅ Yes (100/day)</td>
+        <td>✅ Yes</td>
+        <td>Production use</td>
+      </tr>
+      <tr>
+        <td>Amazon SES</td>
+        <td>✅ Limited</td>
+        <td>✅ Yes</td>
+        <td>High-volume alerts</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot JWT Authentication - Complete Guide</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; background: #f7f7f7; }
+    h1, h2, h3 { color: #2c3e50; }
+    code, pre { background: #efefef; padding: 5px; border-radius: 4px; }
+    .question { margin-top: 20px; font-weight: bold; color: #34495e; }
+    .answer { margin-left: 15px; color: #2d3436; }
+  </style>
+</head>
+<body>
+
+  <h1>JWT Authentication in Spring Boot – Complete Guide</h1>
+
+  <h2>🔐 What is JWT?</h2>
+  <p>JWT (JSON Web Token) is a secure way to transmit data between parties as a JSON object. It is widely used for authentication and authorization in modern applications.</p>
+
+  <h2>📦 Parts of JWT</h2>
+  <ul>
+    <li><strong>Header</strong>: Specifies the token type and signing algorithm.</li>
+    <li><strong>Payload</strong>: Contains claims/data (like user ID, roles).</li>
+    <li><strong>Signature</strong>: Verifies the token was not tampered with.</li>
+  </ul>
+
+  <h2>🤔 Common JWT Questions</h2>
+  <div class="question">Q: Is JWT part of Spring Security?</div>
+  <div class="answer">A: No, JWT is a standard. But Spring Security can be configured to use JWT for authentication and authorization.</div>
+
+  <div class="question">Q: When is JWT code executed?</div>
+  <div class="answer">A: It runs <strong>before the controller</strong>, usually in a filter like <code>OncePerRequestFilter</code>.</div>
+
+  <div class="question">Q: Where is the password stored?</div>
+  <div class="answer">A: Passwords are stored in the database in <strong>bcrypt (hashed)</strong> form for security.</div>
+
+  <div class="question">Q: If password is hashed, how do we validate login?</div>
+  <div class="answer">A: During login, the password is hashed again and compared using <code>BCryptPasswordEncoder.matches(raw, hashed)</code>.</div>
+
+  <div class="question">Q: What is <code>OncePerRequestFilter</code>?</div>
+  <div class="answer">A: It's a Spring Security filter that ensures logic is executed only once per HTTP request. Ideal for JWT filters.</div>
+
+  <hr>
+
+  <h2>💬 Discussion Q&A – Spring Boot JWT Integration</h2>
+
+  <div class="question">Q: In which layer do we implement JWT in a Spring Boot app?</div>
+  <div class="answer">A: JWT is integrated into the <strong>security layer</strong>, especially via filters and config classes.</div>
+
+  <div class="question">Q: How is JWT code called in a Spring Boot app?</div>
+  <div class="answer">A: It is called via a custom filter that extends <code>OncePerRequestFilter</code> and is registered in the Spring Security configuration.</div>
+
+  <div class="question">Q: What does GET /api/user return?</div>
+  <div class="answer">A: It depends on your controller. Typically, it returns the currently authenticated user's details if protected by JWT.</div>
+
+  <div class="question">Q: I have to access GET /getStudentdetails — how is JWT used for this?</div>
+  <div class="answer">A: Your JWT filter will intercept this request, validate the token, and only then pass control to the controller.</div>
+
+  <div class="question">Q: How to protect /getStudentdetails endpoint using JWT?</div>
+  <div class="answer">In your Spring Security config:
+    <pre>
+.antMatchers("/auth/login", "/auth/register").permitAll()
+.antMatchers("/getStudentdetails").authenticated()
+    </pre>
+  </div>
+
+  <div class="question">Q: How can I protect all APIs except login and register?</div>
+  <div class="answer">
+    Use:
+    <pre>
+.antMatchers("/auth/login", "/auth/register").permitAll()
+.anyRequest().authenticated()
+    </pre>
+  </div>
+
+  <div class="question">Q: Is Spring Security also required, or is JWT code alone enough?</div>
+  <div class="answer">Yes, you still need Spring Security. JWT alone doesn't manage HTTP security or user authentication logic.</div>
+
+  <div class="question">Q: What is filtered in a JWT filter?</div>
+  <div class="answer">The JWT filter checks the Authorization header, validates the token, sets authentication in the SecurityContext, then passes the request forward.</div>
+
+  <div class="question">Q: Is JWT filter code executed before or after the controller?</div>
+  <div class="answer">Before. The request must be authenticated before it reaches the controller method.</div>
+
+  <div class="question">Q: Where are user credentials stored?</div>
+  <div class="answer">In the database (e.g., MySQL/PostgreSQL), typically in a <code>users</code> table with encrypted passwords.</div>
+
+  <div class="question">Q: What happens when a user registers?</div>
+  <div class="answer">Their details (username, password, role) are saved in the DB. Password is hashed using <code>BCrypt</code>.</div>
+
+  <div class="question">Q: If the password is hashed, how is it validated?</div>
+  <div class="answer">Using <code>BCryptPasswordEncoder</code>, which compares the raw password to the hashed one in the DB.</div>
+
+  <div class="question">Q: Once the user logs in, how is JWT generated and validated?</div>
+  <div class="answer">
+    1. On login, credentials are checked.<br>
+    2. If valid, a JWT is generated and returned.<br>
+    3. On subsequent requests, the JWT is sent in headers and validated by a filter.
+  </div>
+
+  <div class="question">Q: What does <code>OncePerRequestFilter</code> do?</div>
+  <div class="answer">Ensures that the filter is executed only once per HTTP request to prevent duplication or multiple executions.</div>
+
+</body>
+</html>

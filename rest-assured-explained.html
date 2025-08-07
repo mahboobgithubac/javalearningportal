@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What is Rest Assured?</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 30px;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code, pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      display: block;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #f8f8f8;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔹 What is Rest Assured?</h1>
+  <p><strong>Rest Assured</strong> is a <strong>Java-based library</strong> used for <strong>testing RESTful APIs</strong>. It provides a <strong>domain-specific language (DSL)</strong> for writing powerful, readable, and maintainable tests for REST services.</p>
+  <p>👉 Think of <strong>Rest Assured</strong> as a <strong>tool for testing</strong> REST APIs, <strong>not</strong> the same thing as a REST API.</p>
+
+  <h2>🔸 Key Differences:</h2>
+  <table>
+    <tr>
+      <th>Term</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td><strong>REST API</strong></td>
+      <td>An API that follows REST (Representational State Transfer) principles; it's what you're testing.</td>
+    </tr>
+    <tr>
+      <td><strong>Rest Assured</strong></td>
+      <td>A Java library/tool used to <strong>test REST APIs</strong> by sending HTTP requests and validating the responses.</td>
+    </tr>
+  </table>
+
+  <h2>🔹 Why use Rest Assured?</h2>
+  <ul>
+    <li>Easy syntax for sending HTTP requests</li>
+    <li>Built-in support for JSON/XML path parsing</li>
+    <li>Integrated with JUnit/TestNG</li>
+    <li>Validations like status codes, headers, body content, etc.</li>
+  </ul>
+
+  <h2>🔸 Example of Using Rest Assured in Java:</h2>
+  <pre><code>import io.restassured.RestAssured;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
+public class ApiTest {
+    public static void main(String[] args) {
+        RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+
+        given()
+            .when()
+                .get("/posts/1")
+            .then()
+                .statusCode(200)
+                .body("id", equalTo(1))
+                .body("userId", notNullValue());
+    }
+}</code></pre>
+
+  <h2>🔹 Summary:</h2>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><strong>Rest API</strong></td>
+      <td>The service you're building or consuming (e.g., GET <code>/users</code>)</td>
+    </tr>
+    <tr>
+      <td><strong>Rest Assured</strong></td>
+      <td>The Java tool used to test those REST APIs by making HTTP calls and checking responses</td>
+    </tr>
+  </table>
+
+</body>
+</html>

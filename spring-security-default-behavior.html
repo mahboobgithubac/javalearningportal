@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring Security Default Behavior</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    h2 {
+      color: #34495e;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      overflow-x: auto;
+      border-left: 4px solid #3498db;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    .note {
+      background-color: #fcf8e3;
+      padding: 10px;
+      border-left: 4px solid #f0ad4e;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Spring Security Default Behavior</h1>
+
+  <h2>✅ What happens if you only add Spring Security dependency?</h2>
+  <p>When Spring Boot detects <code>spring-boot-starter-security</code> in the classpath, it applies default security configuration automatically:</p>
+
+  <ul>
+    <li>🔐 <strong>All endpoints are secured</strong>: Any HTTP request (like GET /, POST /api, etc.) will require authentication.</li>
+    <li>🧾 <strong>Default login form</strong>: A basic HTML login form is auto-generated.</li>
+    <li>👤 <strong>In-memory user is created</strong>:
+      <ul>
+        <li><strong>Username:</strong> <code>user</code></li>
+        <li><strong>Password:</strong> Randomly generated and shown in the console (e.g., <code>Using generated security password: abc123xyz</code>)</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>🔐 Example</h2>
+  <p>If you visit <code>http://localhost:8080/</code> in the browser after adding the dependency but no configuration, you'll see a login form:</p>
+
+  <pre><code>Username: user
+Password: (check console log)</code></pre>
+
+  <h2>💡 When would it NOT work properly?</h2>
+  <div class="note">
+    It won’t behave correctly or fully work if:
+    <ul>
+      <li>You're building an API-only backend and expect token-based or header-based authentication.</li>
+      <li>You don’t want to use the default login form (e.g., building a custom frontend).</li>
+      <li>You need to allow public access to specific endpoints like <code>/register</code> or <code>/public</code>.</li>
+    </ul>
+  </div>
+
+  <h2>🛠 Minimal Custom Configuration Example</h2>
+  <p>Allow public access to <code>/public</code> and <code>/login</code> endpoints, require authentication for the rest:</p>
+
+  <pre><code>@Configuration
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/public", "/login").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(); // optional: enables default login form
+        return http.build();
+    }
+}</code></pre>
+
+  <h2>✅ Summary Table</h2>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>With Only Dependency</th>
+    </tr>
+    <tr>
+      <td>Security enabled</td>
+      <td>✅ Yes</td>
+    </tr>
+    <tr>
+      <td>Default login form</td>
+      <td>✅ Yes</td>
+    </tr>
+    <tr>
+      <td>Random password</td>
+      <td>✅ Yes</td>
+    </tr>
+    <tr>
+      <td>Custom endpoint control</td>
+      <td>❌ No</td>
+    </tr>
+    <tr>
+      <td>JWT support</td>
+      <td>❌ No</td>
+    </tr>
+    <tr>
+      <td>Session management config</td>
+      <td>❌ No</td>
+    </tr>
+  </table>
+
+  <p>If you need more control (token-based auth, JWT, public APIs, custom login), you'll need a custom <code>SecurityFilterChain</code> bean and potentially <code>@EnableWebSecurity</code>.</p>
+
+</body>
+</html>
