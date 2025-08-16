@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Spring Boot REST API on AWS Elastic Beanstalk</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; background-color: #f9f9f9; }
+        h1 { color: #2c3e50; }
+        code { background-color: #eee; padding: 2px 6px; border-radius: 4px; }
+        pre { background-color: #eee; padding: 10px; border-radius: 6px; overflow-x: auto; }
+        ul { background: white; padding: 15px; border-radius: 6px; box-shadow: 0 0 4px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <h1>Deploy Spring Boot REST API on AWS Elastic Beanstalk</h1>
+    <p>Follow these steps to deploy your Spring Boot application on AWS Elastic Beanstalk.</p>
+
+    <h2>1. Prepare Your Spring Boot Application</h2>
+    <ul>
+        <li>Package the application using <code>mvn clean package</code>.</li>
+        <li>Ensure it’s a runnable JAR file.</li>
+        <li>Set <code>server.port=5000</code> in <code>application.properties</code> (Beanstalk expects port 5000).</li>
+    </ul>
+
+    <h2>2. Install the Elastic Beanstalk CLI (Optional)</h2>
+    <pre>
+pip install awsebcli --upgrade --user
+    </pre>
+
+    <h2>3. Create a Beanstalk Application</h2>
+    <ul>
+        <li>Go to AWS Elastic Beanstalk Console.</li>
+        <li>Click "Create Application".</li>
+        <li>Choose "Java" as the platform.</li>
+        <li>Upload your packaged JAR file.</li>
+    </ul>
+
+    <h2>4. Deploy the Application</h2>
+    <p>Elastic Beanstalk will automatically create EC2, load balancers, and other resources.</p>
+
+    <h2>5. Access Your API</h2>
+    <p>Open the Beanstalk-generated URL, e.g., <code>http://yourapp-env.elasticbeanstalk.com</code>.</p>
+
+</body>
+</html>

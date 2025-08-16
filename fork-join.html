@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Java Fork/Join Framework — Full Guide</title>
+  <style>
+    body{font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6;color:#111;background:#f7f8fb;padding:32px}
+    .card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(20,20,40,0.06);padding:24px;max-width:1000px;margin:20px auto}
+    h1,h2{margin-top:0}
+    h2{border-bottom:1px dashed #ddd;padding-bottom:6px}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px 10px;border:1px solid #eef2f7;text-align:left}
+    pre{background:#0f1724;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto}
+    code{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    footer{font-size:13px;color:#666;margin-top:18px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Java Fork/Join Framework — Complete Guide</h1>
+
+    <h2>1. Overview</h2>
+    <p>The <strong>Fork/Join Framework</strong> in Java is a high-performance framework for parallel programming, introduced in <strong>Java 7</strong> (<code>java.util.concurrent</code> package). It is designed to <em>divide</em> (fork) big tasks into smaller subtasks, execute them in parallel, and then <em>combine</em> (join) their results.</p>
+
+    <h2>2. Why Fork/Join?</h2>
+    <ul>
+      <li>Better performance for problems that can be <strong>recursively split</strong>.</li>
+      <li>Uses <strong>work-stealing algorithm</strong> — idle threads take work from busy threads.</li>
+    </ul>
+
+    <h2>3. Key Components</h2>
+    <table>
+      <tr><th>Class</th><th>Purpose</th></tr>
+      <tr><td><code>ForkJoinPool</code></td><td>Special thread pool for Fork/Join tasks</td></tr>
+      <tr><td><code>RecursiveAction</code></td><td>Tasks without return values</td></tr>
+      <tr><td><code>RecursiveTask&lt;V&gt;</code></td><td>Tasks with return values</td></tr>
+    </table>
+
+    <h2>4. How It Works</h2>
+    <ol>
+      <li><strong>Fork</strong> — Split the task into smaller subtasks.</li>
+      <li><strong>Process</strong> — Run subtasks in parallel.</li>
+      <li><strong>Join</strong> — Combine results.</li>
+    </ol>
+
+    <h2>5. Example — Sum of Array</h2>
+    <pre><code>import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.ForkJoinPool;
+
+class ArraySumTask extends RecursiveTask&lt;Long&gt; {
+    private static final int THRESHOLD = 3;
+    private int[] arr;
+    private int start, end;
+
+    public ArraySumTask(int[] arr, int start, int end) {
+        this.arr = arr;
+        this.start = start;
+        this.end = end;
+    }
+
+    @Override
+    protected Long compute() {
+        if (end - start &lt;= THRESHOLD) {
+            long sum = 0;
+            for (int i = start; i &lt; end; i++) sum += arr[i];
+            return sum;
+        } else {
+            int mid = (start + end) / 2;
+            ArraySumTask leftTask = new ArraySumTask(arr, start, mid);
+            ArraySumTask rightTask = new ArraySumTask(arr, mid, end);
+
+            leftTask.fork(); // async left
+            long rightResult = rightTask.compute(); // compute right
+            long leftResult = leftTask.join(); // wait for left
+            return leftResult + rightResult;
+        }
+    }
+}
+
+public class ForkJoinExample {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        ForkJoinPool pool = new ForkJoinPool();
+        long sum = pool.invoke(new ArraySumTask(arr, 0, arr.length));
+        System.out.println("Sum: " + sum); // Output: 45
+    }
+}</code></pre>
+
+    <h2>6. When to Use</h2>
+    <ul>
+      <li>✅ Large, recursively splittable tasks.</li>
+      <li>✅ CPU-bound work needing parallel execution.</li>
+      <li>❌ Avoid for I/O-heavy tasks (use <code>ExecutorService</code> instead).</li>
+    </ul>
+
+    <footer>Java Fork/Join Framework — Theory, components, and example implementation.</footer>
+  </div>
+</body>
+</html>

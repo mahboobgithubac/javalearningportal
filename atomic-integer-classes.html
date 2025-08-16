@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Java Atomic Classes — Reference</title>
+  <style>
+    body{font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6;color:#111;background:#f7f8fb;padding:32px}
+    .card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(20,20,40,0.06);padding:24px;max-width:900px;margin:20px auto}
+    h1{margin:0 0 6px;font-size:24px}
+    p.lead{color:#444;margin-top:0}
+    h2{margin-top:20px;border-bottom:1px dashed #e6e9ef;padding-bottom:8px}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px 10px;border:1px solid #eef2f7;text-align:left}
+    pre{background:#0f1724;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto}
+    code{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .note{background:#fff8e6;border-left:4px solid #f6c84c;padding:10px;border-radius:6px;margin-top:12px}
+    footer{font-size:13px;color:#666;margin-top:18px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Java <code>java.util.concurrent.atomic</code> — Atomic Classes (Reference)</h1>
+    <p class="lead">Complete list of atomic classes available in the Java standard library (as of Java 21) with brief descriptions and examples.</p>
+
+    <h2>1. Atomic Value Classes</h2>
+    <table>
+      <thead>
+        <tr><th>Class</th><th>Type / Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>AtomicBoolean</code></td><td><code>boolean</code> — atomic boolean value</td></tr>
+        <tr><td><code>AtomicInteger</code></td><td><code>int</code> — atomic integer operations (increment, add, compareAndSet, etc.)</td></tr>
+        <tr><td><code>AtomicLong</code></td><td><code>long</code> — atomic long operations</td></tr>
+        <tr><td><code>AtomicReference&lt;V&gt;</code></td><td>Atomic reference to an object of type <code>V</code></td></tr>
+        <tr><td><code>AtomicStampedReference&lt;V&gt;</code></td><td>Reference + integer "stamp" to help avoid ABA problem</td></tr>
+        <tr><td><code>AtomicMarkableReference&lt;V&gt;</code></td><td>Reference + boolean mark (useful to represent logical deletion / marking)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>2. Atomic Array Classes</h2>
+    <table>
+      <thead>
+        <tr><th>Class</th><th>Array Type</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>AtomicIntegerArray</code></td><td><code>int[]</code> — atomic operations per element</td></tr>
+        <tr><td><code>AtomicLongArray</code></td><td><code>long[]</code> — atomic operations per element</td></tr>
+        <tr><td><code>AtomicReferenceArray&lt;E&gt;</code></td><td><code>E[]</code> — atomic operations on object arrays</td></tr>
+      </tbody>
+    </table>
+
+    <h2>3. Atomic Field Updaters</h2>
+    <p>Used for lock-free atomic updates to <code>volatile</code> fields inside existing objects without wrapping the whole object.</p>
+    <table>
+      <thead>
+        <tr><th>Class</th><th>For Field Type</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>AtomicIntegerFieldUpdater&lt;T&gt;</code></td><td><code>int</code> field updater</td></tr>
+        <tr><td><code>AtomicLongFieldUpdater&lt;T&gt;</code></td><td><code>long</code> field updater</td></tr>
+        <tr><td><code>AtomicReferenceFieldUpdater&lt;T,V&gt;</code></td><td>object reference field updater</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Adder / Accumulator Classes (Low-contended counters)</h2>
+    <p>Designed to scale better under high concurrency by striping updates.</p>
+    <table>
+      <thead>
+        <tr><th>Class</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>LongAdder</code></td><td>High-performance sum for <code>long</code></td></tr>
+        <tr><td><code>LongAccumulator</code></td><td>Accumulates <code>long</code> values with a custom function</td></tr>
+        <tr><td><code>DoubleAdder</code></td><td>High-performance sum for <code>double</code></td></tr>
+        <tr><td><code>DoubleAccumulator</code></td><td>Accumulates <code>double</code> values with a custom function</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Notes on <code>float</code> and <code>double</code></h2>
+    <div class="note">
+      <p><strong>Core Java does not provide <code>AtomicFloat</code> or <code>AtomicDouble</code>.</strong></p>
+      <ul>
+        <li>For <code>double</code> you can use <code>AtomicLong</code> and convert via <code>Double.doubleToLongBits()</code> / <code>Double.longBitsToDouble()</code>.</li>
+        <li>For <code>float</code> you can use <code>AtomicInteger</code> with <code>Float.floatToIntBits()</code> / <code>Float.intBitsToFloat()</code>, or use <code>AtomicReference&lt;Float&gt;</code>.</li>
+        <li>Google Guava provides <code>AtomicDouble</code> if you prefer a ready-made class.</li>
+      </ul>
+    </div>
+
+    <h2>Example: AtomicDouble via <code>AtomicLong</code></h2>
+    <pre><code>// simple thread-safe atomic double helper using AtomicLong
+import java.util.concurrent.atomic.AtomicLong;
+
+public class AtomicDouble {
+    private final AtomicLong bits;
+
+    public AtomicDouble(double initialValue) {
+        bits = new AtomicLong(Double.doubleToLongBits(initialValue));
+    }
+
+    public double get() {
+        return Double.longBitsToDouble(bits.get());
+    }
+
+    public void set(double newValue) {
+        bits.set(Double.doubleToLongBits(newValue));
+    }
+
+    public void add(double delta) {
+        while (true) {
+            long current = bits.get();
+            double currentVal = Double.longBitsToDouble(current);
+            double nextVal = currentVal + delta;
+            long next = Double.doubleToLongBits(nextVal);
+            if (bits.compareAndSet(current, next)) {
+                return;
+            }
+        }
+    }
+}
+</code></pre>
+
+    <h2>Quick Usage Guidance</h2>
+    <ul>
+      <li>Use <code>AtomicInteger</code>/<code>AtomicLong</code> for simple counters where lock-free atomicity is needed.</li>
+      <li>Use <code>LongAdder</code> / <code>DoubleAdder</code> when you expect high contention and only need a sum.</li>
+      <li>Use <code>AtomicReference</code> (and the stamped/markable variants) for atomic updates to objects and to handle ABA problems.</li>
+    </ul>
+
+    <footer></footer>
+  </div>
+</body>
+</html>

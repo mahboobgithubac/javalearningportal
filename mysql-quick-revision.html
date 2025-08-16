@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>MySQL Quick Revision Guide — Interview Hub</title>
+  <style>
+    :root{
+      --bg:#f6f8fb; --card:#ffffff; --muted:#6b7280; --text:#0b1220;
+      --accent:#0f1724; --mark-bg:#fff3b0; --mark-color:#8a3b3b;
+      --sidebar-bg:#ffffff; --sidebar-border:#e6eef7;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+    .app{display:flex;min-height:100vh;gap:18px}
+    /* sidebar */
+    .sidebar{width:300px;background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);padding:16px;box-shadow:0 6px 18px rgba(16,24,40,0.04);position:sticky;top:16px;height:calc(100vh - 32px);overflow:auto;transition:width .22s,transform .22s}
+    .sidebar.collapsed{width:64px}
+    .sb-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+    .sb-title{font-weight:700;font-size:15px}
+    .sb-toggle{margin-left:auto;background:#eef2f7;border-radius:6px;padding:6px;cursor:pointer;border:0}
+    .sb-list a{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;color:var(--text);text-decoration:none;margin-bottom:6px;font-size:14px}
+    .sb-list a:hover{background:#fbfcff}
+    .sb-icon{width:34px;height:34px;border-radius:6px;background:#f3f6fb;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+    /* main */
+    .main{flex:1;padding:22px;max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:14px}
+    .card{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 20px rgba(16,24,40,0.04);margin-bottom:16px}
+    h2{margin:0 0 8px}
+    .muted{color:var(--muted);font-size:13px}
+    mark{background:var(--mark-bg);color:var(--mark-color);padding:0 4px;border-radius:3px;font-weight:700}
+    pre{background:#0b1224;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto;font-size:13px}
+    code{font-family:SFMono-Regular,Menlo,Consolas,monospace}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:8px;border:1px solid #eef2f7;text-align:left;font-size:14px}
+    .kbd{background:#0f1724;color:#fff;padding:2px 6px;border-radius:6px;font-size:12px}
+    .qa .question{cursor:pointer;padding:10px;border-radius:8px;background:#fbfcff;border:1px solid #eef2f7;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+    .qa .answer{padding:10px 12px;background:#fff;margin-bottom:12px;border-radius:8px;border:1px solid #eef2f7;display:none}
+    .muted-small{color:var(--muted);font-size:13px}
+    /* responsive */
+    @media (max-width:900px){
+      .sidebar{position:fixed;left:0;top:0;height:100vh;z-index:30;transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+    }
+    ul{margin:8px 0 0 18px}
+    ol{margin:8px 0 0 18px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar" aria-label="Navigation sidebar">
+      <div class="sb-header">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="sb-icon">SQL</div>
+          <div>
+            <div class="sb-title">MySQL Revision</div>
+            <div class="muted-small">Quick Interview Guide</div>
+          </div>
+        </div>
+        <button id="sbToggle" class="sb-toggle" title="Collapse sidebar">☰</button>
+      </div>
+
+      <nav class="sb-list" role="navigation" aria-label="Contents">
+        <a href="#intro"><span class="sb-icon">01</span> Introduction</a>
+        <a href="#basics"><span class="sb-icon">02</span> Basics & Data Types</a>
+        <a href="#crud"><span class="sb-icon">03</span> CRUD</a>
+        <a href="#joins"><span class="sb-icon">04</span> Joins</a>
+        <a href="#indexes"><span class="sb-icon">05</span> Indexes</a>
+        <a href="#transactions"><span class="sb-icon">06</span> Transactions & ACID</a>
+        <a href="#sp"><span class="sb-icon">07</span> Stored Procedures & Triggers</a>
+        <a href="#views-ctes"><span class="sb-icon">08</span> Views & CTEs</a>
+        <a href="#perf"><span class="sb-icon">09</span> Performance & EXPLAIN</a>
+        <a href="#security"><span class="sb-icon">10</span> Security</a>
+        <a href="#pitfalls"><span class="sb-icon">11</span> Common Pitfalls</a>
+        <a href="#interview"><span class="sb-icon">12</span> Interview Q&A</a>
+        <a href="#combined"><span class="sb-icon">13</span> Combined SQL Examples</a>
+        <a href="#refs"><span class="sb-icon">14</span> Quick References</a>
+      </nav>
+
+      <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+        <div style="margin-bottom:6px"><strong>Tip</strong></div>
+        <div>Use Q&A in test mode—try to answer before revealing the solution.</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header>
+        <div>
+          <h1>MySQL Quick Revision Guide</h1>
+          <p class="lead">Essentials, advanced topics, performance tips, pitfalls, and most-asked interview Q&A — all in one file.</p>
+        </div>
+        <div style="margin-left:auto" class="muted-small">Light theme • Standalone HTML</div>
+      </header>
+
+      <!-- Intro -->
+      <section id="intro" class="card">
+        <h2>Introduction</h2>
+        <p><mark>MySQL</mark> is a widely-used open-source relational database (RDBMS). It stores data in tables (rows & columns) and uses SQL (Structured Query Language) for data operations.</p>
+        <p class="muted-small">Core components: <mark>Server</mark>, <mark>Storage Engines</mark> (InnoDB, MyISAM), <mark>Client</mark> utilities, configuration files.</p>
+      </section>
+
+      <!-- Basics & data types -->
+      <section id="basics" class="card">
+        <h2>Basics & Data Types</h2>
+        <h3>RDBMS Concepts</h3>
+        <ul>
+          <li><mark>Schema</mark> = database structure (tables, constraints).</li>
+          <li><mark>Table</mark> = collection of rows (records).</li>
+          <li><mark>Row</mark> = single record; <mark>Column</mark> = attribute with a data type.</li>
+        </ul>
+
+        <h3>Common Data Types</h3>
+        <table>
+          <thead><tr><th>Category</th><th>Examples</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Numeric</td><td>INT, BIGINT, DECIMAL, FLOAT, DOUBLE</td><td>Use DECIMAL for exact precision (money).</td></tr>
+            <tr><td>String</td><td>CHAR, VARCHAR, TEXT</td><td>CHAR fixed-length; VARCHAR variable; TEXT for large strings.</td></tr>
+            <tr><td>Date / Time</td><td>DATE, TIME, DATETIME, TIMESTAMP, YEAR</td><td>TIMESTAMP affected by timezone/server settings.</td></tr>
+            <tr><td>Other</td><td>BOOLEAN (TINYINT(1)), ENUM, JSON</td><td>JSON supported with functions for querying.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- CRUD -->
+      <section id="crud" class="card">
+        <h2>CRUD — Basic Syntax</h2>
+
+        <h3>Create / Insert</h3>
+        <pre><code>CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) UNIQUE,
+  balance DECIMAL(12,2) DEFAULT 0.00
+);
+
+INSERT INTO users (name, email, balance)
+VALUES ('Alice', 'a@example.com', 100.00);</code></pre>
+
+        <h3>Read / Select</h3>
+        <pre><code>SELECT id, name, email FROM users WHERE balance &gt; 50 ORDER BY name LIMIT 10;</code></pre>
+
+        <h3>Update</h3>
+        <pre><code>UPDATE users SET balance = balance + 10 WHERE id = 1;</code></pre>
+
+        <h3>Delete</h3>
+        <pre><code>DELETE FROM users WHERE id = 2;</code></pre>
+
+        <p class="muted-small">Prefer explicit column lists (avoid <code>SELECT *</code> in production).</p>
+      </section>
+
+      <!-- Joins -->
+      <section id="joins" class="card">
+        <h2>Joins (Quick)</h2>
+        <p><mark>Join</mark> combines rows from two or more tables based on related columns.</p>
+
+        <h3>INNER JOIN</h3>
+        <pre><code>SELECT o.id, u.name
+FROM orders o
+INNER JOIN users u ON o.user_id = u.id;</code></pre>
+
+        <h3>LEFT JOIN</h3>
+        <pre><code>SELECT u.name, o.id
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id; -- includes users with no orders</code></pre>
+
+        <h3>RIGHT JOIN</h3>
+        <pre><code>-- similar to LEFT JOIN but preserves right table</code></pre>
+
+        <h3>CROSS JOIN</h3>
+        <pre><code>SELECT * FROM a CROSS JOIN b; -- Cartesian product</code></pre>
+
+        <h3>SELF JOIN</h3>
+        <pre><code>SELECT e.name, m.name AS manager
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.id;</code></pre>
+      </section>
+
+      <!-- Indexes -->
+      <section id="indexes" class="card">
+        <h2>Indexes</h2>
+        <p><mark>Index</mark> improves lookup speed. Types: BTREE (default), HASH (MEMORY engine), FULLTEXT, SPATIAL.</p>
+
+        <h3>Create Index</h3>
+        <pre><code>CREATE INDEX idx_users_email ON users(email);
+-- composite index:
+CREATE INDEX idx_user_name_email ON users (name, email);</code></pre>
+
+        <h3>Index Tips</h3>
+        <ul>
+          <li>Use indexes on columns used in <code>WHERE</code>, <code>JOIN</code>, <code>ORDER BY</code> (careful with functions).</li>
+          <li>Composite index order matters (leftmost prefix).</li>
+          <li>Too many indexes slow down <code>INSERT/UPDATE/DELETE</code>.</li>
+          <li>Use <code>EXPLAIN</code> to see index usage.</li>
+        </ul>
+      </section>
+
+      <!-- Transactions -->
+      <section id="transactions" class="card">
+        <h2>Transactions & ACID</h2>
+        <p><mark>Transactions</mark> group multiple statements; ensure <mark>Atomicity, Consistency, Isolation, Durability (ACID)</mark>.</p>
+        <pre><code>START TRANSACTION;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT; -- or ROLLBACK on error</code></pre>
+
+        <h3>Isolation Levels</h3>
+        <ul>
+          <li>READ UNCOMMITTED</li>
+          <li>READ COMMITTED</li>
+          <li>REPEATABLE READ (MySQL default)</li>
+          <li>SERIALIZABLE</li>
+        </ul>
+        <p class="muted-small">Understand anomalies: dirty reads, non-repeatable reads, phantom reads.</p>
+      </section>
+
+      <!-- Stored procs -->
+      <section id="sp" class="card">
+        <h2>Stored Procedures, Functions & Triggers</h2>
+
+        <h3>Stored Procedure</h3>
+        <pre><code>DELIMITER //
+CREATE PROCEDURE add_funds(IN uid INT, IN amt DECIMAL(10,2))
+BEGIN
+  UPDATE users SET balance = balance + amt WHERE id = uid;
+END;
+//
+DELIMITER ;</code></pre>
+
+        <h3>Trigger</h3>
+        <pre><code>CREATE TRIGGER before_user_insert
+BEFORE INSERT ON users
+FOR EACH ROW
+SET NEW.created_at = NOW();</code></pre>
+
+        <h3>Notes</h3>
+        <ul>
+          <li>Procedures run on server — good for encapsulating business logic; be cautious about complexity and portability.</li>
+          <li>Keep transactions explicit; be careful with error handling inside stored procs.</li>
+        </ul>
+      </section>
+
+      <!-- Views & CTEs -->
+      <section id="views-ctes" class="card">
+        <h2>Views & CTEs</h2>
+        <h3>View</h3>
+        <pre><code>CREATE VIEW active_users AS
+SELECT id, name FROM users WHERE active = 1;</code></pre>
+
+        <h3>CTE (Common Table Expression) — MySQL 8+</h3>
+        <pre><code>WITH recent_orders AS (
+  SELECT * FROM orders WHERE created_at &gt; DATE_SUB(NOW(), INTERVAL 7 DAY)
+)
+SELECT * FROM recent_orders WHERE total &gt; 100;</code></pre>
+      </section>
+
+      <!-- Performance -->
+      <section id="perf" class="card">
+        <h2>Performance Tips & EXPLAIN</h2>
+        <h3>Use EXPLAIN</h3>
+        <pre><code>EXPLAIN SELECT * FROM orders WHERE user_id = 10;</code></pre>
+        <p>Look for: <code>type</code> (ALL vs index vs range), <code>possible_keys</code>, <code>key</code>, <code>rows</code>, and <code>Extra</code> (Using filesort, Using temporary).</p>
+
+        <h3>Optimization Tips</h3>
+        <ul>
+          <li>Limit result set (<code>LIMIT</code>) for large scans.</li>
+          <li>Avoid functions on indexed columns (prevents index usage).</li>
+          <li>Use proper data types (smaller types = faster scans and smaller indexes).</li>
+          <li>Denormalize selectively for read-heavy systems (measure before changing).</li>
+          <li>Consider query cache (deprecated in some versions) and application-side caching.</li>
+        </ul>
+      </section>
+
+      <!-- Security -->
+      <section id="security" class="card">
+        <h2>Security</h2>
+        <h3>User Management</h3>
+        <pre><code>CREATE USER 'app'@'%' IDENTIFIED BY 'strongPass';
+GRANT SELECT, INSERT, UPDATE ON mydb.* TO 'app'@'%';
+FLUSH PRIVILEGES;</code></pre>
+
+        <h3>SQL Injection Prevention</h3>
+        <ul>
+          <li>Use prepared statements / parameterized queries.</li>
+          <li>Validate and sanitize inputs.</li>
+          <li>Use least-privilege DB users.</li>
+        </ul>
+
+        <h3>Encryption & TLS</h3>
+        <p>Enable SSL/TLS for remote DB connections; encrypt sensitive columns at application layer where needed.</p>
+      </section>
+
+      <!-- Pitfalls -->
+      <section id="pitfalls" class="card">
+        <h2>Common Mistakes & Pitfalls</h2>
+        <ul>
+          <li><mark>SELECT *</mark> — returns unnecessary data and couples app to schema.</li>
+          <li>Not indexing foreign keys used in joins — causes full table scans.</li>
+          <li>Mixing storage engines (MyISAM vs InnoDB) — affects transactions & FK support.</li>
+          <li>Using improper data types — e.g., FLOAT for money instead of DECIMAL.</li>
+          <li>Ignoring character sets & collations — leads to comparison issues.</li>
+          <li>Not using EXPLAIN to analyze slow queries.</li>
+        </ul>
+      </section>
+
+      <!-- Interview Q&A -->
+      <section id="interview" class="card qa">
+        <h2>Most Asked Interview Questions (click to reveal answers)</h2>
+        <p class="muted-small">Try answering before clicking the question.</p>
+
+        <!-- Q1 -->
+        <div class="question" data-target="iq1">
+          <div><strong>Q1:</strong> What's the difference between <code>WHERE</code> and <code>HAVING</code>?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq1" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li><code>WHERE</code> filters rows <em>before</em> grouping/aggregation.</li>
+            <li><code>HAVING</code> filters groups <em>after</em> aggregation (used with <code>GROUP BY</code>).</li>
+            <li>Example:
+              <pre><code>SELECT user_id, COUNT(*) c
+FROM orders
+WHERE status='PAID'
+GROUP BY user_id
+HAVING c &gt; 5;</code></pre>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question" data-target="iq2">
+          <div><strong>Q2:</strong> PRIMARY KEY vs UNIQUE KEY — differences?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq2" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li><code>PRIMARY KEY</code> uniquely identifies rows; it's implicitly <code>NOT NULL</code> and only one per table.</li>
+            <li><code>UNIQUE KEY</code> enforces uniqueness but allows a single <code>NULL</code> (behavior differs by SQL dialect).</li>
+            <li>You can have multiple UNIQUE keys in a table.</li>
+          </ul>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question" data-target="iq3">
+          <div><strong>Q3:</strong> How to find duplicate rows in a table?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq3" class="answer">
+          <strong>Answer:</strong>
+          <pre><code>SELECT col1, col2, COUNT(*) cnt
+FROM mytable
+GROUP BY col1, col2
+HAVING cnt &gt; 1;</code></pre>
+          <p>To delete duplicates keeping the lowest id:
+            <pre><code>DELETE t1 FROM mytable t1
+INNER JOIN mytable t2
+WHERE t1.id &gt; t2.id
+AND t1.col = t2.col;</code></pre>
+          </p>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question" data-target="iq4">
+          <div><strong>Q4:</strong> INNER JOIN vs EXISTS — when to prefer which?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq4" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li><code>INNER JOIN</code> returns combined rows; duplicates if multiple matches exist.</li>
+            <li><code>EXISTS</code> checks existence of rows in a correlated subquery and returns boolean per outer row.</li>
+            <li>Use <code>EXISTS</code> when you want to test presence (often faster when inner returns many columns) and <code>JOIN</code> when you need columns from both tables.</li>
+            <pre><code>-- EXISTS
+SELECT u.* FROM users u WHERE EXISTS (
+  SELECT 1 FROM orders o WHERE o.user_id = u.id AND o.total &gt; 100
+);</code></pre>
+          </ul>
+        </div>
+
+        <!-- Q5 -->
+        <div class="question" data-target="iq5">
+          <div><strong>Q5:</strong> How does indexing work internally in MySQL?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq5" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li>Most MySQL indexes (InnoDB) use a <mark>B-tree (B+ tree)</mark>. Searching walks the tree from root to leaf to find the key.</li>
+            <li>InnoDB stores the actual rows clustered by PRIMARY KEY (clustered index). Secondary indexes refer to the primary key.</li>
+            <li>Fulltext indexes use inverted index structures; HASH indexes exist for MEMORY engine.</li>
+            <li>Careful: index selectivity matters — low-cardinality columns (e.g., boolean) are poor index candidates.</li>
+          </ul>
+        </div>
+
+        <!-- Q6 -->
+        <div class="question" data-target="iq6">
+          <div><strong>Q6:</strong> Difference between MyISAM and InnoDB?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq6" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li><strong>InnoDB</strong>: supports transactions, row-level locking, foreign keys, crash recovery — use for OLTP.</li>
+            <li><strong>MyISAM</strong>: table-level locking, no transactions, faster for read-heavy workflows historically, no foreign keys.</li>
+            <li>Modern MySQL defaults to InnoDB for most workloads.</li>
+          </ul>
+        </div>
+
+        <!-- Q7 -->
+        <div class="question" data-target="iq7">
+          <div><strong>Q7:</strong> How to optimize a slow query (quick checklist)?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq7" class="answer">
+          <strong>Answer:</strong>
+          <ol>
+            <li>Run <code>EXPLAIN</code> to see execution plan.</li>
+            <li>Add/adjust indexes for WHERE, JOIN, ORDER BY columns.</li>
+            <li>Avoid functions on indexed columns — transforms can prevent index usage.</li>
+            <li>Limit result set; paginate; avoid unnecessary columns.</li>
+            <li>Consider denormalization or summary tables for heavy aggregation.</li>
+            <li>Ensure statistics are up-to-date; consider increasing buffer_pool size (InnoDB).</li>
+          </ol>
+        </div>
+
+        <!-- Q8 -->
+        <div class="question" data-target="iq8">
+          <div><strong>Q8:</strong> How does MySQL treat NULL in comparisons?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq8" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li><code>NULL</code> means unknown. Comparisons with NULL result in <code>UNKNOWN</code>; use <code>IS NULL</code> or <code>IS NOT NULL</code>.</li>
+            <li>Example: <code>WHERE col = NULL</code> will not match; use <code>WHERE col IS NULL</code>.</li>
+            <li>Be careful with unique indexes & NULL semantics (MySQL allows multiple NULLs in unique index depending on engine/SQL mode).</li>
+          </ul>
+        </div>
+
+        <!-- Q9 -->
+        <div class="question" data-target="iq9">
+          <div><strong>Q9:</strong> How to design for high availability / replication basics?</div>
+          <div class="muted-small">Click</div>
+        </div>
+        <div id="iq9" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li>Use replication: asynchronous master → replicas (read scaling); semi-sync for more durability.</li>
+            <li>Consider Group Replication / InnoDB cluster for multi-primary / automated failover.</li>
+            <li>Use backups & binlogs for point-in-time recovery.</li>
+            <li>Design for idempotent writes and handle eventual consistency where needed.</li>
+          </ul>
+        </div>
+
+        <!-- add more Qs as needed -->
+
+      </section>
+
+      <!-- Combined SQL Examples -->
+      <section id="combined" class="card">
+        <h2>Combined SQL Examples — Quick Reference</h2>
+        <pre><code>-- Create schema and tables
+CREATE DATABASE shop;
+USE shop;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  email VARCHAR(150),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE orders (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  total DECIMAL(12,2) NOT NULL,
+  status VARCHAR(20) DEFAULT 'NEW',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+) ENGINE=InnoDB;
+
+-- Indexes
+CREATE INDEX idx_orders_user ON orders(user_id);
+CREATE INDEX idx_orders_status ON orders(status);
+
+-- Insert sample data
+INSERT INTO users (username, email) VALUES ('alice','a@example.com'),('bob','b@example.com');
+INSERT INTO orders (user_id, total) VALUES (1, 99.99), (1, 12.00), (2, 150.00);
+
+-- Join example
+SELECT u.username, o.id, o.total
+FROM users u
+JOIN orders o ON u.id = o.user_id
+WHERE o.total &gt; 50;
+
+-- Aggregation & HAVING
+SELECT u.id, u.username, COUNT(o.id) orders_count, SUM(o.total) total_spent
+FROM users u LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.username
+HAVING total_spent &gt; 50;
+
+-- Transaction example
+START TRANSACTION;
+UPDATE users SET balance = balance - 100 WHERE id = 1;
+UPDATE users SET balance = balance + 100 WHERE id = 2;
+COMMIT;
+
+-- Stored procedure example
+DELIMITER //
+CREATE PROCEDURE add_order(IN uid INT, IN amount DECIMAL(12,2))
+BEGIN
+  INSERT INTO orders (user_id, total) VALUES (uid, amount);
+END;
+//
+DELIMITER ;
+
+-- View example
+CREATE VIEW recent_orders AS
+SELECT * FROM orders WHERE created_at &gt; DATE_SUB(NOW(), INTERVAL 30 DAY);
+
+-- CTE example (MySQL 8+)
+WITH top_users AS (
+  SELECT user_id, COUNT(*) cnt
+  FROM orders
+  GROUP BY user_id
+)
+SELECT u.username, t.cnt FROM users u JOIN top_users t ON u.id = t.user_id;</code></pre>
+      </section>
+
+      <!-- References -->
+      <section id="refs" class="card">
+        <h2>Quick References & Tips</h2>
+        <ul>
+          <li>Prefer <mark>InnoDB</mark> for transactional systems.</li>
+          <li>Always <mark>EXPLAIN</mark> slow queries and tune indexes.</li>
+          <li>Use prepared statements to prevent SQL injection.</li>
+          <li>Keep backup & recovery strategy: logical backups (mysqldump) + binary logs for PITR.</li>
+        </ul>
+      </section>
+
+      <footer style="text-align:center;color:var(--muted);margin-top:12px">
+        Tip: Use the Q&A in test mode — try answering before revealing answers. Want more questions or a PDF export? Ask me!
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar collapse toggle & mobile open/close
+    (function(){
+      const sb = document.getElementById('sidebar');
+      const toggle = document.getElementById('sbToggle');
+      let collapsed = false;
+      function isMobile(){ return window.matchMedia('(max-width:900px)').matches; }
+
+      toggle.addEventListener('click', ()=> {
+        if(isMobile()){
+          sb.classList.toggle('open');
+          return;
+        }
+        collapsed = !collapsed;
+        if(collapsed){
+          sb.classList.add('collapsed');
+          toggle.textContent = '›';
+          toggle.title = 'Expand sidebar';
+        } else {
+          sb.classList.remove('collapsed');
+          toggle.textContent = '☰';
+          toggle.title = 'Collapse sidebar';
+        }
+      });
+
+      document.querySelectorAll('.sb-list a').forEach(a=>{
+        a.addEventListener('click', (e)=>{
+          e.preventDefault();
+          const id = a.getAttribute('href').substring(1);
+          const el = document.getElementById(id);
+          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          if(isMobile()) sb.classList.remove('open');
+        });
+      });
+    })();
+
+    // Collapsible Q&A
+    (function(){
+      document.querySelectorAll('.question').forEach(q=>{
+        q.addEventListener('click', ()=>{
+          const id = q.getAttribute('data-target');
+          const ans = document.getElementById(id);
+          if(!ans) return;
+          const visible = ans.style.display === 'block';
+          document.querySelectorAll('.qa .answer').forEach(a=> a.style.display='none');
+          ans.style.display = visible ? 'none' : 'block';
+          if(!visible) setTimeout(()=> ans.scrollIntoView({behavior:'smooth', block:'nearest'}), 120);
+        });
+      });
+
+      // open answer if hash points to it
+      const h = location.hash.replace('#','');
+      if(h){
+        const el = document.getElementById(h);
+        if(el && el.classList.contains('answer')) el.style.display = 'block';
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Core Java Quick Revision Guide (Java 8 → 21)</title>
+  <style>
+    :root{
+      --bg:#f6f8fb; --card:#ffffff; --muted:#6b7280; --text:#0b1220;
+      --accent:#0f1724; --mark-bg:#fff3b0; --mark-color:#8a3b3b;
+      --sidebar-bg:#ffffff; --sidebar-border:#e6eef7;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+    .app{display:flex;min-height:100vh;gap:18px}
+    /* sidebar */
+    .sidebar{width:300px;background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);padding:16px;box-shadow:0 6px 18px rgba(16,24,40,0.04);position:sticky;top:16px;height:calc(100vh - 32px);overflow:auto;transition:width .22s,transform .22s}
+    .sidebar.collapsed{width:64px}
+    .sb-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+    .sb-title{font-weight:700;font-size:15px}
+    .sb-toggle{margin-left:auto;background:#eef2f7;border-radius:6px;padding:6px;cursor:pointer;border:0}
+    .sb-list a{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;color:var(--text);text-decoration:none;margin-bottom:6px;font-size:14px}
+    .sb-list a:hover{background:#fbfcff}
+    .sb-icon{width:34px;height:34px;border-radius:6px;background:#f3f6fb;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+    /* main */
+    .main{flex:1;padding:22px;max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:14px}
+    .card{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 20px rgba(16,24,40,0.04);margin-bottom:16px}
+    h2{margin:0 0 8px}
+    .muted{color:var(--muted);font-size:13px}
+    mark{background:var(--mark-bg);color:var(--mark-color);padding:0 4px;border-radius:3px;font-weight:700}
+    pre{background:#0b1224;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto;font-size:13px}
+    code{font-family:SFMono-Regular,Menlo,Consolas,monospace}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:8px;border:1px solid #eef2f7;text-align:left;font-size:14px}
+    .kbd{background:#0f1724;color:#fff;padding:2px 6px;border-radius:6px;font-size:12px}
+    .qa .question{cursor:pointer;padding:10px;border-radius:8px;background:#fbfcff;border:1px solid #eef2f7;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+    .qa .answer{padding:10px 12px;background:#fff;margin-bottom:12px;border-radius:8px;border:1px solid #eef2f7;display:none}
+    .muted-small{color:var(--muted);font-size:13px}
+    /* responsive */
+    @media (max-width:900px){
+      .sidebar{position:fixed;left:0;top:0;height:100vh;z-index:30;transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar" aria-label="Navigation sidebar">
+      <div class="sb-header">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="sb-icon">J</div>
+          <div>
+            <div class="sb-title">Core Java Quick Revision</div>
+            <div class="muted-small">8 → 21 | Collapsible</div>
+          </div>
+        </div>
+        <button id="sbToggle" class="sb-toggle" title="Collapse sidebar">☰</button>
+      </div>
+
+      <nav class="sb-list" role="navigation" aria-label="Contents">
+        <a href="#intro"><span class="sb-icon">01</span> Intro & JVM</a>
+        <a href="#types"><span class="sb-icon">02</span> Types & Variables</a>
+        <a href="#control"><span class="sb-icon">03</span> Control Flow</a>
+        <a href="#methods"><span class="sb-icon">04</span> Methods & Param Passing</a>
+        <a href="#oop"><span class="sb-icon">05</span> OOP Basics</a>
+        <a href="#inheritance"><span class="sb-icon">06</span> Inheritance & Polymorphism</a>
+        <a href="#abstraction"><span class="sb-icon">07</span> Abstraction & Encapsulation</a>
+        <a href="#interfaces"><span class="sb-icon">08</span> Interfaces & Abstract Classes</a>
+        <a href="#exceptions"><span class="sb-icon">09</span> Exceptions</a>
+        <a href="#strings"><span class="sb-icon">10</span> Strings & Builders</a>
+        <a href="#wrappers"><span class="sb-icon">11</span> Wrappers & Autoboxing</a>
+        <a href="#keywords"><span class="sb-icon">12</span> static / final / this / super</a>
+        <a href="#inner"><span class="sb-icon">13</span> Inner Classes</a>
+        <a href="#memory"><span class="sb-icon">14</span> Memory & GC</a>
+        <a href="#threads"><span class="sb-icon">15</span> Multithreading Basics</a>
+        <a href="#java8"><span class="sb-icon">16</span> Java 8 Highlights</a>
+        <a href="#java9plus"><span class="sb-icon">17</span> Java 9–17 Highlights</a>
+        <a href="#java21"><span class="sb-icon">18</span> Java 21 Highlights</a>
+        <a href="#pitfalls"><span class="sb-icon">19</span> Common Mistakes</a>
+        <a href="#final"><span class="sb-icon">20</span> Final Combined Code</a>
+      </nav>
+
+      <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+        <div style="margin-bottom:6px"><strong>Tip</strong></div>
+        <div>Use sidebar to jump to sections. Collapse on small screens with the ☰ button.</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header>
+        <div>
+          <h1>Core Java Quick Revision Guide</h1>
+          <p class="lead">Concise notes, highlighted keywords, short examples, and final combined sample. Covers Java 8 through Java 21 features.</p>
+        </div>
+        <div style="margin-left:auto" class="muted-small">Light theme • Single file</div>
+      </header>
+
+      <!-- 1 Intro -->
+      <section id="intro" class="card">
+        <h2>Introduction & JVM Overview</h2>
+        <p><mark>Java</mark> is a platform-independent, object-oriented language. Key components:</p>
+        <ul>
+          <li><mark>JVM</mark> — executes bytecode, manages memory & GC.</li>
+          <li><mark>JRE</mark> — runtime environment (JVM + libs).</li>
+          <li><mark>JDK</mark> — development kit (javac, jar, etc.).</li>
+        </ul>
+        <p class="muted-small">Remember: Java source → bytecode (.class) → JVM executes. <mark>ClassLoader</mark> loads classes.</p>
+      </section>
+
+      <!-- 2 Types -->
+      <section id="types" class="card">
+        <h2>Types & Variables</h2>
+        <p>Primitive types: <code>byte, short, int, long, float, double, char, boolean</code>. Reference types: <code>String, arrays, objects</code>.</p>
+        <pre><code>// variable examples
+int n = 10;
+double d = 3.14;
+String s = "hello"; // reference
+int[] arr = new int[5];
+</code></pre>
+        <p class="muted-small">Tip: default values for fields: numeric→0, boolean→false, reference→null.</p>
+      </section>
+
+      <!-- 3 Control -->
+      <section id="control" class="card">
+        <h2>Control Flow Statements</h2>
+        <p>Standard: <code>if/else</code>, <code>switch</code>, loops (<code>for</code>, <code>while</code>, <code>do-while</code>).</p>
+        <pre><code>// switch (Java 7+)
+switch (str) {
+  case "a": ...
+  default: ...
+}
+// enhanced switch (Java 12+ preview, later final)
+int res = switch(x) {
+  case 1 -> 10;
+  default -> 0;
+};
+</code></pre>
+        <p class="muted-small">Note: <mark>switch</mark> on String is allowed (since Java 7).</p>
+      </section>
+
+      <!-- 4 Methods -->
+      <section id="methods" class="card">
+        <h2>Methods & Parameter Passing</h2>
+        <p>Java uses <mark>pass-by-value</mark> for everything. For object references, the reference value is copied — the method can mutate the object but cannot reassign caller's reference.</p>
+        <pre><code>void change(List&lt;String&gt; l) { l.add("x"); } // caller's list modified
+void reassign(List&lt;String&gt; l) { l = new ArrayList<>(); } // caller unaffected
+</code></pre>
+      </section>
+
+      <!-- 5 OOP -->
+      <section id="oop" class="card">
+        <h2>OOP Basics</h2>
+        <ul>
+          <li><mark>Encapsulation</mark> — hide fields, use getters/setters.</li>
+          <li><mark>Inheritance</mark> — extends keyword; single inheritance for classes.</li>
+          <li><mark>Polymorphism</mark> — method overriding, dynamic dispatch.</li>
+          <li><mark>Abstraction</mark> — abstract classes & interfaces.</li>
+        </ul>
+        <pre><code>class Animal { void speak() {} }
+class Dog extends Animal { @Override void speak(){ System.out.println("woof"); } }
+Animal a = new Dog(); a.speak(); // woof (polymorphism)</code></pre>
+      </section>
+
+      <!-- 6 Inheritance -->
+      <section id="inheritance" class="card">
+        <h2>Inheritance & Polymorphism</h2>
+        <p>Use <mark>@Override</mark>. Constructors are not inherited. Use <code>super()</code> to call parent constructor.</p>
+        <pre><code>class A { A(int x){} }
+class B extends A { B(){ super(5); } }</code></pre>
+        <p class="muted-small">Virtual method invocation — methods resolved at runtime.</p>
+      </section>
+
+      <!-- 7 Abstraction -->
+      <section id="abstraction" class="card">
+        <h2>Abstraction & Encapsulation</h2>
+        <p><mark>Abstract class</mark> can have both abstract and concrete methods. <mark>Interface</mark> (Java 8+) can have default & static methods.</p>
+        <pre><code>interface I { default void log(){ System.out.println("hi"); } }</code></pre>
+      </section>
+
+      <!-- 8 Interfaces -->
+      <section id="interfaces" class="card">
+        <h2>Interfaces & Abstract Classes</h2>
+        <p>Use interface for contract; abstract class for partial implementation. Since Java 8 interfaces support <code>default</code> and <code>static</code> methods; private methods added later.</p>
+      </section>
+
+      <!-- 9 Exceptions -->
+      <section id="exceptions" class="card">
+        <h2>Exception Handling</h2>
+        <p>Checked exceptions (extend <code>Exception</code>) must be declared or handled. Unchecked exceptions extend <code>RuntimeException</code>.</p>
+        <pre><code>try (BufferedReader br = new BufferedReader(...)) {
+  // try-with-resources (AutoCloseable) - Java 7+
+} catch (IOException e) {
+  e.printStackTrace();
+} finally { /* optional */ }</code></pre>
+        <p class="muted-small">Prefer specific exception types; avoid catching <code>Exception</code> broadly.</p>
+      </section>
+
+      <!-- 10 Strings -->
+      <section id="strings" class="card">
+        <h2>Strings & StringBuilder/StringBuffer</h2>
+        <p><mark>String</mark> is immutable. Use <code>StringBuilder</code> for mutable concatenation in single-thread; <code>StringBuffer</code> is synchronized (rarely needed).</p>
+        <pre><code>String s = "a" + "b"; // compiler optimizes literals
+StringBuilder sb = new StringBuilder(); sb.append("a").append("b");</code></pre>
+      </section>
+
+      <!-- 11 Wrappers -->
+      <section id="wrappers" class="card">
+        <h2>Wrapper Classes & Autoboxing</h2>
+        <p>Wrappers: <code>Integer</code>, <code>Long</code>, etc. Autoboxing/unboxing introduced in Java 5 — watch for <mark>NullPointerException</mark> when unboxing null.</p>
+        <pre><code>Integer i = null; int x = i; // NPE</code></pre>
+      </section>
+
+      <!-- 12 Keywords -->
+      <section id="keywords" class="card">
+        <h2>static / final / this / super</h2>
+        <ul>
+          <li><code>static</code>: class-level members.</li>
+          <li><code>final</code>: cannot reassign (variables), cannot override (methods), cannot extend (classes).</li>
+          <li><code>this</code>: reference to current object.</li>
+          <li><code>super</code>: access parent members/constructor.</li>
+        </ul>
+      </section>
+
+      <!-- 13 Inner -->
+      <section id="inner" class="card">
+        <h2>Inner & Nested Classes</h2>
+        <p>Types: static nested class, non-static inner class, local class, anonymous class. Non-static inner classes have implicit reference to outer instance.</p>
+        <pre><code>class Outer { class Inner { } static class Nested { } }</code></pre>
+      </section>
+
+      <!-- 14 Memory -->
+      <section id="memory" class="card">
+        <h2>Memory Model & Garbage Collection</h2>
+        <p>Heap (objects), Stack (local vars), Metaspace (class metadata). GC algorithms: Serial, Parallel, CMS (legacy), G1, ZGC/ Shenandoah (newer).</p>
+        <p class="muted-small">Tuning GC & heap is advanced — know basics: GC reclaims unreachable objects; <mark>finalize()</mark> deprecated — avoid.</p>
+      </section>
+
+      <!-- 15 Threads -->
+      <section id="threads" class="card">
+        <h2>Multithreading Basics</h2>
+        <p>Create threads via <code>Thread</code> or <code>Runnable</code> / <code>Callable</code> with <code>ExecutorService</code>. Use synchronization to protect shared state.</p>
+        <pre><code>// simple thread
+Thread t = new Thread(() -> System.out.println("run"));
+t.start(); // runs concurrently</code></pre>
+        <p class="muted-small">Avoid using <code>synchronized</code> blindly; prefer higher-level constructs from <code>java.util.concurrent</code>.</p>
+      </section>
+
+      <!-- 16 Java 8 -->
+      <section id="java8" class="card">
+        <h2>Java 8 Highlights</h2>
+        <ul>
+          <li><mark>Lambdas</mark>: concise functional syntax: <code>(a,b) -> a+b</code>.</li>
+          <li><mark>Streams</mark>: functional operations on collections (<code>map</code>, <code>filter</code>, <code>reduce</code>).</li>
+          <li><mark>Optional</mark>: avoid null checks.</li>
+          <li>New Date/Time API: <code>java.time</code> (LocalDate, Instant, Duration).</li>
+          <li>Default & static methods in interfaces.</li>
+        </ul>
+        <pre><code>// lambda + stream
+List<String> list = Arrays.asList("a","b","c");
+list.stream().filter(s -> s.contains("a")).forEach(System.out::println);
+</code></pre>
+      </section>
+
+      <!-- 17 Java 9-17 -->
+      <section id="java9plus" class="card">
+        <h2>Java 9 → 17 (selected highlights)</h2>
+        <ul>
+          <li><strong>Java 9</strong>: JShell REPL, <mark>Module System (JPMS)</mark>, <code>List.of()</code>, private methods in interfaces.</li>
+          <li><strong>Java 10</strong>: <code>var</code> (local type inference).</li>
+          <li><strong>Java 11</strong>: String helpers (<code>isBlank()</code>, <code>lines()</code>, <code>repeat()</code>), HTTP Client (standard).</li>
+          <li><strong>Java 12–14</strong>: Switch expressions, Text blocks (preview → final in later), Pattern matching improvements (preview).</li>
+          <li><strong>Java 15</strong>: Text Blocks final, Sealed classes (preview).</li>
+          <li><strong>Java 16</strong>: Records (final), pattern matching for instanceof (final).</li>
+          <li><strong>Java 17</strong>: LTS — Sealed classes finalized, more pattern matching features (preview/records matured).</li>
+        </ul>
+        <p class="muted-small">Quick usage example: <code>List.of(1,2,3)</code> returns an immutable list.</p>
+      </section>
+
+      <!-- 18 Java 21 -->
+      <section id="java21" class="card">
+        <h2>Java 21 (Selected features)</h2>
+        <ul>
+          <li><strong>Virtual Threads</strong> (Project Loom — structured concurrency model) — extremely lightweight threads for massive concurrency (preview/phase features).</li>
+          <li><strong>Sequenced Collections</strong> — standardized order semantics for iteration of collections (List/Set/Map have well-defined order).</li>
+          <li><strong>Record Patterns & Pattern Matching</strong> — match and deconstruct records in switch/if patterns.</li>
+          <li><strong>String Templates</strong> (preview) — safer templating for strings.</li>
+          <li><strong>Structured Concurrency</strong> (incubator/preview) — better manage lifecycles of concurrent tasks.</li>
+        </ul>
+        <p class="muted-small">Java 21 continued the trend: productivity and simplifying concurrency. Keep an eye on virtual threads for modern concurrent apps.</p>
+      </section>
+
+      <!-- 19 Pitfalls -->
+      <section id="pitfalls" class="card">
+        <h2>Common Mistakes & Pitfalls</h2>
+        <ul>
+          <li><mark>NullPointerException</mark> from unboxing null wrappers.</li>
+          <li>Using mutable objects as keys in maps (breaks hashing).</li>
+          <li>Assuming <code>String==</code> compares content — use <code>equals()</code>.</li>
+          <li>Using <code>==</code> for object equality instead of <code>equals()</code>.</li>
+          <li>Relying on iteration order of hash-based collections (use LinkedHashMap/TreeMap when order matters).</li>
+          <li>Ignoring thread-safety for shared mutable state — prefer <code>java.util.concurrent</code> utilities.</li>
+          <li>Overusing finalizers — use try-with-resources and cleaners instead.</li>
+        </ul>
+      </section>
+
+      <!-- 20 Final combined code -->
+      <section id="final" class="card">
+        <h2>Final Combined Example (runnable)</h2>
+        <p class="muted-small">Save as <code>CoreJavaQuickDemo.java</code>. Demonstrates basics, OOP, exceptions, streams, and small Java 9+ APIs.</p>
+        <pre><code>// CoreJavaQuickDemo.java
+import java.util.*;
+import java.util.stream.*;
+import java.time.*;
+
+public class CoreJavaQuickDemo {
+  public static void main(String[] args) {
+    // primitives & wrappers
+    int n = 5;
+    Integer ni = n; // autoboxing
+    System.out.println("n=" + n + ", ni=" + ni);
+
+    // String & StringBuilder
+    String s = "hello";
+    StringBuilder sb = new StringBuilder(s).append(" world");
+    System.out.println(sb.toString());
+
+    // Collections + Streams (Java 8)
+    List<String> list = List.of("apple","banana","cherry"); // immutable (Java 9+)
+    list.stream().filter(st -> st.startsWith("b")).forEach(System.out::println);
+
+    // try-with-resources & exception
+    try {
+      Optional<String> opt = Optional.of("value");
+      System.out.println(opt.orElse("default"));
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    // OOP & polymorphism
+    Animal a = new Dog();
+    a.speak(); // dynamic dispatch
+
+    // Local variable type inference (Java 10)
+    var map = Map.of("k1",1,"k2",2);
+    System.out.println(map);
+
+    // Date/Time API (Java 8)
+    LocalDate today = LocalDate.now();
+    System.out.println("Today: " + today);
+
+    // Records (Java 16+) - demonstration (if supported)
+    // record Point(int x,int y) {}
+    // var p = new Point(1,2);
+    // System.out.println(p);
+
+    System.out.println(\"Done demo\");
+  }
+
+  static class Animal { void speak(){ System.out.println(\"animal\"); } }
+  static class Dog extends Animal { @Override void speak(){ System.out.println(\"woof\"); } }
+}
+</code></pre>
+        <p class="muted-small">Note: commented record example shows the idea — compile on a >=Java 16 toolchain to use records.</p>
+      </section>
+
+      <footer style="text-align:center;color:var(--muted);margin-top:12px">Tip: Use this file as a one-page quick revision before interviews — try to explain each highlighted keyword aloud.</footer>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar collapse toggle (desktop & mobile)
+    (function(){
+      const sb = document.getElementById('sidebar');
+      const toggle = document.getElementById('sbToggle');
+      let collapsed = false;
+      function isMobile(){ return window.matchMedia('(max-width:900px)').matches; }
+
+      toggle.addEventListener('click', ()=> {
+        if(isMobile()){
+          sb.classList.toggle('open');
+          return;
+        }
+        collapsed = !collapsed;
+        if(collapsed){
+          sb.classList.add('collapsed');
+          toggle.textContent = '›';
+          toggle.title = 'Expand sidebar';
+        } else {
+          sb.classList.remove('collapsed');
+          toggle.textContent = '☰';
+          toggle.title = 'Collapse sidebar';
+        }
+      });
+
+      // smooth scroll for links
+      document.querySelectorAll('.sb-list a').forEach(a=>{
+        a.addEventListener('click', (e)=>{
+          e.preventDefault();
+          const id = a.getAttribute('href').substring(1);
+          const el = document.getElementById(id);
+          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          if(isMobile()) sb.classList.remove('open');
+        });
+      });
+    })();
+
+    // Optional: Expand/collapse QA answers if you add QA blocks later
+  </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>compare() Implementation in Java — HTML Reference</title>
+  <style>
+    :root{--bg:#f7f8fb;--card:#ffffff;--accent:#0b5ed7;--muted:#6b7280;--mono:Consolas, "Courier New", monospace}
+    body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:#0f172a; margin:0; padding:32px}
+    .container{max-width:900px;margin:0 auto}
+    header{display:flex;gap:16px;align-items:center;margin-bottom:20px}
+    header h1{font-size:20px;margin:0}
+    .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 6px 18px rgba(12,18,34,0.06);margin-bottom:16px}
+    h2{margin:0 0 12px 0;font-size:16px}
+    p{margin:0 0 12px 0;color:var(--muted)}
+    pre{background:#0f172a;color:#e6eef8;padding:14px;border-radius:8px;overflow:auto;font-family:var(--mono);font-size:13px}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{border:1px solid #e6e9ef;padding:8px;text-align:left}
+    th{background:#f1f5f9}
+    .badge{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(11,94,215,0.12);color:var(--accent);font-weight:600;font-size:12px}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">Java</div>
+      <h1>compare() Implementation in Java — Quick Reference</h1>
+    </header>
+
+    <section class="card">
+      <h2>Syntax</h2>
+      <pre><code>int compare(T o1, T o2)</code></pre>
+      <p>Return values:</p>
+      <ul>
+        <li><strong>0</strong> if <code>o1</code> equals <code>o2</code></li>
+        <li><strong>&lt; 0</strong> if <code>o1</code> should come before <code>o2</code></li>
+        <li><strong>&gt; 0</strong> if <code>o1</code> should come after <code>o2</code></li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Example: Custom Comparator to Sort by Age</h2>
+      <pre><code>import java.util.*;
+
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+}
+
+class AgeComparator implements Comparator<Person> {
+    @Override
+    public int compare(Person p1, Person p2) {
+        return Integer.compare(p1.getAge(), p2.getAge());
+        // OR: return p1.getAge() - p2.getAge();
+    }
+}
+
+// Usage example below</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>Usage Example</h2>
+      <pre><code>public class Main {
+    public static void main(String[] args) {
+        List<Person> list = new ArrayList<>();
+        list.add(new Person("Alice", 30));
+        list.add(new Person("Bob", 25));
+        list.add(new Person("Charlie", 35));
+
+        Collections.sort(list, new AgeComparator());
+
+        for (Person p : list) {
+            System.out.println(p.getName() + " - " + p.getAge());
+        }
+    }
+}</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>To Compare by Name</h2>
+      <pre><code>class NameComparator implements Comparator<Person> {
+    public int compare(Person p1, Person p2) {
+        return p1.getName().compareTo(p2.getName());
+    }
+}</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>compareTo() vs compare()</h2>
+      <p>Quick feature comparison.</p>
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Interface</th>
+          <th>Defined In</th>
+          <th>Used For</th>
+          <th>Modifies Class?</th>
+        </tr>
+        <tr>
+          <td>compareTo()</td>
+          <td>Comparable&lt;T&gt;</td>
+          <td>The class itself</td>
+          <td>Natural ordering</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>compare()</td>
+          <td>Comparator&lt;T&gt;</td>
+          <td>External class or lambda</td>
+          <td>Custom ordering</td>
+          <td>No</td>
+        </tr>
+      </table>
+    </section>
+
+    <footer>
+      Tip: Use lambda expressions for compact comparators, e.g. <code>Comparator.comparing(Person::getAge)</code>.
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Java Collections Framework — Interview Masterfile</title>
+  <style>
+    :root{
+      --bg:#f6f8fb; --card:#ffffff; --muted:#6b7280; --text:#0b1220;
+      --accent:#0f1724; --mark-bg:#fff3b0; --mark-color:#8a3b3b;
+      --sidebar-bg:#ffffff; --sidebar-border:#e6eef7;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* layout */
+    .app {
+      display:flex;
+      min-height:100vh;
+      gap:18px;
+    }
+    /* sidebar */
+    .sidebar {
+      width:280px;
+      background:var(--sidebar-bg);
+      border-right:1px solid var(--sidebar-border);
+      padding:16px;
+      transition:width .22s ease, transform .22s ease;
+      box-shadow:0 6px 18px rgba(16,24,40,0.04);
+      position:sticky;
+      top:16px;
+      height:calc(100vh - 32px);
+      overflow:auto;
+    }
+    .sidebar.collapsed {
+      width:64px;
+    }
+    .sb-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+    .sb-title{font-weight:700;font-size:15px}
+    .sb-toggle{margin-left:auto;background:#eef2f7;border-radius:6px;padding:6px;cursor:pointer;border:0}
+    .sb-list{margin-top:8px}
+    .sb-list a{
+      display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;color:var(--text);text-decoration:none;
+      margin-bottom:6px;font-size:14px;
+    }
+    .sb-list a:hover{background:#fbfcff}
+    .sb-icon{width:28px;height:28px;border-radius:6px;background:#f3f6fb;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-weight:700}
+
+    /* main content */
+    .main {
+      flex:1;
+      padding:22px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:14px}
+
+    .card{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 20px rgba(16,24,40,0.04);margin-bottom:16px}
+    h2{margin:0 0 8px}
+    .muted{color:var(--muted);font-size:13px}
+    .diagram{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+    .box{background:#f8fafc;border:1px solid #e6eef7;padding:10px 12px;border-radius:8px;min-width:160px;text-align:center}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+    mark{background:var(--mark-bg);color:var(--mark-color);padding:0 4px;border-radius:3px;font-weight:700}
+
+    pre{background:#0b1224;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto;font-size:13px}
+    code{font-family:SFMono-Regular,Menlo,Consolas,monospace}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:8px;border:1px solid #eef2f7;text-align:left;font-size:14px}
+    .pill{background:#eef2ff;padding:4px 8px;border-radius:999px;font-size:12px;color:#0b2b6f}
+
+    /* QA styles */
+    .qa .question{cursor:pointer;padding:10px;border-radius:8px;background:#fbfcff;border:1px solid #eef2f7;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+    .qa .answer{padding:10px 12px;background:#fff;margin-bottom:12px;border-radius:8px;border:1px solid #eef2f7;display:none}
+    .kbd{background:#0f1724;color:#fff;padding:2px 6px;border-radius:6px;font-size:12px}
+
+    /* responsive */
+    @media (max-width:900px){
+      .sidebar{position:fixed;left:0;top:0;height:100vh;z-index:30;transform:translateX(-100%);transition:transform .22s ease}
+      .sidebar.open{transform:translateX(0)}
+      .app{padding-left:0}
+      .main{padding:18px}
+      .sb-toggle{display:inline-block}
+    }
+
+    /* small helpers */
+    .muted-small{color:var(--muted);font-size:13px}
+    .highlight{background:#fff3b0;padding:2px 6px;border-radius:6px;font-weight:700}
+    a.anchor-link{color:var(--muted);text-decoration:none;margin-left:6px;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar" aria-label="Navigation sidebar">
+      <div class="sb-header">
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="sb-icon">J</div>
+          <div>
+            <div class="sb-title">Java Collections</div>
+            <div class="muted-small">Interview Masterfile</div>
+          </div>
+        </div>
+        <button id="sbToggle" class="sb-toggle" title="Collapse sidebar">☰</button>
+      </div>
+
+      <nav class="sb-list" role="navigation">
+        <a href="#overview"><span class="sb-icon">01</span> Overview</a>
+        <a href="#hierarchy"><span class="sb-icon">02</span> Hierarchy Diagram</a>
+        <a href="#core-interfaces"><span class="sb-icon">03</span> Core Interfaces</a>
+        <a href="#implementations"><span class="sb-icon">04</span> Implementations</a>
+        <a href="#differences"><span class="sb-icon">05</span> Key Differences</a>
+        <a href="#examples"><span class="sb-icon">06</span> Code Examples</a>
+        <a href="#tricky-qa"><span class="sb-icon">07</span> Interview Q&A</a>
+        <a href="#pitfalls"><span class="sb-icon">08</span> Mistakes & Pitfalls</a>
+        <a href="#final"><span class="sb-icon">09</span> Final Merged Code</a>
+        <a href="#references"><span class="sb-icon">10</span> Quick References</a>
+      </nav>
+
+      <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+        <div style="margin-bottom:6px"><strong>Tip</strong></div>
+        <div>Use the QA section to test yourself — click a question to reveal the answer.</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header>
+        <div>
+          <h1>Java Collections Framework — Interview Masterfile</h1>
+          <p class="lead">Short topic explanations, <mark>highlighted</mark> keywords, tricky Q&A (collapsible), pitfalls, and a final merged example — all in one file.</p>
+        </div>
+        <div style="margin-left:auto" class="muted-small">Light theme • Collapsible sidebar</div>
+      </header>
+
+      <!-- Overview -->
+      <section id="overview" class="card">
+        <h2>Overview</h2>
+        <p>The <mark>Java Collections Framework (JCF)</mark> provides a set of interfaces and classes to store and manipulate groups of objects.  
+           Goals: <mark>reusability</mark>, <mark>consistency</mark>, and <mark>performance</mark>.</p>
+        <p class="muted-small">Note: <code>Collection</code> is the root for most containers; <code>Map</code> is separate.</p>
+      </section>
+
+      <!-- Hierarchy -->
+      <section id="hierarchy" class="card">
+        <h2>Mini Hierarchy Diagram</h2>
+        <div class="diagram" aria-hidden="true">
+          <div class="box"><strong>Collection</strong><div class="muted-small">root (except Map)</div></div>
+          <div class="box"><strong>List</strong><div class="muted-small">ArrayList, LinkedList</div></div>
+          <div class="box"><strong>Set</strong><div class="muted-small">HashSet, TreeSet</div></div>
+          <div class="box"><strong>Queue / Deque</strong><div class="muted-small">PriorityQueue, ArrayDeque</div></div>
+          <div class="box"><strong>Map</strong><div class="muted-small">HashMap, TreeMap</div></div>
+        </div>
+        <p class="muted-small">Keep this mental map for interview responses.</p>
+      </section>
+
+      <!-- Core Interfaces -->
+      <section id="core-interfaces" class="card">
+        <h2>Core Interfaces (short)</h2>
+        <div class="grid">
+          <div>
+            <h3>List</h3>
+            <p><mark>Ordered</mark>, allows <mark>duplicates</mark>, indexed access. Examples: <code>ArrayList</code>, <code>LinkedList</code>.</p>
+          </div>
+          <div>
+            <h3>Set</h3>
+            <p>No duplicates. Implementations differ in ordering & complexity: <code>HashSet</code>, <code>LinkedHashSet</code>, <code>TreeSet</code>.</p>
+          </div>
+          <div>
+            <h3>Queue / Deque</h3>
+            <p><mark>FIFO</mark> generally; Deque supports both ends (stack/queue). Use <code>ArrayDeque</code> over <code>Stack</code>.</p>
+          </div>
+          <div>
+            <h3>Map</h3>
+            <p><mark>Key-value</mark> pairs; unique keys. Examples: <code>HashMap</code>, <code>LinkedHashMap</code>, <code>TreeMap</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Implementations -->
+      <section id="implementations" class="card">
+        <h2>Important Implementations & Notes</h2>
+        <table>
+          <thead><tr><th>Class</th><th>When to use / Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>ArrayList</code></td><td>Fast random access (<mark>O(1)</mark> get). Amortized <mark>O(1)</mark> add. Use for read-heavy lists.</td></tr>
+            <tr><td><code>LinkedList</code></td><td>Good for frequent insert/remove at ends or via iterator. Random access is <mark>O(n)</mark>.</td></tr>
+            <tr><td><code>HashSet</code></td><td>Backed by <code>HashMap</code>. <mark>No guaranteed order</mark>. Allows one <code>null</code>.</td></tr>
+            <tr><td><code>LinkedHashSet</code></td><td>Maintains <mark>insertion order</mark>.</td></tr>
+            <tr><td><code>TreeSet</code></td><td>Sorted (red-black tree). Elements must be <mark>Comparable</mark> or provide a <code>Comparator</code>.</td></tr>
+            <tr><td><code>HashMap</code></td><td>General-purpose map; allows one <code>null</code> key and null values; not synchronized.</td></tr>
+            <tr><td><code>LinkedHashMap</code></td><td>Predictable insertion/access order; can implement LRU cache via <code>removeEldestEntry</code>.</td></tr>
+            <tr><td><code>TreeMap</code></td><td>Sorted map with natural order or custom comparator.</td></tr>
+            <tr><td><code>ConcurrentHashMap</code></td><td>High-concurrency thread-safe map; no locking of entire map; <mark>no null keys/values</mark>.</td></tr>
+            <tr><td><code>PriorityQueue</code></td><td>Heap-based priority queue; natural order or comparator.</td></tr>
+            <tr><td><code>ArrayDeque</code></td><td>Use as stack/queue — preferable to <code>Stack</code> and faster than <code>LinkedList</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Differences -->
+      <section id="differences" class="card">
+        <h2>Key Differences (quick)</h2>
+        <table>
+          <thead><tr><th>Question</th><th>Short Answer</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ArrayList vs LinkedList</strong></td><td><mark>ArrayList</mark>: fast random access; <mark>LinkedList</mark>: fast inserts/removes via iterator; iteration cost similar.</td></tr>
+            <tr><td><strong>HashMap vs Hashtable</strong></td><td><mark>HashMap</mark> not synchronized, allows null; <mark>Hashtable</mark> legacy & synchronized (avoid).</td></tr>
+            <tr><td><strong>HashSet vs TreeSet</strong></td><td><mark>HashSet</mark>: unordered, average O(1). <mark>TreeSet</mark>: ordered, O(log n).</td></tr>
+            <tr><td><strong>Fail-fast vs Fail-safe</strong></td><td>Fail-fast (ArrayList iterators) throw <code>ConcurrentModificationException</code>. Fail-safe (CopyOnWriteArrayList, ConcurrentHashMap) are snapshot/weakly-consistent.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Code Examples -->
+      <section id="examples" class="card">
+        <h2>Short Code Examples</h2>
+
+        <h3>ArrayList — basic</h3>
+        <pre><code>// ArrayList - dynamic array
+List<String> list = new ArrayList<>();
+list.add("A"); list.add("B");
+System.out.println(list.get(1)); // B
+</code></pre>
+
+        <h3>HashMap — iterate entries</h3>
+        <pre><code>// HashMap iteration
+Map<String,Integer> map = new HashMap<>();
+map.put("one",1); map.put("two",2);
+for (Map.Entry<String,Integer> e : map.entrySet()){
+  System.out.println(e.getKey()+"="+e.getValue());
+}
+</code></pre>
+
+        <h3>TreeSet — sorted set</h3>
+        <pre><code>// TreeSet - natural order
+Set<Integer> ts = new TreeSet<>();
+ts.add(5); ts.add(1); ts.add(3);
+System.out.println(ts); // [1,3,5]
+</code></pre>
+
+        <h3>PriorityQueue — top element</h3>
+        <pre><code>// PriorityQueue - min-heap by default
+PriorityQueue<Integer> pq = new PriorityQueue<>();
+pq.add(30); pq.add(10); pq.add(20);
+System.out.println(pq.poll()); // 10
+</code></pre>
+
+        <h3>ConcurrentHashMap — concurrent operations</h3>
+        <pre><code>// ConcurrentHashMap - safe for concurrent updates
+ConcurrentHashMap<String,Integer> chm = new ConcurrentHashMap<>();
+chm.putIfAbsent("k", 1);
+chm.compute("k", (key,v) -> v==null?1:v+1);
+</code></pre>
+      </section>
+
+      <!-- Interview Q&A -->
+      <section id="tricky-qa" class="card qa">
+        <h2>Interview Q&A (click question to reveal answer)</h2>
+        <p class="muted-small">Practice mode: try answering before clicking.</p>
+
+        <div class="question" data-target="a1">
+          <div><strong>Q1:</strong> Difference between <code>HashMap</code> and <code>ConcurrentHashMap</code>?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a1" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li><mark>HashMap</mark> is not thread-safe; external synchronization needed.</li>
+            <li><mark>ConcurrentHashMap</mark> supports concurrent reads and updates; internally uses lock-striping / concurrency techniques and is <mark>highly concurrent</mark>. It does not allow <code>null</code> keys or values.</li>
+            <li>Iterators of <code>ConcurrentHashMap</code> are weakly consistent — they reflect some updates but don't throw <code>ConcurrentModificationException</code>.</li>
+          </ul>
+        </div>
+
+        <div class="question" data-target="a2">
+          <div><strong>Q2:</strong> Why override both <code>equals()</code> and <code>hashCode()</code>?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a2" class="answer">
+          <strong>Answer:</strong>
+          <p>Hash-based collections use <code>hashCode()</code> for bucket selection and <code>equals()</code> for exact match. If two equal objects have different hash codes, they may end up in different buckets causing lookup failures or duplicates.</p>
+        </div>
+
+        <div class="question" data-target="a3">
+          <div><strong>Q3:</strong> What is <mark>fail-fast</mark> and an example?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a3" class="answer">
+          <strong>Answer:</strong>
+          <p>Fail-fast iterators detect structural modification (via <code>modCount</code>) and throw <code>ConcurrentModificationException</code> if the collection changes during iteration (e.g., modifying an <code>ArrayList</code> while iterating).</p>
+        </div>
+
+        <div class="question" data-target="a4">
+          <div><strong>Q4:</strong> Can you use a mutable object as a <code>HashMap</code> key?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a4" class="answer">
+          <strong>Answer:</strong>
+          <p>Avoid it. If fields affecting <code>hashCode</code>/<code>equals</code> change after insertion, the map may fail to find the key anymore. Prefer immutable keys.</p>
+        </div>
+
+        <div class="question" data-target="a5">
+          <div><strong>Q5:</strong> Why <code>TreeSet</code> may throw <code>ClassCastException</code>?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a5" class="answer">
+          <strong>Answer:</strong>
+          <p><code>TreeSet</code> requires ordering. If elements are not <code>Comparable</code> and no comparator is supplied, comparisons will fail causing <code>ClassCastException</code>.</p>
+        </div>
+
+        <div class="question" data-target="a6">
+          <div><strong>Q6:</strong> How to implement an LRU cache with the JCF?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a6" class="answer">
+          <strong>Answer:</strong>
+          <p>Use <code>LinkedHashMap</code> with access-order and override <code>removeEldestEntry</code>:</p>
+          <pre><code>new LinkedHashMap<K,V>(capacity, loadFactor, true) {
+  protected boolean removeEldestEntry(Map.Entry<K,V> eldest) {
+    return size() > maxEntries;
+  }
+};</code></pre>
+        </div>
+
+        <div class="question" data-target="a7">
+          <div><strong>Q7:</strong> Time complexities of common operations?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a7" class="answer">
+          <strong>Answer:</strong>
+          <ul>
+            <li><code>ArrayList.get(i)</code>: O(1)</li>
+            <li><code>ArrayList.add()</code> (amortized): O(1)</li>
+            <li><code>ArrayList.remove(index)</code>: O(n)</li>
+            <li><code>HashMap.get/put</code>: O(1) average, O(n) worst-case (rare)</li>
+          </ul>
+        </div>
+
+        <div class="question" data-target="a8">
+          <div><strong>Q8:</strong> When to use <code>CopyOnWriteArrayList</code> and tradeoffs?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a8" class="answer">
+          <strong>Answer:</strong>
+          <p>Use when reads >> writes. Writes copy the entire array (expensive). Iterators operate on a snapshot and are thread-safe without locks.</p>
+        </div>
+
+        <div class="question" data-target="a9">
+          <div><strong>Q9:</strong> Why <code>HashSet</code> allows one <code>null</code> but <code>TreeSet</code> often doesn't?</div>
+          <div class="pill">Click</div>
+        </div>
+        <div id="a9" class="answer">
+          <strong>Answer:</strong>
+          <p><code>HashSet</code> uses hashing and supports a single null. <code>TreeSet</code> needs ordering — comparing null to elements causes <code>NullPointerException</code> unless comparator handles nulls.</p>
+        </div>
+
+      </section>
+
+      <!-- Pitfalls -->
+      <section id="pitfalls" class="card">
+        <h2>Common Mistakes & Pitfalls</h2>
+        <ul>
+          <li><mark>Modifying while iterating</mark> without iterator's remove leads to <code>ConcurrentModificationException</code>.</li>
+          <li><mark>Mutable keys</mark> in maps — don't change fields used in <code>hashCode</code>/<code>equals</code>.</li>
+          <li>Not implementing <code>equals()</code>/<code>hashCode()</code> correctly for objects used in hash-based collections.</li>
+          <li>Avoid legacy synchronized containers like <code>Vector</code>/<code>Hashtable</code> — prefer concurrent collections or synchronized wrappers.</li>
+          <li>Assuming the order of <code>HashMap</code> — use <code>LinkedHashMap</code> when ordering matters.</li>
+          <li>Using <code>TreeMap</code>/<code>TreeSet</code> with inconsistent comparators leads to unpredictable behavior or runtime exceptions.</li>
+          <li>Relying on <code>size()</code> semantics under heavy concurrency — be mindful of race conditions.</li>
+        </ul>
+      </section>
+
+      <!-- Final Merged Code -->
+      <section id="final" class="card">
+        <h2>Final Merged Example (runnable)</h2>
+        <p class="muted-small">Save as <code>CollectionsDemo.java</code>, compile & run: <span class="kbd">javac CollectionsDemo.java && java CollectionsDemo</span></p>
+
+        <pre><code>// CollectionsDemo.java - demonstrates List, Set, Map, Queue and pitfalls
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class CollectionsDemo {
+    public static void main(String[] args) {
+        // ArrayList - dynamic
+        List<String> arrayList = new ArrayList<>(Arrays.asList("apple","banana","cherry"));
+        arrayList.add(1, "blueberry");
+        System.out.println("ArrayList: " + arrayList);
+
+        // Deque - ArrayDeque
+        Deque<String> deque = new ArrayDeque<>();
+        deque.add("first"); deque.addLast("second"); deque.addFirst("zero");
+        System.out.println("Deque pollFirst: " + deque.pollFirst());
+
+        // HashSet - no duplicates
+        Set<String> set = new HashSet<>();
+        set.add("a"); set.add("b"); set.add("a");
+        System.out.println("HashSet: " + set);
+
+        // HashMap - basic use
+        Map<String,Integer> map = new HashMap<>();
+        map.put("one",1); map.put("two",2); map.put("three",3);
+        for (Map.Entry<String,Integer> e : map.entrySet()){
+            System.out.println("entry: "+e.getKey()+"="+e.getValue());
+        }
+
+        // Mutable key pitfall demonstration
+        Map<MutableKey,String> bad = new HashMap<>();
+        MutableKey k = new MutableKey(1);
+        bad.put(k, "value1");
+        k.setId(2); // key mutated -> lookup fails
+        System.out.println("Lookup after mutate (likely null): " + bad.get(new MutableKey(1)));
+
+        // ConcurrentHashMap example
+        ConcurrentHashMap<String,Integer> chm = new ConcurrentHashMap<>();
+        chm.put("a",1); chm.compute("a", (key,v) -> v==null?1:v+1);
+        System.out.println("ConcurrentHashMap: " + chm);
+
+        // PriorityQueue
+        Queue<Integer> pq = new PriorityQueue<>(Comparator.naturalOrder());
+        pq.addAll(Arrays.asList(30,10,20));
+        System.out.println("PriorityQueue poll: " + pq.poll());
+
+        System.out.println(\"Done - demo of List, Set, Map, Queue\");
+    }
+
+    static class MutableKey {
+        private int id;
+        public MutableKey(int id){ this.id = id; }
+        public void setId(int id){ this.id = id; }
+        @Override public int hashCode(){ return Objects.hash(id); }
+        @Override public boolean equals(Object o){
+            if (this == o) return true;
+            if (!(o instanceof MutableKey)) return false;
+            return this.id == ((MutableKey)o).id;
+        }
+        @Override public String toString(){ return \"MK(\"+id+\")\"; }
+    }
+}
+</code></pre>
+
+        <p class="muted-small">The <code>MutableKey</code> class demonstrates why keys should be immutable.</p>
+      </section>
+
+      <!-- References -->
+      <section id="references" class="card">
+        <h2>Quick References & Tips</h2>
+        <ul>
+          <li>Prefer <mark>immutable keys</mark> (String, wrappers, immutable classes).</li>
+          <li>For heavy concurrency use <code>ConcurrentHashMap</code>, <code>CopyOnWriteArrayList</code>, or concurrent queues depending on read/write pattern.</li>
+          <li>Use <mark>LongAdder</mark> / <mark>DoubleAdder</mark> for highly contended counters.</li>
+        </ul>
+      </section>
+
+      <footer style="text-align:center;color:var(--muted);margin-top:12px">
+        Tip: Use QA in test mode — try answering before revealing. Good luck with interviews!
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar collapse toggle
+    (function(){
+      const sb = document.getElementById('sidebar');
+      const toggle = document.getElementById('sbToggle');
+      let collapsed = false;
+
+      // Desktop collapse behavior
+      toggle.addEventListener('click', ()=> {
+        collapsed = !collapsed;
+        if(collapsed){
+          sb.classList.add('collapsed');
+          toggle.textContent = '›';
+          toggle.title = 'Expand sidebar';
+        } else {
+          sb.classList.remove('collapsed');
+          toggle.textContent = '☰';
+          toggle.title = 'Collapse sidebar';
+        }
+      });
+
+      // Mobile: click outside to close / open
+      function isMobile(){
+        return window.matchMedia('(max-width:900px)').matches;
+      }
+      if(isMobile()){
+        // replace toggle action to open/close overlay
+        toggle.addEventListener('click', ()=> {
+          if(sb.classList.contains('open')) sb.classList.remove('open');
+          else sb.classList.add('open');
+        });
+        // add a global click to close sidebar when clicking main
+        document.addEventListener('click', (e)=> {
+          if(!sb.contains(e.target) && !toggle.contains(e.target) && sb.classList.contains('open')){
+            sb.classList.remove('open');
+          }
+        });
+      }
+
+      // Smooth scroll for sidebar links
+      document.querySelectorAll('.sb-list a').forEach(a=>{
+        a.addEventListener('click', (e)=>{
+          e.preventDefault();
+          const id = a.getAttribute('href').substring(1);
+          const el = document.getElementById(id);
+          if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          // close on mobile
+          if(isMobile()) sb.classList.remove('open');
+        });
+      });
+    })();
+
+    // Collapsible Q&A logic
+    (function(){
+      document.querySelectorAll('.qa .question').forEach(q=>{
+        q.addEventListener('click', ()=>{
+          const id = q.getAttribute('data-target');
+          const ans = document.getElementById(id);
+          if(!ans) return;
+          const currentlyVisible = ans.style.display === 'block';
+          // close all answers (keep one open pattern)
+          document.querySelectorAll('.qa .answer').forEach(a=> a.style.display = 'none');
+          ans.style.display = currentlyVisible ? 'none' : 'block';
+          if(!currentlyVisible) setTimeout(()=> ans.scrollIntoView({behavior:'smooth', block:'nearest'}), 120);
+        });
+      });
+
+      // open answer if hash points to it
+      const hash = location.hash.replace('#','');
+      if(hash){
+        const el = document.getElementById(hash);
+        if(el && el.classList.contains('answer')) el.style.display = 'block';
+      }
+    })();
+  </script>
+</body>
+</html>

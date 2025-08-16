@@ -662,14 +662,14 @@ public class CyclicBarrierExample {
   <h3>18. What is CAS (Compare-And-Swap)?</h3>
   <pre><code>AtomicInteger atomic = new AtomicInteger(0);
 atomic.compareAndSet(0, 1);</code></pre>
-
+<a href="atomic-integer-classes.html"> Atomic Integer Classes</a>
   <h3>19. Fork/Join Framework</h3>
   <pre><code>class MyTask extends RecursiveTask&lt;Integer&gt; {
     protected Integer compute() {
         // Divide and conquer logic
     }
 }</code></pre>
-
+More on <a href="fork-join.html"> Fork/Join</a>
   <h3>20. What is false sharing?</h3>
   <p>Occurs when multiple threads access variables on the same cache line, hurting performance. Use padding or separation to avoid.</p>
   <h3>21. How do you ensure thread safety in Java?</h3>

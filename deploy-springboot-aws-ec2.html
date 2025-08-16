@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Deploy Spring Boot REST API on AWS EC2 — Step-by-Step Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light">
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:#e2e8f0;
+      --accent:#2563eb;
+      --accent-2:#1d4ed8;
+      --code-bg:#0b1020;
+      --code-fg:#e6edf3;
+      --kbd-bg:#eef2ff;
+      --kbd-border:#c7d2fe;
+      --shadow: 0 6px 24px rgba(2,8,23,.06), 0 2px 8px rgba(2,8,23,.05);
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .layout{
+      display:grid;
+      grid-template-columns: 280px 1fr;
+      min-height:100dvh;
+    }
+    /* Sidebar */
+    .sidebar{
+      position:sticky; top:0;
+      height:100dvh;
+      border-right:1px solid var(--border);
+      background:#fbfdff;
+      padding:22px 18px;
+    }
+    .logo{
+      font-weight:800; letter-spacing:.3px; font-size:1.05rem;
+      color:#0b1220; margin-bottom:16px;
+    }
+    .search{
+      position:relative; margin-bottom:14px;
+    }
+    .search input{
+      width:100%; border:1px solid var(--border); border-radius:12px;
+      padding:10px 12px; outline:none; background:white;
+    }
+    .toc{
+      margin:10px 0; padding:0; list-style:none;
+      max-height: calc(100dvh - 165px); overflow:auto;
+    }
+    .toc li{margin:4px 0}
+    .toc a{
+      display:block; padding:8px 10px; border-radius:10px; color:#0f172a;
+    }
+    .toc a:hover{background:#eef2ff}
+    .toc a.active{background:#e0e7ff; color:#111827; font-weight:600}
+
+    /* Main */
+    .main{
+      padding:28px;
+    }
+    .container{
+      max-width:1100px; margin:0 auto;
+    }
+    .header{
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      margin-bottom:18px;
+    }
+    .title{font-size:1.9rem; margin:0}
+    .badge{
+      background:#ecfeff; color:#155e75; border:1px solid #a5f3fc;
+      padding:6px 10px; border-radius:999px; font-weight:600; font-size:.82rem;
+    }
+
+    /* Card / sections */
+    .card{
+      background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); box-shadow:var(--shadow);
+      padding:22px; margin:18px 0;
+    }
+    .card h2{margin-top:0; font-size:1.3rem}
+    .muted{color:var(--muted)}
+    .kstack{display:flex; gap:10px; flex-wrap:wrap}
+    .pill{
+      padding:5px 10px; border-radius:999px;
+      border:1px solid var(--border); background:#fff; font-size:.85rem;
+    }
+
+    /* Details / accordion */
+    details{
+      border:1px solid var(--border);
+      border-radius:12px; background:#fff; margin:12px 0; overflow:hidden;
+    }
+    summary{
+      cursor:pointer; padding:14px 14px; list-style:none; font-weight:600;
+      background:#f6f8ff;
+    }
+    details[open] summary{border-bottom:1px solid var(--border)}
+    .details-body{padding:14px}
+
+    /* Code blocks */
+    pre{
+      position:relative; background:var(--code-bg); color:var(--code-fg);
+      border-radius:12px; padding:14px 16px; overflow:auto; border:1px solid #0e152a;
+      margin:12px 0;
+    }
+    code{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:.9rem}
+    .lang{
+      position:absolute; top:8px; right:56px; font-size:.75rem; opacity:.8
+    }
+    .copy{
+      position:absolute; top:8px; right:8px; font-size:.8rem; border:1px solid #334155;
+      padding:4px 8px; border-radius:8px; background:#0b1220; color:#e6edf3; cursor:pointer;
+    }
+    .copy.copied{background:#065f46; border-color:#065f46}
+
+    /* Callouts */
+    .callout{
+      border-left:4px solid var(--accent);
+      background:#f0f7ff; padding:12px 14px; border-radius:10px; margin:12px 0;
+    }
+
+    /* Footer */
+    footer{color:var(--muted); font-size:.9rem; margin:24px 0}
+
+    /* Small screens */
+    @media (max-width: 960px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{position:relative; height:auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">AWS Deploy Guide</div>
+      <div class="search">
+        <input id="search" type="text" placeholder="Quick find (e.g. systemd, CORS)..." />
+      </div>
+      <ul class="toc" id="toc">
+        <li><a href="#overview" class="active">Overview</a></li>
+        <li><a href="#prepare-app">A. Prepare Spring Boot</a></li>
+        <li><a href="#build">B. Build Artifact</a></li>
+        <li><a href="#ec2">C. Create & Configure EC2</a></li>
+        <li><a href="#java">D. Install Java</a></li>
+        <li><a href="#env">E. Environment Variables</a></li>
+        <li><a href="#run">F. Upload & Run</a></li>
+        <li><a href="#service">G. Run as systemd Service</a></li>
+      </ul>
+      <div class="callout">
+        Tip: Use <kbd style="background:var(--kbd-bg); border:1px solid var(--kbd-border); border-radius:6px; padding:2px 6px">Ctrl</kbd> + <kbd style="background:var(--kbd-bg); border:1px solid var(--kbd-border); border-radius:6px; padding:2px 6px">F</kbd> to search.
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="container">
+        <div class="header">
+          <h1 class="title">Deploy Spring Boot REST API on AWS EC2</h1>
+          <span class="badge">EC2 • Java 17 • Production</span>
+        </div>
+
+        <section id="overview" class="card">
+          <h2>Overview</h2>
+          <p class="muted">
+            This guide shows how to deploy a Spring Boot REST API on an AWS EC2 instance, with production-ready configuration, CORS, health checks, and a systemd service to keep your app running.
+          </p>
+          <div class="kstack">
+            <span class="pill">Spring Boot</span>
+            <span class="pill">EC2</span>
+            <span class="pill">RDS (optional)</span>
+            <span class="pill">Actuator</span>
+            <span class="pill">CORS</span>
+            <span class="pill">Systemd</span>
+          </div>
+        </section>
+
+        <section id="prepare-app" class="card">
+          <h2>A. Prepare Spring Boot for Production</h2>
+
+          <details open>
+            <summary>application.properties</summary>
+            <div class="details-body">
+              <pre><button class="copy">Copy</button><span class="lang">properties</span><code># Server
+server.port=8080
+
+# Logging
+logging.level.root=INFO
+logging.file.name=logs/app.log
+
+# Database (Example: RDS MySQL)
+spring.datasource.url=jdbc:mysql://${DB_HOST}:3306/${DB_NAME}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASSWORD}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+
+# CORS (Example: Allow React frontend)
+spring.web.cors.allowed-origins=https://myfrontend.com
+spring.web.cors.allowed-methods=GET,POST,PUT,DELETE</code></pre>
+              <div class="callout">
+                Use <code>${ENV_VARIABLE}</code> placeholders and set secrets as environment variables on the EC2 instance.
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>CORS Config Class</summary>
+            <div class="details-body">
+              <pre><button class="copy">Copy</button><span class="lang">java</span><code>import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class CorsConfig {
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("https://myfrontend.com")
+                        .allowedMethods("*");
+            }
+        };
+    }
+}</code></pre>
+            </div>
+          </details>
+
+          <details>
+            <summary>Actuator for Health Checks</summary>
+            <div class="details-body">
+              <pre><button class="copy">Copy</button><span class="lang">xml</span><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+
+              <pre><button class="copy">Copy</button><span class="lang">properties</span><code>management.endpoints.web.exposure.include=health,info</code></pre>
+              <p>ALBs can probe <code>/actuator/health</code> for instance health.</p>
+            </div>
+          </details>
+        </section>
+
+        <section id="build" class="card">
+          <h2>B. Build the Application</h2>
+          <pre><button class="copy">Copy</button><span class="lang">bash</span><code>mvn clean package -DskipTests</code></pre>
+          <p class="muted">Your deployable JAR will be at <code>target/&lt;your-app&gt;.jar</code>.</p>
+        </section>
+
+        <section id="ec2" class="card">
+          <h2>C. Create & Configure EC2</h2>
+          <ol>
+            <li>Launch an EC2 instance (Amazon Linux 2 or Ubuntu 22.04).</li>
+            <li>Security Group: allow <code>22</code> (SSH), <code>8080</code> (app), and optionally <code>80/443</code> (if using Nginx/ALB).</li>
+            <li>SSH into the instance:</li>
+          </ol>
+          <pre><button class="copy">Copy</button><span class="lang">bash</span><code>ssh -i my-key.pem ec2-user@&lt;ec2-ip&gt;</code></pre>
+        </section>
+
+        <section id="java" class="card">
+          <h2>D. Install Java 17</h2>
+          <details open>
+            <summary>Amazon Linux 2</summary>
+            <div class="details-body">
+              <pre><button class="copy">Copy</button><span class="lang">bash</span><code>sudo amazon-linux-extras enable java-openjdk17
+sudo yum install -y java-17-openjdk</code></pre>
+            </div>
+          </details>
+          <details>
+            <summary>Ubuntu 22.04</summary>
+            <div class="details-body">
+              <pre><button class="copy">Copy</button><span class="lang">bash</span><code>sudo apt update
+sudo apt install -y openjdk-17-jdk</code></pre>
+            </div>
+          </details>
+        </section>
+
+        <section id="env" class="card">
+          <h2>E. Set Environment Variables</h2>
+          <pre><button class="copy">Copy</button><span class="lang">bash</span><code>echo "export DB_HOST=mydb.xxxxxx.rds.amazonaws.com" | sudo tee -a /etc/environment
+echo "export DB_NAME=mydb" | sudo tee -a /etc/environment
+echo "export DB_USER=admin" | sudo tee -a /etc/environment
+echo "export DB_PASSWORD=supersecret" | sudo tee -a /etc/environment
+# load for current shell
+source /etc/environment</code></pre>
+          <p class="muted">Alternatively, set them inside the systemd service (next section) to keep them scoped to the app.</p>
+        </section>
+
+        <section id="run" class="card">
+          <h2>F. Upload & Run the App</h2>
+          <details open>
+            <summary>Upload JAR from your local machine</summary>
+            <div class="details-body">
+              <pre><button class="copy">Copy</button><span class="lang">bash</span><code>scp -i my-key.pem target/myapp.jar ec2-user@&lt;ec2-ip&gt;:/home/ec2-user/</code></pre>
+            </div>
+          </details>
+          <details>
+            <summary>Run (foreground test)</summary>
+            <div class="details-body">
+              <pre><button class="copy">Copy</button><span class="lang">bash</span><code>java -jar /home/ec2-user/myapp.jar</code></pre>
+              <p>Open <code>http://&lt;ec2-ip&gt;:8080</code> in your browser to verify.</p>
+            </div>
+          </details>
+        </section>
+
+        <section id="service" class="card">
+          <h2>G. Run as a Background Service (systemd)</h2>
+          <p>Create the service file:</p>
+          <pre><button class="copy">Copy</button><span class="lang">bash</span><code>sudo tee /etc/systemd/system/myapp.service &gt; /dev/null &lt;&lt; 'EOF'
+[Unit]
+Description=My Spring Boot App
+After=network.target
+
+[Service]
+User=ec2-user
+ExecStart=/usr/bin/java -jar /home/ec2-user/myapp.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+Environment=DB_HOST=mydb.xxxxxx.rds.amazonaws.com
+Environment=DB_NAME=mydb
+Environment=DB_USER=admin
+Environment=DB_PASSWORD=supersecret
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable myapp
+sudo systemctl start myapp
+sudo systemctl status myapp --no-pager</code></pre>
+
+          <div class="callout">
+            Logs: <code>journalctl -u myapp -f</code><br/>
+            Health check (for ALB): <code>GET /actuator/health</code>
+          </div>
+        </section>
+
+        <footer>
+          © Your Team — Production-ready Spring Boot on AWS EC2.
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Copy buttons
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = pre.querySelector('.copy');
+      if(!btn) return;
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code').innerText;
+        try{
+          await navigator.clipboard.writeText(code);
+          btn.classList.add('copied');
+          btn.textContent = 'Copied';
+          setTimeout(()=>{ btn.classList.remove('copied'); btn.textContent='Copy'; },1200);
+        }catch(e){
+          btn.textContent='Failed';
+          setTimeout(()=>{ btn.textContent='Copy'; },1200);
+        }
+      });
+    });
+
+    // TOC highlight
+    const links = [...document.querySelectorAll('.toc a')];
+    const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+    const onScroll = () => {
+      let idx = 0;
+      sections.forEach((sec,i) => {
+        const top = sec.getBoundingClientRect().top;
+        if(top < innerHeight*0.35) idx = i;
+      });
+      links.forEach(a=>a.classList.remove('active'));
+      links[idx]?.classList.add('active');
+    };
+    document.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+
+    // Quick search filter
+    const search = document.getElementById('search');
+    search.addEventListener('input', () => {
+      const q = search.value.toLowerCase();
+      document.querySelectorAll('.card, details, pre, li').forEach(el => {
+        const text = el.innerText.toLowerCase();
+        el.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

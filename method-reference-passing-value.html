@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Method Reference — Passing Values (Lambda vs Method Reference)</title>
+  <style>
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:#f8fafc; color:#0f1724; margin:0; padding:24px; }
+    .wrap { max-width:980px; margin:0 auto; background:#fff; padding:26px; border-radius:10px; box-shadow:0 6px 18px rgba(15,23,42,0.06); }
+    h1{ margin:0 0 8px; font-size:26px }
+    p.lead{ color:#374151; margin-top:8px }
+    .section{ margin-top:18px; padding-top:16px; border-top:1px solid #eef2f7 }
+    pre{ background:#0f1724; color:#e6edf3; padding:16px; border-radius:8px; overflow:auto; font-size:13px }
+    code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace }
+    .note{ background:#f1f5f9; padding:12px; border-radius:8px; color:#0f1724 }
+    ul{ margin:8px 0 0 20px }
+    footer{ margin-top:20px; color:#6b7280; font-size:13px }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Passing Values to Method References (Lambda vs Method Reference)</h1>
+    <p class="lead">Short guide showing how values are passed when using method references and when you must use lambdas instead.</p>
+
+    <div class="section">
+      <h2>How values get passed</h2>
+      <p>When you use a method reference, the values are supplied by the calling context (the functional interface method). You don't manually pass parameters — the functional interface's abstract method provides them.</p>
+    </div>
+
+    <div class="section">
+      <h2>1. Example: forEach with System.out::println</h2>
+      <pre><code>// Lambda
+names.forEach(name -> System.out.println(name));
+
+// Method reference (equivalent)
+names.forEach(System.out::println);
+</code></pre>
+      <p class="note">Here, <code>forEach</code> provides each element to <code>System.out.println</code> automatically.</p>
+    </div>
+
+    <div class="section">
+      <h2>2. Static method reference</h2>
+      <pre><code;>// MyUtils::getLength example
+import java.util.function.Function;
+
+Function<String,Integer> strToLen = MyUtils::getLength;
+
+System.out.println(strToLen.apply("MethodRef")); // value passed by apply()
+
+class MyUtils {
+    public static int getLength(String s) { return s.length(); }
+}
+</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>3. Instance method reference (bound to object)</h2>
+      <pre><code>// Bound instance method reference
+MyMath math = new MyMath();
+BiFunction<Integer,Integer,Integer> add = math::add;
+System.out.println(add.apply(10, 4)); // 10 and 4 passed by apply()
+
+class MyMath {
+    public int add(int x, int y) { return x + y; }
+}
+</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>4. When you need extra arguments</h2>
+      <p>If your target method requires more arguments than the functional interface supplies, you cannot use a plain method reference; use a lambda to provide the extra (fixed) values.</p>
+
+      <pre><code>// Suppose printWithPrefix(String prefix, String msg)
+// Consumer&lt;String&gt; gives only one String (msg)
+// So you must use a lambda:
+Consumer<String> c = msg -> MyUtils.printWithPrefix("INFO: ", msg);
+
+// You <em>cannot</em> write: MyUtils::printWithPrefix here, because the signatures don't match.
+</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>Rule of thumb</h2>
+      <ul>
+        <li>Method reference works when the functional interface method's parameters exactly match the target method's parameters (or match via instance binding).</li>
+        <li>If you need to supply extra fixed arguments or perform additional logic, use a lambda instead.</li>
+        <li>Method references are syntactic sugar — prefer them when they make code clearer and concise.</li>
+      </ul>
+    </div>
+
+    <footer>
+      <div>Generated: Method reference — passing values quick guide.</div>
+    </footer>
+  </div>
+</body>
+</html>

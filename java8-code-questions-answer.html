@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Java 8 Interview Coding Q&A — Expand/Collapse</title>
+  <style>
+    body{font-family:Arial, sans-serif;background:#f6f8fb;margin:0;padding:20px;color:#0f172a}
+    .container{max-width:900px;margin:auto}
+    details{background:#fff;border-radius:8px;padding:14px;margin-bottom:10px;box-shadow:0 4px 10px rgba(0,0,0,0.06)}
+    summary{font-weight:bold;cursor:pointer;font-size:15px}
+    pre{background:#0f172a;color:#e6eef8;padding:10px;border-radius:6px;overflow:auto;font-size:13px}
+    code{font-family:Consolas, monospace}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Java 8 Interview Coding Questions & Answers</h1>
+ <details open>
+      <summary>Common Sample Data Used in Examples</summary>
+      <pre><code>// Sample integer list
+List&lt;Integer&gt; list = Arrays.asList(3, 5, 11, 22, 43, 12, 24, 32, 44, 33, 65);
+
+// Sample string list
+List&lt;String&gt; listOfStrings = Arrays.asList("Java", "Python", "C#", "Java", "Kotlin", "Python");
+
+// Sample arrays
+int[] a = {4, 2, 7, 1};
+int[] b = {8, 3, 9, 5};
+
+// Sample string for character operations
+String str = "Java Learning Portal";
+</code></pre>
+    </details>
+
+     <details>
+      <summary>1) Separate odd and even numbers</summary>
+      <pre><code>// Using partitioningBy (gives true/false keys)
+Map&lt;Boolean, List&lt;Integer&gt;&gt; result = list.stream()
+    .collect(Collectors.partitioningBy(i -&gt; i % 2 == 0));
+	<pre>output  :{false=[3, 5, 11, 43, 33, 65], true=[22, 12, 24, 32, 44]}</pre>
+	
+
+// Using groupingBy to get "Even" and "Odd" keys
+Map&lt;String, List&lt;Integer&gt;&gt; resultNamed = list.stream()
+    .collect(Collectors.groupingBy(i -&gt; i % 2 == 0 ? "Even" : "Odd"));
+	
+		<pre>output  :{Even=[22, 12, 24, 32, 44], Odd=[3, 5, 11, 43, 33, 65]}</pre>
+</code></pre>
+    </details>
+    <details><summary>2) Remove duplicates from a list</summary><pre><code>List&lt;String&gt; unique = list.stream().distinct().collect(Collectors.toList());</code></pre></details>
+    <details><summary>3) Frequency of each character in a string</summary><pre><code>Map&lt;Character, Long&gt; freq = str.chars().mapToObj(c -&gt; (char)c)
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));</code></pre></details>
+    <details><summary>4) Frequency of each element in list</summary><pre><code>Map&lt;String, Long&gt; freq = list.stream()
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));</code></pre></details>
+    <details><summary>5) Sort decimals in reverse order</summary><pre><code>list.stream().sorted(Comparator.reverseOrder()).forEach(System.out::println);</code></pre></details>
+    <details><summary>6) Join strings with prefix, suffix, and delimiter</summary><pre><code>String res = list.stream().collect(Collectors.joining(", ", "[", "]"));</code></pre></details>
+    <details><summary>7) Multiples of 5</summary><pre><code>list.stream().filter(i -&gt; i % 5 == 0).forEach(System.out::println);</code></pre></details>
+    <details><summary>8) Find max and min</summary><pre><code>int max = list.stream().max(Comparator.naturalOrder()).get();
+int min = list.stream().min(Comparator.naturalOrder()).get();</code></pre></details>
+    <details><summary>9) Merge two arrays into sorted array</summary><pre><code>int[] merged = IntStream.concat(Arrays.stream(a), Arrays.stream(b))
+    .sorted().toArray();</code></pre></details>
+    <details><summary>10) Merge arrays into sorted array without duplicates</summary><pre><code>int[] merged = IntStream.concat(Arrays.stream(a), Arrays.stream(b))
+    .sorted().distinct().toArray();</code></pre></details>
+    <details><summary>11) Three max and three min numbers</summary><pre><code>list.stream().sorted().limit(3).forEach(...);
+list.stream().sorted(Comparator.reverseOrder()).limit(3).forEach(...);</code></pre></details>
+    <details><summary>12) Check if two strings are anagrams</summary><pre><code>s1 = Stream.of(s1.split("")).map(String::toUpperCase).sorted().collect(Collectors.joining());
+s2 = Stream.of(s2.split("")).map(String::toUpperCase).sorted().collect(Collectors.joining());</code></pre></details>
+    <details><summary>13) Sum of digits of a number</summary><pre><code>int sum = Stream.of(String.valueOf(num).split(""))
+    .collect(Collectors.summingInt(Integer::parseInt));</code></pre></details>
+    <details><summary>14) Second largest number</summary><pre><code>int second = list.stream().sorted(Comparator.reverseOrder()).skip(1).findFirst().get();</code></pre></details>
+    <details><summary>15) Sort strings by length</summary><pre><code>list.stream().sorted(Comparator.comparing(String::length)).forEach(...);</code></pre></details>
+    <details><summary>16) Sum and average of array</summary><pre><code>int sum = Arrays.stream(a).sum();
+double avg = Arrays.stream(a).average().getAsDouble();</code></pre></details>
+    <details><summary>17) Common elements between two arrays</summary><pre><code>list1.stream().filter(list2::contains).forEach(System.out::println);</code></pre></details>
+    <details><summary>18) Reverse each word of a string</summary><pre><code>String res = Arrays.stream(str.split(" "))
+    .map(w -&gt; new StringBuilder(w).reverse())
+    .collect(Collectors.joining(" "));</code></pre></details>
+    <details><summary>19) Sum of first 10 natural numbers</summary><pre><code>int sum = IntStream.range(1, 11).sum();</code></pre></details>
+    <details><summary>20) Reverse an integer array</summary><pre><code>int[] rev = IntStream.rangeClosed(1, arr.length)
+    .map(i -&gt; arr[arr.length - i]).toArray();</code></pre></details>
+    <details><summary>21) First 10 even numbers</summary><pre><code>IntStream.rangeClosed(1, 10).map(i -&gt; i * 2).forEach(System.out::println);</code></pre></details>
+    <details><summary>22) Most repeated element in array</summary><pre><code>Map.Entry&lt;String, Long&gt; most = map.entrySet().stream()
+    .max(Map.Entry.comparingByValue()).get();</code></pre></details>
+    <details><summary>23) Palindrome check</summary><pre><code>String rev = new StringBuilder(str).reverse().toString();
+boolean isPal = str.equalsIgnoreCase(rev);</code></pre></details>
+    <details><summary>24) Strings starting with a number</summary><pre><code>list.stream().filter(s -&gt; Character.isDigit(s.charAt(0))).forEach(...);</code></pre></details>
+    <details><summary>25) Extract duplicate elements from array</summary><pre><code>Set&lt;Integer&gt; dup = list.stream().filter(i -&gt; !set.add(i)).collect(Collectors.toSet());</code></pre></details>
+    <details><summary>26) Duplicate characters in a string</summary><pre><code>Set&lt;String&gt; dup = Arrays.stream(str.split("")).filter(c -&gt; !set.add(c)).collect(Collectors.toSet());</code></pre></details>
+    <details><summary>27) First repeated character in a string</summary><pre><code>String first = map.entrySet().stream().filter(e -&gt; e.getValue() &gt; 1)
+    .map(Map.Entry::getKey).findFirst().get();</code></pre></details>
+    <details><summary>28) First non-repeated character</summary><pre><code>String first = map.entrySet().stream().filter(e -&gt; e.getValue() == 1)
+    .map(Map.Entry::getKey).findFirst().get();</code></pre></details>
+    <details><summary>29) Fibonacci series</summary><pre><code>Stream.iterate(new int[]{0,1}, f -&gt; new int[]{f[1], f[0]+f[1]})
+    .limit(10).map(f -&gt; f[0]).forEach(...);</code></pre></details>
+    <details><summary>30) First 10 odd numbers</summary><pre><code>Stream.iterate(1, n -&gt; n + 2).limit(10).forEach(...);</code></pre></details>
+    <details><summary>31) Last element of an array</summary><pre><code>String last = list.stream().skip(list.size()-1).findFirst().get();</code></pre></details>
+    <details><summary>32) Age from birthdate</summary><pre><code>long years = ChronoUnit.YEARS.between(birthDate, LocalDate.now());</code></pre></details>
+
+  </div>
+</body>
+</html>

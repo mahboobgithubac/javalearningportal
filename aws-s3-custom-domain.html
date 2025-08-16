@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS S3 File Upload with Custom Domain</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+        }
+        code {
+            background: #eee;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        .note {
+            background: #fffbcc;
+            padding: 10px;
+            border-left: 4px solid #ffd700;
+            margin-bottom: 15px;
+        }
+        .tip {
+            background: #e0ffe0;
+            padding: 10px;
+            border-left: 4px solid #2ecc71;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AWS S3 File Upload with Custom Domain</h1>
+
+        <p>When uploading files to Amazon S3, the default URL format usually looks like:</p>
+        <pre><code>https://my-bucket.s3.amazonaws.com/myfile.jpg</code></pre>
+
+        <h2>Can we replace <code>.s3.amazonaws.com</code> with a custom domain?</h2>
+        <p>Yes! You can set up a custom domain so that your file URL looks like:</p>
+        <pre><code>https://cdn.mywebsite.com/myfile.jpg</code></pre>
+
+        <div class="note">
+            This requires some configuration in AWS S3, CloudFront, and your domain DNS.
+        </div>
+
+        <h2>Steps to Use a Custom Domain for S3 Files</h2>
+        <ol>
+            <li><strong>Create or use an existing S3 bucket</strong> and make sure it is public for file access or has signed URL configuration.</li>
+            <li><strong>Set up an Amazon CloudFront distribution</strong> pointing to your S3 bucket as the origin.</li>
+            <li><strong>Configure your custom domain in CloudFront</strong>:
+                <ul>
+                    <li>Add an Alternate Domain Name (CNAME) such as <code>cdn.mywebsite.com</code>.</li>
+                    <li>Attach an SSL/TLS certificate from AWS Certificate Manager (ACM).</li>
+                </ul>
+            </li>
+            <li><strong>Update your DNS records</strong> in Route 53 or your DNS provider to point <code>cdn.mywebsite.com</code> to the CloudFront distribution.</li>
+            <li><strong>Use the custom domain</strong> in your application instead of the default <code>.s3.amazonaws.com</code> URL.</li>
+        </ol>
+
+        <h2>Advantages of Using a Custom Domain</h2>
+        <ul>
+            <li>Branding consistency with your own domain.</li>
+            <li>Better SEO for images and files.</li>
+            <li>Improved performance via CloudFront's global CDN.</li>
+            <li>Easier to migrate files without changing app code (only update DNS).</li>
+        </ul>
+
+        <div class="tip">
+            💡 Even if you use a custom domain, the files are still stored in S3 — the domain is just a friendly alias served through CloudFront.
+        </div>
+    </div>
+</body>
+</html>

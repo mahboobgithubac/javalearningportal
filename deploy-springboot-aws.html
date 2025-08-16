@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Spring Boot REST API to AWS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        ul {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Deploy Spring Boot REST API to AWS</h1>
+
+    <h2>1. Prerequisites</h2>
+    <ul>
+        <li>AWS account</li>
+        <li>AWS CLI installed and configured (<code>aws configure</code>)</li>
+        <li>Spring Boot application ready to deploy</li>
+        <li>Maven or Gradle installed</li>
+    </ul>
+
+    <h2>2. Package the Application</h2>
+    <pre><code>mvn clean package</code></pre>
+    This generates a JAR file in the <code>target/</code> folder.
+
+    <h2>3. Configure Spring Boot for AWS Deployment</h2>
+    <p>Typically, you don’t need to make large changes to your Spring Boot app to run on AWS. However, you might need:</p>
+    <ul>
+        <li><strong>Externalized Configuration</strong> — use <code>application.properties</code> or environment variables for DB URLs, S3 credentials, etc.</li>
+        <li><strong>Server Port</strong> — If deploying to Elastic Beanstalk or ECS, ensure:
+            <pre><code>server.port=${PORT:5000}</code></pre>
+        </li>
+        <li><strong>Logging</strong> — Use CloudWatch-compatible logging patterns.</li>
+        <li><strong>Database Connection</strong> — If using RDS:
+            <pre><code>spring.datasource.url=jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASS}</code></pre>
+        </li>
+    </ul>
+
+    <h2>4. AWS Deployment Options</h2>
+
+    <h3>Option 1: AWS Elastic Beanstalk</h3>
+    <ol>
+        <li>Create an Elastic Beanstalk application in the AWS Console.</li>
+        <li>Upload your <code>.jar</code> file.</li>
+        <li>AWS will automatically create an EC2 environment to run it.</li>
+    </ol>
+
+    <h3>Option 2: EC2 Instance</h3>
+    <ol>
+        <li>Launch an EC2 instance (Amazon Linux / Ubuntu).</li>
+        <li>Install Java:
+            <pre><code>sudo amazon-linux-extras install java-openjdk17</code></pre>
+        </li>
+        <li>Copy your JAR file to EC2:
+            <pre><code>scp target/myapp.jar ec2-user@&lt;EC2-IP&gt;:/home/ec2-user/</code></pre>
+        </li>
+        <li>Run your app:
+            <pre><code>java -jar myapp.jar</code></pre>
+        </li>
+    </ol>
+
+    <h3>Option 3: AWS ECS (Docker)</h3>
+    <ol>
+        <li>Create a <code>Dockerfile</code> for your Spring Boot app.</li>
+        <li>Push the Docker image to Amazon ECR.</li>
+        <li>Deploy via ECS service and Fargate.</li>
+    </ol>
+
+    <h2>5. Domain & SSL</h2>
+    <ul>
+        <li>Use Route 53 to configure your domain.</li>
+        <li>Use AWS Certificate Manager (ACM) for free SSL.</li>
+        <li>Attach the certificate to your Load Balancer.</li>
+    </ul>
+
+    <h2>6. Security Best Practices</h2>
+    <ul>
+        <li>Use IAM Roles instead of hardcoding AWS keys.</li>
+        <li>Enable HTTPS for all endpoints.</li>
+        <li>Enable security groups and restrict inbound traffic.</li>
+    </ul>
+
+</body>
+</html>
