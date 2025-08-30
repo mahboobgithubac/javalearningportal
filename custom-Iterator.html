@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Custom Iterator in Java – Example</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --fg: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #10b981;
+      --code-bg: #0b1020;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 32px; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.6; background: var(--bg); color: var(--fg);
+    }
+    .container { max-width: 980px; margin: 0 auto; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+    h1 { font-size: 1.8rem; margin: 0; }
+    .pill { border: 1px solid var(--border); padding: 6px 10px; border-radius: 999px; color: var(--muted); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin: 16px 0; box-shadow: 0 10px 20px rgba(0,0,0,.25); }
+    h2, h3 { margin-top: 0; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.95rem; }
+    pre { background: var(--code-bg); color: var(--fg); padding: 16px; border-radius: 12px; overflow: auto; border: 1px solid var(--border); }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background: #111827; border: 1px solid var(--border); padding: 2px 6px; border-radius: 6px; font-size: .9rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .note { color: var(--muted); }
+    .footer { text-align: center; color: var(--muted); margin-top: 28px; font-size: .9rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Custom Iterator in Java – Quick Guide & Example</h1>
+      <span class="pill">Java • Collections • Iterator</span>
+    </header>
+
+    <section class="card">
+      <h2>What is an Iterator?</h2>
+      <p>An <code>Iterator&lt;T&gt;</code> lets you traverse elements of a collection one by one. You can create a custom iterator when you need custom traversal logic (e.g., reverse order, filtering, skipping).</p>
+      <div class="grid">
+        <div class="card">
+          <h3>Required Methods</h3>
+          <ul>
+            <li><code>boolean hasNext()</code> – Are there more elements?</li>
+            <li><code>T next()</code> – Return the next element.</li>
+            <li class="note">Optional: <code>void remove()</code> – Usually unsupported.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Typical Steps</h3>
+          <ol>
+            <li>Implement <code>Iterator&lt;T&gt;</code>.</li>
+            <li>Maintain internal state (e.g., index).</li>
+            <li>Expose via an <code>Iterable</code> wrapper to support <span class="kbd">for-each</span>.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Full Example: Iterator for <em>int[]</em></h2>
+      <p>This example shows a custom iterator <code>IntArrayIterator</code> and a small wrapper collection <code>IntArrayCollection</code> that implements <code>Iterable</code>, enabling the enhanced <span class="kbd">for</span>-loop.</p>
+
+      <pre><code class="language-java">import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+// Custom Iterator for Integer Array
+class IntArrayIterator implements Iterator&lt;Integer&gt; {
+    private final int[] array;
+    private int index = 0;
+
+    public IntArrayIterator(int[] array) {
+        this.array = array;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return index &lt; array.length;
+    }
+
+    @Override
+    public Integer next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException("No more elements!");
+        }
+        return array[index++];
+    }
+
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Remove not supported!");
+    }
+}
+
+// Custom Collection class implementing Iterable
+class IntArrayCollection implements Iterable&lt;Integer&gt; {
+    private final int[] array;
+
+    public IntArrayCollection(int[] array) {
+        this.array = array;
+    }
+
+    @Override
+    public Iterator&lt;Integer&gt; iterator() {
+        return new IntArrayIterator(array);
+    }
+}
+
+// Demo
+public class CustomIteratorExample {
+    public static void main(String[] args) {
+        int[] numbers = {10, 20, 30, 40, 50};
+        IntArrayCollection collection = new IntArrayCollection(numbers);
+
+        System.out.println("Iterating using custom iterator:");
+        for (int num : collection) {
+            System.out.println(num);
+        }
+    }
+}
+</code></pre>
+
+      <h3>Expected Output</h3>
+      <pre><code>Iterating using custom iterator:
+10
+20
+30
+40
+50</code></pre>
+
+      <h3>Why this design?</h3>
+      <ul>
+        <li><strong>Separation of concerns</strong>: iterator knows how to traverse; collection exposes iteration.</li>
+        <li><strong>Safe</strong>: throws <code>NoSuchElementException</code> if you call <code>next()</code> without a next element.</li>
+        <li><strong>Clear</strong>: <code>remove()</code> explicitly unsupported.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Variations You Can Try</h2>
+      <ul>
+        <li><strong>Filtering</strong>: Skip even numbers only iterate odds.</li>
+        <li><strong>Reverse iteration</strong>: Start from the end and move backwards.</li>
+        <li><strong>Windowed iteration</strong>: Yield chunks (batches) of N elements.</li>
+      </ul>
+      <p class="note">Tip: For filtering, advance the internal index in <code>hasNext()</code> until a matching element is found.</p>
+    </section>
+
+    <p class="footer">© Your Name — Custom Iterator in Java</p>
+  </div>
+</body>
+</html>

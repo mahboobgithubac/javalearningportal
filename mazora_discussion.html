@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mazora — Conversation Export</title>
+  <style>
+    body{font-family:Inter, Roboto, Arial, sans-serif; margin:24px; color:#222}
+    header{margin-bottom:20px}
+    h1{font-size:22px}
+    h2{font-size:18px; margin-top:20px}
+    pre{background:#f6f8fa; padding:12px; border-radius:6px; overflow:auto}
+    code{font-family:SFMono-Regular, Consolas, 'Courier New', monospace}
+    section{margin-bottom:18px}
+    .note{color:#555}
+    .small{font-size:13px; color:#666}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mazora — Conversation Export (HTML)</h1>
+    <p class="small">This file contains the full discussion and code snippets from the chat export. Sections are grouped by topic for easy reading.</p>
+  </header>
+
+  <section>
+    <h2>1. Progress Bar — Simple Reusable Component</h2>
+    <p class="note">A simple React progress bar that displays percentage inside the bar and simulates loading.</p>
+    <pre><code>// ProgressBar Example
+import React, { useState, useEffect } from "react";
+
+const ProgressBar = ({ progress }) => {
+  return (
+    <div style={styles.container}>
+      <div style={{ ...styles.bar, width: `${progress}%` }}>
+        <span style={styles.label}>{progress}%</span>
+      </div>
+    </div>
+  );
+};
+
+const App = () => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((oldProgress) => {
+        if (oldProgress >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return oldProgress + 10;
+      });
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={styles.app}>
+      <h2>Progress Bar Example</h2>
+      <ProgressBar progress={progress} />
+    </div>
+  );
+};
+
+const styles = {
+  app: { width: "400px", margin: "50px auto", fontFamily: "Arial, sans-serif", textAlign: "center" },
+  container: { height: "30px", width: "100%", backgroundColor: "#e0e0de", borderRadius: "15px", overflow: "hidden" },
+  bar: { height: "100%", backgroundColor: "#4caf50", textAlign: "center", lineHeight: "30px", color: "white", borderRadius: "15px", transition: "width 0.3s ease-in-out" },
+  label: { fontWeight: "bold" }
+};
+
+export default App;</code></pre>
+  </section>
+
+  <section>
+    <h2>2. Mazora — Multi-step Checkout Progress</h2>
+    <p class="note">A three-step progress tracker: Checkout → Address → Order Placed. Place file as <code>src/components/Checkout/CheckoutProgress.js</code></p>
+    <pre><code>import React, { useState } from "react";
+
+const steps = ["Checkout", "Address", "Order Placed"];
+
+const CheckoutProgress = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const progressPercentage = (currentStep / steps.length) * 100;
+
+  return (
+    &lt;div style={styles.wrapper}&gt;
+      &lt;h2&gt;Checkout Progress&lt;/h2&gt;
+      &lt;div style={styles.progressContainer}&gt;
+        &lt;div style={{ ...styles.progressBar, width: `${progressPercentage}%` }} /&gt;
+      &lt;/div&gt;
+      &lt;div style={styles.steps}&gt;
+        {steps.map((step, index) =&gt; (
+          &lt;div key={index} style={styles.step}&gt;
+            &lt;div style={{ ...styles.circle, backgroundColor: currentStep &gt;= index + 1 ? "#4caf50" : "#ccc" }}&gt;
+              {index + 1}
+            &lt;/div&gt;
+            &lt;span style={{ marginTop: "8px", color: currentStep &gt;= index + 1 ? "#4caf50" : "#777" }}&gt;{step}&lt;/span&gt;
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+      &lt;div style={{ marginTop: "20px" }}&gt;
+        {currentStep &gt; 1 &amp;&amp; (
+          &lt;button onClick={() =&gt; setCurrentStep(currentStep - 1)} style={styles.btn}&gt;Previous&lt;/button&gt;
+        )}
+        {currentStep &lt; steps.length &amp;&amp; (
+          &lt;button onClick={() =&gt; setCurrentStep(currentStep + 1)} style={styles.btn}&gt;Next&lt;/button&gt;
+        )}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+
+const styles = { /* styles omitted for brevity, see conversation for full */ };
+
+export default CheckoutProgress;</code></pre>
+  </section>
+
+  <section>
+    <h2>3. Recommended File Structure</h2>
+    <pre><code>src/
+ └── components/
+      └── Checkout/
+           └── CheckoutProgress.js
+
+Optionally add CheckoutProgress.css beside it.</code></pre>
+  </section>
+
+  <section>
+    <h2>4. Load Balancing in Microservices — Short Notes</h2>
+    <p class="note">Summary of load balancing types and best practices.</p>
+    <ul>
+      <li><strong>Client-side</strong>: client or API gateway selects instance. (Eureka + Spring Cloud LoadBalancer)</li>
+      <li><strong>Server-side</strong>: central LB (Nginx, HAProxy, AWS ELB, Kubernetes Service)</li>
+      <li><strong>DNS</strong>: simple round-robin via DNS</li>
+      <li><strong>Service Mesh</strong>: Istio/Envoy/Linkerd for advanced LB & observability</li>
+    </ul>
+    <pre><code>// Spring Boot example using RestTemplate to call product-service
+String url = "http://product-service/api/products/1";
+restTemplate.getForObject(url, String.class);</code></pre>
+  </section>
+
+  <section>
+    <h2>5. Passing Data Child → Parent (Real-world)</h2>
+    <p class="note">Example: AddressForm (child) sends address to CheckoutPage (parent).</p>
+    <pre><code>// CheckoutPage.js
+import React, { useState } from "react";
+import AddressForm from "./AddressForm";
+
+function CheckoutPage() {
+  const [shippingAddress, setShippingAddress] = useState("");
+  const handleAddressSubmit = (address) =&gt; setShippingAddress(address);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Selected Shipping Address: {shippingAddress || "No address provided yet"}&lt;/p&gt;
+      &lt;AddressForm onAddressSubmit={handleAddressSubmit} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default CheckoutPage;
+
+// AddressForm.js
+import React, { useState } from "react";
+
+function AddressForm({ onAddressSubmit }) {
+  const [address, setAddress] = useState("");
+  const handleSubmit = () =&gt; { if(!address){alert('Please enter an address'); return;} onAddressSubmit(address); setAddress(''); };
+
+  return (
+    &lt;div&gt;
+      &lt;input value={address} onChange={e =&gt; setAddress(e.target.value)} /&gt;
+      &lt;button onClick={handleSubmit}&gt;Save Address&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default AddressForm;</code></pre>
+  </section>
+
+  <section>
+    <h2>6. Final Round Questions — Short Answers (Spring Boot, Microservices, React)</h2>
+    <p class="small">A compact Q&A you can use as a cheat-sheet during prep.</p>
+    <h3>Spring Boot + REST API (short)</h3>
+    <ul>
+      <li><strong>@RestController vs @Controller</strong>: @RestController = @Controller + @ResponseBody (returns JSON).</li>
+      <li><strong>Global exception</strong>: @ControllerAdvice + @ExceptionHandler.</li>
+      <li><strong>Validation</strong>: @Valid + javax validation annotations.</li>
+      <li><strong>Pagination</strong>: Pageable from Spring Data JPA.</li>
+      <li><strong>JWT</strong>: login → server issues JWT → client sends in Authorization header.</li>
+      <li><strong>Rate limiting</strong>: API Gateway or Bucket4j.</li>
+    </ul>
+    <h3>Microservices (short)</h3>
+    <ul>
+      <li><strong>Communication</strong>: Sync (REST/Feign) or Async (Kafka/RabbitMQ).</li>
+      <li><strong>Service registry</strong>: Eureka/Consul.</li>
+      <li><strong>API Gateway</strong>: routing, auth, rate limiting.</li>
+      <li><strong>Circuit breaker</strong>: Resilience4j.</li>
+    </ul>
+    <h3>React (short)</h3>
+    <ul>
+      <li><strong>State</strong>: Context API / Redux / React Query.</li>
+      <li><strong>API calls</strong>: Axios / Fetch.</li>
+      <li><strong>Auth</strong>: store token in HttpOnly cookie or memory; protect routes.</li>
+      <li><strong>Child→Parent</strong>: pass callback via props.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>7. @ComponentScan — Using Multiple Times</h2>
+    <p class="note">Summary and examples.</p>
+    <pre><code>// Single with multiple packages
+@SpringBootApplication
+@ComponentScan(basePackages = {"com.mazora.order", "com.mazora.user", "com.mazora.product"})
+public class Application { }
+
+// Using wrapper
+@SpringBootApplication
+@ComponentScans({
+  @ComponentScan(basePackages = "com.mazora.order"),
+  @ComponentScan(basePackages = "com.mazora.user")
+})
+public class Application { }</code></pre>
+    <p class="small">Best practice: keep a single component scan in the main application class and structure packages under the root package.</p>
+  </section>
+
+  <section>
+    <h2>8. @RestController — Duplicate Annotation</h2>
+    <p class="note">Can you use @RestController twice on the same class?</p>
+    <p>No. <strong>@RestController</strong> is not repeatable. Applying it twice to the same class will cause a compile-time error: <code>Duplicate annotation @org.springframework.web.bind.annotation.RestController</code></p>
+    <pre><code>// Incorrect — will fail to compile
+@RestController
+@RestController
+public class UserController { }
+
+// Correct — create multiple controller classes
+@RestController
+@RequestMapping("/users")
+public class UserController { }
+
+@RestController
+@RequestMapping("/orders")
+public class OrderController { }</code></pre>
+  </section>
+
+  <footer>
+    <p class="small">End of export. Generated from conversation content. If you want a PDF or a trimmed cheat-sheet, tell me which sections to include.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>React Quick Revision Notes — Java Developer (Light)</title>
+  <style>
+    :root{
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --muted: #6b7280;
+      --accent: #0ea5a4;
+      --fg: #0f172a;
+      --border: #e6e9ef;
+      --card-shadow: 0 6px 18px rgba(15,23,42,0.06);
+      --code-bg: #0b1020;
+      --code-fg: #f8fafc;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:var(--bg);color:var(--fg);line-height:1.5}
+    .wrap{max-width:1100px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{font-size:1.6rem;margin:0}
+    .pill{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:6px 10px;border-radius:999px;font-size:0.9rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:18px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--card-shadow)}
+    h2{margin:.2rem 0 0.6rem 0;font-size:1.05rem}
+    h3{margin:.2rem 0 .6rem 0;color:var(--accent)}
+    ul,ol{margin:0.4rem 0 0.6rem 1.1rem}
+    li{margin:0.25rem 0}
+    pre{background:#0b1220;color:var(--code-fg);padding:12px;border-radius:8px;overflow:auto;border:1px solid rgba(11,18,32,0.6)}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    .note{color:var(--muted);font-size:0.95rem}
+    .footer{margin-top:22px;text-align:center;color:var(--muted);font-size:0.95rem}
+    .filename{font-weight:600;color:var(--fg)}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>React Quick Revision Notes</h1>
+      <span class="pill">For Java Developers — Light Mode</span>
+    </header>
+
+    <section class="card">
+      <h2>1. React Basics</h2>
+      <ul>
+        <li><strong>What is React?</strong> A JS library for building UIs using components and declarative syntax (JSX).</li>
+        <li><strong>Key ideas:</strong> Component-based, Virtual DOM, unidirectional data flow.</li>
+      </ul>
+    </section>
+
+    <div class="grid">
+      <div class="card">
+        <h2>2. Core Concepts</h2>
+        <ul>
+          <li><strong>Components:</strong> Functional (hooks) vs Class (legacy).</li>
+          <li><strong>Props vs State:</strong> Props = read-only inputs; State = component-local data.</li>
+          <li><strong>Virtual DOM:</strong> Efficient diffing & minimal real DOM updates.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>3. Hooks (must-know)</h2>
+        <ul>
+          <li><code>useState</code> — local state</li>
+          <li><code>useEffect</code> — side-effects & lifecycle</li>
+          <li><code>useContext</code> — access shared data</li>
+          <li><code>useRef</code> — mutable refs without re-render
+          </li>
+          <li><code>useReducer</code> — complex state management</li>
+        </ul>
+        <p class="note">Be ready to explain when to choose <code>useReducer</code> over <code>useState</code>.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>4. Lifecycle Mapping</h2>
+        <ul>
+          <li>Class: <code>componentDidMount</code>, <code>componentDidUpdate</code>, <code>componentWillUnmount</code></li>
+          <li>Function: <code>useEffect(() =&gt; { ... }, [deps])</code> and cleanup via return function.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>5. Communication</h2>
+        <ul>
+          <li>Parent → Child: <em>props</em></li>
+          <li>Child → Parent: callbacks passed via props</li>
+          <li>Global state: Context API, Redux</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>6. Lists & Conditional Rendering</h2>
+        <ul>
+          <li>Use <code>array.map()</code> to render lists and provide a stable <code>key</code>.</li>
+          <li>Conditionals: <code>&amp;&amp;</code> and ternary <code>cond ? A : B</code>.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>7. Forms</h2>
+        <ul>
+          <li>Controlled components: input value bound to state.</li>
+          <li>Uncontrolled components: use <code>ref</code> to read DOM value.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>8. React Router</h2>
+        <ul>
+          <li>Use <code>BrowserRouter</code>, <code>Routes</code>, <code>Route</code>.</li>
+          <li><code>Link</code> for navigation; <code>useNavigate()</code> for programmatic redirects.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>9. State Management</h2>
+        <ul>
+          <li>Local: <code>useState</code>, <code>useReducer</code>.</li>
+          <li>Global: Context API, Redux (enterprise apps).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>10. Performance</h2>
+        <ul>
+          <li><code>React.memo</code> to avoid re-renders.</li>
+          <li><code>useCallback</code> for stable function references.</li>
+          <li><code>useMemo</code> to memoize expensive calculations.</li>
+          <li>Code-splitting: <code>React.lazy</code> + <code>Suspense</code>.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>11. Backend Integration (Spring Boot)</h2>
+        <ul>
+          <li>Call APIs via <code>fetch</code> or <code>axios</code> inside <code>useEffect</code>.</li>
+          <li>Handle CORS on the server (global config or controller-level).</li>
+          <li>Auth: prefer HTTP-only cookies for JWT in production; mitigate XSS/CSRF.</li>
+        </ul>
+      </div>
+    </div>
+
+    <section class="card">
+      <h2>12. Common Interview Questions</h2>
+      <ol>
+        <li>Functional vs Class components?</li>
+        <li>Virtual DOM vs Real DOM?</li>
+        <li>How does <code>useEffect</code> map to lifecycle methods?</li>
+        <li>State vs Props?</li>
+        <li>When to use Redux vs Context API?</li>
+        <li>How to manage API loading/error states?</li>
+        <li>What is "lifting state up"?</li>
+        <li>Controlled vs Uncontrolled components?</li>
+        <li>How to improve performance in React?</li>
+        <li>How to secure React ↔ Spring Boot integration?</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2>Java Analogies (Quick Memory Hooks)</h2>
+      <ul>
+        <li><strong>Props</strong> ≈ method parameters</li>
+        <li><strong>State</strong> ≈ instance fields</li>
+        <li><strong>Context/Redux</strong> ≈ application-scoped singleton bean</li>
+        <li><strong>useEffect</strong> ≈ <code>@PostConstruct</code>/<code>@PreDestroy</code> lifecycles</li>
+        <li><strong>React Router</strong> ≈ Spring MVC routing (URL ↔ component mapping)</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Fast Snippets</h2>
+      <h3>Basic fetch inside <code>useEffect</code></h3>
+      <pre><code>useEffect(() =&gt; {
+  let cancelled = false;
+  (async () =&gt; {
+    try {
+      const res = await fetch('/api/products');
+      if (!res.ok) throw new Error('Network error');
+      const data = await res.json();
+      if (!cancelled) setProducts(data);
+    } catch (e) { setError(e.message); }
+  })();
+  return () =&gt; { cancelled = true; };
+}, []);</code></pre>
+
+      <h3>Memoization</h3>
+      <pre><code>const expensive = useMemo(() =&gt; compute(items), [items]);
+const onClick = useCallback(() =&gt; doSomething(expensive), [expensive]);</code></pre>
+    </section>
+
+    <p class="footer">Filename: <span class="filename">react-revision-notes-java-dev-light.html</span></p>
+  </div>
+</body>
+</html>

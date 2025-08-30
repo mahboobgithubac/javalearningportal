@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sessions & Performance Tuning — Spring Boot + React</title>
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --card: #121826;
+      --muted: #9fb0ca;
+      --text: #e6eefc;
+      --accent: #6aa5ff;
+      --code: #0d1320;
+      --border: #243047;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+      color: var(--text); 
+	  
+    }
+    .container { max-width: 1040px; margin: 0 auto; padding: 32px 20px 80px; }
+    header { text-align: center; margin-bottom: 28px; }
+    h1 { font-size: 2.2rem; margin: 0 0 10px; letter-spacing: 0.3px; }
+    .subtitle { color: var(--muted); font-size: 0.98rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 8px 40px rgba(0,0,0,.35); }
+    .toc { line-height: 1.9; }
+    .toc a { color: var(--accent); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    h2 { margin: 32px 0 12px; font-size: 1.6rem; }
+    h3 { margin: 24px 0 8px; font-size: 1.25rem; }
+    p { color: #dbe6fb; }
+    ul { margin: 10px 0 18px 20px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; }
+    pre { background: var(--code); border: 1px solid var(--border); border-radius: 12px; padding: 14px; overflow: auto; }
+    code.inline { background: var(--code); border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; }
+    details { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 12px 12px 6px; margin: 12px 0; }
+    details > summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+    .note { padding: 10px 12px; border-left: 3px solid var(--accent); background: rgba(106,165,255,0.08); border-radius: 6px; }
+    .kbd { font-family: ui-monospace, monospace; background: #111726; border: 1px solid var(--border); padding: 0 6px; border-radius: 6px; }
+    footer { margin-top: 40px; color: var(--muted); font-size: 0.9rem; text-align: center; }
+    .tag { display: inline-block; padding: 2px 8px; border: 1px solid var(--border); border-radius: 999px; color: var(--muted); font-size: 0.8rem; margin-right: 6px; }
+    .section { margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Sessions & Performance Tuning — Spring Boot + React</h1>
+      <div class="subtitle">Concise, production-focused notes with examples and checklists</div>
+      <div style="margin-top:10px">
+        <span class="tag">Spring Boot</span>
+        <span class="tag">React</span>
+        <span class="tag">Performance</span>
+        <span class="tag">Sessions</span>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2 id="toc">Table of Contents</h2>
+      <div class="toc">
+        <ol>
+          <li><a href="#global-session">Global Session in Spring Boot REST API</a></li>
+          <li><a href="#sb-perf">Performance Tuning — Spring Boot REST API</a></li>
+          <li><a href="#react-perf">Performance Tuning — React App</a></li>
+          <li><a href="#usecallback">What is <code class="inline">useCallback</code> in React?</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 1) GLOBAL SESSION -->
+    <section id="global-session" class="section card">
+      <h2>1) Global Session in Spring Boot REST API</h2>
+      <p>Depending on your needs, “global session” can mean either per-user HTTP sessions or shared app-wide state. Here are options with examples:</p>
+
+      <details open>
+        <summary>1.1 Per-user <code class="inline">HttpSession</code></summary>
+        <p>Store data per logged-in user (works in single-node deployments):</p>
+<pre><code class="language-java">@RestController
+@RequestMapping("/session")
+public class SessionController {
+
+    @GetMapping("/set")
+    public String setSession(HttpSession session) {
+        session.setAttribute("username", "Mahboob");
+        return "Session attribute set!";
+    }
+
+    @GetMapping("/get")
+    public String getSession(HttpSession session) {
+        return "Username in session: " + session.getAttribute("username");
+    }
+}
+</code></pre>
+        <div class="note">For multi-node setups, back <code class="inline">HttpSession</code> with Spring Session (e.g., Redis) so the session is available across servers.</div>
+      </details>
+
+      <details>
+        <summary>1.2 Shared (application-wide) state with a Singleton Bean</summary>
+        <p>Shared across all users because Spring beans are singleton by default.</p>
+<pre><code class="language-java">@Component
+public class GlobalSession {
+    private final Map&lt;String, Object&gt; data = new ConcurrentHashMap&lt;&gt;();
+    public void set(String key, Object value) { data.put(key, value); }
+    public Object get(String key) { return data.get(key); }
+}
+
+@RestController
+@RequestMapping("/global")
+public class GlobalController {
+    private final GlobalSession globalSession;
+    public GlobalController(GlobalSession globalSession) { this.globalSession = globalSession; }
+
+    @GetMapping("/set")
+    public String setGlobal() {
+        globalSession.set("appVersion", "1.0.0");
+        return "Global data set!";
+    }
+
+    @GetMapping("/get")
+    public String getGlobal() { return "App Version: " + globalSession.get("appVersion"); }
+}
+</code></pre>
+      </details>
+
+      <details>
+        <summary>1.3 Distributed sessions with Spring Session + Redis</summary>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.session&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-session-data-redis&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<pre><code class="language-java">@EnableRedisHttpSession
+public class SessionConfig { }
+</code></pre>
+        <p>Now <code class="inline">HttpSession</code> is backed by Redis and becomes cluster-wide.</p>
+      </details>
+
+      <details>
+        <summary>1.4 Stateless auth with JWT (no server sessions)</summary>
+        <p>Use JWTs to carry identity and claims; avoids server-side session state and scales well horizontally.</p>
+      </details>
+    </section>
+
+    <!-- 2) SPRING BOOT PERFORMANCE -->
+    <section id="sb-perf" class="section card">
+      <h2>2) Performance Tuning — Spring Boot REST API</h2>
+      <p>Optimize in layers: JVM, Spring config, database, caching, and infrastructure.</p>
+
+      <details open>
+        <summary>2.1 JVM &amp; App</summary>
+        <ul>
+          <li>Tune heap <span class="kbd">-Xms</span>/<span class="kbd">-Xmx</span>, prefer G1GC (<span class="kbd">-XX:+UseG1GC</span>).</li>
+          <li>Observe with JFR/VisualVM or Micrometer + Prometheus + Grafana.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>2.2 Spring Boot configs</summary>
+<pre><code class="language-properties"># Lazy init
+spring.main.lazy-initialization=true
+
+# HikariCP pooling
+spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.idle-timeout=30000
+spring.datasource.hikari.max-lifetime=1800000
+spring.datasource.hikari.connection-timeout=20000
+
+# Compression\ nserver.compression.enabled=true
+server.compression.mime-types=application/json,application/xml,text/html,text/xml,text/plain
+server.compression.min-response-size=1024
+
+# Tomcat threads
+server.tomcat.threads.max=200
+server.tomcat.threads.min-spare=20
+</code></pre>
+      </details>
+
+      <details>
+        <summary>2.3 Database</summary>
+        <ul>
+          <li>Indexes on frequently filtered/joined columns.</li>
+          <li>Use pagination &amp; projections/DTOs.</li>
+          <li>Batch writes and avoid N+1 (use <code class="inline">@EntityGraph</code> or <code class="inline">JOIN FETCH</code>).</li>
+        </ul>
+<pre><code class="language-properties">spring.jpa.properties.hibernate.jdbc.batch_size=50
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.order_updates=true
+</code></pre>
+      </details>
+
+      <details>
+        <summary>2.4 Caching</summary>
+<pre><code class="language-java">@Cacheable("users")
+public User getUser(Long id) { /* ... */ }
+</code></pre>
+        <p>Use Caffeine (in-memory) or Redis (distributed).</p>
+      </details>
+
+      <details>
+        <summary>2.5 REST &amp; Reactive</summary>
+        <ul>
+          <li>Return only needed fields (DTOs).</li>
+          <li>ETags &amp; cache headers for GET.</li>
+          <li>Consider WebFlux for very high concurrency.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>2.6 Monitoring</summary>
+<pre><code class="language-xml">&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+        <p>Export metrics to Prometheus and visualize in Grafana.</p>
+      </details>
+
+      <details>
+        <summary>2.7 Deployment &amp; Infra</summary>
+        <ul>
+          <li>Autoscale, set CPU/RAM limits, and put an API gateway or Nginx in front.</li>
+          <li>Enable HTTP/2 and Brotli/Gzip on the edge.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>2.8 Quick best-practice block</summary>
+<pre><code class="language-properties">spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=false
+spring.jpa.open-in-view=false
+server.compression.enabled=true
+server.tomcat.threads.max=200
+</code></pre>
+      </details>
+    </section>
+
+    <!-- 3) REACT PERFORMANCE -->
+    <section id="react-perf" class="section card">
+      <h2>3) Performance Tuning — React App</h2>
+      <p>Focus on avoiding unnecessary re-renders, shrinking bundles, and optimizing network usage.</p>
+
+      <details open>
+        <summary>3.1 Code-level optimizations</summary>
+<pre><code class="language-jsx">// React.memo to skip re-renders when props are equal
+const UserCard = React.memo(({ user }) =&gt; &lt;div&gt;{user.name}&lt;/div&gt;);
+
+// useCallback / useMemo
+const calculate = useCallback(() =&gt; doHeavyTask(data), [data]);
+const value = useMemo(() =&gt; expensive(items), [items]);
+</code></pre>
+      </details>
+
+      <details>
+        <summary>3.2 Rendering big lists</summary>
+<pre><code class="language-jsx">import { FixedSizeList as List } from 'react-window';
+&lt;List height={400} itemCount={1000} itemSize={35} width={300}&gt;
+  {({ index, style }) =&gt; &lt;div style={style}&gt;Item {index}&lt;/div&gt;}
+&lt;/List&gt;
+</code></pre>
+      </details>
+
+      <details>
+        <summary>3.3 Bundle size</summary>
+<pre><code class="language-jsx">// Code splitting
+const Dashboard = React.lazy(() =&gt; import('./Dashboard'));
+&lt;Suspense fallback={&lt;div&gt;Loading...&lt;/div&gt;}&gt;
+  &lt;Dashboard /&gt;
+&lt;/Suspense&gt;
+</code></pre>
+<pre><code class="language-bash">npm i -D source-map-explorer
+npm run build
+npx source-map-explorer 'build/static/js/*.js'
+</code></pre>
+      </details>
+
+      <details>
+        <summary>3.4 Build &amp; delivery</summary>
+        <ul>
+          <li>Always deploy the production build (<span class="kbd">npm run build</span>).</li>
+          <li>Enable Gzip/Brotli and HTTP/2; serve via CDN.</li>
+          <li>Use a service worker (PWA) to cache static assets.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>3.5 Network &amp; API</summary>
+<pre><code class="language-jsx">// Debounce
+import { debounce } from 'lodash';
+const handleSearch = debounce((q) =&gt; fetch(`/api?q=${q}`), 300);
+
+// React Query caching
+import { useQuery } from '@tanstack/react-query';
+const { data } = useQuery(['user', id], () =&gt; fetchUser(id));
+</code></pre>
+      </details>
+
+      <details>
+        <summary>3.6 CSS &amp; UI</summary>
+        <ul>
+          <li>Lazy-load images (<code class="inline">loading="lazy"</code>), prefer WebP/AVIF.</li>
+          <li>Use SVG icons or a small icon set.</li>
+          <li>Be mindful with CSS-in-JS runtime overhead.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>3.7 State management</summary>
+        <ul>
+          <li>Keep state local; avoid global context for frequently changing values.</li>
+          <li>Consider React Query/Zustand/Recoil for scalable patterns.</li>
+        </ul>
+      </details>
+
+      <details>
+        <summary>3.8 Profiling</summary>
+<pre><code class="language-jsx">// Web Vitals
+import reportWebVitals from './reportWebVitals';
+reportWebVitals(console.log);
+</code></pre>
+      </details>
+
+      <details>
+        <summary>3.9 Production snippets</summary>
+<pre><code class="language-js">// Nginx
+# gzip on;
+# gzip_types text/plain text/css application/json application/javascript;
+# gzip_min_length 256;
+</code></pre>
+      </details>
+    </section>
+
+    <!-- 4) useCallback EXPLAINED -->
+    <section id="usecallback" class="section card">
+      <h2>4) What is <code class="inline">useCallback</code> in React?</h2>
+      <p><code class="inline">useCallback</code> returns a memoized function reference so it doesn’t get recreated on every render—useful when passing callbacks to memoized children or as stable dependencies.</p>
+
+      <details open>
+        <summary>4.1 Problem without <code class="inline">useCallback</code></summary>
+<pre><code class="language-jsx">function Counter() {
+  const [count, setCount] = React.useState(0);
+  const increment = () =&gt; setCount(count + 1); // new function each render
+  return (
+    &lt;&gt;
+      &lt;button onClick={increment}&gt;+&lt;/button&gt;
+      &lt;p&gt;{count}&lt;/p&gt;
+    &lt;/&gt;
+  );
+}
+</code></pre>
+      </details>
+
+      <details>
+        <summary>4.2 Solution with <code class="inline">useCallback</code></summary>
+<pre><code class="language-jsx">function Counter() {
+  const [count, setCount] = React.useState(0);
+  const increment = React.useCallback(() =&gt; {
+    setCount(c =&gt; c + 1);
+  }, []); // stable reference
+  return (
+    &lt;&gt;
+      &lt;button onClick={increment}&gt;+&lt;/button&gt;
+      &lt;p&gt;{count}&lt;/p&gt;
+    &lt;/&gt;
+  );
+}
+</code></pre>
+      </details>
+
+      <details>
+        <summary>4.3 With a memoized child</summary>
+<pre><code class="language-jsx">const Child = React.memo(({ onClick }) =&gt; {
+  console.log('Child rendered');
+  return &lt;button onClick={onClick}&gt;Click Me&lt;/button&gt;;
+});
+
+function Parent() {
+  const [count, setCount] = React.useState(0);
+  const handleClick = React.useCallback(() =&gt; setCount(c =&gt; c + 1), []);
+  return (
+    &lt;&gt;
+      &lt;Child onClick={handleClick} /&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+    &lt;/&gt;
+  );
+}
+</code></pre>
+      </details>
+
+      <details>
+        <summary>4.4 When to use</summary>
+        <ul>
+          <li>✅ Passing callbacks to <code class="inline">React.memo</code> children.</li>
+          <li>✅ As a stable dependency for <code class="inline">useEffect</code>/<code class="inline">useMemo</code>.</li>
+          <li>❌ Avoid overuse; it has its own overhead.</li>
+        </ul>
+      </details>
+
+      <div class="note"><strong>Tip:</strong> <code class="inline">useCallback</code> memoizes functions; <code class="inline">useMemo</code> memoizes computed values.</div>
+    </section>
+
+    <footer>
+      Built as a single-file HTML summary of our discussion. You can copy this file as-is and host it anywhere.
+    </footer>
+  </div>
+</body>
+</html>

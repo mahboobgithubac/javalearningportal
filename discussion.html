@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot & Related Q&A</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fafafa;
+      color: #222;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    details {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      color: #1a73e8;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, monospace;
+    }
+    a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Spring Boot & Related Q&A Collection</h1>
+  <p><em>Compiled study notes in Q&A format.</em></p>
+
+  <h2>Table of Contents</h2>
+  <ul>
+    <li><a href="#many-to-many">Many-to-Many Association</a></li>
+    <li><a href="#pagination">Pagination in Spring Boot</a></li>
+    <li><a href="#sorting">Sorting in Spring Boot</a></li>
+    <li><a href="#jwt-oauth">JWT vs OAuth Layer</a></li>
+    <li><a href="#security-order">Execution Order: Security vs Controller</a></li>
+    <li><a href="#security-layer">How to Add Security Layer</a></li>
+    <li><a href="#composite-key">Composite Primary Key Example</a></li>
+  </ul>
+
+  <!-- Q&A Blocks -->
+
+  <h2 id="many-to-many">1) Many-to-Many Association</h2>
+  <details>
+    <summary>Q: How many tables will be created and what are the structures?</summary>
+    <p><strong>Answer:</strong></p>
+    <p>In your <code>Student</code> ↔ <code>Course</code> example:</p>
+    <ul>
+      <li><code>student</code> table</li>
+      <li><code>course</code> table</li>
+      <li><code>student_course</code> (join table)</li>
+    </ul>
+    <p><strong>student</strong></p>
+    <pre><code>id (PK)
+... other fields</code></pre>
+    <p><strong>course</strong></p>
+    <pre><code>id (PK)
+... other fields</code></pre>
+    <p><strong>student_course</strong></p>
+    <pre><code>student_id (FK → student.id)
+course_id  (FK → course.id)
+PRIMARY KEY (student_id, course_id)</code></pre>
+  </details>
+
+  <h2 id="pagination">2) Pagination in Spring Boot</h2>
+  <details>
+    <summary>Q: How to add pagination in Spring Boot app?</summary>
+    <p><strong>Answer:</strong></p>
+    <pre><code>@GetMapping("/students")
+public Page&lt;Student&gt; getStudents(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    return studentRepository.findAll(pageable);
+}</code></pre>
+    <p><code>Page</code> gives content + metadata (total pages, elements, etc.).</p>
+  </details>
+
+  <h2 id="sorting">3) Sorting in Spring Boot</h2>
+  <details>
+    <summary>Q: How to implement sorting?</summary>
+    <p><strong>Answer:</strong></p>
+    <pre><code>@GetMapping("/students")
+public Page&lt;Student&gt; getStudents(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "id") String sortBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    return studentRepository.findAll(pageable);
+}</code></pre>
+    <p>Sorting logic belongs in the <strong>service layer</strong> (controller should just delegate).</p>
+  </details>
+
+  <h2 id="jwt-oauth">4) JWT vs OAuth</h2>
+  <details>
+    <summary>Q: In which layer should JWT or OAuth logic be?</summary>
+    <p><strong>Answer:</strong> In the <strong>Security layer</strong>.  
+    Authentication & authorization should be handled by Spring Security filters and configuration, not in the controller.</p>
+  </details>
+
+  <h2 id="security-order">5) Security vs Controller Execution Order</h2>
+  <details>
+    <summary>Q: Which executes first, Security layer or Controller layer?</summary>
+    <p><strong>Answer:</strong> The <strong>Security layer</strong> (Spring Security filters) runs before the Controller layer.  
+    Requests are intercepted and validated before reaching the controller.</p>
+  </details>
+
+  <h2 id="security-layer">6) Adding Security Layer</h2>
+  <details>
+    <summary>Q: How can I add a security layer in Spring Boot?</summary>
+    <p><strong>Answer:</strong></p>
+    <pre><code>@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/api/public/**").permitAll()
+            .antMatchers("/api/admin/**").hasRole("ADMIN")
+            .anyRequest().authenticated()
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}</code></pre>
+    <p>You can add a JWT filter for token validation as well.</p>
+  </details>
+
+  <h2 id="composite-key">7) Composite Primary Key Example</h2>
+  <details>
+    <summary>Q: How to implement a composite primary key in Spring Boot JPA?</summary>
+    <p><strong>Answer:</strong></p>
+    <p>Using <code>@Embeddable</code> and <code>@EmbeddedId</code>:</p>
+    <pre><code>@Embeddable
+public class StudentCourseId implements Serializable {
+    private Long studentId;
+    private Long courseId;
+    // equals() and hashCode()
+}
+
+@Entity
+public class StudentCourse {
+    @EmbeddedId
+    private StudentCourseId id;
+
+    private Date enrollmentDate;
+}</code></pre>
+    <p>This maps a table with <code>(studentId, courseId)</code> as a composite primary key.</p>
+  </details>
+
+</body>
+</html>
